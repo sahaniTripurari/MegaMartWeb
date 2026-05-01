@@ -65,12 +65,6 @@ MegaMart is a cutting-edge, high-performance grocery and essentials delivery web
 └── index.html       # Main entry page
 ```
 
-## 🛡️ Best Practices & Security
-
-To maintain the security and performance of this project, we follow these rules:
-- **Sensitive Data**: Never upload `.env` files or API keys to GitHub.
-- **Dependencies**: Use `npm install` to manage packages; do not commit `node_modules`.
-- **Optimization**: All images and videos are compressed for optimal web performance.
 
 ---
 
