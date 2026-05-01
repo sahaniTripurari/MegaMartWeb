@@ -1,0 +1,21 @@
+{
+  "name": "quickkart",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "QuickKart - Modern Grocery Delivery App",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.2"
+  },
+  "keywords": ["grocery", "delivery", "quickkart", "ecommerce"],
+  "author": "",
+  "license": "MIT"
+}

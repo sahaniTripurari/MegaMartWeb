@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaMart | Premium E-Commerce</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Header with Search -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="#" class="logo" id="logoBtn">
+                <div class="logo-icon"><i data-lucide="zap"></i></div>
+                <span class="logo-text">MegaMart</span>
+            </a>
+            
+            <div class="global-search-container">
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="globalSearchInput" placeholder="Search for groceries, kitchen essentials...">
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="delivery-location">
+                    <div class="loc-icon-wrapper"><i data-lucide="map-pin"></i></div>
+                    <div class="loc-text">
+                        <span class="loc-label">Delivering to</span>
+                        <span class="loc-address">Mumbai, 400001 <i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+                
+                <button class="action-btn cart-button" id="cartButton">
+                    <div class="cart-icon-wrapper">
+                        <i data-lucide="shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    <div class="cart-text">
+                        <span class="cart-label">My Cart</span>
+                        <span class="cart-total" id="cartTotalHeader">₹0.00</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="container">
+            <div class="type-list" id="navCategories">
+                <div class="typeName active" data-category="Home"><i data-lucide="home"></i> Home</div>
+                <div class="typeName" data-category="All Products"><i data-lucide="layout-grid"></i> All</div>
+                <!-- Categories injected via JS -->
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- ================= HOME VIEW ================= -->
+        <div id="homeView" class="view-section active">
+            
+            <!-- Video & Auto-Rotating Top Selling Slider -->
+            <section class="mega-hero container gs-reveal">
+                <div class="mega-hero-grid">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline class="bg-video">
+                            <source src="/megamartPoster.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay-text">
+                            <span class="hero-badge">⚡ Guaranteed 10 Min Delivery</span>
+                            <h2>MegaMart Exclusives</h2>
+                            <p>Fresh from farms to your doorstep.</p>
+                        </div>
+                    </div>
+                    <div class="auto-slider-container">
+                        <div class="slider-header">
+                            <h3><i data-lucide="trending-up"></i> Top Selling Right Now</h3>
+                        </div>
+                        <!-- Automatically changes images -->
+                        <div class="auto-slider" id="autoSlider">
+                            <div class="slider-track" id="sliderTrack">
+                                <!-- Slides injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Premium Scrolling Marquee -->
+            <div class="marquee-wrapper gs-reveal">
+                <div class="marquee-content">
+                    <span>🔥 Trending: Fresh Alphonso Mangoes</span><span class="dot">•</span>
+                    <span>💳 Get 10% Extra OFF on HDFC Cards</span><span class="dot">•</span>
+                    <span>⚡ 10-Minute Guaranteed Delivery</span><span class="dot">•</span>
+                    <span>🍎 Farm Fresh Vegetables</span><span class="dot">•</span>
+                    <span>🔥 Trending: Fresh Alphonso Mangoes</span><span class="dot">•</span>
+                    <span>💳 Get 10% Extra OFF on HDFC Cards</span><span class="dot">•</span>
+                    <span>⚡ 10-Minute Guaranteed Delivery</span><span class="dot">•</span>
+                    <span>🍎 Farm Fresh Vegetables</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Category Sections -->
+            <div id="homeCategoriesWrapper">
+                <!-- 1. Fresh Fruits: CSS Grid Style -->
+                <section class="cat-section style-grid container gs-reveal" id="sec-Fresh Fruits" style="display:none;">
+                    <div class="cat-header">
+                        <h2>Fresh Fruits</h2>
+                        <button class="view-all-btn" data-category="Fresh Fruits">View All <i data-lucide="arrow-right"></i></button>
+                    </div>
+                    <div class="grid-content" id="content-Fresh Fruits"></div>
+                </section>
+
+                <!-- 2. Kitchen: Featured Hero + List Style -->
+                <section class="cat-section style-featured bg-soft container gs-reveal" id="sec-Kitchen" style="display:none;">
+                    <div class="cat-header">
+                        <h2>Kitchen Essentials</h2>
+                        <button class="view-all-btn" data-category="Kitchen">View All <i data-lucide="arrow-right"></i></button>
+                    </div>
+                    <div class="featured-content" id="content-Kitchen"></div>
+                </section>
+
+                <!-- 3. Fresh Vegetables: Continuous Marquee Style -->
+                <section class="cat-section style-marquee gs-reveal" id="sec-Fresh Vegetables" style="display:none;">
+                    <div class="container cat-header">
+                        <h2>Fresh Vegetables</h2>
+                        <button class="view-all-btn" data-category="Fresh Vegetables">View All <i data-lucide="arrow-right"></i></button>
+                    </div>
+                    <div class="marquee-product-wrapper">
+                        <div class="marquee-product-track" id="content-Fresh Vegetables"></div>
+                    </div>
+                </section>
+
+                <!-- 4. Exotic: Coverflow 3D Style -->
+                <section class="cat-section style-coverflow container gs-reveal" id="sec-Exotic" style="display:none;">
+                    <div class="cat-header">
+                        <h2>Exotic Range</h2>
+                        <button class="view-all-btn" data-category="Exotic">View All <i data-lucide="arrow-right"></i></button>
+                    </div>
+                    <div class="coverflow-content" id="content-Exotic"></div>
+                </section>
+
+                <!-- 5. House Hold: Horizontal Snap Scroll -->
+                <section class="cat-section style-snap container gs-reveal" id="sec-House Hold" style="display:none;">
+                    <div class="cat-header">
+                        <h2>House Hold Deals</h2>
+                        <button class="view-all-btn" data-category="House Hold">View All <i data-lucide="arrow-right"></i></button>
+                    </div>
+                    <div class="snap-content" id="content-House Hold"></div>
+                </section>
+
+                <!-- Other Categories: Standard Grid -->
+                <div id="otherCategories"></div>
+            </div>
+        </div>
+
+        <!-- ================= CATEGORY VIEW ================= -->
+        <div id="categoryView" class="view-section" style="display: none;">
+            <div class="container">
+                <div class="category-page-header">
+                    <h2 id="categoryPageTitle">Category Name</h2>
+                    
+                    <div class="category-filters">
+                        <div class="filter-box">
+                            <i data-lucide="filter"></i>
+                            <select id="sortSelect">
+                                <option value="relevance">Sort by Relevance</option>
+                                <option value="low-high">Price: Low to High</option>
+                                <option value="high-low">Price: High to Low</option>
+                                <option value="discount">Highest Discount</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-grid grid-layout" id="categoryProductsGrid">
+                    <!-- Products injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PRODUCT DETAILS VIEW ================= -->
+        <div id="productDetailView" class="view-section" style="display: none;">
+            <div class="container">
+                <button class="btn btn-outline back-btn" id="backFromProductBtn" style="margin-bottom: 24px;">
+                    <i data-lucide="arrow-left"></i> Back
+                </button>
+                <div class="product-detail-layout" id="productDetailContent">
+                    <!-- Product details injected here -->
+                </div>
+                <div class="related-products-section">
+                    <h3>Related Products</h3>
+                    <div class="grid-layout" id="relatedProductsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col brand-col">
+                <a href="#" class="logo">
+                    <div class="logo-icon"><i data-lucide="zap"></i></div>
+                    <span class="logo-text">MegaMart</span>
+                </a>
+                <p>MegaMart is your ultimate destination for lightning-fast delivery of groceries and household essentials.</p>
+                <!-- Fixed Footer Social Icons -->
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i data-lucide="instagram"></i></a>
+                    <a href="#" class="social-icon"><i data-lucide="twitter"></i></a>
+                    <a href="#" class="social-icon"><i data-lucide="facebook"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <a href="#">Home</a>
+                <a href="#">All Products</a>
+                <a href="#">Offers</a>
+            </div>
+            <div class="footer-col">
+                <h4>Customer Service</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">Track Order</a>
+                <a href="#">Return Policy</a>
+            </div>
+            <div class="footer-col">
+                <h4>Download MegaMart App</h4>
+                <div class="app-buttons">
+                    <button class="app-btn"><i data-lucide="apple"></i> <span>App Store</span></button>
+                    <button class="app-btn"><i data-lucide="play"></i> <span>Google Play</span></button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <button class="close-cart" id="closeCart"><i data-lucide="x"></i></button>
+        </div>
+        <div class="cart-delivery-banner">
+            <i data-lucide="zap"></i>
+            <span>Delivery in <strong>10 minutes</strong></span>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer" id="cartFooter"></div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module" src="/main.js"></script>
+</body>
+</html>
