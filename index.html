@@ -16,10 +16,20 @@
     <!-- Top Header with Search -->
     <header class="header" id="header">
         <div class="container header-inner">
-            <a href="#" class="logo" id="logoBtn">
-                <div class="logo-icon"><i data-lucide="zap"></i></div>
-                <span class="logo-text">MegaMart</span>
-            </a>
+            <div class="header-left">
+                <a href="#" class="logo" id="logoBtn">
+                    <div class="logo-icon"><i data-lucide="zap"></i></div>
+                    <span class="logo-text">MegaMart</span>
+                </a>
+                
+                <div class="delivery-location">
+                    <div class="loc-icon-wrapper"><i data-lucide="map-pin"></i></div>
+                    <div class="loc-text">
+                        <span class="loc-label">Delivering to</span>
+                        <span class="loc-address">Mumbai, 400001 <i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+            </div>
             
             <div class="global-search-container">
                 <div class="search-box">
@@ -29,15 +39,7 @@
             </div>
 
             <div class="header-actions">
-                <div class="delivery-location">
-                    <div class="loc-icon-wrapper"><i data-lucide="map-pin"></i></div>
-                    <div class="loc-text">
-                        <span class="loc-label">Delivering to</span>
-                        <span class="loc-address">Mumbai, 400001 <i data-lucide="chevron-down"></i></span>
-                    </div>
-                </div>
-                
-                <button class="action-btn cart-button" id="cartButton">
+                <button class="action-btn cart-button desktop-cart" id="cartButton">
                     <div class="cart-icon-wrapper">
                         <i data-lucide="shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
@@ -47,12 +49,42 @@
                         <span class="cart-total" id="cartTotalHeader">₹0.00</span>
                     </div>
                 </button>
+                <button class="mobile-search-toggle" id="mobileSearchToggle">
+                    <i data-lucide="search"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-item active" data-view="home">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </div>
+        <div class="bottom-nav-item" data-view="categories">
+            <i data-lucide="layout-grid"></i>
+            <span>Categories</span>
+        </div>
+        <div class="bottom-nav-item" data-view="search">
+            <i data-lucide="search"></i>
+            <span>Search</span>
+        </div>
+        <div class="bottom-nav-item" id="mobileCartBtn">
+            <div class="cart-icon-wrapper">
+                <i data-lucide="shopping-cart"></i>
+                <span class="cart-count mobile-count">0</span>
+            </div>
+            <span>Cart</span>
+        </div>
+        <div class="bottom-nav-item" data-view="profile">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <!-- Navigation Bar (Desktop) -->
+    <nav class="nav-bar desktop-nav">
         <div class="container">
             <div class="type-list" id="navCategories">
                 <div class="typeName active" data-category="Home"><i data-lucide="home"></i> Home</div>
@@ -66,6 +98,14 @@
         <!-- ================= HOME VIEW ================= -->
         <div id="homeView" class="view-section active">
             
+            <!-- Mobile Search Bar (Appears on scroll or toggle) -->
+            <div class="mobile-search-bar container">
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="mobileSearchInput" placeholder="Search for groceries...">
+                </div>
+            </div>
+
             <!-- Video & Auto-Rotating Top Selling Slider -->
             <section class="mega-hero container gs-reveal">
                 <div class="mega-hero-grid">
@@ -74,14 +114,14 @@
                             <source src="/megamartPoster.mp4" type="video/mp4">
                         </video>
                         <div class="video-overlay-text">
-                            <span class="hero-badge">⚡ Guaranteed 10 Min Delivery</span>
-                            <h2>MegaMart Exclusives</h2>
-                            <p>Fresh from farms to your doorstep.</p>
+                            <span class="hero-badge">⚡ 10 Min Delivery</span>
+                            <h2>Freshness Delivered</h2>
+                            <p>Handpicked quality for you.</p>
                         </div>
                     </div>
                     <div class="auto-slider-container">
                         <div class="slider-header">
-                            <h3><i data-lucide="trending-up"></i> Top Selling Right Now</h3>
+                            <h3><i data-lucide="trending-up"></i> Trending Now</h3>
                         </div>
                         <!-- Automatically changes images -->
                         <div class="auto-slider" id="autoSlider">
@@ -93,15 +133,22 @@
                 </div>
             </section>
 
+            <!-- Quick Categories (Mobile only) -->
+            <section class="quick-categories container mobile-only gs-reveal">
+                <div class="quick-cat-grid" id="quickCategories">
+                    <!-- Quick circles injected via JS -->
+                </div>
+            </section>
+
             <!-- Premium Scrolling Marquee -->
             <div class="marquee-wrapper gs-reveal">
                 <div class="marquee-content">
                     <span>🔥 Trending: Fresh Alphonso Mangoes</span><span class="dot">•</span>
-                    <span>💳 Get 10% Extra OFF on HDFC Cards</span><span class="dot">•</span>
+                    <span>💳 10% OFF on HDFC Cards</span><span class="dot">•</span>
                     <span>⚡ 10-Minute Guaranteed Delivery</span><span class="dot">•</span>
                     <span>🍎 Farm Fresh Vegetables</span><span class="dot">•</span>
                     <span>🔥 Trending: Fresh Alphonso Mangoes</span><span class="dot">•</span>
-                    <span>💳 Get 10% Extra OFF on HDFC Cards</span><span class="dot">•</span>
+                    <span>💳 10% OFF on HDFC Cards</span><span class="dot">•</span>
                     <span>⚡ 10-Minute Guaranteed Delivery</span><span class="dot">•</span>
                     <span>🍎 Farm Fresh Vegetables</span>
                 </div>
@@ -198,6 +245,72 @@
                 <div class="related-products-section">
                     <h3>Related Products</h3>
                     <div class="grid-layout" id="relatedProductsGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PROFILE VIEW ================= -->
+        <div id="profileView" class="view-section" style="display: none;">
+            <div class="container">
+                <div class="profile-layout">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i data-lucide="user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h2>Guest User</h2>
+                            <p>+91 9876543210 • guest@megamart.com</p>
+                        </div>
+                        <button class="edit-profile-btn"><i data-lucide="edit-3"></i></button>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label">Orders</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">₹450</span>
+                            <span class="stat-label">Saved</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Coupons</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <div class="menu-item">
+                            <div class="menu-icon"><i data-lucide="shopping-bag"></i></div>
+                            <span>My Orders</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i data-lucide="map-pin"></i></div>
+                            <span>Saved Addresses</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i data-lucide="credit-card"></i></div>
+                            <span>Payments & Refunds</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i data-lucide="headphones"></i></div>
+                            <span>Help & Support</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i data-lucide="settings"></i></div>
+                            <span>Settings</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                    </div>
+
+                    <button class="logout-btn">
+                        <i data-lucide="log-out"></i>
+                        <span>Log Out</span>
+                    </button>
                 </div>
             </div>
         </div>

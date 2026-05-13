@@ -8,16 +8,20 @@ export class ContainerView {
         this.homeView = document.getElementById('homeView');
         this.categoryView = document.getElementById('categoryView');
         this.productDetailView = document.getElementById('productDetailView');
+        this.profileView = document.getElementById('profileView');
         
         // Containers
         this.navCategories = document.getElementById('navCategories');
+        this.quickCategories = document.getElementById('quickCategories');
         this.categoryProductsGrid = document.getElementById('categoryProductsGrid');
         this.categoryPageTitle = document.getElementById('categoryPageTitle');
         this.cartCount = document.getElementById('cartCount');
+        this.mobileCount = document.querySelector('.mobile-count');
         this.cartTotalHeader = document.getElementById('cartTotalHeader');
         
         // Search & Filter
         this.globalSearchInput = document.getElementById('globalSearchInput');
+        this.mobileSearchInput = document.getElementById('mobileSearchInput');
         this.sortSelect = document.getElementById('sortSelect');
         
         // State
@@ -32,12 +36,14 @@ export class ContainerView {
     
     init() {
         this.renderNavCategories();
+        this.renderQuickCategories();
         this.renderHomePage();
         this.setupAutoSlider();
         this.setupRouting();
         this.setupSearchAndFilter();
         this.setupCartModal();
         this.setupEventDelegation();
+        this.setupBottomNav();
         this.updateCartUI();
         this.setupScrollAnimations();
         
@@ -45,31 +51,63 @@ export class ContainerView {
         if (window.lucide) lucide.createIcons();
     }
 
-    getImageWithFallback(src) {
-        // Zepto CDN images may occasionally fail; keep card rendering stable with local fallback.
-        return `<img class="itemImage" src="${src}" alt="Product image" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/javascript.svg';">`;
+    // ================= MOBILE UI =================
+    setupBottomNav() {
+        const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+        bottomNavItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const view = item.dataset.view;
+                
+                // Update active state
+                bottomNavItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                if (view === 'home') {
+                    this.showHomeView();
+                } else if (view === 'categories') {
+                    this.showCategoryView('All Products');
+                } else if (view === 'search') {
+                    this.mobileSearchInput.focus();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (view === 'profile') {
+                    this.showProfileView();
+                }
+            });
+        });
+
+        const mobileCartBtn = document.getElementById('mobileCartBtn');
+        if (mobileCartBtn) {
+            mobileCartBtn.addEventListener('click', () => {
+                this.openCartSidebar();
+            });
+        }
     }
 
-    normalizeCategoryName(name) {
-        return (name || '').toString().trim().toLowerCase();
-    }
+    renderQuickCategories() {
+        if (!this.quickCategories) return;
+        this.quickCategories.innerHTML = '';
+        
+        // Take first 8 categories for quick circles
+        this.elementList.slice(0, 8).forEach(category => {
+            const item = this.controller.filterItems(category)[0];
+            if (!item) return;
 
-    getItemsForCategory(categoryName) {
-        const normalized = this.normalizeCategoryName(categoryName);
-        const allItemsKeys = new Set(['all products', 'all', 'search results']);
-        if (allItemsKeys.has(normalized)) return [...this.data];
-
-        const items = this.data.filter(
-            (item) => this.normalizeCategoryName(item.type) === normalized
-        );
-
-        // If category key is unexpected, keep UI usable instead of blank.
-        return items.length ? items : [...this.data];
+            const catItem = document.createElement('div');
+            catItem.className = 'quick-cat-item';
+            catItem.innerHTML = `
+                <div class="quick-cat-icon">
+                    <img src="${item.src}" alt="${category}" onerror="this.src='/javascript.svg';">
+                </div>
+                <span>${category}</span>
+            `;
+            catItem.addEventListener('click', () => this.showCategoryView(category));
+            this.quickCategories.appendChild(catItem);
+        });
     }
 
     // ================= ROUTING & VIEWS =================
     setActiveView(activeView) {
-        [this.homeView, this.categoryView, this.productDetailView].forEach((view) => {
+        [this.homeView, this.categoryView, this.productDetailView, this.profileView].forEach((view) => {
             if (!view) return;
             view.classList.remove('active');
             view.style.display = 'none';
@@ -79,17 +117,34 @@ export class ContainerView {
             activeView.classList.add('active');
             activeView.style.display = 'block';
         }
+        
+        // Sync bottom nav active state
+        const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+        bottomNavItems.forEach(nav => nav.classList.remove('active'));
+        
+        if (activeView === this.homeView) {
+            document.querySelector('.bottom-nav-item[data-view="home"]')?.classList.add('active');
+        } else if (activeView === this.categoryView) {
+            document.querySelector('.bottom-nav-item[data-view="categories"]')?.classList.add('active');
+        } else if (activeView === this.profileView) {
+            document.querySelector('.bottom-nav-item[data-view="profile"]')?.classList.add('active');
+        }
     }
 
     setupRouting() {
-        document.getElementById('logoBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            this.showHomeView();
+        document.querySelectorAll('#logoBtn, .logo').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showHomeView();
+            });
         });
         
+        const profileBtn = document.getElementById('profileBtn');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', () => this.showProfileView());
+        }
+        
         document.getElementById('backFromProductBtn').addEventListener('click', () => {
-            // Determine whether to go back to category or home based on previous state
-            // For simplicity, just go to category if currentCategory is set, else home
             if(this.currentCategory && this.currentCategory !== 'All Products' && this.currentCategory !== 'Home') {
                 this.showCategoryView(this.currentCategory);
             } else {
@@ -103,6 +158,13 @@ export class ContainerView {
         this.setActiveView(this.homeView);
         
         this.updateNavHighlight('Home');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    showProfileView() {
+        this.currentCategory = 'Profile';
+        this.setActiveView(this.profileView);
+        this.updateNavHighlight('Profile');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -150,7 +212,7 @@ export class ContainerView {
         `;
 
         // Render Related Products
-        const relatedItems = this.controller.filterItems(item.type).filter(i => i.name !== item.name).slice(0, 5);
+        const relatedItems = this.controller.filterItems(item.type).filter(i => i.name !== item.name).slice(0, 6);
         const relatedGrid = document.getElementById('relatedProductsGrid');
         relatedGrid.innerHTML = '';
         relatedItems.forEach(relItem => {
@@ -178,6 +240,7 @@ export class ContainerView {
             .sort((a,b) => ((b.price - b.discount_price) - (a.price - a.discount_price)))
             .slice(0, 5);
             
+        sliderTrack.innerHTML = '';
         topItems.forEach(item => {
             const slide = document.createElement('div');
             slide.className = 'slide-item';
@@ -287,22 +350,28 @@ export class ContainerView {
             'House Hold': '<i data-lucide="home"></i>'
         };
         
-        this.elementList.forEach((value) => {
-            const typeName = document.createElement("div");                    
-            typeName.classList.add("typeName");
-            typeName.dataset.category = value;
-            const icon = categoryIcons[value] || '<i data-lucide="box"></i>';
-            typeName.innerHTML = `${icon} ${value}`;                                
-            this.navCategories.appendChild(typeName);        
-        });
-
-        this.navCategories.querySelectorAll('.typeName').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const cat = e.currentTarget.dataset.category;
-                if(cat === 'Home') this.showHomeView();
-                else this.showCategoryView(cat);
+        if (this.navCategories) {
+            this.navCategories.innerHTML = `
+                <div class="typeName active" data-category="Home"><i data-lucide="home"></i> Home</div>
+                <div class="typeName" data-category="All Products"><i data-lucide="layout-grid"></i> All</div>
+            `;
+            this.elementList.forEach((value) => {
+                const typeName = document.createElement("div");                    
+                typeName.classList.add("typeName");
+                typeName.dataset.category = value;
+                const icon = categoryIcons[value] || '<i data-lucide="box"></i>';
+                typeName.innerHTML = `${icon} ${value}`;                                
+                this.navCategories.appendChild(typeName);        
             });
-        });
+
+            this.navCategories.querySelectorAll('.typeName').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const cat = e.currentTarget.dataset.category;
+                    if(cat === 'Home') this.showHomeView();
+                    else this.showCategoryView(cat);
+                });
+            });
+        }
     }
 
     renderCategoryProducts(categoryName, searchQuery = '', sortBy = 'relevance') {
@@ -333,10 +402,10 @@ export class ContainerView {
         
         if (items.length === 0) {
             this.categoryProductsGrid.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 100px 0;">
-                    <i data-lucide="search-x" style="width: 64px; height: 64px; margin-bottom: 24px; color: var(--text-muted); opacity: 0.5;"></i>
-                    <h3 style="font-size: 1.8rem; margin-bottom: 12px; font-weight: 700;">No products found</h3>
-                    <p style="color: var(--text-muted); font-size: 1.1rem;">Try adjusting your search or filters to find what you're looking for.</p>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 0;">
+                    <i data-lucide="search-x" style="width: 48px; height: 48px; margin-bottom: 16px; color: var(--text-muted); opacity: 0.5;"></i>
+                    <h3 style="font-size: 1.25rem; margin-bottom: 8px; font-weight: 700;">No products found</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Try a different search term.</p>
                 </div>
             `;
         } else {
@@ -349,20 +418,7 @@ export class ContainerView {
 
             // Refined animation for smoother entrance
             if (window.gsap) {
-                // Kill any existing animations on these elements first
-                gsap.killTweensOf("#categoryProductsGrid .itemName");
-                
-                gsap.fromTo("#categoryProductsGrid .itemName", 
-                    { y: 30, opacity: 0 },
-                    { 
-                        y: 0, 
-                        opacity: 1, 
-                        duration: 0.5, 
-                        stagger: 0.03, 
-                        ease: "power3.out",
-                        delay: 0.1 // Small delay to ensure display:block has settled
-                    }
-                );
+                gsap.from("#categoryProductsGrid .itemName", { y: 20, opacity: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" });
             }
         }
     }
@@ -376,15 +432,13 @@ export class ContainerView {
         
         itemDiv.innerHTML = `
             <div class="product-image-container clickable-area">
-                ${this.getImageWithFallback(element.src)}
+                <img class="itemImage" src="${element.src}" alt="${element.name}" loading="lazy" onerror="this.src='/javascript.svg';">
                 ${discountPercent > 0 ? `<div class="discount-badge">${discountPercent}% OFF</div>` : ''}
-                <div class="delivery-badge"><span><i data-lucide="zap"></i></span> 10 MINS</div>
+                <div class="delivery-badge"><i data-lucide="zap" style="width:10px;height:10px;color:var(--primary)"></i> 10 MINS</div>
             </div>
             <div class="product-content clickable-area">
-                <div class="product-info">
-                    <h3 class="product-title">${element.name}</h3>
-                    <p class="product-unit">${element.unit}</p>
-                </div>
+                <h3 class="product-title">${element.name}</h3>
+                <p class="product-unit">${element.unit}</p>
             </div>
             <div class="product-actions">
                 <div class="price-section">
@@ -414,8 +468,7 @@ export class ContainerView {
             if (e.target.closest('.clickable-area')) {
                 const card = e.target.closest('.itemName');
                 if(card) {
-                    const itemName = card.dataset.name;
-                    const item = this.data.find(i => i.name === itemName);
+                    const item = this.data.find(i => i.name === card.dataset.name);
                     if(item) this.showProductDetailView(item);
                 }
                 return;
@@ -424,27 +477,26 @@ export class ContainerView {
             // 2. Add / Plus Button (Global)
             const addBtn = e.target.closest('.add-btn') || e.target.closest('.add.qty-plus') || e.target.closest('.add-detail');
             if (addBtn) {
+                let item;
                 // If it's in detail view
                 if(addBtn.classList.contains('add-btn-detail') || addBtn.classList.contains('add-detail')) {
                     const actionsDiv = addBtn.closest('.pd-actions');
-                    const item = this.data.find(i => i.name === actionsDiv.dataset.name);
+                    item = this.data.find(i => i.name === actionsDiv.dataset.name);
                     if(item) {
                         item.quantity = (item.quantity || 0) + 1;
-                        if(item.quantity===1) this.showToast(`Added ${item.name} to cart`);
-                        this.updateAllCardDOMs(item);
                         this.updateProductDetailDOM(item, actionsDiv);
-                        this.updateCartUI();
                     }
-                    return;
+                } else {
+                    // Normal card
+                    const card = addBtn.closest('.itemName');
+                    if(card) {
+                        item = this.data.find(i => i.name === card.dataset.name);
+                        if (item) item.quantity = (item.quantity || 0) + 1;
+                    }
                 }
-                
-                // Normal card
-                const card = addBtn.closest('.itemName');
-                if(!card) return;
-                const item = this.data.find(i => i.name === card.dataset.name);
+
                 if (item) {
-                    item.quantity = (item.quantity || 0) + 1;
-                    if (item.quantity === 1) this.showToast(`Added ${item.name} to cart`);
+                    if (item.quantity === 1) this.showToast(`Added ${item.name}`);
                     this.updateAllCardDOMs(item);
                     this.updateCartUI();
                 }
@@ -454,30 +506,38 @@ export class ContainerView {
             // 3. Subtract Button (Global)
             const subBtn = e.target.closest('.subtract') || e.target.closest('.subtract-detail');
             if (subBtn) {
+                let item;
                 // If it's in detail view
                 if(subBtn.classList.contains('subtract-detail')) {
                     const actionsDiv = subBtn.closest('.pd-actions');
-                    const item = this.data.find(i => i.name === actionsDiv.dataset.name);
+                    item = this.data.find(i => i.name === actionsDiv.dataset.name);
                     if(item && item.quantity > 0) {
                         item.quantity -= 1;
-                        this.updateAllCardDOMs(item);
                         this.updateProductDetailDOM(item, actionsDiv);
-                        this.updateCartUI();
                     }
-                    return;
+                } else {
+                    // Normal card
+                    const card = subBtn.closest('.itemName');
+                    if(card) {
+                        item = this.data.find(i => i.name === card.dataset.name);
+                        if (item && item.quantity > 0) item.quantity -= 1;
+                    }
                 }
 
-                // Normal card
-                const card = subBtn.closest('.itemName');
-                if(!card) return;
-                const item = this.data.find(i => i.name === card.dataset.name);
-                if (item && item.quantity > 0) {
-                    item.quantity -= 1;
+                if (item) {
                     this.updateAllCardDOMs(item);
                     this.updateCartUI();
                 }
             }
         });
+
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        if (mobileSearchToggle) {
+            mobileSearchToggle.addEventListener('click', () => {
+                this.mobileSearchInput.focus();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
     }
 
     updateProductDetailDOM(item, actionsDiv) {
@@ -499,7 +559,7 @@ export class ContainerView {
             const btnContainer = cardElement.querySelector('.btn-container');
             if (!btnContainer) return;
             
-            if (item.quantity === 0 || !item.quantity) {
+            if (!item.quantity) {
                 btnContainer.innerHTML = `<button class="add-btn">Add</button>`;
             } else {
                 btnContainer.innerHTML = `
@@ -515,17 +575,18 @@ export class ContainerView {
 
     // ================= SEARCH & FILTER =================
     setupSearchAndFilter() {
-        this.globalSearchInput.addEventListener('keydown', (e) => {
+        const handleSearch = (e) => {
             if (e.key === 'Enter') {
                 const query = e.target.value.trim();
-                if (query) {
-                    this.showCategoryView('Search Results', query);
-                }
+                if (query) this.showCategoryView('Search Results', query);
             }
-        });
+        };
+
+        this.globalSearchInput.addEventListener('keydown', handleSearch);
+        if (this.mobileSearchInput) this.mobileSearchInput.addEventListener('keydown', handleSearch);
 
         this.sortSelect.addEventListener('change', (e) => {
-            const currentSearch = this.globalSearchInput?.value?.trim() || '';
+            const currentSearch = this.globalSearchInput?.value || this.mobileSearchInput?.value || '';
             const searchQuery = this.currentCategory === 'Search Results' ? currentSearch : '';
             this.renderCategoryProducts(this.currentCategory, searchQuery, e.target.value);
         });
@@ -534,57 +595,44 @@ export class ContainerView {
     // ================= CART =================
     setupCartModal() {
         const cartButton = document.getElementById('cartButton');
-        const cartSidebar = document.getElementById('cartSidebar');
         const cartOverlay = document.getElementById('cartOverlay');
         const closeCart = document.getElementById('closeCart');
         
-        const openSidebar = () => {
-            this.renderCartSidebar();
-            cartSidebar.classList.add('active');
-            cartOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
-
-        const closeSidebar = () => {
-            cartSidebar.classList.remove('active');
-            cartOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        };
-
-        cartButton.addEventListener('click', openSidebar);
-        closeCart.addEventListener('click', closeSidebar);
-        cartOverlay.addEventListener('click', closeSidebar);
+        cartButton.addEventListener('click', () => this.openCartSidebar());
+        closeCart.addEventListener('click', () => this.closeCartSidebar());
+        cartOverlay.addEventListener('click', () => this.closeCartSidebar());
         
         document.getElementById('cartItems').addEventListener('click', (e) => {
+            const name = e.target.dataset.name;
+            const item = this.data.find(i => i.name === name);
+            if (!item) return;
+
             if (e.target.classList.contains('subtract-cart')) {
-                const item = this.data.find(i => i.name === e.target.dataset.name);
-                if (item && item.quantity > 0) {
-                    item.quantity -= 1;
-                    this.updateAllCardDOMs(item);
-                    
-                    // If detailed view is open for this item, update it too
-                    const pdActions = document.querySelector('.pd-actions');
-                    if(pdActions && pdActions.dataset.name === item.name) {
-                        this.updateProductDetailDOM(item, pdActions);
-                    }
-                    
-                    this.updateCartUI();
-                }
+                item.quantity -= 1;
             } else if (e.target.classList.contains('add-cart')) {
-                const item = this.data.find(i => i.name === e.target.dataset.name);
-                if (item) {
-                    item.quantity += 1;
-                    this.updateAllCardDOMs(item);
-                    
-                    const pdActions = document.querySelector('.pd-actions');
-                    if(pdActions && pdActions.dataset.name === item.name) {
-                        this.updateProductDetailDOM(item, pdActions);
-                    }
-                    
-                    this.updateCartUI();
-                }
+                item.quantity += 1;
             }
+
+            this.updateAllCardDOMs(item);
+            const pdActions = document.querySelector('.pd-actions');
+            if(pdActions && pdActions.dataset.name === item.name) {
+                this.updateProductDetailDOM(item, pdActions);
+            }
+            this.updateCartUI();
         });
+    }
+
+    openCartSidebar() {
+        this.renderCartSidebar();
+        document.getElementById('cartSidebar').classList.add('active');
+        document.getElementById('cartOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeCartSidebar() {
+        document.getElementById('cartSidebar').classList.remove('active');
+        document.getElementById('cartOverlay').classList.remove('active');
+        document.body.style.overflow = '';
     }
 
     updateCartUI() {
@@ -599,7 +647,9 @@ export class ContainerView {
         });
         
         this.cartCount.textContent = totalItems;
+        if (this.mobileCount) this.mobileCount.textContent = totalItems;
         if(this.cartTotalHeader) this.cartTotalHeader.textContent = `₹${totalPrice.toFixed(2)}`;
+        
         if (document.getElementById('cartSidebar').classList.contains('active')) {
             this.renderCartSidebar();
         }
@@ -613,23 +663,23 @@ export class ContainerView {
         if (cartItems.length === 0) {
             cartItemsContainer.innerHTML = `
                 <div class="empty-cart">
-                    <div class="empty-cart-icon"><i data-lucide="shopping-cart"></i></div>
+                    <i data-lucide="shopping-cart" style="width:48px;height:48px;margin-bottom:16px;opacity:0.3"></i>
                     <h3>Your cart is empty</h3>
-                    <p style="margin-top:8px; font-size:0.9rem;">Add items to start your MegaMart journey.</p>
+                    <p style="font-size:0.85rem;color:var(--text-muted)">Add something to make me happy!</p>
                 </div>
             `;
             cartFooter.innerHTML = '';
         } else {
             cartItemsContainer.innerHTML = cartItems.map(item => `
                 <div class="cart-item">
-                    <img src="${item.src}" alt="${item.name}" class="cart-item-image" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/javascript.svg';">
+                    <img src="${item.src}" alt="${item.name}" class="cart-item-image" onerror="this.src='/javascript.svg';">
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
                         <div class="cart-item-price">₹${item.discount_price}</div>
                     </div>
-                    <div class="quantity-controls" style="width: 100px; height: 32px; font-size:14px;">
+                    <div class="quantity-controls" style="width: 80px; height: 28px;">
                         <button class="qty-btn subtract-cart" data-name="${item.name}">−</button>
-                        <span class="quantity-display">${item.quantity}</span>
+                        <span class="quantity-display" style="font-size:0.75rem">${item.quantity}</span>
                         <button class="qty-btn add-cart" data-name="${item.name}">+</button>
                     </div>
                 </div>
@@ -640,19 +690,10 @@ export class ContainerView {
             const total = subtotal + deliveryFee;
             
             cartFooter.innerHTML = `
-                <div class="bill-row">
-                    <span>Item Total</span>
-                    <span>₹${subtotal.toFixed(2)}</span>
-                </div>
-                <div class="bill-row">
-                    <span>Delivery Fee</span>
-                    <span>${deliveryFee === 0 ? '<span style="color:var(--success)">FREE</span>' : `₹${deliveryFee}`}</span>
-                </div>
-                <div class="bill-row total">
-                    <span>To Pay</span>
-                    <span>₹${total.toFixed(2)}</span>
-                </div>
-                <button class="checkout-btn">Proceed to Checkout</button>
+                <div class="bill-row"><span>Items</span><span>₹${subtotal.toFixed(2)}</span></div>
+                <div class="bill-row"><span>Delivery</span><span>${deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}</span></div>
+                <div class="bill-row total"><span>Total</span><span>₹${total.toFixed(2)}</span></div>
+                <button class="checkout-btn">Checkout</button>
             `;
         }
         if (window.lucide) lucide.createIcons();
@@ -680,16 +721,19 @@ export class ContainerView {
             gsap.registerPlugin(ScrollTrigger);
             gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
                 gsap.from(elem, {
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 85%",
-                    },
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.8,
-                    ease: "power3.out"
+                    scrollTrigger: { trigger: elem, start: "top 90%" },
+                    y: 30, opacity: 0, duration: 0.6, ease: "power2.out"
                 });
             });
         }
+    }
+
+    normalizeCategoryName(name) { return (name || '').toString().trim().toLowerCase(); }
+
+    getItemsForCategory(categoryName) {
+        const normalized = this.normalizeCategoryName(categoryName);
+        if (['all products', 'all', 'search results'].includes(normalized)) return [...this.data];
+        const items = this.data.filter(item => this.normalizeCategoryName(item.type) === normalized);
+        return items.length ? items : [...this.data];
     }
 }
