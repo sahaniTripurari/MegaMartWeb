@@ -48,6 +48,16 @@
                         <span class="coins-balance" id="headerCoinBalance">150</span>
                     </div>
                 </button>
+                <button class="action-btn wishlist-button desktop-wishlist" id="wishlistButton" title="My Wishlist">
+                    <div class="wishlist-icon-wrapper">
+                        <i data-lucide="heart"></i>
+                        <span class="cart-count wishlist-badge-count" id="wishlistCount">0</span>
+                    </div>
+                    <div class="wishlist-text">
+                        <span class="wishlist-label">Wishlist</span>
+                        <span class="wishlist-sub" id="wishlistCountLabel">0 Items</span>
+                    </div>
+                </button>
                 <button class="action-btn orders-button desktop-orders" id="headerOrdersBtn" title="My Orders & Live Tracking">
                     <div class="orders-icon-wrapper">
                         <i data-lucide="package"></i>
@@ -67,6 +77,68 @@
                         <span class="cart-total" id="cartTotalHeader">₹0.00</span>
                     </div>
                 </button>
+
+                <!-- Authentication Section -->
+                <div class="header-auth-box" id="headerAuthContainer">
+                    <!-- Logged Out State: Login / Sign Up Button -->
+                    <button class="action-btn auth-login-btn" id="headerLoginBtn" title="Login or Register">
+                        <div class="auth-icon-wrapper">
+                            <i data-lucide="user"></i>
+                        </div>
+                        <div class="auth-text">
+                            <span class="auth-label">Account</span>
+                            <span class="auth-sub">Login / Sign Up</span>
+                        </div>
+                    </button>
+
+                    <!-- Logged In State: User Menu & Dropdown -->
+                    <div class="header-user-menu" id="headerUserMenu" style="display: none;">
+                        <button class="header-user-btn" id="headerUserBtn" aria-haspopup="true" aria-expanded="false" title="Account Menu">
+                            <div class="user-avatar-pill" id="headerUserAvatar">TS</div>
+                            <div class="user-name-box">
+                                <span class="user-greeting-sub">Hi,</span>
+                                <span class="user-greeting-name" id="headerUserName">Tripurari</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="user-chevron"></i>
+                        </button>
+
+                        <div class="header-user-dropdown" id="headerUserDropdown" role="menu">
+                            <div class="dropdown-profile-header">
+                                <div class="dropdown-avatar-large" id="dropdownUserAvatar">TS</div>
+                                <div class="dropdown-user-info">
+                                    <h4 id="dropdownUserName">Tripurari Sahni</h4>
+                                    <p id="dropdownUserEmail">tripurarisahni@gmail.com</p>
+                                    <span class="verified-badge"><i data-lucide="shield-check"></i> Verified Member</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-menu-list">
+                                <button class="user-menu-item" id="dropdownProfileBtn" role="menuitem">
+                                    <i data-lucide="user"></i>
+                                    <span>👤 My Profile</span>
+                                </button>
+                                <button class="user-menu-item" id="dropdownOrdersBtn" role="menuitem">
+                                    <i data-lucide="package"></i>
+                                    <span>📦 My Orders</span>
+                                </button>
+                                <button class="user-menu-item" id="dropdownWishlistBtn" role="menuitem">
+                                    <i data-lucide="heart"></i>
+                                    <span>❤️ My Wishlist</span>
+                                </button>
+                                <button class="user-menu-item" id="dropdownCoinsBtn" role="menuitem">
+                                    <span class="menu-coin-icon">🪙</span>
+                                    <span>MegaCoins: <strong id="dropdownCoinsVal">150</strong></span>
+                                </button>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button class="user-menu-item logout-action" id="dropdownLogoutBtn" role="menuitem">
+                                <i data-lucide="log-out"></i>
+                                <span>🚪 Logout</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="mobile-search-toggle" id="mobileSearchToggle">
                     <i data-lucide="search"></i>
                 </button>
@@ -88,6 +160,13 @@
             <i data-lucide="package"></i>
             <span>Orders</span>
         </div>
+        <div class="bottom-nav-item" id="bottomWishlistBtn">
+            <div class="cart-icon-wrapper">
+                <i data-lucide="heart"></i>
+                <span class="cart-count bottom-wishlist-count" id="bottomWishlistCount">0</span>
+            </div>
+            <span>Wishlist</span>
+        </div>
         <div class="bottom-nav-item" id="mobileCartBtn">
             <div class="cart-icon-wrapper">
                 <i data-lucide="shopping-cart"></i>
@@ -95,9 +174,42 @@
             </div>
             <span>Cart</span>
         </div>
-        <div class="bottom-nav-item" data-view="profile">
+        <div class="bottom-nav-item" data-view="profile" id="mobileProfileBtn">
             <i data-lucide="user"></i>
             <span>Profile</span>
+        </div>
+    </nav>
+
+    <!-- Sub-header Category Navigation Tabs (Flipkart Inspired) -->
+    <nav class="sub-header-nav" id="subHeaderNav">
+        <div class="container sub-header-container">
+            <div class="sub-nav-tabs" id="subNavTabs">
+                <button class="sub-nav-tab active" data-tab="For You">
+                    <i data-lucide="sparkles"></i>
+                    <span>For You</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Grocery">
+                    <i data-lucide="shopping-basket"></i>
+                    <span>Grocery</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Fruits & Veggies">
+                    <i data-lucide="apple"></i>
+                    <span>Fruits & Veggies</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Kitchen">
+                    <i data-lucide="utensils"></i>
+                    <span>Kitchen</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Household">
+                    <i data-lucide="home"></i>
+                    <span>Household</span>
+                </button>
+                <button class="sub-nav-tab hot-tab" data-tab="Top Offers">
+                    <i data-lucide="tag"></i>
+                    <span>Top Offers</span>
+                    <span class="hot-badge">HOT</span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -115,6 +227,218 @@
     <main class="main-content">
         <!-- ================= HOME VIEW ================= -->
         <div id="homeView" class="view-section active">
+
+            <!-- Bank Offer Strip -->
+            <div class="bank-offer-strip" id="bankOfferStrip">
+                <div class="container bank-offer-inner">
+                    <div class="bank-offer-left">
+                        <span class="bank-badge"><i data-lucide="credit-card"></i> BANK OFFER</span>
+                        <span class="bank-desc"><strong>10% Instant Discount</strong> on HDFC Bank & SBI Cards on orders above ₹499</span>
+                    </div>
+                    <div class="bank-offer-right">
+                        <button class="coupon-chip" id="copyBankCouponBtn" title="Click to copy coupon code">
+                            <span>Code: <strong>FESTIVE10</strong></span>
+                            <i data-lucide="copy" class="copy-icon"></i>
+                        </button>
+                        <span class="bank-terms">T&C Apply</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flipkart-Style Mega Banner Hero Carousel -->
+            <section class="mega-banner-carousel-section container gs-reveal">
+                <div class="mega-carousel-wrapper" id="megaCarouselWrapper">
+                    <div class="mega-carousel-track" id="megaCarouselTrack">
+                        <!-- Banner 1: Big Bang Sale -->
+                        <div class="mega-banner-slide banner-bbd active" data-slide="0">
+                            <div class="banner-content">
+                                <span class="banner-pill-badge">🔥 DIWALI SPECIAL • BIG BANG SALE</span>
+                                <h1 class="banner-title">BIG BANG SALE IS LIVE</h1>
+                                <p class="banner-subtitle">50% to 80% OFF on 5,000+ Daily Essentials</p>
+                                <div class="banner-perks-row">
+                                    <span class="banner-perk"><i data-lucide="zap"></i> 10-Min Delivery</span>
+                                    <span class="banner-perk">🪙 4x MegaCoins</span>
+                                    <span class="banner-perk">🚚 Free Delivery ₹499+</span>
+                                </div>
+                                <button class="banner-cta-btn" data-category="All Products">
+                                    <span>SHOP BIG BANG DEALS</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="banner-visual">
+                                <div class="banner-discount-seal">
+                                    <span class="seal-sub">UP TO</span>
+                                    <span class="seal-percent">80%</span>
+                                    <span class="seal-off">OFF</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Banner 2: Super Grocery Bonanza -->
+                        <div class="mega-banner-slide banner-grocery" data-slide="1">
+                            <div class="banner-content">
+                                <span class="banner-pill-badge">🥬 FARM-TO-FORK HARVEST</span>
+                                <h1 class="banner-title">SUPER GROCERY BONANZA</h1>
+                                <p class="banner-subtitle">Fresh Farm Produce Starting From Just ₹19</p>
+                                <div class="banner-perks-row">
+                                    <span class="banner-perk"><i data-lucide="check-circle-2"></i> 100% Organic & Handpicked</span>
+                                    <span class="banner-perk">❄️ Cold-Chain Stored</span>
+                                </div>
+                                <button class="banner-cta-btn" data-category="Fresh Vegetables">
+                                    <span>EXPLORE PRODUCE FROM ₹19</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="banner-visual">
+                                <div class="banner-discount-seal seal-green">
+                                    <span class="seal-sub">FRESH FROM</span>
+                                    <span class="seal-percent">₹19</span>
+                                    <span class="seal-off">ONLY</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Banner 3: Kitchen Essentials Fest -->
+                        <div class="mega-banner-slide banner-kitchen" data-slide="2">
+                            <div class="banner-content">
+                                <span class="banner-pill-badge">🍳 CHEF'S WONDERLAND</span>
+                                <h1 class="banner-title">KITCHEN ESSENTIALS FEST</h1>
+                                <p class="banner-subtitle">Premium Cookware, Appliances & Organizers Up to 60% OFF</p>
+                                <div class="banner-perks-row">
+                                    <span class="banner-perk">🔥 Non-stick & Triply Steel</span>
+                                    <span class="banner-perk">⭐ 1-Year Warranty</span>
+                                </div>
+                                <button class="banner-cta-btn" data-category="Kitchen">
+                                    <span>GRAB KITCHEN DEALS</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="banner-visual">
+                                <div class="banner-discount-seal seal-orange">
+                                    <span class="seal-sub">UP TO</span>
+                                    <span class="seal-percent">60%</span>
+                                    <span class="seal-off">OFF</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <button class="carousel-arrow prev" id="megaCarouselPrev" aria-label="Previous Slide">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow next" id="megaCarouselNext" aria-label="Next Slide">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="carousel-indicators" id="megaCarouselIndicators">
+                        <button class="indicator-dot active" data-index="0" aria-label="Slide 1"></button>
+                        <button class="indicator-dot" data-index="1" aria-label="Slide 2"></button>
+                        <button class="indicator-dot" data-index="2" aria-label="Slide 3"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Utility Icon Strip (Flipkart App Icon Strip) -->
+            <section class="utility-icon-strip container gs-reveal">
+                <div class="utility-grid">
+                    <div class="utility-item" id="utilCreditDeals" role="button" tabindex="0">
+                        <div class="utility-icon-box util-card-icon">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <span class="util-title">Credit Deals</span>
+                        <span class="util-sub">Extra ₹150 OFF</span>
+                    </div>
+                    <div class="utility-item" id="utilMegaCoins" role="button" tabindex="0">
+                        <div class="utility-icon-box util-coin-icon">
+                            <span class="coin-emoji-icon">🪙</span>
+                        </div>
+                        <span class="util-title">MegaCoins</span>
+                        <span class="util-sub">150 Available</span>
+                    </div>
+                    <div class="utility-item" id="utilGiftCards" role="button" tabindex="0">
+                        <div class="utility-icon-box util-gift-icon">
+                            <i data-lucide="gift"></i>
+                        </div>
+                        <span class="util-title">Gift Cards</span>
+                        <span class="util-sub">Flat 10% Extra</span>
+                    </div>
+                    <div class="utility-item" id="utilSuperOffers" role="button" tabindex="0">
+                        <div class="utility-icon-box util-zap-icon">
+                            <i data-lucide="zap"></i>
+                        </div>
+                        <span class="util-title">Super Offers</span>
+                        <span class="util-sub">Min 50% OFF</span>
+                    </div>
+                    <div class="utility-item" id="utilBestBrands" role="button" tabindex="0">
+                        <div class="utility-icon-box util-brand-icon">
+                            <i data-lucide="award"></i>
+                        </div>
+                        <span class="util-title">Best Brands</span>
+                        <span class="util-sub">Amul, Tata, Dabur</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flipkart 3-Column Deal Cards Grid (matching Image 2) -->
+            <section class="flipkart-deal-cards-section container gs-reveal">
+                <div class="flipkart-3col-grid">
+                    <!-- Column 1: Deals of the Day -->
+                    <div class="deal-card deal-col-1">
+                        <div class="deal-card-header">
+                            <div class="deal-title-row">
+                                <h3>⚡ Deals of the Day</h3>
+                                <span class="deal-mini-timer"><i data-lucide="clock"></i> 02:45:10</span>
+                            </div>
+                            <button class="deal-view-all" data-category="Fresh Fruits">View All <i data-lucide="chevron-right"></i></button>
+                        </div>
+                        <p class="deal-sub">Crazy limited-time prices on fresh favorites</p>
+                        <div class="deal-mini-grid" id="dealCol1Grid">
+                            <!-- Populated via JS -->
+                        </div>
+                        <div class="deal-card-footer">
+                            <span class="deal-highlight-tag">🔥 Grab Before Stock Runs Out!</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Top Offers / Mega Saver Combos -->
+                    <div class="deal-card deal-col-2">
+                        <div class="deal-card-header">
+                            <div class="deal-title-row">
+                                <h3>🌟 Top Offers</h3>
+                                <span class="deal-badge-pill">MEGA SAVER</span>
+                            </div>
+                            <button class="deal-view-all" data-category="All Products">View All <i data-lucide="chevron-right"></i></button>
+                        </div>
+                        <p class="deal-sub">Bundle and save up to 70% on pantry staples</p>
+                        <div class="deal-mini-grid" id="dealCol2Grid">
+                            <!-- Populated via JS -->
+                        </div>
+                        <div class="deal-card-footer">
+                            <span class="deal-highlight-tag tag-blue">🪙 Extra 15% with MegaCoins</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Budget Bazaar - Under ₹99 -->
+                    <div class="deal-card deal-col-3">
+                        <div class="deal-card-header">
+                            <div class="deal-title-row">
+                                <h3>🏷️ Budget Bazaar</h3>
+                                <span class="deal-badge-pill tag-green">UNDER ₹99</span>
+                            </div>
+                            <button class="deal-view-all" data-category="Fresh Vegetables">View All <i data-lucide="chevron-right"></i></button>
+                        </div>
+                        <p class="deal-sub">Pocket-friendly daily essentials from ₹19</p>
+                        <div class="deal-mini-grid" id="dealCol3Grid">
+                            <!-- Populated via JS -->
+                        </div>
+                        <div class="deal-card-footer">
+                            <span class="deal-highlight-tag tag-purple">⚡ 10-Min Instant Delivery</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
             
             <!-- Flipkart-Style Deal of the Day / Flash Sale Countdown Bar -->
             <div class="flash-sale-banner" id="flashSaleBanner">
@@ -293,14 +617,15 @@
             <div class="container">
                 <div class="profile-layout">
                     <div class="profile-header">
-                        <div class="profile-avatar">
-                            <i data-lucide="user"></i>
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span id="profileAvatarText"><i data-lucide="user"></i></span>
                         </div>
                         <div class="profile-info">
-                            <h2>Guest User</h2>
-                            <p>+91 9876543210 • guest@megamart.com</p>
+                            <h2 id="profileUserName">Guest User</h2>
+                            <p id="profileUserContact">Sign in to access orders, wishlist, and rewards</p>
                         </div>
-                        <button class="edit-profile-btn"><i data-lucide="edit-3"></i></button>
+                        <button class="auth-btn-profile" id="profileLoginBtn" style="display:none;"><i data-lucide="log-in"></i> Sign In</button>
+                        <button class="edit-profile-btn" id="editProfileBtn"><i data-lucide="edit-3"></i></button>
                     </div>
 
                     <div class="profile-stats">
@@ -377,10 +702,135 @@
                         </div>
                     </div>
 
-                    <button class="logout-btn">
+                    <button class="logout-btn" id="profileLogoutBtn">
                         <i data-lucide="log-out"></i>
                         <span>Log Out</span>
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= FULL-PAGE DEDICATED CART VIEW ================= -->
+        <div id="cartPageView" class="view-section" style="display: none;">
+            <div class="container cart-page-container">
+                <!-- Top Bar -->
+                <div class="cart-page-topbar">
+                    <button class="btn-cart-back" id="cartPageBackBtn">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Continue Shopping</span>
+                    </button>
+                    <div class="cart-page-heading">
+                        <h2>Shopping Cart</h2>
+                        <span class="cart-badge-pill" id="cartPageItemCount">0 Items</span>
+                    </div>
+                    <button class="btn-cart-clear" id="cartPageClearBtn" title="Clear all items in cart">
+                        <i data-lucide="trash-2"></i>
+                        <span>Clear Cart</span>
+                    </button>
+                </div>
+
+                <!-- 2-Column Desktop Layout (stacked on mobile) -->
+                <div class="cart-page-layout">
+                    <!-- Left Column (65%): Detailed item list -->
+                    <div class="cart-page-left">
+                        <!-- Free Delivery Bar in Cart -->
+                        <div class="cart-free-delivery-card" id="cartPageDeliveryAlert">
+                            <div class="cfd-icon-box"><i data-lucide="truck"></i></div>
+                            <div class="cfd-content">
+                                <span class="cfd-title" id="cartPageDeliveryTitle">Add ₹149 more for FREE Delivery</span>
+                                <div class="cfd-progress-track">
+                                    <div class="cfd-progress-fill" id="cartPageDeliveryFill" style="width: 70%;"></div>
+                                </div>
+                            </div>
+                            <span class="cfd-badge" id="cartPageDeliveryBadge">₹499 GOAL</span>
+                        </div>
+
+                        <!-- Items List -->
+                        <div class="cart-page-items-list" id="cartPageItemsList">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="cart-empty-state" id="cartPageEmpty" style="display: none;">
+                            <div class="empty-icon-wrap">
+                                <i data-lucide="shopping-cart"></i>
+                            </div>
+                            <h3>Your cart is empty</h3>
+                            <p>Looks like you haven't added anything to your cart yet. Discover hundreds of fresh groceries with instant 10-minute delivery!</p>
+                            <button class="btn btn-primary shop-now-btn" id="cartPageShopNowBtn">
+                                <i data-lucide="shopping-bag"></i>
+                                <span>Shop Now</span>
+                            </button>
+                        </div>
+
+                        <!-- Saved For Later Section -->
+                        <div class="saved-for-later-box" id="savedForLaterBox" style="display: none;">
+                            <div class="saved-box-header">
+                                <div class="saved-title-left">
+                                    <i data-lucide="bookmark"></i>
+                                    <h3>Saved For Later (<span id="savedItemsCount">0</span>)</h3>
+                                </div>
+                                <span class="saved-sub">Items you saved to buy later</span>
+                            </div>
+                            <div class="saved-items-list" id="savedItemsList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column (35%): Flipkart/Amazon style 'Price Details' sticky card -->
+                    <div class="cart-page-right" id="cartPageRightCol">
+                        <div class="cart-price-summary-card">
+                            <div class="summary-card-header">
+                                <h3>PRICE DETAILS</h3>
+                            </div>
+                            <div class="summary-card-body">
+                                <div class="summary-row">
+                                    <span>Price (<span id="summaryCount">0</span> items)</span>
+                                    <span id="summaryMRP">₹0.00</span>
+                                </div>
+                                <div class="summary-row discount-row">
+                                    <span>Discount</span>
+                                    <span class="text-green" id="summaryDiscount">- ₹0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Delivery Charges</span>
+                                    <span id="summaryDeliveryFee" class="text-green">FREE</span>
+                                </div>
+                                <div class="summary-row megacoins-row" id="summaryMegaCoinsRow" style="display: none;">
+                                    <span>🪙 MegaCoins Discount</span>
+                                    <span class="text-green" id="summaryMegaCoinsSavings">- ₹50.00</span>
+                                </div>
+                                <div class="summary-coins-toggle">
+                                    <label class="coins-checkbox-label">
+                                        <input type="checkbox" id="cartPageRedeemCoins">
+                                        <span class="custom-chk"></span>
+                                        <div class="chk-label">
+                                            <span>Redeem 50 MegaCoins</span>
+                                            <small>Save ₹50 instantly on this order</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="summary-divider"></div>
+                                <div class="summary-row total-row">
+                                    <span>Total Amount</span>
+                                    <span class="summary-final-total" id="summaryFinalTotal">₹0.00</span>
+                                </div>
+                                <div class="summary-savings-banner" id="summarySavingsBanner">
+                                    <span class="popper-icon">🎉</span>
+                                    <span>You will save <strong id="summaryTotalSavings">₹0.00</strong> on this order</span>
+                                </div>
+                            </div>
+                            <div class="summary-card-footer">
+                                <button class="btn-proceed-checkout" id="cartPageProceedBtn">
+                                    <span>PROCEED TO CHECKOUT</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                                <div class="trust-guarantee">
+                                    <div class="trust-item"><i data-lucide="shield-check"></i> <span>Safe & Secure Payments</span></div>
+                                    <div class="trust-item"><i data-lucide="zap"></i> <span>100% Authentic Products</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -453,6 +903,158 @@
 
         <div class="cart-items" id="cartItems"></div>
         <div class="cart-footer" id="cartFooter"></div>
+    </div>
+
+    <!-- ================= USER AUTHENTICATION MODAL ================= -->
+    <div class="auth-modal-overlay" id="authModalOverlay"></div>
+    <div class="auth-modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+        <div class="auth-modal-header">
+            <div class="auth-brand-badge">
+                <div class="auth-brand-icon"><i data-lucide="zap"></i></div>
+                <div>
+                    <h3 id="authModalTitle">Welcome to MegaMart</h3>
+                    <p class="auth-brand-sub">Instant 10-Minute Grocery Supermarket</p>
+                </div>
+            </div>
+            <button class="close-auth-modal" id="closeAuthModal" title="Close dialog" aria-label="Close dialog">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <!-- Dual Tab Switcher -->
+        <div class="auth-tab-switchers" role="tablist">
+            <button class="auth-tab-btn active" id="authTabLogin" role="tab" aria-selected="true" data-tab="login">
+                <i data-lucide="log-in"></i>
+                <span>Login</span>
+            </button>
+            <button class="auth-tab-btn" id="authTabRegister" role="tab" aria-selected="false" data-tab="register">
+                <i data-lucide="user-plus"></i>
+                <span>Sign Up / Register</span>
+            </button>
+        </div>
+
+        <div class="auth-modal-body">
+            <!-- Recruiter Quick 1-Click Demo Login Box -->
+            <div class="demo-login-box">
+                <div class="demo-box-top">
+                    <span class="demo-recruiter-tag">⚡ Recruiter Quick Testing</span>
+                    <span class="demo-coins-tag">🪙 150 MegaCoins Loaded</span>
+                </div>
+                <button type="button" class="demo-account-btn" id="demoLoginBtn" title="Instant 1-Click Login as Tripurari Sahni">
+                    <div class="demo-account-avatar">TS</div>
+                    <div class="demo-account-info">
+                        <strong>Or continue with Demo Account (Tripurari Sahni)</strong>
+                        <span>tripurarisahni@gmail.com • +91 9876543210</span>
+                    </div>
+                    <div class="demo-account-arrow">
+                        <span>1-Click</span>
+                        <i data-lucide="arrow-right"></i>
+                    </div>
+                </button>
+            </div>
+
+            <div class="auth-divider-line">
+                <span>OR SIGN IN WITH CREDENTIALS</span>
+            </div>
+
+            <!-- Tab 1: Login Form -->
+            <form class="auth-tab-panel active" id="loginTabContent" novalidate>
+                <div class="auth-input-group">
+                    <label for="loginIdentifier">Email or 10-Digit Mobile Phone</label>
+                    <div class="auth-input-field">
+                        <i data-lucide="mail" class="auth-field-icon"></i>
+                        <input type="text" id="loginIdentifier" placeholder="e.g. tripurarisahni@gmail.com or 9876543210" autocomplete="username" required>
+                    </div>
+                    <span class="auth-field-error" id="loginIdentifierError"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <div class="auth-label-row">
+                        <label for="loginPassword">Password</label>
+                        <a href="javascript:void(0)" class="auth-forgot-link" id="authForgotLink">Forgot Password?</a>
+                    </div>
+                    <div class="auth-input-field">
+                        <i data-lucide="lock" class="auth-field-icon"></i>
+                        <input type="password" id="loginPassword" placeholder="Enter password (demo: 123456)" autocomplete="current-password" required>
+                        <button type="button" class="auth-pwd-toggle" id="toggleLoginPassword" aria-label="Toggle password visibility">
+                            <i data-lucide="eye" id="loginEyeIcon"></i>
+                        </button>
+                    </div>
+                    <span class="auth-field-error" id="loginPasswordError"></span>
+                </div>
+
+                <div class="auth-remember-row">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" id="loginRememberMe" checked>
+                        <span>Keep me logged in on this browser</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-main-btn" id="loginSubmitBtn">
+                    <span>Login to MegaMart</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+
+                <div class="auth-footer-text">
+                    New to MegaMart? <button type="button" class="auth-switch-link" id="switchTabToRegister">Sign Up Free</button>
+                </div>
+            </form>
+
+            <!-- Tab 2: Register Form -->
+            <form class="auth-tab-panel" id="registerTabContent" style="display:none;" novalidate>
+                <div class="auth-input-group">
+                    <label for="registerName">Full Name</label>
+                    <div class="auth-input-field">
+                        <i data-lucide="user" class="auth-field-icon"></i>
+                        <input type="text" id="registerName" placeholder="e.g. Tripurari Sahni" autocomplete="name" required>
+                    </div>
+                    <span class="auth-field-error" id="registerNameError"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label for="registerEmail">Email Address</label>
+                    <div class="auth-input-field">
+                        <i data-lucide="mail" class="auth-field-icon"></i>
+                        <input type="email" id="registerEmail" placeholder="e.g. user@example.com" autocomplete="email" required>
+                    </div>
+                    <span class="auth-field-error" id="registerEmailError"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label for="registerPhone">10-Digit Mobile Phone</label>
+                    <div class="auth-input-field auth-phone-field">
+                        <span class="auth-phone-prefix">+91</span>
+                        <input type="tel" id="registerPhone" placeholder="9876543210" maxlength="10" autocomplete="tel" required>
+                    </div>
+                    <span class="auth-field-error" id="registerPhoneError"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label for="registerPassword">Create Password (Min 6 chars)</label>
+                    <div class="auth-input-field">
+                        <i data-lucide="lock" class="auth-field-icon"></i>
+                        <input type="password" id="registerPassword" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+                        <button type="button" class="auth-pwd-toggle" id="toggleRegisterPassword" aria-label="Toggle password visibility">
+                            <i data-lucide="eye" id="registerEyeIcon"></i>
+                        </button>
+                    </div>
+                    <span class="auth-field-error" id="registerPasswordError"></span>
+                </div>
+
+                <div class="auth-terms-disclaimer">
+                    By registering, you agree to MegaMart's <a href="javascript:void(0)">Terms of Service</a> &amp; <a href="javascript:void(0)">Privacy Policy</a>.
+                </div>
+
+                <button type="submit" class="auth-main-btn" id="registerSubmitBtn">
+                    <span>Create MegaMart Account</span>
+                    <i data-lucide="user-check"></i>
+                </button>
+
+                <div class="auth-footer-text">
+                    Already have an account? <button type="button" class="auth-switch-link" id="switchTabToLogin">Log In</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- ================= PINCODE & DELIVERY ESTIMATOR MODAL ================= -->
@@ -782,6 +1384,31 @@
             <div class="tracking-order-summary" id="trackingOrderSummary">
                 <!-- Dynamically populated -->
             </div>
+        </div>
+    </div>
+
+    <!-- ================= WISHLIST DRAWER ================= -->
+    <div class="wishlist-sidebar-overlay" id="wishlistOverlay"></div>
+    <div class="wishlist-sidebar" id="wishlistSidebar">
+        <div class="wishlist-header">
+            <div class="wishlist-title-wrap">
+                <div class="wishlist-header-icon"><i data-lucide="heart"></i></div>
+                <h3>My Wishlist</h3>
+                <span class="wishlist-header-count" id="wishlistDrawerCount">0 items</span>
+            </div>
+            <button class="close-wishlist" id="closeWishlist" title="Close Wishlist">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="wishlist-subbanner">
+            <i data-lucide="sparkles"></i>
+            <span>Save items to easily reorder your daily grocery favorites!</span>
+        </div>
+        <div class="wishlist-items" id="wishlistItems">
+            <!-- Dynamically populated -->
+        </div>
+        <div class="wishlist-footer" id="wishlistFooter">
+            <!-- Move All to Cart button -->
         </div>
     </div>
 

@@ -10,6 +10,7 @@ export class ContainerView {
         this.categoryView = document.getElementById('categoryView');
         this.productDetailView = document.getElementById('productDetailView');
         this.profileView = document.getElementById('profileView');
+        this.cartPageView = document.getElementById('cartPageView');
         
         // Containers
         this.navCategories = document.getElementById('navCategories');
@@ -42,9 +43,13 @@ export class ContainerView {
         this.activeFilterTag = 'all';
         this.sliderInterval = null;
         this.wishlist = this.loadWishlistFromStorage();
+        this.savedForLater = this.loadSavedForLaterFromStorage();
         this.megaCoins = this.loadMegaCoinsFromStorage();
         this.redeemMegaCoins = false;
         this.redeemedCoinsValue = 0;
+        this.megaCarouselIndex = 0;
+        this.megaCarouselInterval = null;
+        this.currentUser = this.loadUserFromStorage();
         
         this.controller = new Controller(this.data);
         this.elementList = this.controller.categories(this.data);
@@ -62,6 +67,8 @@ export class ContainerView {
         this.setupFilterTags();
         this.setupCartModal();
         this.setupWishlistModal();
+        this.setupAuth();
+        this.setupOrderHistoryDrawer();
         this.setupEventDelegation();
         this.setupBottomNav();
         this.updateCartUI();
@@ -73,6 +80,12 @@ export class ContainerView {
         this.updateMegaCoinsUI();
         this.setupFlashSaleTimer();
         this.setupMegaCoinsNav();
+        this.setupSubHeaderNav();
+        this.setupMegaCarousel();
+        this.setupBankOfferStrip();
+        this.setupUtilityStrip();
+        this.setupFlipkartDealCards();
+        this.setupCartPageView();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -85,8 +98,8 @@ export class ContainerView {
             item.addEventListener('click', () => {
                 const view = item.dataset.view;
                 
-                // If it's cart or wishlist, don't change active view tab
-                if (item.id === 'mobileCartBtn' || item.id === 'bottomWishlistBtn') {
+                // If it's cart, wishlist or orders drawer, don't change active view tab
+                if (item.id === 'mobileCartBtn' || item.id === 'bottomWishlistBtn' || item.id === 'mobileOrdersBtn') {
                     return;
                 }
                 
@@ -110,7 +123,7 @@ export class ContainerView {
         const mobileCartBtn = document.getElementById('mobileCartBtn');
         if (mobileCartBtn) {
             mobileCartBtn.addEventListener('click', () => {
-                this.openCartSidebar();
+                this.showCartPageView();
             });
         }
 
@@ -146,7 +159,7 @@ export class ContainerView {
 
     // ================= ROUTING & VIEWS =================
     setActiveView(activeView) {
-        [this.homeView, this.categoryView, this.productDetailView, this.profileView].forEach((view) => {
+        [this.homeView, this.categoryView, this.productDetailView, this.profileView, this.cartPageView].forEach((view) => {
             if (!view) return;
             view.classList.remove('active');
             view.style.display = 'none';
@@ -167,6 +180,8 @@ export class ContainerView {
             document.querySelector('.bottom-nav-item[data-view="categories"]')?.classList.add('active');
         } else if (activeView === this.profileView) {
             document.querySelector('.bottom-nav-item[data-view="profile"]')?.classList.add('active');
+        } else if (activeView === this.cartPageView) {
+            document.getElementById('mobileCartBtn')?.classList.add('active');
         }
     }
 
@@ -177,6 +192,14 @@ export class ContainerView {
                 this.showHomeView();
             });
         });
+
+        const cartButton = document.getElementById('cartButton');
+        if (cartButton) {
+            cartButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showCartPageView();
+            });
+        }
         
         const profileBtn = document.getElementById('profileBtn');
         if (profileBtn) {
@@ -195,6 +218,13 @@ export class ContainerView {
         }
     }
 
+    showCartPageView() {
+        this.currentCategory = 'Cart';
+        this.setActiveView(this.cartPageView);
+        this.renderCartPageView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     showHomeView() {
         this.currentCategory = 'Home';
         this.setActiveView(this.homeView);
@@ -207,6 +237,8 @@ export class ContainerView {
         this.currentCategory = 'Profile';
         this.setActiveView(this.profileView);
         this.updateNavHighlight('Profile');
+        this.updateAuthUI();
+        this.updateProfileStats();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -956,7 +988,12 @@ export class ContainerView {
                     
                     const heroDiv = document.createElement('div');
                     heroDiv.className = 'featured-hero';
-                    heroDiv.innerHTML = `<img src="${heroItem.src}" alt="${heroItem.name}"><h3>${heroItem.name}</h3><p>Starting at ₹${heroItem.discount_price}</p>`;
+                    heroDiv.innerHTML = `
+                        <span style="font-size:0.68rem; font-weight:800; background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; padding:2px 8px; border-radius:4px; margin-bottom:8px;">⭐ SPOTLIGHT DEAL</span>
+                        <img src="${heroItem.src}" alt="${heroItem.name}" loading="lazy" onerror="this.src='/javascript.svg';">
+                        <h3>${heroItem.name}</h3>
+                        <p>Starting at ₹${heroItem.discount_price} <span style="font-size:0.75rem; text-decoration:line-through; color:var(--text-muted); margin-left:4px;">₹${heroItem.price}</span></p>
+                    `;
                     heroDiv.addEventListener('click', () => this.showProductDetailView(heroItem));
                     
                     const listDiv = document.createElement('div');
@@ -1618,7 +1655,10 @@ export class ContainerView {
         const cartOverlay = document.getElementById('cartOverlay');
         const closeCart = document.getElementById('closeCart');
         
-        cartButton?.addEventListener('click', () => this.openCartSidebar());
+        cartButton?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showCartPageView();
+        });
         closeCart?.addEventListener('click', () => this.closeCartSidebar());
         cartOverlay?.addEventListener('click', () => this.closeCartSidebar());
         
@@ -1644,10 +1684,7 @@ export class ContainerView {
     }
 
     openCartSidebar() {
-        this.renderCartSidebar();
-        document.getElementById('cartSidebar')?.classList.add('active');
-        document.getElementById('cartOverlay')?.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        this.showCartPageView();
     }
 
     closeCartSidebar() {
@@ -1673,6 +1710,9 @@ export class ContainerView {
         
         if (document.getElementById('cartSidebar')?.classList.contains('active')) {
             this.renderCartSidebar();
+        }
+        if (this.cartPageView?.classList.contains('active')) {
+            this.renderCartPageView();
         }
     }
     
@@ -1934,6 +1974,14 @@ export class ContainerView {
         if (pinInput && !pinInput.value) pinInput.value = savedPin;
         if (cityInput && !cityInput.value) cityInput.value = savedCity;
 
+        // Pre-fill Customer Name & Phone if logged in
+        if (this.currentUser) {
+            const custName = document.getElementById('custName');
+            const custPhone = document.getElementById('custPhone');
+            if (custName && !custName.value) custName.value = this.currentUser.name || '';
+            if (custPhone && !custPhone.value) custPhone.value = this.currentUser.phone || '';
+        }
+
         this.updateMegaCoinsUI();
         this.renderCheckoutSummary();
         modal?.classList.add('active');
@@ -2081,6 +2129,7 @@ export class ContainerView {
             if (window.lucide) lucide.createIcons();
         }
 
+        this.updateProfileStats();
         this.showToast(`🎉 Order placed! Earned ${earnedCoins} MegaCoins!`);
     }
 
@@ -2374,5 +2423,1236 @@ export class ContainerView {
                 window.scrollTo({ top: 300, behavior: 'smooth' });
             });
         }
+    }
+
+    // ================= DEDICATED FULL-PAGE CART VIEW =================
+    loadSavedForLaterFromStorage() {
+        try {
+            const raw = localStorage.getItem('megamart_saved_for_later');
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    saveSavedForLaterToStorage() {
+        try {
+            localStorage.setItem('megamart_saved_for_later', JSON.stringify(this.savedForLater));
+        } catch (e) {}
+    }
+
+    setupCartPageView() {
+        // Back to Shopping
+        const backBtn = document.getElementById('cartPageBackBtn');
+        backBtn?.addEventListener('click', () => {
+            this.showHomeView();
+        });
+
+        // Shop Now in empty state
+        const shopNowBtn = document.getElementById('cartPageShopNowBtn');
+        shopNowBtn?.addEventListener('click', () => {
+            this.showHomeView();
+        });
+
+        // Clear Cart Button
+        const clearBtn = document.getElementById('cartPageClearBtn');
+        clearBtn?.addEventListener('click', () => {
+            const cartItems = this.data.filter(i => i.quantity > 0);
+            if (cartItems.length === 0) return;
+            if (confirm('Are you sure you want to clear all items from your cart?')) {
+                this.data.forEach(item => {
+                    item.quantity = 0;
+                });
+                this.saveCartToStorage();
+                this.updateCartUI();
+                this.renderCartPageView();
+                this.showToast('🗑️ Cart cleared successfully');
+            }
+        });
+
+        // Proceed to Checkout
+        const proceedBtn = document.getElementById('cartPageProceedBtn');
+        proceedBtn?.addEventListener('click', () => {
+            const cartItems = this.data.filter(i => i.quantity > 0);
+            if (cartItems.length === 0) {
+                this.showToast('Your cart is empty! Add products before checking out.');
+                return;
+            }
+            this.openCheckoutModal();
+        });
+
+        // MegaCoins Checkbox Toggle
+        const coinsToggle = document.getElementById('cartPageRedeemCoins');
+        coinsToggle?.addEventListener('change', (e) => {
+            this.redeemMegaCoins = e.target.checked;
+            this.renderCartPageView();
+        });
+    }
+
+    renderCartPageView() {
+        if (!this.cartPageView) return;
+        const cartItems = this.data.filter(item => item.quantity > 0);
+        const cartPageItemsList = document.getElementById('cartPageItemsList');
+        const cartPageEmpty = document.getElementById('cartPageEmpty');
+        const cartPageRightCol = document.getElementById('cartPageRightCol');
+        const cartPageItemCount = document.getElementById('cartPageItemCount');
+        const clearBtn = document.getElementById('cartPageClearBtn');
+        const freeDeliveryAlert = document.getElementById('cartPageDeliveryAlert');
+
+        const totalItemsCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        if (cartPageItemCount) {
+            cartPageItemCount.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}`;
+        }
+
+        if (cartItems.length === 0) {
+            if (cartPageItemsList) cartPageItemsList.style.display = 'none';
+            if (cartPageEmpty) cartPageEmpty.style.display = 'flex';
+            if (cartPageRightCol) cartPageRightCol.style.display = 'none';
+            if (clearBtn) clearBtn.style.display = 'none';
+            if (freeDeliveryAlert) freeDeliveryAlert.style.display = 'none';
+        } else {
+            if (cartPageItemsList) {
+                cartPageItemsList.style.display = 'flex';
+                cartPageItemsList.innerHTML = cartItems.map(item => {
+                    const discountPercent = Math.round(((item.price - item.discount_price) / item.price) * 100);
+                    return `
+                        <div class="cart-item-full" data-name="${item.name}">
+                            <div class="cart-item-full-img">
+                                <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='/javascript.svg';">
+                            </div>
+                            <div class="cart-item-full-details">
+                                <h4 class="cart-item-full-title" data-name="${item.name}">${item.name}</h4>
+                                <div class="cart-item-full-unit">${item.unit || '1 unit'} • ⚡ 10 Mins Delivery</div>
+                                <div class="cart-item-full-price-row">
+                                    <span class="cart-price-curr">₹${item.discount_price}</span>
+                                    <span class="cart-price-mrp">₹${item.price}</span>
+                                    ${discountPercent > 0 ? `<span class="cart-price-disc">${discountPercent}% OFF</span>` : ''}
+                                </div>
+                                <div class="cart-item-full-actions">
+                                    <div class="cart-item-stepper">
+                                        <button class="cart-stepper-btn sub-qty" data-name="${item.name}" aria-label="Decrease quantity">−</button>
+                                        <span class="cart-stepper-qty">${item.quantity}</span>
+                                        <button class="cart-stepper-btn add-qty" data-name="${item.name}" aria-label="Increase quantity">+</button>
+                                    </div>
+                                    <button class="btn-cart-save-later" data-name="${item.name}">
+                                        <i data-lucide="bookmark"></i> <span>Save for Later</span>
+                                    </button>
+                                    <button class="btn-cart-remove" data-name="${item.name}">
+                                        <i data-lucide="trash-2"></i> <span>Remove</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Wire up actions inside cart items
+                cartPageItemsList.querySelectorAll('.cart-item-full-title').forEach(titleEl => {
+                    titleEl.addEventListener('click', () => {
+                        const name = titleEl.dataset.name;
+                        const item = this.data.find(i => i.name === name);
+                        if (item) this.showProductDetailView(item);
+                    });
+                });
+
+                cartPageItemsList.querySelectorAll('.cart-stepper-btn.sub-qty').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const name = btn.dataset.name;
+                        const item = this.data.find(i => i.name === name);
+                        if (item && item.quantity > 0) {
+                            item.quantity -= 1;
+                            this.saveCartToStorage();
+                            this.updateAllCardDOMs(item);
+                            this.updateCartUI();
+                            this.renderCartPageView();
+                        }
+                    });
+                });
+
+                cartPageItemsList.querySelectorAll('.cart-stepper-btn.add-qty').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const name = btn.dataset.name;
+                        const item = this.data.find(i => i.name === name);
+                        if (item) {
+                            item.quantity += 1;
+                            this.saveCartToStorage();
+                            this.updateAllCardDOMs(item);
+                            this.updateCartUI();
+                            this.renderCartPageView();
+                        }
+                    });
+                });
+
+                cartPageItemsList.querySelectorAll('.btn-cart-save-later').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const name = btn.dataset.name;
+                        const item = this.data.find(i => i.name === name);
+                        if (item) {
+                            if (!this.savedForLater.some(s => s.name === item.name)) {
+                                this.savedForLater.push({
+                                    name: item.name,
+                                    price: item.price,
+                                    discount_price: item.discount_price,
+                                    src: item.src,
+                                    unit: item.unit
+                                });
+                                this.saveSavedForLaterToStorage();
+                            }
+                            item.quantity = 0;
+                            this.saveCartToStorage();
+                            this.updateAllCardDOMs(item);
+                            this.updateCartUI();
+                            this.renderCartPageView();
+                            this.showToast(`🔖 Saved "${item.name}" for later`);
+                        }
+                    });
+                });
+
+                cartPageItemsList.querySelectorAll('.btn-cart-remove').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const name = btn.dataset.name;
+                        const item = this.data.find(i => i.name === name);
+                        if (item) {
+                            item.quantity = 0;
+                            this.saveCartToStorage();
+                            this.updateAllCardDOMs(item);
+                            this.updateCartUI();
+                            this.renderCartPageView();
+                            this.showToast(`🗑️ Removed "${item.name}" from cart`);
+                        }
+                    });
+                });
+            }
+
+            if (cartPageEmpty) cartPageEmpty.style.display = 'none';
+            if (cartPageRightCol) cartPageRightCol.style.display = 'block';
+            if (clearBtn) clearBtn.style.display = 'inline-flex';
+            if (freeDeliveryAlert) freeDeliveryAlert.style.display = 'flex';
+
+            // Price Details calculations
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
+            const mrpTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const mrpDiscount = Math.max(0, mrpTotal - subtotal);
+            const deliveryFee = subtotal > 499 ? 0 : 25;
+            const coinsDiscount = (this.redeemMegaCoins && this.megaCoins >= 50) ? Math.min(50, subtotal) : 0;
+            const finalTotal = Math.max(0, subtotal + deliveryFee - coinsDiscount);
+            const totalSavings = mrpDiscount + (subtotal > 499 ? 25 : 0) + coinsDiscount;
+
+            // Update free delivery tracker
+            const deliveryTitle = document.getElementById('cartPageDeliveryTitle');
+            const deliveryFill = document.getElementById('cartPageDeliveryFill');
+            const deliveryBadge = document.getElementById('cartPageDeliveryBadge');
+            if (subtotal >= 499) {
+                if (deliveryTitle) deliveryTitle.textContent = '🎉 Congratulations! You have unlocked FREE Delivery!';
+                if (deliveryFill) deliveryFill.style.width = '100%';
+                if (deliveryBadge) deliveryBadge.textContent = 'FREE UNLOCKED';
+            } else {
+                const diff = (499 - subtotal).toFixed(0);
+                if (deliveryTitle) deliveryTitle.textContent = `Add ₹${diff} more for FREE Delivery`;
+                const pct = Math.min(100, Math.round((subtotal / 499) * 100));
+                if (deliveryFill) deliveryFill.style.width = `${pct}%`;
+                if (deliveryBadge) deliveryBadge.textContent = `₹499 GOAL`;
+            }
+
+            // Update Right Column Price Details
+            const summaryCount = document.getElementById('summaryCount');
+            const summaryMRP = document.getElementById('summaryMRP');
+            const summaryDiscount = document.getElementById('summaryDiscount');
+            const summaryDeliveryFee = document.getElementById('summaryDeliveryFee');
+            const summaryMegaCoinsRow = document.getElementById('summaryMegaCoinsRow');
+            const summaryMegaCoinsSavings = document.getElementById('summaryMegaCoinsSavings');
+            const summaryFinalTotal = document.getElementById('summaryFinalTotal');
+            const summaryTotalSavings = document.getElementById('summaryTotalSavings');
+            const cartPageRedeemCoins = document.getElementById('cartPageRedeemCoins');
+
+            if (summaryCount) summaryCount.textContent = totalItemsCount;
+            if (summaryMRP) summaryMRP.textContent = `₹${mrpTotal.toFixed(2)}`;
+            if (summaryDiscount) summaryDiscount.textContent = `- ₹${mrpDiscount.toFixed(2)}`;
+            if (summaryDeliveryFee) {
+                summaryDeliveryFee.textContent = deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`;
+                summaryDeliveryFee.className = deliveryFee === 0 ? 'text-green' : '';
+            }
+
+            if (summaryMegaCoinsRow && summaryMegaCoinsSavings) {
+                if (coinsDiscount > 0) {
+                    summaryMegaCoinsRow.style.display = 'flex';
+                    summaryMegaCoinsSavings.textContent = `- ₹${coinsDiscount.toFixed(2)}`;
+                } else {
+                    summaryMegaCoinsRow.style.display = 'none';
+                }
+            }
+
+            if (cartPageRedeemCoins) cartPageRedeemCoins.checked = this.redeemMegaCoins;
+            if (summaryFinalTotal) summaryFinalTotal.textContent = `₹${finalTotal.toFixed(2)}`;
+            if (summaryTotalSavings) summaryTotalSavings.textContent = `₹${totalSavings.toFixed(2)}`;
+        }
+
+        // Render Saved For Later Section
+        this.renderSavedForLaterSection();
+        if (window.lucide) lucide.createIcons();
+    }
+
+    renderSavedForLaterSection() {
+        const savedBox = document.getElementById('savedForLaterBox');
+        const savedCount = document.getElementById('savedItemsCount');
+        const savedList = document.getElementById('savedItemsList');
+        if (!savedBox || !savedList) return;
+
+        if (this.savedForLater.length === 0) {
+            savedBox.style.display = 'none';
+        } else {
+            savedBox.style.display = 'block';
+            if (savedCount) savedCount.textContent = this.savedForLater.length;
+            savedList.innerHTML = this.savedForLater.map(item => `
+                <div class="cart-item-full" data-name="${item.name}">
+                    <div class="cart-item-full-img">
+                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='/javascript.svg';">
+                    </div>
+                    <div class="cart-item-full-details">
+                        <h4 class="cart-item-full-title">${item.name}</h4>
+                        <div class="cart-item-full-unit">${item.unit || '1 unit'}</div>
+                        <div class="cart-item-full-price-row">
+                            <span class="cart-price-curr">₹${item.discount_price}</span>
+                            <span class="cart-price-mrp">₹${item.price}</span>
+                        </div>
+                        <div class="cart-item-full-actions">
+                            <button class="btn-move-to-cart" data-name="${item.name}">
+                                <i data-lucide="shopping-cart"></i> <span>Move to Cart</span>
+                            </button>
+                            <button class="btn-cart-remove remove-saved" data-name="${item.name}">
+                                <i data-lucide="trash-2"></i> <span>Remove</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            savedList.querySelectorAll('.btn-move-to-cart').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const name = btn.dataset.name;
+                    const item = this.data.find(i => i.name === name);
+                    if (item) {
+                        item.quantity = 1;
+                        this.savedForLater = this.savedForLater.filter(s => s.name !== name);
+                        this.saveSavedForLaterToStorage();
+                        this.saveCartToStorage();
+                        this.updateAllCardDOMs(item);
+                        this.updateCartUI();
+                        this.renderCartPageView();
+                        this.showToast(`🛒 Moved "${name}" back to cart`);
+                    }
+                });
+            });
+
+            savedList.querySelectorAll('.remove-saved').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const name = btn.dataset.name;
+                    this.savedForLater = this.savedForLater.filter(s => s.name !== name);
+                    this.saveSavedForLaterToStorage();
+                    this.renderSavedForLaterSection();
+                    this.showToast(`Removed "${name}" from saved items`);
+                });
+            });
+        }
+    }
+
+    // ================= FLIPKART MEGA HERO & UTILITY STRIP =================
+    setupSubHeaderNav() {
+        const tabs = document.querySelectorAll('.sub-nav-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.dataset.tab;
+                if (target === 'For You') {
+                    this.showHomeView();
+                } else if (target === 'Grocery') {
+                    this.showCategoryView('All Products');
+                } else if (target === 'Fruits & Veggies') {
+                    this.showCategoryView('Fresh Fruits');
+                } else if (target === 'Kitchen') {
+                    this.showCategoryView('Kitchen');
+                } else if (target === 'Household') {
+                    this.showCategoryView('House Hold');
+                } else if (target === 'Top Offers') {
+                    this.showHomeView();
+                    const flashSale = document.getElementById('flashSaleBanner');
+                    if (flashSale) flashSale.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    setupMegaCarousel() {
+        const track = document.getElementById('megaCarouselTrack');
+        const prevBtn = document.getElementById('megaCarouselPrev');
+        const nextBtn = document.getElementById('megaCarouselNext');
+        const dots = document.querySelectorAll('#megaCarouselIndicators .indicator-dot');
+        const wrapper = document.getElementById('megaCarouselWrapper');
+        if (!track) return;
+
+        const totalSlides = 3;
+        const updateSlide = (index) => {
+            this.megaCarouselIndex = (index + totalSlides) % totalSlides;
+            track.style.transform = `translateX(-${this.megaCarouselIndex * 100}%)`;
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === this.megaCarouselIndex);
+            });
+        };
+
+        prevBtn?.addEventListener('click', () => {
+            updateSlide(this.megaCarouselIndex - 1);
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            updateSlide(this.megaCarouselIndex + 1);
+        });
+
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                const idx = parseInt(dot.dataset.index, 10);
+                updateSlide(idx);
+            });
+        });
+
+        // Banner CTA buttons
+        document.querySelectorAll('.mega-banner-slide .banner-cta-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.category || 'All Products';
+                this.showCategoryView(cat);
+            });
+        });
+
+        // Auto-slide every 4.5 seconds
+        const startAutoSlide = () => {
+            if (this.megaCarouselInterval) clearInterval(this.megaCarouselInterval);
+            this.megaCarouselInterval = setInterval(() => {
+                updateSlide(this.megaCarouselIndex + 1);
+            }, 4500);
+        };
+
+        const stopAutoSlide = () => {
+            if (this.megaCarouselInterval) clearInterval(this.megaCarouselInterval);
+        };
+
+        wrapper?.addEventListener('mouseenter', stopAutoSlide);
+        wrapper?.addEventListener('mouseleave', startAutoSlide);
+        startAutoSlide();
+    }
+
+    setupBankOfferStrip() {
+        const copyBtn = document.getElementById('copyBankCouponBtn');
+        copyBtn?.addEventListener('click', () => {
+            if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText('FESTIVE10').then(() => {
+                    this.showToast('📋 Coupon FESTIVE10 copied to clipboard! (10% OFF)');
+                }).catch(() => {
+                    this.showToast('📋 Coupon Code: FESTIVE10');
+                });
+            } else {
+                this.showToast('📋 Coupon Code: FESTIVE10');
+            }
+        });
+    }
+
+    setupUtilityStrip() {
+        document.getElementById('utilCreditDeals')?.addEventListener('click', () => {
+            this.showToast('💳 10% Instant Discount on HDFC & SBI Cards! Code: FESTIVE10');
+        });
+        document.getElementById('utilMegaCoins')?.addEventListener('click', () => {
+            this.showProfileView();
+        });
+        document.getElementById('utilGiftCards')?.addEventListener('click', () => {
+            this.showToast('🎁 MegaMart Gift Cards: Get 10% Extra Balance on ₹1,000+');
+        });
+        document.getElementById('utilSuperOffers')?.addEventListener('click', () => {
+            this.showHomeView();
+            const flash = document.getElementById('flashSaleBanner');
+            if (flash) flash.scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('utilBestBrands')?.addEventListener('click', () => {
+            this.showCategoryView('All Products');
+        });
+    }
+
+    setupFlipkartDealCards() {
+        const col1 = document.getElementById('dealCol1Grid');
+        const col2 = document.getElementById('dealCol2Grid');
+        const col3 = document.getElementById('dealCol3Grid');
+
+        const fruits = this.controller.filterItems('Fresh Fruits').slice(0, 4);
+        const allItems = this.data.slice(0, 16);
+        const topSaver = allItems.filter(i => (i.price - i.discount_price) > 30).slice(0, 4);
+        const budget = this.data.filter(i => i.discount_price <= 99).slice(0, 4);
+
+        const renderMiniGrid = (container, items, labelPrefix = '') => {
+            if (!container) return;
+            container.innerHTML = items.map(item => `
+                <div class="deal-mini-item" data-name="${item.name}">
+                    <div class="deal-mini-img-wrap">
+                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='/javascript.svg';">
+                    </div>
+                    <span class="deal-mini-name">${item.name}</span>
+                    <span class="deal-mini-price">${labelPrefix}₹${item.discount_price}</span>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.deal-mini-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const name = el.dataset.name;
+                    const item = this.data.find(i => i.name === name);
+                    if (item) this.showProductDetailView(item);
+                });
+            });
+        };
+
+        renderMiniGrid(col1, fruits.length ? fruits : allItems.slice(0, 4), 'From ');
+        renderMiniGrid(col2, topSaver.length ? topSaver : allItems.slice(4, 8), '');
+        renderMiniGrid(col3, budget.length ? budget : allItems.slice(8, 12), 'From ');
+
+        // Wire up "View All" on deal cards
+        document.querySelectorAll('.flipkart-deal-cards-section .deal-view-all').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.category || 'All Products';
+                this.showCategoryView(cat);
+            });
+        });
+    }
+
+    // ================= USER AUTHENTICATION & SECURITY SYSTEM =================
+
+    loadUserFromStorage() {
+        try {
+            const raw = localStorage.getItem('megamart_user');
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && parsed.name) {
+                return parsed;
+            }
+            return null;
+        } catch (e) {
+            console.error('Error reading user session:', e);
+            return null;
+        }
+    }
+
+    saveUserToStorage(user) {
+        try {
+            if (user) {
+                localStorage.setItem('megamart_user', JSON.stringify(user));
+            } else {
+                localStorage.removeItem('megamart_user');
+            }
+        } catch (e) {
+            console.error('Error saving user session:', e);
+        }
+    }
+
+    loadRegisteredUsers() {
+        try {
+            const raw = localStorage.getItem('megamart_registered_users');
+            if (!raw) {
+                const seed = [{
+                    name: 'Tripurari Sahni',
+                    email: 'tripurarisahni@gmail.com',
+                    phone: '9876543210',
+                    password: 'password123',
+                    registeredAt: '2026-01-01T00:00:00.000Z'
+                }];
+                localStorage.setItem('megamart_registered_users', JSON.stringify(seed));
+                return seed;
+            }
+            return JSON.parse(raw) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    saveRegisteredUsers(users) {
+        try {
+            localStorage.setItem('megamart_registered_users', JSON.stringify(users));
+        } catch (e) {
+            console.error('Error saving registered users:', e);
+        }
+    }
+
+    setupAuth() {
+        // Elements
+        const headerLoginBtn = document.getElementById('headerLoginBtn');
+        const headerUserBtn = document.getElementById('headerUserBtn');
+        const headerUserDropdown = document.getElementById('headerUserDropdown');
+        const authModal = document.getElementById('authModal');
+        const authOverlay = document.getElementById('authModalOverlay');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const profileLoginBtn = document.getElementById('profileLoginBtn');
+        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+
+        // Dropdown menu items
+        const dropdownProfileBtn = document.getElementById('dropdownProfileBtn');
+        const dropdownOrdersBtn = document.getElementById('dropdownOrdersBtn');
+        const dropdownWishlistBtn = document.getElementById('dropdownWishlistBtn');
+        const dropdownCoinsBtn = document.getElementById('dropdownCoinsBtn');
+        const dropdownLogoutBtn = document.getElementById('dropdownLogoutBtn');
+
+        // Tabs
+        const authTabLogin = document.getElementById('authTabLogin');
+        const authTabRegister = document.getElementById('authTabRegister');
+        const switchTabToRegister = document.getElementById('switchTabToRegister');
+        const switchTabToLogin = document.getElementById('switchTabToLogin');
+
+        // Demo Login
+        const demoLoginBtn = document.getElementById('demoLoginBtn');
+
+        // Password Show/Hide Toggles
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        const registerPasswordInput = document.getElementById('registerPassword');
+
+        // Form elements
+        const loginForm = document.getElementById('loginTabContent');
+        const registerForm = document.getElementById('registerTabContent');
+
+        // Open Auth Modal
+        const openModal = (tab = 'login') => {
+            if (tab === 'login') {
+                this.switchAuthTab('login');
+            } else {
+                this.switchAuthTab('register');
+            }
+            authModal?.classList.add('active');
+            authOverlay?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.lucide) lucide.createIcons();
+        };
+
+        this.openAuthModal = openModal;
+
+        const closeModal = () => {
+            authModal?.classList.remove('active');
+            authOverlay?.classList.remove('active');
+            document.body.style.overflow = '';
+            this.clearAuthErrors();
+        };
+
+        this.closeAuthModal = closeModal;
+
+        // Header and Profile Triggers
+        headerLoginBtn?.addEventListener('click', () => openModal('login'));
+        profileLoginBtn?.addEventListener('click', () => openModal('login'));
+        closeAuthModal?.addEventListener('click', closeModal);
+        authOverlay?.addEventListener('click', closeModal);
+
+        // Header User Menu Dropdown Toggle
+        headerUserBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = headerUserDropdown?.classList.contains('active');
+            if (isOpen) {
+                headerUserDropdown?.classList.remove('active');
+                headerUserBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                headerUserDropdown?.classList.add('active');
+                headerUserBtn.setAttribute('aria-expanded', 'true');
+                if (window.lucide) lucide.createIcons();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (headerUserDropdown && !headerUserDropdown.contains(e.target) && !headerUserBtn?.contains(e.target)) {
+                headerUserDropdown.classList.remove('active');
+                headerUserBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Dropdown actions
+        dropdownProfileBtn?.addEventListener('click', () => {
+            headerUserDropdown?.classList.remove('active');
+            headerUserBtn?.setAttribute('aria-expanded', 'false');
+            this.showProfileView();
+        });
+
+        dropdownOrdersBtn?.addEventListener('click', () => {
+            headerUserDropdown?.classList.remove('active');
+            headerUserBtn?.setAttribute('aria-expanded', 'false');
+            this.openOrderHistoryDrawer();
+        });
+
+        dropdownWishlistBtn?.addEventListener('click', () => {
+            headerUserDropdown?.classList.remove('active');
+            headerUserBtn?.setAttribute('aria-expanded', 'false');
+            this.openWishlistSidebar();
+        });
+
+        dropdownCoinsBtn?.addEventListener('click', () => {
+            headerUserDropdown?.classList.remove('active');
+            headerUserBtn?.setAttribute('aria-expanded', 'false');
+            this.showProfileView();
+            setTimeout(() => {
+                const coinsCard = document.querySelector('.profile-megacoins-card');
+                coinsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        });
+
+        dropdownLogoutBtn?.addEventListener('click', () => {
+            headerUserDropdown?.classList.remove('active');
+            headerUserBtn?.setAttribute('aria-expanded', 'false');
+            this.logout();
+        });
+
+        profileLogoutBtn?.addEventListener('click', () => {
+            this.logout();
+        });
+
+        // Dual Tab switching
+        authTabLogin?.addEventListener('click', () => this.switchAuthTab('login'));
+        authTabRegister?.addEventListener('click', () => this.switchAuthTab('register'));
+        switchTabToRegister?.addEventListener('click', () => this.switchAuthTab('register'));
+        switchTabToLogin?.addEventListener('click', () => this.switchAuthTab('login'));
+
+        // Password Show/Hide
+        toggleLoginPassword?.addEventListener('click', () => {
+            if (loginPasswordInput) {
+                const isPassword = loginPasswordInput.type === 'password';
+                loginPasswordInput.type = isPassword ? 'text' : 'password';
+                toggleLoginPassword.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+                if (window.lucide) lucide.createIcons();
+            }
+        });
+
+        toggleRegisterPassword?.addEventListener('click', () => {
+            if (registerPasswordInput) {
+                const isPassword = registerPasswordInput.type === 'password';
+                registerPasswordInput.type = isPassword ? 'text' : 'password';
+                toggleRegisterPassword.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+                if (window.lucide) lucide.createIcons();
+            }
+        });
+
+        // Recruiter 1-Click Demo Login Button (Tripurari Sahni)
+        demoLoginBtn?.addEventListener('click', () => {
+            const demoUser = {
+                name: 'Tripurari Sahni',
+                email: 'tripurarisahni@gmail.com',
+                phone: '9876543210',
+                loggedIn: true,
+                isDemo: true,
+                loginTime: new Date().toISOString()
+            };
+            this.currentUser = demoUser;
+            this.saveUserToStorage(demoUser);
+            this.updateAuthUI();
+            this.closeAuthModal();
+            this.showToast('🚀 Welcome back, Tripurari Sahni! (Demo Account)');
+        });
+
+        // Login Form Submission
+        loginForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleLoginSubmit();
+        });
+
+        // Register Form Submission
+        registerForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleRegisterSubmit();
+        });
+
+        // Initialize UI with current storage state
+        this.updateAuthUI();
+        this.updateProfileStats();
+    }
+
+    switchAuthTab(tab) {
+        const authTabLogin = document.getElementById('authTabLogin');
+        const authTabRegister = document.getElementById('authTabRegister');
+        const loginTabContent = document.getElementById('loginTabContent');
+        const registerTabContent = document.getElementById('registerTabContent');
+
+        this.clearAuthErrors();
+
+        if (tab === 'login') {
+            authTabLogin?.classList.add('active');
+            authTabRegister?.classList.remove('active');
+            authTabLogin?.setAttribute('aria-selected', 'true');
+            authTabRegister?.setAttribute('aria-selected', 'false');
+            if (loginTabContent) loginTabContent.style.display = 'flex';
+            if (registerTabContent) registerTabContent.style.display = 'none';
+        } else {
+            authTabRegister?.classList.add('active');
+            authTabLogin?.classList.remove('active');
+            authTabRegister?.setAttribute('aria-selected', 'true');
+            authTabLogin?.setAttribute('aria-selected', 'false');
+            if (registerTabContent) registerTabContent.style.display = 'flex';
+            if (loginTabContent) loginTabContent.style.display = 'none';
+        }
+        if (window.lucide) lucide.createIcons();
+    }
+
+    clearAuthErrors() {
+        document.querySelectorAll('.auth-field-error').forEach(el => el.textContent = '');
+        document.querySelectorAll('.auth-input-field').forEach(el => el.classList.remove('input-error'));
+    }
+
+    handleLoginSubmit() {
+        const idInput = document.getElementById('loginIdentifier');
+        const pwdInput = document.getElementById('loginPassword');
+        const idError = document.getElementById('loginIdentifierError');
+        const pwdError = document.getElementById('loginPasswordError');
+
+        this.clearAuthErrors();
+
+        const identifier = (idInput?.value || '').trim();
+        const password = (pwdInput?.value || '').trim();
+
+        let hasError = false;
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^[6-9]\d{9}$/;
+        const any10Digits = /^\d{10}$/;
+
+        const isEmail = emailRegex.test(identifier);
+        const isPhone = phoneRegex.test(identifier) || any10Digits.test(identifier);
+
+        if (!identifier) {
+            idError.textContent = 'Please enter your email or 10-digit mobile number';
+            idInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        } else if (!isEmail && !isPhone) {
+            idError.textContent = 'Enter a valid email address or 10-digit mobile number';
+            idInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        if (!password) {
+            pwdError.textContent = 'Please enter your password';
+            pwdInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        } else if (password.length < 4) {
+            pwdError.textContent = 'Password must be at least 4 characters';
+            pwdInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Check if demo user identifier
+        const isDemoIdentifier = identifier.toLowerCase() === 'tripurarisahni@gmail.com' ||
+                                 identifier === '9876543210' ||
+                                 identifier.toLowerCase() === 'tripurari';
+
+        if (isDemoIdentifier) {
+            const demoUser = {
+                name: 'Tripurari Sahni',
+                email: 'tripurarisahni@gmail.com',
+                phone: '9876543210',
+                loggedIn: true,
+                isDemo: true,
+                loginTime: new Date().toISOString()
+            };
+            this.currentUser = demoUser;
+            this.saveUserToStorage(demoUser);
+            this.updateAuthUI();
+            this.closeAuthModal();
+            this.showToast('👋 Welcome back, Tripurari Sahni!');
+            return;
+        }
+
+        // Check registered users in storage
+        const registeredUsers = this.loadRegisteredUsers();
+        const found = registeredUsers.find(u =>
+            (u.email?.toLowerCase() === identifier.toLowerCase() || u.phone === identifier)
+        );
+
+        if (found) {
+            if (found.password && found.password !== password) {
+                pwdError.textContent = 'Incorrect password. Try again or use 1-Click Demo Login.';
+                pwdInput?.closest('.auth-input-field')?.classList.add('input-error');
+                return;
+            }
+            const activeUser = {
+                name: found.name,
+                email: found.email,
+                phone: found.phone,
+                loggedIn: true,
+                loginTime: new Date().toISOString()
+            };
+            this.currentUser = activeUser;
+            this.saveUserToStorage(activeUser);
+            this.updateAuthUI();
+            this.closeAuthModal();
+            this.showToast(`👋 Welcome back, ${found.name.split(' ')[0]}!`);
+            return;
+        }
+
+        // Create session for user
+        const autoName = isEmail ? identifier.split('@')[0].replace(/[._]/g, ' ') : 'Customer ' + identifier.slice(-4);
+        const capitalized = autoName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        const newUser = {
+            name: capitalized,
+            email: isEmail ? identifier : `${identifier}@customer.megamart.com`,
+            phone: isPhone ? identifier : '9876543210',
+            loggedIn: true,
+            loginTime: new Date().toISOString()
+        };
+
+        this.currentUser = newUser;
+        this.saveUserToStorage(newUser);
+        this.updateAuthUI();
+        this.closeAuthModal();
+        this.showToast(`👋 Welcome to MegaMart, ${capitalized}!`);
+    }
+
+    handleRegisterSubmit() {
+        const nameInput = document.getElementById('registerName');
+        const emailInput = document.getElementById('registerEmail');
+        const phoneInput = document.getElementById('registerPhone');
+        const pwdInput = document.getElementById('registerPassword');
+
+        const nameError = document.getElementById('registerNameError');
+        const emailError = document.getElementById('registerEmailError');
+        const phoneError = document.getElementById('registerPhoneError');
+        const pwdError = document.getElementById('registerPasswordError');
+
+        this.clearAuthErrors();
+
+        const name = (nameInput?.value || '').trim();
+        const email = (emailInput?.value || '').trim();
+        const phone = (phoneInput?.value || '').trim();
+        const password = (pwdInput?.value || '').trim();
+
+        let hasError = false;
+
+        if (!name || name.length < 2) {
+            nameError.textContent = 'Please enter your full name (at least 2 letters)';
+            nameInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email || !emailRegex.test(email)) {
+            emailError.textContent = 'Please enter a valid email address';
+            emailInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        const phoneRegex = /^[6-9]\d{9}$/;
+        const any10Digits = /^\d{10}$/;
+        if (!phone || (!phoneRegex.test(phone) && !any10Digits.test(phone))) {
+            phoneError.textContent = 'Please enter a valid 10-digit mobile number';
+            phoneInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        if (!password || password.length < 6) {
+            pwdError.textContent = 'Password must be at least 6 characters long';
+            pwdInput?.closest('.auth-input-field')?.classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Check if user already exists
+        const registeredUsers = this.loadRegisteredUsers();
+        const existing = registeredUsers.find(u => u.email?.toLowerCase() === email.toLowerCase() || u.phone === phone);
+        if (existing) {
+            emailError.textContent = 'An account with this email or phone already exists. Please log in.';
+            return;
+        }
+
+        // Save new user
+        const newUser = {
+            name,
+            email,
+            phone,
+            password,
+            registeredAt: new Date().toISOString()
+        };
+
+        registeredUsers.push(newUser);
+        this.saveRegisteredUsers(registeredUsers);
+
+        // Auto log in
+        const sessionUser = {
+            name,
+            email,
+            phone,
+            loggedIn: true,
+            loginTime: new Date().toISOString()
+        };
+        this.currentUser = sessionUser;
+        this.saveUserToStorage(sessionUser);
+
+        this.updateAuthUI();
+        this.closeAuthModal();
+        this.showToast(`🎉 Welcome to MegaMart, ${name.split(' ')[0]}! Account created.`);
+    }
+
+    logout() {
+        this.clearUserFromStorage();
+        this.currentUser = null;
+        this.updateAuthUI();
+        this.updateProfileStats();
+        this.showToast('🚪 Logged out successfully. See you again soon!');
+    }
+
+    clearUserFromStorage() {
+        try {
+            localStorage.removeItem('megamart_user');
+        } catch (e) {
+            console.error('Error clearing session:', e);
+        }
+    }
+
+    updateAuthUI() {
+        const headerLoginBtn = document.getElementById('headerLoginBtn');
+        const headerUserMenu = document.getElementById('headerUserMenu');
+        const headerUserName = document.getElementById('headerUserName');
+        const headerUserAvatar = document.getElementById('headerUserAvatar');
+
+        const dropdownUserAvatar = document.getElementById('dropdownUserAvatar');
+        const dropdownUserName = document.getElementById('dropdownUserName');
+        const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+        const dropdownCoinsVal = document.getElementById('dropdownCoinsVal');
+
+        const profileAvatarText = document.getElementById('profileAvatarText');
+        const profileUserName = document.getElementById('profileUserName');
+        const profileUserContact = document.getElementById('profileUserContact');
+        const profileLoginBtn = document.getElementById('profileLoginBtn');
+        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+
+        if (this.currentUser && this.currentUser.name) {
+            // Logged in
+            if (headerLoginBtn) headerLoginBtn.style.display = 'none';
+            if (headerUserMenu) headerUserMenu.style.display = 'flex';
+
+            const firstName = this.currentUser.name.split(' ')[0] || 'Member';
+            const initials = this.currentUser.name
+                .split(' ')
+                .filter(Boolean)
+                .map(n => n[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase() || 'MM';
+
+            if (headerUserName) headerUserName.textContent = firstName;
+            if (headerUserAvatar) headerUserAvatar.textContent = initials;
+
+            if (dropdownUserAvatar) dropdownUserAvatar.textContent = initials;
+            if (dropdownUserName) dropdownUserName.textContent = this.currentUser.name;
+            if (dropdownUserEmail) dropdownUserEmail.textContent = this.currentUser.email || this.currentUser.phone;
+            if (dropdownCoinsVal) dropdownCoinsVal.textContent = this.megaCoins;
+
+            // Profile View
+            if (profileAvatarText) profileAvatarText.textContent = initials;
+            if (profileUserName) profileUserName.textContent = this.currentUser.name;
+            if (profileUserContact) {
+                const phoneStr = this.currentUser.phone ? `+91 ${this.currentUser.phone}` : '';
+                const emailStr = this.currentUser.email || '';
+                profileUserContact.textContent = [phoneStr, emailStr].filter(Boolean).join(' • ');
+            }
+            if (profileLoginBtn) profileLoginBtn.style.display = 'none';
+            if (profileLogoutBtn) profileLogoutBtn.style.display = 'flex';
+
+            // Auto pre-fill checkout if form is present
+            const custName = document.getElementById('custName');
+            const custPhone = document.getElementById('custPhone');
+            if (custName && !custName.value) custName.value = this.currentUser.name;
+            if (custPhone && !custPhone.value) custPhone.value = this.currentUser.phone || '';
+        } else {
+            // Logged out
+            if (headerLoginBtn) headerLoginBtn.style.display = 'inline-flex';
+            if (headerUserMenu) headerUserMenu.style.display = 'none';
+
+            // Profile View
+            if (profileAvatarText) profileAvatarText.innerHTML = '<i data-lucide="user"></i>';
+            if (profileUserName) profileUserName.textContent = 'Guest User';
+            if (profileUserContact) profileUserContact.textContent = 'Sign in to access orders, wishlist, and rewards';
+            if (profileLoginBtn) profileLoginBtn.style.display = 'inline-flex';
+            if (profileLogoutBtn) profileLogoutBtn.style.display = 'none';
+        }
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    updateProfileStats() {
+        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const profileOrdersCount = document.getElementById('profileOrdersCount');
+        if (profileOrdersCount) {
+            profileOrdersCount.textContent = orders.length;
+        }
+    }
+
+    // ================= ORDER HISTORY DRAWER SYSTEM =================
+
+    setupOrderHistoryDrawer() {
+        const headerOrdersBtn = document.getElementById('headerOrdersBtn');
+        const mobileOrdersBtn = document.getElementById('mobileOrdersBtn');
+        const profileOrdersBtn = document.getElementById('profileOrdersBtn');
+        const footerOrdersBtn = document.getElementById('orderHistoryFooterBtn');
+        const closeHistory = document.getElementById('closeOrderHistory');
+        const historyOverlay = document.getElementById('orderHistoryOverlay');
+
+        const openDrawer = () => this.openOrderHistoryDrawer();
+        const closeDrawer = () => this.closeOrderHistoryDrawer();
+
+        headerOrdersBtn?.addEventListener('click', openDrawer);
+        mobileOrdersBtn?.addEventListener('click', openDrawer);
+        profileOrdersBtn?.addEventListener('click', openDrawer);
+        footerOrdersBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openDrawer();
+        });
+
+        closeHistory?.addEventListener('click', closeDrawer);
+        historyOverlay?.addEventListener('click', closeDrawer);
+
+        // Live Tracking Modal close triggers
+        const trackingModal = document.getElementById('orderTrackingModal');
+        const trackingOverlay = document.getElementById('orderTrackingOverlay');
+        const closeTracking = document.getElementById('closeTrackingModal');
+        const profileTrackBtn = document.getElementById('profileTrackBtn');
+        const trackFooterBtn = document.getElementById('trackOrderFooterBtn');
+        const trackSuccessBtn = document.getElementById('trackOrderFromSuccessBtn');
+
+        const closeTracker = () => {
+            trackingModal?.classList.remove('active');
+            trackingOverlay?.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        closeTracking?.addEventListener('click', closeTracker);
+        trackingOverlay?.addEventListener('click', closeTracker);
+
+        profileTrackBtn?.addEventListener('click', () => {
+            const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+            const latestId = orders[0]?.orderId || '#MM-89214';
+            this.openLiveTracker(latestId);
+        });
+
+        trackFooterBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+            const latestId = orders[0]?.orderId || '#MM-89214';
+            this.openLiveTracker(latestId);
+        });
+
+        trackSuccessBtn?.addEventListener('click', () => {
+            const orderId = document.getElementById('successOrderId')?.textContent || '#MM-89214';
+            this.closeCheckoutModal();
+            this.openLiveTracker(orderId);
+        });
+    }
+
+    openOrderHistoryDrawer() {
+        const drawer = document.getElementById('orderHistoryDrawer');
+        const overlay = document.getElementById('orderHistoryOverlay');
+        const body = document.getElementById('orderHistoryBody');
+
+        if (!drawer || !body) return;
+
+        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+
+        if (orders.length === 0) {
+            body.innerHTML = `
+                <div class="history-empty-state">
+                    <div class="history-empty-icon"><i data-lucide="package"></i></div>
+                    <h4>No Orders Yet</h4>
+                    <p>You haven't placed any grocery orders yet. Start adding items and enjoy lightning 10-minute delivery!</p>
+                    <button class="continue-shopping-btn" id="emptyHistoryShopBtn" style="margin-top:12px;">Start Shopping</button>
+                </div>
+            `;
+            document.getElementById('emptyHistoryShopBtn')?.addEventListener('click', () => {
+                this.closeOrderHistoryDrawer();
+                this.showHomeView();
+            });
+        } else {
+            body.innerHTML = orders.map(order => {
+                const dateStr = order.date ? new Date(order.date).toLocaleDateString('en-IN', {
+                    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                }) : 'Recently';
+
+                const itemsCount = (order.items || []).reduce((acc, i) => acc + (i.qty || 1), 0);
+                const itemsSummary = (order.items || []).map(i => `${i.name} (x${i.qty})`).join(', ');
+
+                return `
+                    <div class="history-card">
+                        <div class="history-card-header">
+                            <div class="hc-id-box">
+                                <span class="hc-order-id">${order.orderId}</span>
+                                <span class="hc-date">${dateStr}</span>
+                            </div>
+                            <span class="hc-status-badge status-delivered">
+                                <i data-lucide="check-circle-2"></i> On the Way
+                            </span>
+                        </div>
+                        <div class="hc-items-preview">
+                            <p class="hc-items-text">${itemsSummary || `${itemsCount} grocery items`}</p>
+                            <div class="hc-meta-row">
+                                <span class="hc-total">Total: <strong>₹${Number(order.total || 0).toFixed(2)}</strong></span>
+                                <span class="hc-payment-method">${order.paymentMethod || 'UPI'}</span>
+                            </div>
+                        </div>
+                        <div class="hc-actions">
+                            <button class="track-order-card-btn" data-order-id="${order.orderId}">
+                                <i data-lucide="navigation"></i> Track Live
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            body.querySelectorAll('.track-order-card-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.orderId;
+                    this.closeOrderHistoryDrawer();
+                    this.openLiveTracker(id);
+                });
+            });
+        }
+
+        drawer.classList.add('active');
+        overlay?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
+
+    closeOrderHistoryDrawer() {
+        document.getElementById('orderHistoryDrawer')?.classList.remove('active');
+        document.getElementById('orderHistoryOverlay')?.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    openLiveTracker(orderId) {
+        const modal = document.getElementById('orderTrackingModal');
+        const overlay = document.getElementById('orderTrackingOverlay');
+        const titleEl = document.getElementById('trackingModalOrderId');
+
+        if (titleEl) titleEl.textContent = orderId || 'Order #MM-89214';
+
+        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const matching = orders.find(o => o.orderId === orderId);
+        const summaryBox = document.getElementById('trackingOrderSummary');
+        if (summaryBox) {
+            if (matching && matching.items) {
+                summaryBox.innerHTML = `
+                    <h4>Order Summary (${matching.items.length} items)</h4>
+                    <div style="font-size:0.85rem;color:#475569;margin-top:4px;">
+                        ${matching.items.map(i => `<div>• ${i.name} × ${i.qty} (₹${i.price})</div>`).join('')}
+                    </div>
+                    <div style="margin-top:8px;font-weight:700;color:#0f172a;">Paid: ₹${Number(matching.total || 0).toFixed(2)} (${matching.paymentMethod || 'UPI'})</div>
+                `;
+            } else {
+                summaryBox.innerHTML = `
+                    <h4>Express Delivery to Dark Store Partner</h4>
+                    <p style="font-size:0.82rem;color:#64748b;margin-top:4px;">Rider assigned: <strong>Ramesh Kumar</strong> • Delivery in 11 minutes</p>
+                `;
+            }
+        }
+
+        modal?.classList.add('active');
+        overlay?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
     }
 }
