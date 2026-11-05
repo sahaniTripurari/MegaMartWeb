@@ -41,6 +41,8 @@ export class ContainerView {
         this.globalSearchInput = document.getElementById('globalSearchInput');
         this.mobileSearchInput = document.getElementById('mobileSearchInput');
         this.sortSelect = document.getElementById('sortSelect');
+        this.categorySubFilterPills = document.getElementById('categorySubFilterPills');
+        this.activeSubType = 'All';
         
         // State
         this.currentCategory = 'All Products';
@@ -293,6 +295,55 @@ export class ContainerView {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    renderSubFilterPills(categoryName) {
+        if (!this.categorySubFilterPills) return;
+        this.categorySubFilterPills.innerHTML = '';
+        this.activeSubType = 'All';
+
+        const catItems = this.getItemsForCategory(categoryName);
+        if (!catItems || catItems.length === 0) return;
+
+        const subTypeCounts = {};
+        catItems.forEach(item => {
+            if (item.subType) {
+                subTypeCounts[item.subType] = (subTypeCounts[item.subType] || 0) + 1;
+            }
+        });
+
+        const subTypes = Object.entries(subTypeCounts);
+        if (subTypes.length <= 1) return;
+
+        // 1. "All" Pill
+        const allBtn = document.createElement('button');
+        allBtn.className = 'category-sub-pill active';
+        allBtn.dataset.subtype = 'All';
+        allBtn.innerHTML = `All <span class="pill-count">${catItems.length}</span>`;
+        allBtn.addEventListener('click', () => {
+            this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(b => b.classList.remove('active'));
+            allBtn.classList.add('active');
+            this.activeSubType = 'All';
+            const currentSort = this.sortSelect?.value || 'featured';
+            this.renderCategoryProducts(this.currentCategory, '', currentSort);
+        });
+        this.categorySubFilterPills.appendChild(allBtn);
+
+        // 2. SubType Pills
+        subTypes.forEach(([subType, count]) => {
+            const btn = document.createElement('button');
+            btn.className = 'category-sub-pill';
+            btn.dataset.subtype = subType;
+            btn.innerHTML = `${subType} <span class="pill-count">${count}</span>`;
+            btn.addEventListener('click', () => {
+                this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.activeSubType = subType;
+                const currentSort = this.sortSelect?.value || 'featured';
+                this.renderCategoryProducts(this.currentCategory, '', currentSort);
+            });
+            this.categorySubFilterPills.appendChild(btn);
+        });
+    }
+
     showCategoryView(categoryName, searchQuery = '') {
         this.currentCategory = categoryName;
         this.setActiveView(this.categoryView);
@@ -301,6 +352,7 @@ export class ContainerView {
         if (this.sortSelect) this.sortSelect.value = 'featured';
         
         this.updateNavHighlight(categoryName);
+        this.renderSubFilterPills(categoryName);
         this.renderCategoryProducts(categoryName, searchQuery, 'featured');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1236,6 +1288,11 @@ export class ContainerView {
         
         let items = this.getItemsForCategory(categoryName);
             
+        // 0. SubType Filter
+        if (this.activeSubType && this.activeSubType !== 'All') {
+            items = items.filter(item => item.subType === this.activeSubType);
+        }
+
         // 1. Search Query
         if (searchQuery.trim() !== '') {
             const query = searchQuery.toLowerCase();
