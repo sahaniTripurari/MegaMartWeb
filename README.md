@@ -1,52 +1,41 @@
-# 🛒 MegaMart - Flagship Quick-Commerce E-Commerce Platform
+# 🛒 MegaMart - Flagship E-Commerce Platform (Flipkart × Amazon × Myntra Inspired)
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Website-22c55e?style=for-the-badge&logo=render)](https://megamart-iyre.onrender.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/sahaniTripurari/MegaMartWeb)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
-MegaMart is a production-grade, fast, and responsive Quick-Commerce grocery & essentials web platform inspired by modern architectures like Zepto, Blinkit, and Instacart. Engineered with clean MVC patterns, real-time cart intelligence, live interactive 5-stage order tracking, and ironclad client-side security guards.
+MegaMart is a production-grade, fast, and responsive Quick-Commerce grocery & essentials web platform inspired by the gold standards of modern e-commerce—**Flipkart, Amazon, Myntra, and Zepto**. Built with clean MVC architecture, conversion-optimized design systems, and real-time state persistence.
 
 ---
 
-## 🌟 Flagship Features
+## 🌟 Gold-Standard E-Commerce Features
 
-### 🛒 1. Advanced Cart & Checkout Intelligence
-- **Dynamic Free Delivery Progress Bar**: Live calculation displaying *"Add ₹X more to get FREE Delivery"* up to the ₹499 threshold with emerald unlocked celebrations.
-- **Slide-over Checkout Drawer**: Address verification (Name, Phone, Address, PIN), coupon discounts (`MEGA50`, `WELCOME10`), and multi-payment selection (UPI, Credit/Debit Card, COD).
-- **Persistent LocalStorage State**: Real-time two-way synchronization ensures cart state is never lost on refresh.
+### 🔵 Flipkart-Inspired Signature Systems
+- **✓ MegaAssured Trust Quality Badge**: Shimmering royal blue & gold trust pill on every product guaranteeing direct sourcing, cold-chain inspection, and 10-minute delivery.
+- **⚡ Flash Sale / Deal of the Day Ticker**: Live hero banner countdown timer (`[HH:MM:SS]`) with dynamic `🔥 40% OFF` flame badges on deal items.
+- **🪙 MegaCoins Loyalty Rewards (Flipkart SuperCoins)**:
+  - Earn coins on every purchase (`🪙 Earn 15 MegaCoins`).
+  - Active balance indicator in Header pill and User Profile.
+  - 1-Click Coin Redemption in Checkout (`Redeem 50 MegaCoins to save ₹50`).
+- **⚖️ Multi-Weight / Pack Size Selector**: Variant pills (`500g`, `1kg`, `2kg` with savings indicator) that dynamically update price, discount, and unit across the entire UI.
 
-### 📍 2. Live Interactive Order Tracking (5-Stage Stepper)
-- **Real-time Status Stepper**:
-  1. **Order Placed**: Timestamp & dark store routing verification.
-  2. **Packed at Dark Store**: Dark store fulfillment inspection.
-  3. **Rider Assigned**: Partner profile (**Ramesh Kumar**, Hero Electric Scooter `MH-02-EK-4821`, 4.9★).
-  4. **Out for Delivery**: Live radar sonar pulse animation with dynamic street status indicator (`Passing Linking Road • 320m away`).
-  5. **Delivered**: OTP verification simulation (`OTP 4829 Verified`).
-- **Simulated Progression**: Interactive stage stepping (`⏮` / `⏭` / `🔄`) + auto 20-second demo timer.
+### 🟠 Amazon-Inspired Signature Conversion Drivers
+- **⚡ Amazon 1-Click "Buy Now" Button**: Amber/orange gradient action button in Product Detail modal that sets quantity, bypasses the cart drawer, and opens the checkout modal ready for instant 1-click purchase.
+- **📦 Amazon "Frequently Bought Together" (FBT) Bundles**: Intelligent companion bundling (e.g., `Banana + Milk + Sugar`, `Tea + Sugar + Milk`, `Cleaners + Soap + Sanitizers`) with 1-click **"🛒 Add All 3 to Cart"** and extra bundle discounts (`Save ₹30 Extra!`).
+- **📍 Live Pincode Delivery Estimator**: Header location selector & product detail checker validating Indian pincodes (Mumbai `400001`, Delhi `110001`, Bangalore `560001`, Pune `411001`) with guaranteed speed badges and localStorage memory.
+- **❓ Searchable Customer Q&A / FAQs Accordion**: Expandable FAQ accordion addressing freshness, return/refund policy, eco-packaging, and delivery speed with instant search filter.
 
-### ❤️ 3. Wishlist / Favorites Engine
-- **Heart Micro-interactions**: Smooth `@keyframes heartPop` active/inactive toggle on all product cards.
-- **Live Badge Counters**: Synced counter across desktop header, mobile header, and bottom navigation.
-- **Wishlist Drawer**: Dedicated sidebar with individual "Move to Cart" and bulk "Move All to Cart" actions.
+### 🟣 Myntra-Inspired Visual Polish & Savings
+- **🎉 Total Savings Celebratory Card**: Vibrant emerald celebration banner in Cart Sidebar & Checkout summary calculating cumulative savings:
+  `🎉 Total Savings: You are saving ₹X on this order!` (MRP discount + Promo coupons + MegaCoins + Free delivery).
+- **❤️ Wishlist / Favorites Engine**: Interactive heart toggle with `@keyframes heartPop` animation, live header badge counter, and dedicated Wishlist Drawer with "Move to Cart" and "Move All to Cart".
+- **🔍 Mouse-Tracking Zoom Preview**: 1.45x smooth magnification tracking cursor position on product images.
 
-### ⭐ 4. Star Ratings & Verified Reviews
-- **Card Rating Badges**: `★ 4.8 (120+)` badges on every catalog item.
-- **Product Detail Breakdown**: 5-star customer distribution bars with verified buyer reviews.
-
-### 🔍 5. Search, Filter & Multi-Sort Engine
-- **Live Debounced Search (300ms)**: Instant filtering without page reload or lag.
-- **Comprehensive Sorting**: Featured, Price: Low to High, Price: High to Low, and Biggest Discount.
-- **Pill Tag Filters**: All, Fresh (Fruits/Vegetables/Herbs), Bestseller, and Under ₹50.
-
-### 🔍 6. Enhanced Product Details
-- **Mouse-Tracking Zoom**: Smooth 1.45x magnification tracking cursor position.
-- **Specifications Grid**: Shelf life, Country of origin, Storage advice, and FSSAI Hygiene certification.
-- **"Customers Also Bought" Carousel**: Interactive companion recommendations with horizontal navigation controls.
-
-### 🛡️ 7. Inventory & Ironclad Security
-- **Urgency Badges**: Automatic `🔥 Only X left!` badges when item stock drops to 5 or lower.
-- **Price Tampering Guard**: Immutable frozen catalog (`Object.freeze`) lookup prevents DOM manipulation or client price spoofing.
-- **Order History Drawer**: Full past orders archive with 1-click **"Reorder All"** restoration.
+### 🛡️ Core Quick-Commerce & Security Architecture
+- **🚚 Dynamic Free Delivery Progress Bar**: Live calculation (*"Add ₹X more for FREE Delivery"* with ₹499 threshold).
+- **📍 Live 5-Stage Order Tracking Stepper**: Order Placed ➔ Packed at Dark Store ➔ Rider Assigned (Ramesh Kumar, 4.9★) ➔ Out for Delivery with Live Sonar Pulse Map ➔ Delivered with OTP.
+- **🔒 Immutable Price Tampering Guard**: Frozen model (`Object.freeze`) calculates all cart totals, preventing browser console tampering.
+- **📋 Order History Drawer**: Past order logs with 1-click **"Reorder All"** restoration.
 
 ---
 
@@ -70,7 +59,7 @@ MegaMartWeb/
 ├── view/
 │   ├── containerView.js      # Main UI controller, event delegation, & cart/order logic
 │   ├── headerView.js         # Header and navigation controller
-│   └── cartView/             # Legacy cart rendering components
+│   └── cartView/             # Cart rendering components
 ├── public/                   # Static assets & icons
 ├── index.html                # Semantic HTML layout & modal templates
 ├── style.css                 # 8pt grid, design system tokens, responsive styling

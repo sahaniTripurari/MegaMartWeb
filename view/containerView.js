@@ -1,4 +1,5 @@
 import { Controller } from "../controller/controller";
+import { getProductVariants, getProductCoins } from "../model/model";
 
 export class ContainerView {
     constructor(data) {
@@ -41,6 +42,9 @@ export class ContainerView {
         this.activeFilterTag = 'all';
         this.sliderInterval = null;
         this.wishlist = this.loadWishlistFromStorage();
+        this.megaCoins = this.loadMegaCoinsFromStorage();
+        this.redeemMegaCoins = false;
+        this.redeemedCoinsValue = 0;
         
         this.controller = new Controller(this.data);
         this.elementList = this.controller.categories(this.data);
@@ -65,6 +69,10 @@ export class ContainerView {
         this.setupScrollAnimations();
         this.loadCartFromStorage();
         this.setupCheckoutModal();
+        this.setupPincodeLocation();
+        this.updateMegaCoinsUI();
+        this.setupFlashSaleTimer();
+        this.setupMegaCoinsNav();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -272,12 +280,24 @@ export class ContainerView {
         const discountPercent = Math.round(((item.price - item.discount_price) / item.price) * 100);
         const rating = this.getProductRating(item);
         const isWishlisted = this.wishlist.has(item.name);
+        const coins = getProductCoins(item);
+        const variants = getProductVariants(item);
 
         // Determine realistic specifications based on category
         const isPerishable = ['fresh fruits', 'fresh vegetables', 'leafy herbs'].includes(item.type.toLowerCase());
         const shelfLife = isPerishable ? "3 - 5 Days from harvest" : "6 - 12 Months (Sealed)";
         const storageInstruction = isPerishable ? "Refrigerate below 4°C or store in ventilated mesh" : "Store in a cool, dry place away from sunlight";
         const countryOrigin = (item.countryoforigin || 'India').toUpperCase();
+
+        // Location state
+        const savedPin = localStorage.getItem('megamart_pincode') || '400001';
+        const savedCity = localStorage.getItem('megamart_city') || 'Mumbai';
+
+        // Frequently Bought Together Bundle
+        const [comp1, comp2] = this.getFrequentlyBoughtTogether(item);
+        const bundleRawPrice = item.discount_price + comp1.discount_price + comp2.discount_price;
+        const bundleSavings = 30;
+        const bundleFinalPrice = Math.max(1, bundleRawPrice - bundleSavings);
 
         detailContainer.innerHTML = `
             <div class="pd-gallery">
@@ -314,26 +334,103 @@ export class ContainerView {
                     </div>
                 </div>
 
+                ${item.isFlashDeal ? `<div class="pd-flash-badge"><span class="flame-icon">🔥</span> FLASH SALE DEAL • ${item.flashDiscount || '40% OFF'}</div>` : ''}
+
                 <h2 class="pd-title">${item.name}</h2>
-                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Net Qty: <strong>${item.unit}</strong></p>
+
+                <!-- Flipkart 'MegaAssured' Trust Badge & Guarantee -->
+                <div class="pd-mega-assured-card">
+                    <div class="mega-assured-badge lg" title="100% Quality Assured & Quick Delivery">
+                        <span class="assured-check">✓</span>
+                        <span class="assured-text"><span class="assured-mega">Mega</span>Assured</span>
+                    </div>
+                    <div class="pd-mega-assured-content">
+                        <span class="pd-mega-assured-title">MegaAssured 100% Quality Guarantee</span>
+                        <span class="pd-mega-assured-desc">Direct farm & brand sourcing • Quality checked • 10-Min Superfast Delivery</span>
+                    </div>
+                </div>
+
+                <p class="pd-net-qty" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Net Qty: <strong>${item.unit}</strong></p>
+
+                <!-- Multi-Weight / Pack Size Variant Selector -->
+                <div class="pd-variant-section">
+                    <div class="variant-label-row">
+                        <span class="variant-label">Pack Size / Weight:</span>
+                        <span class="variant-selected-value" id="pdSelectedVariantUnit">${item.unit}</span>
+                    </div>
+                    <div class="variant-pills" id="pdVariantPills">
+                        ${variants.map(v => `
+                            <button type="button" class="variant-pill ${v.unit === item.unit ? 'active' : ''}" 
+                                    data-unit="${v.unit}" 
+                                    data-price="${v.price}" 
+                                    data-discount="${v.discount_price}">
+                                <span class="variant-unit-name">${v.unit}</span>
+                                <span class="variant-unit-price">₹${v.discount_price}</span>
+                                ${v.price > v.discount_price ? `<span class="variant-badge-save">Save ₹${v.price - v.discount_price}</span>` : ''}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
 
                 <div class="pd-price-row">
                     <span class="pd-price">₹${item.discount_price}</span>
                     ${item.price > item.discount_price ? `<span class="pd-mrp">₹${item.price}</span> <span class="pd-discount">${discountPercent}% OFF</span>` : ''}
                 </div>
 
+                <!-- Flipkart-style 'MegaCoins' Rewards Banner -->
+                <div class="pd-megacoins-reward">
+                    <div class="pd-coin-icon-box">🪙</div>
+                    <div class="pd-coin-text-box">
+                        <span class="pd-coin-title"><strong>Earn ${coins} MegaCoins</strong> on this purchase</span>
+                        <span class="pd-coin-sub">Redeem coins on checkout for instant ₹1/coin cash discount</span>
+                    </div>
+                </div>
+
                 <p class="pd-desc">Premium grade hand-picked ${item.name}. Sourced directly from certified farmers and ethical suppliers to ensure farm-to-doorstep freshness within 10 minutes.</p>
 
-                <!-- Actions -->
+                <!-- Amazon Pincode & Delivery Estimator -->
+                <div class="pd-delivery-estimator" id="pdDeliveryEstimator">
+                    <div class="estimator-header">
+                        <div class="estimator-icon"><i data-lucide="truck"></i></div>
+                        <div class="estimator-title-wrap">
+                            <span class="estimator-label">Delivery to</span>
+                            <span class="estimator-target" id="pdCurrentPincodeDisplay">${savedCity}, ${savedPin}</span>
+                        </div>
+                    </div>
+                    <div class="estimator-input-group">
+                        <div class="estimator-input-wrapper">
+                            <i data-lucide="map-pin" class="estimator-input-icon"></i>
+                            <input type="text" id="pdPincodeInput" placeholder="Enter 6-digit Pincode" maxlength="6" value="${savedPin}">
+                        </div>
+                        <button type="button" class="estimator-check-btn" id="pdPincodeCheckBtn">Check</button>
+                    </div>
+                    <div class="estimator-result-badge" id="pdEstimatorResult">
+                        <div class="estimator-speed-row">
+                            <i data-lucide="zap" class="zap-icon"></i>
+                            <span>⚡ Express Delivery in 10-15 mins! FREE on orders above ₹499</span>
+                        </div>
+                        <div class="estimator-meta-row">
+                            <span>✓ In stock at Dark Store #${Math.abs(savedPin.charCodeAt(0) % 20) + 1}</span>
+                            <span>✓ Cash & UPI on Delivery available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions: Add to Cart + Amazon 'Buy Now' 1-Click Instant Checkout -->
                 <div class="pd-actions" data-name="${item.name}">
-                    ${!item.quantity ? 
-                        `<button class="pd-add-btn add-btn-detail">Add to Cart</button>` :
-                        `<div class="pd-qty-controls">
-                            <button class="pd-qty-btn subtract-detail">−</button>
-                            <span class="pd-qty-display">${item.quantity}</span>
-                            <button class="pd-qty-btn add-detail">+</button>
-                        </div>`
-                    }
+                    <div class="pd-btn-group">
+                        ${!item.quantity ? 
+                            `<button class="pd-add-btn add-btn-detail"><i data-lucide="shopping-cart"></i> Add to Cart</button>` :
+                            `<div class="pd-qty-controls">
+                                <button class="pd-qty-btn subtract-detail">−</button>
+                                <span class="pd-qty-display">${item.quantity}</span>
+                                <button class="pd-qty-btn add-detail">+</button>
+                            </div>`
+                        }
+                        <button class="pd-buy-now-btn" data-name="${item.name}" title="Buy instantly with 1-click checkout">
+                            <i data-lucide="zap"></i> Buy Now
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Key Specifications Grid -->
@@ -365,6 +462,157 @@ export class ContainerView {
                             <div class="spec-label">Quality Assured</div>
                             <div class="spec-value">FSSAI & Hygiene Verified</div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Amazon 'Frequently Bought Together' Bundle -->
+                <div class="pd-fbt-card" id="pdFbtCard">
+                    <div class="fbt-header">
+                        <span class="fbt-tag"><i data-lucide="package-plus"></i> FREQUENTLY BOUGHT TOGETHER</span>
+                        <h3>Frequently bought together</h3>
+                    </div>
+                    <div class="fbt-body">
+                        <div class="fbt-items-row">
+                            <div class="fbt-item" data-name="${item.name}">
+                                <div class="fbt-img-wrap">
+                                    <img src="${item.src}" alt="${item.name}" onerror="this.src='/javascript.svg';">
+                                    <span class="fbt-this-badge">This item</span>
+                                </div>
+                                <div class="fbt-item-details">
+                                    <span class="fbt-item-name">${item.name}</span>
+                                    <span class="fbt-item-price">₹${item.discount_price}</span>
+                                </div>
+                            </div>
+
+                            <div class="fbt-plus-symbol"><i data-lucide="plus"></i></div>
+
+                            <div class="fbt-item" data-name="${comp1.name}">
+                                <div class="fbt-img-wrap">
+                                    <img src="${comp1.src}" alt="${comp1.name}" onerror="this.src='/javascript.svg';">
+                                </div>
+                                <div class="fbt-item-details">
+                                    <span class="fbt-item-name">${comp1.name}</span>
+                                    <span class="fbt-item-price">₹${comp1.discount_price}</span>
+                                </div>
+                            </div>
+
+                            <div class="fbt-plus-symbol"><i data-lucide="plus"></i></div>
+
+                            <div class="fbt-item" data-name="${comp2.name}">
+                                <div class="fbt-img-wrap">
+                                    <img src="${comp2.src}" alt="${comp2.name}" onerror="this.src='/javascript.svg';">
+                                </div>
+                                <div class="fbt-item-details">
+                                    <span class="fbt-item-name">${comp2.name}</span>
+                                    <span class="fbt-item-price">₹${comp2.discount_price}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fbt-bundle-summary">
+                            <div class="fbt-price-calculation">
+                                <div class="fbt-price-label">Total Bundle Price:</div>
+                                <div class="fbt-price-numbers">
+                                    <span class="fbt-final-price">₹${bundleFinalPrice}</span>
+                                    <span class="fbt-strike-price">₹${bundleRawPrice}</span>
+                                    <span class="fbt-savings-pill">Save ₹30 Extra!</span>
+                                </div>
+                                <div class="fbt-items-desc">Includes: <strong>${item.name}</strong> + <strong>${comp1.name}</strong> + <strong>${comp2.name}</strong></div>
+                            </div>
+                            <button type="button" class="fbt-add-all-btn" id="fbtAddAllBtn" data-items="${item.name},${comp1.name},${comp2.name}">
+                                <i data-lucide="shopping-cart"></i> 🛒 Add All 3 to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amazon Customer Q&A / FAQs Accordion -->
+                <div class="pd-qa-section" id="pdQaSection">
+                    <div class="qa-header">
+                        <div class="qa-badge-title">
+                            <span class="qa-tag"><i data-lucide="help-circle"></i> CUSTOMER Q&A</span>
+                            <h3>Customer Questions & Answers</h3>
+                        </div>
+                    </div>
+
+                    <div class="qa-search-bar">
+                        <i data-lucide="search" class="qa-search-icon"></i>
+                        <input type="text" id="pdQaSearchInput" placeholder="Have a question? Search answers (e.g. fresh, return, packaging)...">
+                    </div>
+
+                    <div class="qa-accordion-list" id="pdQaAccordionList">
+                        <div class="qa-item active" data-keywords="organic fresh farm harvest 24 hours produce nutrient cold chain">
+                            <button class="qa-question-btn" type="button" aria-expanded="true">
+                                <span class="qa-q-icon">Q:</span>
+                                <span class="qa-q-text">Is this product organic & fresh?</span>
+                                <i data-lucide="chevron-down" class="qa-chevron"></i>
+                            </button>
+                            <div class="qa-answer-box" style="display: block;">
+                                <div class="qa-answer-content">
+                                    <span class="qa-a-icon">A:</span>
+                                    <div class="qa-a-text">
+                                        Yes, direct farm harvest within 24 hours. Certified cold-chain network ensures crisp freshness and uncompromised nutrients from soil to kitchen.
+                                        <div class="qa-verified-tag"><i data-lucide="check-circle-2"></i> Verified Agronomist Check • 100% Quality Assured</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="qa-item" data-keywords="return policy refund guarantee doorstep replacement instant money back 24 hours">
+                            <button class="qa-question-btn" type="button" aria-expanded="false">
+                                <span class="qa-q-icon">Q:</span>
+                                <span class="qa-q-text">What is the return policy?</span>
+                                <i data-lucide="chevron-down" class="qa-chevron"></i>
+                            </button>
+                            <div class="qa-answer-box" style="display: none;">
+                                <div class="qa-answer-content">
+                                    <span class="qa-a-icon">A:</span>
+                                    <div class="qa-a-text">
+                                        Instant doorstep return/refund within 24 hours if quality is compromised. No questions asked guarantee with 1-click refund back to your payment method.
+                                        <div class="qa-verified-tag"><i data-lucide="shield-check"></i> Zero-Hassle Return • Instant UPI / Wallet Credit</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="qa-item" data-keywords="packaging packaged food grade biodegradable hygienic sealed safe eco friendly">
+                            <button class="qa-question-btn" type="button" aria-expanded="false">
+                                <span class="qa-q-icon">Q:</span>
+                                <span class="qa-q-text">How is it packaged?</span>
+                                <i data-lucide="chevron-down" class="qa-chevron"></i>
+                            </button>
+                            <div class="qa-answer-box" style="display: none;">
+                                <div class="qa-answer-content">
+                                    <span class="qa-a-icon">A:</span>
+                                    <div class="qa-a-text">
+                                        100% biodegradable food-grade packaging. UV-sanitized and sealed in temperature-controlled dark stores for maximum safety and hygiene.
+                                        <div class="qa-verified-tag"><i data-lucide="leaf"></i> Eco-Friendly • Tamper-Evident Food-Grade Seal</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="qa-item" data-keywords="delivery timeframe speed 10 15 minutes quick fast dispatch dark store express">
+                            <button class="qa-question-btn" type="button" aria-expanded="false">
+                                <span class="qa-q-icon">Q:</span>
+                                <span class="qa-q-text">How quickly will my order arrive?</span>
+                                <i data-lucide="chevron-down" class="qa-chevron"></i>
+                            </button>
+                            <div class="qa-answer-box" style="display: none;">
+                                <div class="qa-answer-content">
+                                    <span class="qa-a-icon">A:</span>
+                                    <div class="qa-a-text">
+                                        Express delivery arrives in 10-15 minutes! Dispatched instantly by our dedicated riders from the nearest MegaMart dark store hub.
+                                        <div class="qa-verified-tag"><i data-lucide="zap"></i> Real-time GPS Tracking Available</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-empty-state" id="qaEmptyState" style="display: none;">
+                        <i data-lucide="help-circle"></i>
+                        <p>No answers matching your search. MegaMart 24/7 Support is here to help.</p>
                     </div>
                 </div>
 
@@ -492,6 +740,155 @@ export class ContainerView {
                 relatedGrid.appendChild(this.createProductCard(relItem));
             });
         }
+
+        // 1. Pincode & Delivery Estimator interaction in Product Detail
+        const pdPinInput = document.getElementById('pdPincodeInput');
+        const pdPinCheckBtn = document.getElementById('pdPincodeCheckBtn');
+        const runPdPinCheck = () => {
+            const val = pdPinInput?.value || '';
+            const res = this.lookupPincode(val);
+            if (!res.valid) {
+                this.showToast(res.error);
+                return;
+            }
+            localStorage.setItem('megamart_pincode', res.pincode);
+            localStorage.setItem('megamart_city', res.city);
+            this.updateHeaderLocationDisplay(res.city, res.pincode);
+            this.updateProductDetailEstimator(res.city, res.pincode, res.message);
+            this.showToast(`📍 Delivery confirmed for ${res.city} (${res.pincode})`);
+        };
+        pdPinCheckBtn?.addEventListener('click', runPdPinCheck);
+        pdPinInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                runPdPinCheck();
+            }
+        });
+
+        // 2. Amazon 'Frequently Bought Together' 1-Click Bundle Add
+        const fbtAddBtn = document.getElementById('fbtAddAllBtn');
+        if (fbtAddBtn) {
+            fbtAddBtn.addEventListener('click', () => {
+                const names = fbtAddBtn.dataset.items.split(',');
+                names.forEach(n => {
+                    const prod = this.data.find(p => p.name === n);
+                    if (prod) {
+                        prod.quantity = (prod.quantity || 0) + 1;
+                        this.updateAllCardDOMs(prod);
+                    }
+                });
+                this.saveCartToStorage();
+                this.updateCartUI();
+                const actionsDiv = detailContainer.querySelector(`.pd-actions[data-name="${item.name}"]`);
+                if (actionsDiv) this.updateProductDetailDOM(item, actionsDiv);
+                
+                fbtAddBtn.innerHTML = `<i data-lucide="check"></i> Added All 3 Items!`;
+                fbtAddBtn.classList.add('added');
+                setTimeout(() => {
+                    if (fbtAddBtn) {
+                        fbtAddBtn.innerHTML = `<i data-lucide="shopping-cart"></i> 🛒 Add All 3 to Cart`;
+                        fbtAddBtn.classList.remove('added');
+                        if (window.lucide) lucide.createIcons();
+                    }
+                }, 2200);
+                if (window.lucide) lucide.createIcons();
+                this.showToast(`🎉 Bundle added! Saved ₹30 extra on 3 items.`);
+            });
+        }
+
+        // 3. Amazon Customer Q&A Accordion & Real-time Search
+        const qaAccordionList = document.getElementById('pdQaAccordionList');
+        if (qaAccordionList) {
+            qaAccordionList.querySelectorAll('.qa-question-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemElem = btn.closest('.qa-item');
+                    const answerBox = itemElem.querySelector('.qa-answer-box');
+                    const isExpanded = itemElem.classList.contains('active');
+                    if (isExpanded) {
+                        itemElem.classList.remove('active');
+                        answerBox.style.display = 'none';
+                        btn.setAttribute('aria-expanded', 'false');
+                    } else {
+                        itemElem.classList.add('active');
+                        answerBox.style.display = 'block';
+                        btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+        }
+
+        const qaSearchInput = document.getElementById('pdQaSearchInput');
+        if (qaSearchInput && qaAccordionList) {
+            qaSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                let matches = 0;
+                qaAccordionList.querySelectorAll('.qa-item').forEach(itemElem => {
+                    const text = (itemElem.textContent || '').toLowerCase();
+                    const keywords = (itemElem.dataset.keywords || '').toLowerCase();
+                    const isMatch = !query || text.includes(query) || keywords.includes(query);
+                    itemElem.style.display = isMatch ? 'block' : 'none';
+                    if (isMatch) {
+                        matches++;
+                        if (query.length >= 2) {
+                            itemElem.classList.add('active');
+                            itemElem.querySelector('.qa-answer-box').style.display = 'block';
+                            itemElem.querySelector('.qa-question-btn').setAttribute('aria-expanded', 'true');
+                        }
+                    }
+                });
+                const emptyState = document.getElementById('qaEmptyState');
+                if (emptyState) emptyState.style.display = matches === 0 ? 'block' : 'none';
+            });
+        }
+
+        // Multi-Weight / Pack Size Variant Interaction
+        const variantPills = detailContainer.querySelectorAll('.variant-pill');
+        variantPills.forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                variantPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+
+                const newUnit = pill.dataset.unit;
+                const newPrice = Number(pill.dataset.price);
+                const newDiscount = Number(pill.dataset.discount);
+
+                item.unit = newUnit;
+                item.price = newPrice;
+                item.discount_price = newDiscount;
+
+                // Update detail UI elements
+                const selUnitEl = document.getElementById('pdSelectedVariantUnit');
+                if (selUnitEl) selUnitEl.textContent = newUnit;
+
+                const netQtyEl = detailContainer.querySelector('.pd-net-qty');
+                if (netQtyEl) netQtyEl.innerHTML = `Net Qty: <strong>${newUnit}</strong>`;
+
+                const priceEl = detailContainer.querySelector('.pd-price');
+                if (priceEl) priceEl.textContent = `₹${newDiscount}`;
+
+                const mrpEl = detailContainer.querySelector('.pd-mrp');
+                if (mrpEl) mrpEl.textContent = `₹${newPrice}`;
+
+                const discEl = detailContainer.querySelector('.pd-discount');
+                const newDiscPct = Math.round(((newPrice - newDiscount) / newPrice) * 100);
+                if (discEl) discEl.textContent = `${newDiscPct}% OFF`;
+
+                // Update MegaCoins display in detail
+                const coinTitleStrong = detailContainer.querySelector('.pd-coin-title strong');
+                if (coinTitleStrong) coinTitleStrong.textContent = `Earn ${getProductCoins(item)} MegaCoins`;
+
+                // Update all visible product cards across the page
+                this.updateAllCardDOMs(item);
+
+                // If in cart, refresh cart totals
+                if (item.quantity > 0) {
+                    this.updateCartUI();
+                }
+
+                this.showToast(`Selected ${item.name} (${newUnit}) • ₹${newDiscount}`);
+            });
+        });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (window.lucide) lucide.createIcons();
@@ -715,6 +1112,7 @@ export class ContainerView {
         const discountPercent = Math.round(((element.price - element.discount_price) / element.price) * 100);
         const rating = this.getProductRating(element);
         const isWishlisted = this.wishlist.has(element.name);
+        const coins = getProductCoins(element);
         
         itemDiv.innerHTML = `
             <div class="product-image-container clickable-area">
@@ -723,6 +1121,7 @@ export class ContainerView {
                 </button>
                 <img class="itemImage" src="${element.src}" alt="${element.name}" loading="lazy" onerror="this.src='/javascript.svg';">
                 ${discountPercent > 0 ? `<div class="discount-badge">${discountPercent}% OFF</div>` : ''}
+                ${element.isFlashDeal ? `<div class="flash-flame-badge">🔥 ${element.flashDiscount || '40% OFF'}</div>` : ''}
                 <div class="delivery-badge"><i data-lucide="zap" style="width:10px;height:10px;color:var(--primary)"></i> 10 MINS</div>
             </div>
             <div class="product-content clickable-area">
@@ -732,7 +1131,20 @@ export class ContainerView {
                     <span class="rating-count">(${rating.reviewCount})</span>
                 </div>
                 <h3 class="product-title">${element.name}</h3>
+                
+                <!-- Flipkart 'MegaAssured' Trust Badge -->
+                <div class="mega-assured-badge" title="MegaAssured: 100% Quality Checked & Quick Delivery">
+                    <span class="assured-check">✓</span>
+                    <span class="assured-text"><span class="assured-mega">Mega</span>Assured</span>
+                </div>
+
                 <p class="product-unit">${element.unit}</p>
+
+                <!-- Flipkart-style MegaCoins Reward Pill -->
+                <div class="megacoins-card-reward">
+                    <span class="coin-icon">🪙</span>
+                    <span>Earn ${coins} MegaCoins</span>
+                </div>
             </div>
             <div class="product-actions">
                 <div class="price-section">
@@ -784,6 +1196,31 @@ export class ContainerView {
                 if (card) {
                     const item = this.data.find(i => i.name === card.dataset.name);
                     if (item) this.showProductDetailView(item);
+                }
+                return;
+            }
+
+            // Amazon 'Buy Now' 1-Click Instant Checkout Button
+            const buyNowBtn = e.target.closest('.pd-buy-now-btn');
+            if (buyNowBtn) {
+                e.stopPropagation();
+                e.preventDefault();
+                const name = buyNowBtn.dataset.name;
+                const item = this.data.find(i => i.name === name);
+                if (item) {
+                    if (!item.quantity || item.quantity < 1) {
+                        item.quantity = 1;
+                    }
+                    this.saveCartToStorage();
+                    this.updateAllCardDOMs(item);
+                    this.updateCartUI();
+                    const actionsDiv = buyNowBtn.closest('.pd-actions');
+                    if (actionsDiv) this.updateProductDetailDOM(item, actionsDiv);
+                    
+                    // Bypass cart sidebar and open checkout modal immediately!
+                    this.closeCartSidebar();
+                    this.openCheckoutModal();
+                    this.showToast(`⚡ 1-Click Checkout: ${item.name}`);
                 }
                 return;
             }
@@ -854,33 +1291,68 @@ export class ContainerView {
 
     updateProductDetailDOM(item, actionsDiv) {
         if (!item.quantity) {
-            actionsDiv.innerHTML = `<button class="pd-add-btn add-btn-detail">Add to Cart</button>`;
+            actionsDiv.innerHTML = `
+                <div class="pd-btn-group">
+                    <button class="pd-add-btn add-btn-detail"><i data-lucide="shopping-cart"></i> Add to Cart</button>
+                    <button class="pd-buy-now-btn" data-name="${item.name}" title="Buy instantly with 1-click checkout">
+                        <i data-lucide="zap"></i> Buy Now
+                    </button>
+                </div>
+            `;
         } else {
             actionsDiv.innerHTML = `
-                <div class="pd-qty-controls">
-                    <button class="pd-qty-btn subtract-detail">−</button>
-                    <span class="pd-qty-display">${item.quantity}</span>
-                    <button class="pd-qty-btn add-detail">+</button>
+                <div class="pd-btn-group">
+                    <div class="pd-qty-controls">
+                        <button class="pd-qty-btn subtract-detail">−</button>
+                        <span class="pd-qty-display">${item.quantity}</span>
+                        <button class="pd-qty-btn add-detail">+</button>
+                    </div>
+                    <button class="pd-buy-now-btn" data-name="${item.name}" title="Buy instantly with 1-click checkout">
+                        <i data-lucide="zap"></i> Buy Now
+                    </button>
                 </div>
             `;
         }
+        if (window.lucide) lucide.createIcons();
     }
 
     updateAllCardDOMs(item) {
         document.querySelectorAll(`.itemName[data-name="${item.name}"]`).forEach(cardElement => {
             const btnContainer = cardElement.querySelector('.btn-container');
-            if (!btnContainer) return;
-            
-            if (!item.quantity) {
-                btnContainer.innerHTML = `<button class="add-btn">Add</button>`;
-            } else {
-                btnContainer.innerHTML = `
-                    <div class="quantity-controls">
-                        <button class="qty-btn subtract">−</button>
-                        <span class="quantity-display">${item.quantity}</span>
-                        <button class="qty-btn add qty-plus">+</button>
-                    </div>
-                `;
+            if (btnContainer) {
+                if (!item.quantity) {
+                    btnContainer.innerHTML = `<button class="add-btn">Add</button>`;
+                } else {
+                    btnContainer.innerHTML = `
+                        <div class="quantity-controls">
+                            <button class="qty-btn subtract">−</button>
+                            <span class="quantity-display">${item.quantity}</span>
+                            <button class="qty-btn add qty-plus">+</button>
+                        </div>
+                    `;
+                }
+            }
+
+            // Sync unit and prices when variant changes
+            const unitEl = cardElement.querySelector('.product-unit');
+            if (unitEl && item.unit) unitEl.textContent = item.unit;
+
+            const currPriceEl = cardElement.querySelector('.current-price');
+            if (currPriceEl && item.discount_price) currPriceEl.textContent = `₹${item.discount_price}`;
+
+            const origPriceEl = cardElement.querySelector('.original-price');
+            if (origPriceEl) {
+                if (item.price > item.discount_price) {
+                    origPriceEl.textContent = `₹${item.price}`;
+                    origPriceEl.style.display = 'inline';
+                } else {
+                    origPriceEl.style.display = 'none';
+                }
+            }
+
+            const coinRewardEl = cardElement.querySelector('.megacoins-card-reward span:last-child');
+            if (coinRewardEl) {
+                coinRewardEl.textContent = `Earn ${getProductCoins(item)} MegaCoins`;
             }
         });
     }
@@ -1236,10 +1708,22 @@ export class ContainerView {
             `).join('');
             
             const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
+            const mrpTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const deliveryFee = subtotal > 499 ? 0 : 25;
+            const deliverySavings = subtotal > 499 ? 25 : 0;
+            const mrpSavings = Math.max(0, mrpTotal - subtotal);
+            const totalSavings = mrpSavings + deliverySavings;
             const total = subtotal + deliveryFee;
             
             cartFooter.innerHTML = `
+                ${totalSavings > 0 ? `
+                <div class="myntra-savings-card">
+                    <div class="myntra-savings-icon">🎉</div>
+                    <div class="myntra-savings-text">
+                        <span class="savings-headline">Total Savings</span>
+                        <span class="savings-amount">You are saving ₹${totalSavings.toFixed(0)} on this order!</span>
+                    </div>
+                </div>` : ''}
                 <div class="bill-row"><span>Items</span><span>₹${subtotal.toFixed(2)}</span></div>
                 <div class="bill-row"><span>Delivery</span><span>${deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}</span></div>
                 <div class="bill-row total"><span>Total</span><span>₹${total.toFixed(2)}</span></div>
@@ -1390,6 +1874,39 @@ export class ContainerView {
             this.renderCheckoutSummary();
         });
 
+        // MegaCoins Redemption Checkbox handler
+        const redeemCheckbox = document.getElementById('redeemCoinsCheckbox');
+        const coinsStatus = document.getElementById('coinsStatusMessage');
+        redeemCheckbox?.addEventListener('change', () => {
+            if (redeemCheckbox.checked) {
+                const usableCoins = Math.min(this.megaCoins || 0, 50);
+                if (usableCoins <= 0) {
+                    redeemCheckbox.checked = false;
+                    this.redeemMegaCoins = false;
+                    this.redeemedCoinsValue = 0;
+                    if (coinsStatus) {
+                        coinsStatus.className = 'coins-status-text';
+                        coinsStatus.textContent = 'You have 0 MegaCoins available to redeem.';
+                    }
+                } else {
+                    this.redeemMegaCoins = true;
+                    this.redeemedCoinsValue = usableCoins;
+                    if (coinsStatus) {
+                        coinsStatus.className = 'coins-status-text applied';
+                        coinsStatus.textContent = `🪙 ${usableCoins} MegaCoins applied: Saved ₹${usableCoins}!`;
+                    }
+                }
+            } else {
+                this.redeemMegaCoins = false;
+                this.redeemedCoinsValue = 0;
+                if (coinsStatus) {
+                    coinsStatus.className = 'coins-status-text';
+                    coinsStatus.textContent = '';
+                }
+            }
+            this.renderCheckoutSummary();
+        });
+
         // Place order button
         placeOrderBtn?.addEventListener('click', () => this.handlePlaceOrder());
     }
@@ -1409,6 +1926,15 @@ export class ContainerView {
         if (body) body.style.display = 'flex';
         if (success) success.style.display = 'none';
 
+        // Pre-fill active Pincode & City in checkout form
+        const savedPin = localStorage.getItem('megamart_pincode') || '400001';
+        const savedCity = localStorage.getItem('megamart_city') || 'Mumbai';
+        const pinInput = document.getElementById('custPin');
+        const cityInput = document.getElementById('custCity');
+        if (pinInput && !pinInput.value) pinInput.value = savedPin;
+        if (cityInput && !cityInput.value) cityInput.value = savedCity;
+
+        this.updateMegaCoinsUI();
         this.renderCheckoutSummary();
         modal?.classList.add('active');
         overlay?.classList.add('active');
@@ -1427,20 +1953,40 @@ export class ContainerView {
         if (!summaryBox) return;
 
         const cartItems = this.data.filter(item => item.quantity > 0);
+        const mrpTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
         const deliveryFee = subtotal > 499 ? 0 : 25;
-        const discount = Math.min(this.appliedDiscount || 0, subtotal);
-        const grandTotal = Math.max(0, subtotal - discount + deliveryFee);
+        const deliverySavings = subtotal > 499 ? 25 : 0;
+        const couponDiscount = Math.min(this.appliedDiscount || 0, subtotal);
+        const coinsDiscount = this.redeemMegaCoins ? Math.min(this.redeemedCoinsValue || 0, Math.max(0, subtotal - couponDiscount)) : 0;
+        const grandTotal = Math.max(0, subtotal - couponDiscount - coinsDiscount + deliveryFee);
+        
+        const mrpSavings = Math.max(0, mrpTotal - subtotal);
+        const totalSavings = mrpSavings + couponDiscount + coinsDiscount + deliverySavings;
 
         summaryBox.innerHTML = `
+            ${totalSavings > 0 ? `
+            <!-- Myntra-style Total Savings Celebratory Card in Checkout -->
+            <div class="myntra-savings-card checkout-style">
+                <div class="myntra-savings-icon">🎉</div>
+                <div class="myntra-savings-text">
+                    <span class="savings-headline">Total Savings</span>
+                    <span class="savings-amount">You are saving ₹${totalSavings.toFixed(0)} on this order!</span>
+                </div>
+            </div>` : ''}
             <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;">
                 <span style="color:var(--text-muted);">Items Subtotal (${cartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
                 <span style="font-weight:600;">₹${subtotal.toFixed(2)}</span>
             </div>
-            ${discount > 0 ? `
+            ${couponDiscount > 0 ? `
             <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;color:var(--success);">
                 <span>Coupon Discount (${this.activeCouponCode})</span>
-                <span style="font-weight:600;">-₹${discount.toFixed(2)}</span>
+                <span style="font-weight:600;">-₹${couponDiscount.toFixed(2)}</span>
+            </div>` : ''}
+            ${coinsDiscount > 0 ? `
+            <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;color:#b45309;font-weight:600;">
+                <span>🪙 MegaCoins Redeemed</span>
+                <span>-₹${coinsDiscount.toFixed(2)}</span>
             </div>` : ''}
             <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;">
                 <span style="color:var(--text-muted);">Delivery Fee</span>
@@ -1474,9 +2020,16 @@ export class ContainerView {
 
         const cartItems = this.data.filter(item => item.quantity > 0);
         const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
-        const discount = this.appliedDiscount || 0;
-        const grandTotal = Math.max(0, subtotal - discount + (subtotal > 499 ? 0 : 25));
+        const couponDiscount = this.appliedDiscount || 0;
+        const coinsDiscount = this.redeemMegaCoins ? (this.redeemedCoinsValue || 0) : 0;
+        const grandTotal = Math.max(0, subtotal - couponDiscount - coinsDiscount + (subtotal > 499 ? 0 : 25));
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'UPI';
+
+        // Calculate earned coins & deduct redeemed coins
+        const earnedCoins = cartItems.reduce((sum, item) => sum + (getProductCoins(item) * item.quantity), 0);
+        this.megaCoins = Math.max(0, this.megaCoins - coinsDiscount) + earnedCoins;
+        this.saveMegaCoinsToStorage();
+        this.updateMegaCoinsUI();
 
         const orderId = '#MM-' + Math.floor(100000 + Math.random() * 900000);
 
@@ -1488,14 +2041,23 @@ export class ContainerView {
             items: cartItems.map(i => ({ name: i.name, qty: i.quantity, price: i.discount_price })),
             total: grandTotal,
             paymentMethod,
+            coinsEarned: earnedCoins,
+            coinsRedeemed: coinsDiscount
         };
 
         const existingOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
         existingOrders.unshift(orderRecord);
         localStorage.setItem('megamart_orders', JSON.stringify(existingOrders));
 
-        // Clear cart
+        // Clear cart & reset redemption
         this.data.forEach(item => { item.quantity = 0; });
+        this.redeemMegaCoins = false;
+        this.redeemedCoinsValue = 0;
+        const redeemCb = document.getElementById('redeemCoinsCheckbox');
+        if (redeemCb) redeemCb.checked = false;
+        const coinsStatusMsg = document.getElementById('coinsStatusMessage');
+        if (coinsStatusMsg) coinsStatusMsg.textContent = '';
+
         this.saveCartToStorage();
         this.updateCartUI();
         document.querySelectorAll('.itemName').forEach(c => {
@@ -1514,10 +2076,303 @@ export class ContainerView {
                 <p><strong>Deliver to:</strong> ${name}, ${address} (${pin})</p>
                 <p><strong>Payment:</strong> ${paymentMethod} (₹${grandTotal.toFixed(2)})</p>
                 <p><strong>Items:</strong> ${cartItems.length} items ordered</p>
+                <p style="color:#b45309;margin-top:6px;font-weight:700;">🪙 +${earnedCoins} MegaCoins Earned! (New Balance: ${this.megaCoins} Coins)</p>
             `;
             if (window.lucide) lucide.createIcons();
         }
 
-        this.showToast('🎉 Order placed successfully!');
+        this.showToast(`🎉 Order placed! Earned ${earnedCoins} MegaCoins!`);
+    }
+
+    // ================= AMAZON E-COMMERCE CONVERSION ENGINE =================
+
+    getFrequentlyBoughtTogether(currentItem) {
+        const pairs = {
+            'Banana': ['Milk', 'Sugar'],
+            'Apple': ['Banana', 'Orange'],
+            'Mango': ['Milk', 'Sugar'],
+            'Orange': ['Apple', 'Banana'],
+            'Papaya': ['Apple', 'Banana'],
+            'Tea': ['Sugar', 'Milk'],
+            'Sugar': ['Tea', 'Milk'],
+            'Milk': ['Tea', 'Sugar'],
+            'Onion': ['Potato', 'Tomato'],
+            'Potato': ['Onion', 'Tomato'],
+            'Tomato': ['Onion', 'Chilli'],
+            'Cauliflower': ['Potato', 'Tomato'],
+            'Bottle Guard': ['Tomato', 'Onion'],
+            'Spinach': ['Coriander', 'Mint'],
+            'Coriander': ['Chilli', 'Curry leaves'],
+            'Curry leaves': ['Chilli', 'Masala'],
+            'Mint': ['Chilli', 'Coriander'],
+            'Chilli': ['Coriander', 'Curry leaves'],
+            'Capsicum': ['Broccoli', 'Mushroom'],
+            'Broccoli': ['Capsicum', 'BabyCorn'],
+            'BabyCorn': ['Broccoli', 'Mushroom'],
+            'Iceberg': ['Capsicum', 'Tomato'],
+            'Mushroom': ['Capsicum', 'Broccoli'],
+            'Masala': ['Salt', 'Curry leaves'],
+            'Salt': ['Sugar', 'Masala'],
+            'Cleaners': ['Sanitizers', 'Soap'],
+            'Soap': ['Sanitizers', 'Cleaners'],
+            'Sanitizers': ['Soap', 'Cleaners'],
+            'Allout': ['Cleaners', 'Room Freshners'],
+            'Room Freshners': ['Cleaners', 'Soap'],
+            'Rose': ['Marigold', 'Whitelower'],
+            'Marigold': ['Rose', 'Whitelower'],
+            'Whitelower': ['Rose', 'Marigold']
+        };
+
+        let comp1, comp2;
+        const mapped = pairs[currentItem.name];
+        if (mapped) {
+            comp1 = this.data.find(i => i.name === mapped[0]);
+            comp2 = this.data.find(i => i.name === mapped[1]);
+        }
+
+        if (!comp1 || !comp2) {
+            const pool = this.data.filter(i => i.name !== currentItem.name);
+            comp1 = comp1 || pool[0];
+            comp2 = comp2 || pool[1];
+        }
+
+        return [comp1, comp2];
+    }
+
+    lookupPincode(pincode) {
+        const pin = String(pincode || '').trim();
+        if (!/^\d{6}$/.test(pin)) {
+            return { valid: false, error: 'Please enter a valid 6-digit Indian Pincode.' };
+        }
+
+        const directory = {
+            '400001': { city: 'Mumbai', area: 'Fort / South Mumbai', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '400050': { city: 'Mumbai', area: 'Bandra West', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '110001': { city: 'Delhi', area: 'Connaught Place', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '110016': { city: 'Delhi', area: 'Hauz Khas', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '560001': { city: 'Bangalore', area: 'MG Road / Central', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '560034': { city: 'Bangalore', area: 'Koramangala', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '500001': { city: 'Hyderabad', area: 'Abids / Koti', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '500081': { city: 'Hyderabad', area: 'Hitec City', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '600001': { city: 'Chennai', area: 'George Town', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 },
+            '700001': { city: 'Kolkata', area: 'BBD Bagh', speed: '⚡ Express Delivery in 12-18 mins!', freeAbove: 499 },
+            '411001': { city: 'Pune', area: 'Shivajinagar / Camp', speed: '⚡ Express Delivery in 10-15 mins!', freeAbove: 499 }
+        };
+
+        const found = directory[pin] || {
+            city: 'Express Delivery Hub',
+            area: 'Metro Sector',
+            speed: '⚡ Express Delivery in 10-15 mins!',
+            freeAbove: 499
+        };
+
+        return {
+            valid: true,
+            pincode: pin,
+            city: found.city,
+            area: found.area,
+            speed: found.speed,
+            message: `${found.speed} FREE on orders above ₹${found.freeAbove}`
+        };
+    }
+
+    setupPincodeLocation() {
+        const locBtn = document.getElementById('headerDeliveryLocation');
+        const modal = document.getElementById('pincodeModal');
+        const overlay = document.getElementById('pincodeModalOverlay');
+        const closeBtn = document.getElementById('closePincodeModal');
+        const applyBtn = document.getElementById('headerPincodeApplyBtn');
+        const pinInput = document.getElementById('headerPincodeInput');
+        const statusBox = document.getElementById('headerPincodeStatus');
+        const cityChips = document.querySelectorAll('.city-chip');
+
+        const savedPin = localStorage.getItem('megamart_pincode') || '400001';
+        const savedCity = localStorage.getItem('megamart_city') || 'Mumbai';
+        this.updateHeaderLocationDisplay(savedCity, savedPin);
+
+        const openModal = () => {
+            if (!modal || !overlay) return;
+            const currentPin = localStorage.getItem('megamart_pincode') || '400001';
+            if (pinInput) pinInput.value = currentPin;
+            if (statusBox) statusBox.style.display = 'none';
+            modal.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => pinInput?.focus(), 100);
+            if (window.lucide) lucide.createIcons();
+        };
+
+        const closeModal = () => {
+            modal?.classList.remove('active');
+            overlay?.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        locBtn?.addEventListener('click', openModal);
+        locBtn?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openModal();
+            }
+        });
+        closeBtn?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', closeModal);
+
+        const applyPincode = (pincode, forcedCity = null) => {
+            const result = this.lookupPincode(pincode);
+            if (!result.valid) {
+                if (statusBox) {
+                    statusBox.className = 'pincode-status-box error';
+                    statusBox.innerHTML = `<i data-lucide="alert-circle"></i> <span>${result.error}</span>`;
+                    statusBox.style.display = 'flex';
+                    if (window.lucide) lucide.createIcons();
+                }
+                return false;
+            }
+
+            const city = forcedCity || result.city;
+            localStorage.setItem('megamart_pincode', result.pincode);
+            localStorage.setItem('megamart_city', city);
+            this.updateHeaderLocationDisplay(city, result.pincode);
+
+            // Pre-fill checkout form inputs if present
+            const custPin = document.getElementById('custPin');
+            const custCity = document.getElementById('custCity');
+            if (custPin) custPin.value = result.pincode;
+            if (custCity) custCity.value = city;
+
+            // Also update any active product detail estimator
+            this.updateProductDetailEstimator(city, result.pincode, result.message);
+
+            if (statusBox) {
+                statusBox.className = 'pincode-status-box success';
+                statusBox.innerHTML = `<i data-lucide="check-circle-2"></i> <div><strong>${city} (${result.pincode})</strong><br><span>${result.message}</span></div>`;
+                statusBox.style.display = 'flex';
+                if (window.lucide) lucide.createIcons();
+            }
+
+            this.showToast(`📍 Delivering to ${city} (${result.pincode})`);
+
+            setTimeout(() => {
+                closeModal();
+            }, 900);
+            return true;
+        };
+
+        applyBtn?.addEventListener('click', () => {
+            const pin = pinInput?.value || '';
+            applyPincode(pin);
+        });
+
+        pinInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyPincode(pinInput.value);
+            }
+        });
+
+        cityChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const city = chip.dataset.city;
+                const pin = chip.dataset.pin;
+                if (pinInput) pinInput.value = pin;
+                cityChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                applyPincode(pin, city);
+            });
+        });
+    }
+
+    updateHeaderLocationDisplay(city, pin) {
+        const addressSpan = document.getElementById('headerDeliveryAddress');
+        if (addressSpan) {
+            addressSpan.innerHTML = `${city}, ${pin} <i data-lucide="chevron-down"></i>`;
+            if (window.lucide) lucide.createIcons();
+        }
+    }
+
+    updateProductDetailEstimator(city, pin, speedMsg) {
+        const target = document.getElementById('pdCurrentPincodeDisplay');
+        const input = document.getElementById('pdPincodeInput');
+        const resultBox = document.getElementById('pdEstimatorResult');
+        if (target) target.textContent = `${city}, ${pin}`;
+        if (input) input.value = pin;
+        if (resultBox) {
+            resultBox.innerHTML = `
+                <div class="estimator-speed-row">
+                    <i data-lucide="zap" class="zap-icon"></i>
+                    <span>${speedMsg || '⚡ Express Delivery in 10-15 mins! FREE on orders above ₹499'}</span>
+                </div>
+                <div class="estimator-meta-row">
+                    <span>✓ In stock at Dark Store #${Math.abs(pin.charCodeAt(0) % 20) + 1}</span>
+                    <span>✓ Cash & UPI on Delivery available</span>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+        }
+    }
+
+    // ================= FLIPKART & MYNTRA EXTENSION HELPERS =================
+
+    loadMegaCoinsFromStorage() {
+        try {
+            const saved = localStorage.getItem('megamart_coins');
+            return saved !== null ? parseInt(saved, 10) : 150;
+        } catch (e) {
+            return 150;
+        }
+    }
+
+    saveMegaCoinsToStorage() {
+        try {
+            localStorage.setItem('megamart_coins', this.megaCoins.toString());
+        } catch (e) {
+            console.error('Error saving coins:', e);
+        }
+    }
+
+    updateMegaCoinsUI() {
+        const headerEl = document.getElementById('headerCoinBalance');
+        if (headerEl) headerEl.textContent = this.megaCoins;
+        const profileEl = document.getElementById('profileCoinBalance');
+        if (profileEl) profileEl.textContent = this.megaCoins;
+        const profileDispEl = document.getElementById('profileCoinBalanceDisplay');
+        if (profileDispEl) profileDispEl.textContent = this.megaCoins;
+        const checkoutEl = document.getElementById('checkoutCoinsAvailable');
+        if (checkoutEl) checkoutEl.textContent = this.megaCoins;
+        const maxUsable = Math.min(this.megaCoins, 50);
+        const redeemCountEl = document.getElementById('redeemCoinsCountDisplay');
+        const redeemValEl = document.getElementById('redeemSavingsDisplay');
+        if (redeemCountEl) redeemCountEl.textContent = maxUsable;
+        if (redeemValEl) redeemValEl.textContent = '₹' + maxUsable;
+    }
+
+    setupFlashSaleTimer() {
+        let remainingSeconds = 3 * 3600 + 47 * 60 + 28;
+        const updateTimer = () => {
+            if (remainingSeconds <= 0) remainingSeconds = 4 * 3600;
+            remainingSeconds--;
+            const h = Math.floor(remainingSeconds / 3600);
+            const m = Math.floor((remainingSeconds % 3600) / 60);
+            const s = remainingSeconds % 60;
+            const hEl = document.getElementById('flashHours');
+            const mEl = document.getElementById('flashMinutes');
+            const sEl = document.getElementById('flashSeconds');
+            if (hEl) hEl.textContent = String(h).padStart(2, '0');
+            if (mEl) mEl.textContent = String(m).padStart(2, '0');
+            if (sEl) sEl.textContent = String(s).padStart(2, '0');
+        };
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+
+    setupMegaCoinsNav() {
+        const btn = document.getElementById('headerCoinsBtn');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                this.showProfileView();
+                window.scrollTo({ top: 300, behavior: 'smooth' });
+            });
+        }
     }
 }

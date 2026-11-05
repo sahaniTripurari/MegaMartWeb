@@ -22,11 +22,11 @@
                     <span class="logo-text">MegaMart</span>
                 </a>
                 
-                <div class="delivery-location">
+                <div class="delivery-location" id="headerDeliveryLocation" role="button" tabindex="0" title="Click to change delivery pincode">
                     <div class="loc-icon-wrapper"><i data-lucide="map-pin"></i></div>
                     <div class="loc-text">
                         <span class="loc-label">Delivering to</span>
-                        <span class="loc-address">Mumbai, 400001 <i data-lucide="chevron-down"></i></span>
+                        <span class="loc-address" id="headerDeliveryAddress">Mumbai, 400001 <i data-lucide="chevron-down"></i></span>
                     </div>
                 </div>
             </div>
@@ -39,6 +39,15 @@
             </div>
 
             <div class="header-actions">
+                <button class="action-btn megacoins-button" id="headerCoinsBtn" title="MegaCoins Loyalty Balance & Rewards">
+                    <div class="coins-icon-wrapper">
+                        <span class="coin-icon">🪙</span>
+                    </div>
+                    <div class="coins-text">
+                        <span class="coins-label">MegaCoins</span>
+                        <span class="coins-balance" id="headerCoinBalance">150</span>
+                    </div>
+                </button>
                 <button class="action-btn orders-button desktop-orders" id="headerOrdersBtn" title="My Orders & Live Tracking">
                     <div class="orders-icon-wrapper">
                         <i data-lucide="package"></i>
@@ -106,6 +115,27 @@
     <main class="main-content">
         <!-- ================= HOME VIEW ================= -->
         <div id="homeView" class="view-section active">
+            
+            <!-- Flipkart-Style Deal of the Day / Flash Sale Countdown Bar -->
+            <div class="flash-sale-banner" id="flashSaleBanner">
+                <div class="container flash-sale-inner">
+                    <div class="flash-sale-left">
+                        <span class="flash-pulse-badge">⚡ FLASH SALE</span>
+                        <span class="flash-sale-title">Crazy Deals End In:</span>
+                    </div>
+                    <div class="flash-sale-timer-box">
+                        <i data-lucide="clock" class="timer-clock-icon"></i>
+                        <div class="countdown-digits" id="flashSaleTimer">
+                            <span class="digit-box" id="flashHours">03</span><span class="digit-sep">:</span>
+                            <span class="digit-box" id="flashMinutes">47</span><span class="digit-sep">:</span>
+                            <span class="digit-box" id="flashSeconds">28</span>
+                        </div>
+                    </div>
+                    <div class="flash-sale-cta">
+                        <span class="flash-badge-pill">🔥 UP TO 40% OFF</span>
+                    </div>
+                </div>
+            </div>
             
             <!-- Mobile Search Bar (Appears on scroll or toggle) -->
             <div class="mobile-search-bar container">
@@ -279,12 +309,38 @@
                             <span class="stat-label">Orders</span>
                         </div>
                         <div class="stat-card">
+                            <span class="stat-value" id="profileCoinBalance">150</span>
+                            <span class="stat-label">MegaCoins</span>
+                        </div>
+                        <div class="stat-card">
                             <span class="stat-value">₹450</span>
                             <span class="stat-label">Saved</span>
                         </div>
                         <div class="stat-card">
                             <span class="stat-value">5</span>
                             <span class="stat-label">Coupons</span>
+                        </div>
+                    </div>
+
+                    <!-- Flipkart SuperCoins / MegaCoins Rewards Banner -->
+                    <div class="profile-megacoins-card">
+                        <div class="coins-card-top">
+                            <div class="coins-card-title">
+                                <span class="coin-gold-large">🪙</span>
+                                <div>
+                                    <h3>MegaCoins Rewards Balance</h3>
+                                    <p>1 MegaCoin = ₹1 instant savings on every order</p>
+                                </div>
+                            </div>
+                            <div class="coins-balance-display">
+                                <span class="coins-number" id="profileCoinBalanceDisplay">150</span>
+                                <span class="coins-unit">Coins</span>
+                            </div>
+                        </div>
+                        <div class="coins-perks-row">
+                            <div class="coin-perk"><span>⚡ 15+ Coins per item</span></div>
+                            <div class="coin-perk"><span>🪙 Instant ₹50 checkout redemption</span></div>
+                            <div class="coin-perk"><span>⭐ SuperSaver VIP Club</span></div>
                         </div>
                     </div>
 
@@ -399,6 +455,44 @@
         <div class="cart-footer" id="cartFooter"></div>
     </div>
 
+    <!-- ================= PINCODE & DELIVERY ESTIMATOR MODAL ================= -->
+    <div class="pincode-modal-overlay" id="pincodeModalOverlay"></div>
+    <div class="pincode-modal" id="pincodeModal">
+        <div class="pincode-modal-header">
+            <div class="pincode-header-title">
+                <i data-lucide="map-pin" class="modal-pin-icon"></i>
+                <h3>Choose Delivery Location</h3>
+            </div>
+            <button class="close-pincode-modal" id="closePincodeModal" title="Close"><i data-lucide="x"></i></button>
+        </div>
+        <div class="pincode-modal-body">
+            <p class="pincode-modal-desc">Enter your 6-digit Pincode to check instant 10-15 minute grocery delivery availability, stock levels, and exclusive local discounts.</p>
+            
+            <div class="pincode-input-group">
+                <div class="pincode-input-wrap">
+                    <i data-lucide="map-pin" class="pin-field-icon"></i>
+                    <input type="text" id="headerPincodeInput" placeholder="Enter 6-digit Pincode (e.g. 400001)" maxlength="6" pattern="[0-9]{6}">
+                </div>
+                <button type="button" class="btn btn-primary pincode-apply-btn" id="headerPincodeApplyBtn">Check</button>
+            </div>
+            
+            <div class="pincode-status-box" id="headerPincodeStatus" style="display: none;"></div>
+
+            <div class="popular-cities-wrap">
+                <div class="popular-cities-title"><i data-lucide="compass"></i> Or Select Major Delivery Metro:</div>
+                <div class="popular-cities-grid">
+                    <button type="button" class="city-chip" data-city="Mumbai" data-pin="400001">🏙️ Mumbai (400001)</button>
+                    <button type="button" class="city-chip" data-city="Delhi" data-pin="110001">🏛️ Delhi (110001)</button>
+                    <button type="button" class="city-chip" data-city="Bangalore" data-pin="560001">💻 Bangalore (560001)</button>
+                    <button type="button" class="city-chip" data-city="Hyderabad" data-pin="500001">💎 Hyderabad (500001)</button>
+                    <button type="button" class="city-chip" data-city="Chennai" data-pin="600001">🌴 Chennai (600001)</button>
+                    <button type="button" class="city-chip" data-city="Kolkata" data-pin="700001">🌉 Kolkata (700001)</button>
+                    <button type="button" class="city-chip" data-city="Pune" data-pin="411001">🏔️ Pune (411001)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Checkout Modal -->
     <div class="checkout-modal-overlay" id="checkoutOverlay"></div>
     <div class="checkout-modal" id="checkoutModal">
@@ -427,6 +521,26 @@
                     <button type="button" id="applyCouponBtn">Apply</button>
                 </div>
                 <div id="couponStatus" class="coupon-status"></div>
+            </div>
+
+            <!-- Flipkart-Style MegaCoins Loyalty Rewards Section -->
+            <div class="checkout-section megacoins-checkout-card">
+                <div class="coins-redeem-header">
+                    <div class="coins-badge-title">
+                        <span class="coin-emoji">🪙</span>
+                        <h4>MegaCoins Loyalty Rewards</h4>
+                    </div>
+                    <span class="coins-avail-badge">Available: <strong id="checkoutCoinsAvailable">150</strong> Coins</span>
+                </div>
+                <label class="megacoins-redeem-row" id="megacoinsRedeemLabel">
+                    <input type="checkbox" id="redeemCoinsCheckbox">
+                    <span class="coins-checkbox-custom"></span>
+                    <div class="coins-redeem-info">
+                        <span class="coins-redeem-text">Use <strong id="redeemCoinsCountDisplay">50</strong> MegaCoins to save <strong id="redeemSavingsDisplay">₹50</strong></span>
+                        <span class="coins-redeem-sub">Instant ₹50 redemption applied directly to order bill</span>
+                    </div>
+                </label>
+                <div id="coinsStatusMessage" class="coins-status-text"></div>
             </div>
 
             <!-- Payment Methods -->

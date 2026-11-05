@@ -2861,3 +2861,1450 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     max-width: 220px;
   }
 }
+
+/* ==========================================================================
+   AMAZON E-COMMERCE CONVERSION DRIVERS & UX SYSTEMS
+   ========================================================================== */
+
+/* 1. Amazon 'Buy Now' 1-Click Instant Checkout */
+.pd-btn-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+.pd-btn-group .pd-add-btn {
+  flex: 1;
+  padding: 14px 18px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(255, 50, 105, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pd-btn-group .pd-add-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 50, 105, 0.35);
+}
+.pd-btn-group .pd-qty-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  height: 52px;
+  padding: 0 6px;
+  border: 1px solid #E5E7EB;
+}
+.pd-buy-now-btn {
+  flex: 1;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #FFA41C 0%, #FF8F00 100%);
+  color: #111827;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(255, 143, 0, 0.3);
+  border: 1px solid rgba(213, 114, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pd-buy-now-btn:hover {
+  background: linear-gradient(135deg, #FA8900 0%, #E67A00 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 143, 0, 0.4);
+  color: #000000;
+}
+.pd-buy-now-btn:active {
+  transform: translateY(1px);
+}
+.pd-buy-now-btn svg {
+  width: 18px;
+  height: 18px;
+  color: #B12704;
+  fill: #B12704;
+}
+
+/* 2. Amazon Pincode & Delivery Estimator */
+.pd-delivery-estimator {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.estimator-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.estimator-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 50, 105, 0.1);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.estimator-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.estimator-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.estimator-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.estimator-target {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+.estimator-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.estimator-input-wrapper {
+  position: relative;
+  flex: 1;
+}
+.estimator-input-wrapper input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #D1D5DB;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background: #FFFFFF;
+  color: var(--text-dark);
+  font-family: inherit;
+  font-weight: 600;
+}
+.estimator-input-wrapper input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 50, 105, 0.15);
+}
+.estimator-input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+}
+.estimator-check-btn {
+  padding: 0 18px;
+  background: var(--text-dark);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.estimator-check-btn:hover {
+  background: #000000;
+}
+.estimator-result-badge {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+.estimator-speed-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #065F46;
+  margin-bottom: 4px;
+}
+.estimator-speed-row .zap-icon {
+  width: 16px;
+  height: 16px;
+  color: #F59E0B;
+  fill: #F59E0B;
+}
+.estimator-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: #047857;
+  font-weight: 500;
+}
+
+/* Header Delivery Location Button Cursor & Hover */
+.delivery-location {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+.delivery-location:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.delivery-location:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+/* Pincode Modal Overlay & Container */
+.pincode-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.pincode-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pincode-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 92%;
+  max-width: 500px;
+  background: #FFFFFF;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.pincode-modal.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.pincode-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: #FAFAFA;
+}
+.pincode-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pincode-header-title h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0;
+}
+.modal-pin-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}
+.close-pincode-modal {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.close-pincode-modal:hover {
+  background: #E5E7EB;
+  color: var(--text-dark);
+}
+.pincode-modal-body {
+  padding: 24px;
+}
+.pincode-modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.pincode-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.pincode-input-wrap {
+  position: relative;
+  flex: 1;
+}
+.pincode-input-wrap input {
+  width: 100%;
+  padding: 12px 14px 12px 38px;
+  border: 1px solid #D1D5DB;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #FFFFFF;
+}
+.pincode-input-wrap input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 50, 105, 0.15);
+}
+.pin-field-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+}
+.pincode-apply-btn {
+  padding: 0 24px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+}
+.pincode-status-box {
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pincode-status-box.success {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+}
+.pincode-status-box.error {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #B91C1C;
+}
+.popular-cities-wrap {
+  border-top: 1px solid #F3F4F6;
+  padding-top: 18px;
+}
+.popular-cities-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.popular-cities-title svg {
+  width: 14px;
+  height: 14px;
+}
+.popular-cities-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.city-chip {
+  padding: 7px 12px;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.city-chip:hover {
+  background: #FFE4EC;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.city-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+}
+
+/* 3. Amazon Frequently Bought Together Bundle */
+.pd-fbt-card {
+  margin-top: 32px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 28px;
+}
+.fbt-header {
+  margin-bottom: 18px;
+}
+.fbt-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.fbt-tag svg {
+  width: 14px;
+  height: 14px;
+}
+.fbt-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+.fbt-body {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (min-width: 900px) {
+  .fbt-body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+.fbt-items-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.fbt-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  text-align: center;
+}
+.fbt-img-wrap {
+  width: 84px;
+  height: 84px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.fbt-img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.fbt-this-badge {
+  position: absolute;
+  bottom: -6px;
+  background: #111827;
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.fbt-item-details {
+  margin-top: 10px;
+}
+.fbt-item-name {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 96px;
+}
+.fbt-item-price {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.fbt-plus-symbol {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+}
+.fbt-plus-symbol svg {
+  width: 14px;
+  height: 14px;
+}
+.fbt-bundle-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 260px;
+  border-top: 1px solid #E5E7EB;
+  padding-top: 16px;
+}
+@media (min-width: 900px) {
+  .fbt-bundle-summary {
+    border-top: none;
+    border-left: 1px solid #E5E7EB;
+    padding-top: 0;
+    padding-left: 20px;
+  }
+}
+.fbt-price-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.fbt-price-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 4px 0;
+}
+.fbt-final-price {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #B12704;
+}
+.fbt-strike-price {
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+.fbt-savings-pill {
+  background: #ECFDF5;
+  color: #047857;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #A7F3D0;
+}
+.fbt-items-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.fbt-add-all-btn {
+  background: linear-gradient(135deg, #FFD814 0%, #F7CA00 100%);
+  color: #0F1111;
+  border: 1px solid #FCD200;
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(247, 202, 0, 0.35);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fbt-add-all-btn:hover {
+  background: linear-gradient(135deg, #F7CA00 0%, #E2B300 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(247, 202, 0, 0.45);
+}
+.fbt-add-all-btn.added {
+  background: #10B981;
+  color: #FFFFFF;
+  border-color: #10B981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* 4. Amazon Customer Q&A / FAQs Accordion */
+.pd-qa-section {
+  margin-top: 32px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 28px;
+}
+.qa-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.qa-tag svg {
+  width: 14px;
+  height: 14px;
+}
+.qa-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.qa-search-bar {
+  position: relative;
+  margin-bottom: 18px;
+}
+.qa-search-bar input {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.qa-search-bar input:focus {
+  outline: none;
+  background: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 50, 105, 0.12);
+}
+.qa-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+}
+.qa-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qa-item {
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.qa-item:hover {
+  border-color: #D1D5DB;
+}
+.qa-item.active {
+  border-color: rgba(255, 50, 105, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+.qa-question-btn {
+  width: 100%;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: #FAFAFA;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.qa-question-btn:hover {
+  background: #F3F4F6;
+}
+.qa-q-icon {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #B12704;
+  background: #FEE2E2;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.qa-q-text {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.qa-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.qa-item.active .qa-chevron {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+.qa-answer-box {
+  padding: 14px 18px;
+  background: #FFFFFF;
+  border-top: 1px solid #F3F4F6;
+}
+.qa-answer-content {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.qa-a-icon {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #047857;
+  background: #ECFDF5;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.qa-a-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+.qa-verified-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: #059669;
+  font-weight: 600;
+}
+.qa-verified-tag svg {
+  width: 14px;
+  height: 14px;
+}
+.qa-empty-state {
+  text-align: center;
+  padding: 24px;
+  background: #F9FAFB;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.qa-empty-state svg {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+
+/* ==========================================================================
+   FLIPKART & MYNTRA SIGNATURE UI/UX PATTERNS & FEATURES
+   ========================================================================== */
+
+/* --- 1. Flipkart 'MegaAssured' Trust Badge --- */
+.mega-assured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #0d3b66 0%, #004b99 100%);
+  color: #FFFFFF;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 4px rgba(0, 75, 153, 0.25);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  width: fit-content;
+  margin: 3px 0;
+}
+
+.mega-assured-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 75, 153, 0.35);
+}
+
+.mega-assured-badge .assured-check {
+  color: #FFD700;
+  font-weight: 900;
+  font-size: 0.72rem;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.6);
+}
+
+.mega-assured-badge .assured-text {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mega-assured-badge .assured-mega {
+  color: #FFD700;
+  font-weight: 800;
+  font-style: italic;
+  margin-right: 2px;
+}
+
+.mega-assured-badge.lg {
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 75, 153, 0.3);
+}
+
+.mega-assured-badge.lg .assured-check {
+  font-size: 0.95rem;
+}
+
+.pd-mega-assured-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(13, 59, 102, 0.05) 0%, rgba(0, 75, 153, 0.09) 100%);
+  border: 1px solid rgba(0, 75, 153, 0.25);
+  border-left: 4px solid #004b99;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+
+.pd-mega-assured-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pd-mega-assured-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0d3b66;
+}
+
+.pd-mega-assured-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* --- 2. Deal of the Day / Flash Sale Countdown Bar --- */
+.flash-sale-banner {
+  background: linear-gradient(90deg, #b91c1c 0%, #dc2626 35%, #ea580c 70%, #d97706 100%);
+  color: #FFFFFF;
+  padding: 10px 0;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid #fef08a;
+  z-index: 10;
+}
+
+.flash-sale-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: -100%; 
+  width: 100%; 
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  animation: flashShimmer 3.5s infinite;
+}
+
+@keyframes flashShimmer {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.flash-sale-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.flash-sale-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flash-pulse-badge {
+  background: #FFFFFF;
+  color: #dc2626;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  animation: flashPulse 1.8s infinite;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+@keyframes flashPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.flash-sale-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.flash-sale-timer-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.32);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.timer-clock-icon {
+  width: 16px;
+  height: 16px;
+  color: #fef08a;
+}
+
+.countdown-digits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Plus Jakarta Sans', monospace;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.digit-box {
+  background: #111827;
+  color: #fef08a;
+  padding: 2px 7px;
+  border-radius: 4px;
+  min-width: 28px;
+  text-align: center;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+  border: 1px solid rgba(254, 240, 138, 0.3);
+}
+
+.digit-sep {
+  color: #FFFFFF;
+  font-weight: 900;
+}
+
+.flash-sale-cta {
+  display: none;
+}
+@media (min-width: 768px) {
+  .flash-sale-cta { display: block; }
+}
+
+.flash-badge-pill {
+  background: #fef08a;
+  color: #991b1b;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Flame badge on Product Cards */
+.flash-flame-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  z-index: 3;
+  animation: flameGlow 2s infinite alternate;
+}
+
+@keyframes flameGlow {
+  0% { box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4); }
+  100% { box-shadow: 0 3px 12px rgba(249, 115, 22, 0.75); }
+}
+
+.pd-flash-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%);
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+
+/* --- 3. Multi-Weight / Pack Size Variant Selector --- */
+.pd-variant-section {
+  margin: 16px 0;
+  padding: 14px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  border: 1px solid #e5e7eb;
+}
+
+.variant-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.variant-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.variant-selected-value {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  background: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.variant-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.variant-pill {
+  flex: 1 1 calc(33.333% - 10px);
+  min-width: 90px;
+  background: #FFFFFF;
+  border: 1.5px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.variant-pill:hover {
+  border-color: var(--primary);
+  background: #fff8f9;
+  transform: translateY(-1px);
+}
+
+.variant-pill.active {
+  border-color: var(--primary);
+  background: #fff1f4;
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.variant-pill.active::after {
+  content: '✓';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.variant-unit-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.variant-unit-price {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.variant-badge-save {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+/* --- 4. Flipkart-style 'MegaCoins' Loyalty Rewards System --- */
+.megacoins-button {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.megacoins-button:hover {
+  background: #fde68a;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(217, 119, 6, 0.2);
+}
+
+.coins-icon-wrapper {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.coins-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.coins-label {
+  font-size: 0.65rem;
+  color: #92400e;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.coins-balance {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #78350f;
+}
+
+/* Card coin reward pill */
+.megacoins-card-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #92400e;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-top: 4px;
+  width: fit-content;
+}
+
+.megacoins-card-reward .coin-icon {
+  font-size: 0.72rem;
+}
+
+/* Product Detail MegaCoins Banner */
+.pd-megacoins-reward {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #fde68a;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin: 12px 0;
+}
+
+.pd-coin-icon-box {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.pd-coin-text-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-coin-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.pd-coin-sub {
+  font-size: 0.75rem;
+  color: #92400e;
+}
+
+/* Profile MegaCoins Loyalty Card */
+.profile-megacoins-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+  border: 1.5px solid #fcd34d;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.15);
+}
+
+.coins-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.coins-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.coin-gold-large {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.coins-card-title h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #78350f;
+}
+
+.coins-card-title p {
+  font-size: 0.78rem;
+  color: #92400e;
+}
+
+.coins-balance-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.coins-number {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #92400e;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.coins-unit {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #78350f;
+  text-transform: uppercase;
+}
+
+.coins-perks-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px dashed #fcd34d;
+  padding-top: 12px;
+}
+
+.coin-perk {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #78350f;
+}
+
+/* Checkout MegaCoins Redeem Section */
+.megacoins-checkout-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #fde68a;
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.coins-redeem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.coins-badge-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.coins-badge-title h4 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #78350f;
+}
+
+.coins-avail-badge {
+  background: #fde68a;
+  color: #78350f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.megacoins-redeem-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.megacoins-redeem-row:hover {
+  border-color: #f59e0b;
+  background: #fffdf5;
+}
+
+.megacoins-redeem-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #d97706;
+  cursor: pointer;
+}
+
+.coins-redeem-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.coins-redeem-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.coins-redeem-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.coins-status-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.coins-status-text.applied {
+  color: #b45309;
+}
+
+/* --- 5. Myntra-style Total Savings Celebratory Card --- */
+.myntra-savings-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #e6f9f0 0%, #d1f5e4 100%);
+  border: 1.5px solid #34d399;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.12);
+  animation: celebratoryPop 0.35s ease-out;
+}
+
+@keyframes celebratoryPop {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.myntra-savings-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.myntra-savings-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.savings-headline {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #065f46;
+}
+
+.savings-amount {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #047857;
+}
+
+.myntra-savings-card.checkout-style {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #22c55e;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.myntra-savings-card.checkout-style .savings-amount {
+  font-size: 0.92rem;
+  color: #15803d;
+}
