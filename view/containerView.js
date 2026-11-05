@@ -967,51 +967,131 @@ export class ContainerView {
         }, 3000);
     }
 
-    // ================= HOME CATEGORY RENDERING =================
+    // ================= HOME CATEGORY RENDERING (FLIPKART CURATED DEAL RAILS) =================
     renderHomePage() {
         const otherCategoriesContainer = document.getElementById('otherCategories');
         if (otherCategoriesContainer) otherCategoriesContainer.innerHTML = '';
 
+        // Exact specifications for the 4 Flipkart Curated Deal Rails (matching Image 1)
+        const railConfigs = {
+            'Fresh Fruits': {
+                title: 'Farm Fresh Picks, Crazy Deals',
+                subtitle: 'Direct from farms • Fresh daily',
+                ribbons: ['Min. 40% Off', 'Under ₹49', 'Under ₹99', 'Min. 35% Off'],
+                ribbonClass: 'ribbon-red',
+                nameOverrides: {
+                    'Banana': 'Banana Robusta',
+                    'Apple': 'Shimla Apple',
+                    'Mango': 'Alphonso Mango',
+                    'Orange': 'Nagpur Orange',
+                    'Papaya': 'Honey Papaya'
+                }
+            },
+            'Kitchen': {
+                title: 'Pantry & Kitchen Essentials',
+                subtitle: 'Top brands • Crazy bundle discounts',
+                ribbons: ['Up to 50% Off', 'From ₹25', 'Under ₹99', 'Min. 30% Off'],
+                ribbonClass: 'ribbon-amber',
+                nameOverrides: {
+                    'Milk': 'Amul Gold Milk',
+                    'Tea': 'Tata Tea Premium',
+                    'Sugar': 'Organic Sugar',
+                    'Masala': 'Everest Masala',
+                    'Salt': 'Tata Salt Vacuum Evaporated'
+                }
+            },
+            'House Hold': {
+                title: 'Home Sparkle, Pocket Friendly',
+                subtitle: 'Sparkling clean home • Everyday low prices',
+                ribbons: ['Under ₹89', 'Min. 45% Off', 'Buy 1 Get 1'],
+                ribbonClass: 'ribbon-green',
+                nameOverrides: {
+                    'Cleaners': 'Lizol Disinfectant Cleaner',
+                    'Allout': 'All Out Mosquito Repellent',
+                    'Room Freshners': 'Godrej aer Pocket Room Freshner',
+                    'Soap': 'Dettol Original Soap (4-Pack)',
+                    'Sanitizers': 'Lifebuoy Hand Sanitizer'
+                }
+            },
+            'Fresh Vegetables': {
+                title: 'Farm Fresh Vegetables',
+                subtitle: 'Crisp handpicked veggies starting from just ₹22',
+                ribbons: ['Under ₹29', 'From ₹22', 'Min. 35% Off'],
+                ribbonClass: 'ribbon-red',
+                nameOverrides: {
+                    'Onion': 'Fresh Nashik Onion',
+                    'Potato': 'Pahari Jyoti Potato',
+                    'Cauliflower': 'Crisp Snowball Cauliflower',
+                    'Bottle Guard': 'Tender Bottle Gourd',
+                    'Tomato': 'Hybrid Red Tomato'
+                }
+            }
+        };
+
+        // Render each of the 4 Flipkart Curated Deal Rails
+        Object.keys(railConfigs).forEach((category) => {
+            const config = railConfigs[category];
+            const sectionEl = document.getElementById(`sec-${category}`);
+            const contentEl = document.getElementById(`content-${category}`);
+            const items = this.controller.filterItems(category);
+
+            if (sectionEl && contentEl && items.length > 0) {
+                sectionEl.style.display = 'block';
+                contentEl.innerHTML = '';
+
+                items.forEach((item, index) => {
+                    const displayTitle = (config.nameOverrides && config.nameOverrides[item.name])
+                        ? config.nameOverrides[item.name]
+                        : item.name;
+                    const ribbonText = config.ribbons[index % config.ribbons.length];
+                    const isWarm = (category === 'Kitchen');
+
+                    const card = document.createElement('div');
+                    card.className = 'curated-deal-card';
+                    card.dataset.name = item.name;
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.setAttribute('aria-label', `${displayTitle} - ${ribbonText}`);
+
+                    card.innerHTML = `
+                        <div class="curated-card-media ${isWarm ? 'media-warm' : ''}">
+                            <img src="${item.src}" alt="${displayTitle}" class="curated-card-img" loading="lazy" onerror="this.src='/javascript.svg';">
+                            <div class="curated-card-ribbon ${config.ribbonClass}">${ribbonText}</div>
+                        </div>
+                        <div class="curated-card-info">
+                            <div class="curated-card-title" title="${displayTitle}">${displayTitle}</div>
+                            <div class="curated-card-price">
+                                <span class="curated-price-highlight">₹${item.discount_price}</span>
+                                <span class="curated-original-price">₹${item.price}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Click navigates to Product Detail View
+                    card.addEventListener('click', () => {
+                        this.showProductDetailView(item);
+                    });
+
+                    // Keyboard accessibility
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.showProductDetailView(item);
+                        }
+                    });
+
+                    contentEl.appendChild(card);
+                });
+            }
+        });
+
+        // Other Categories: Standard Grid
         this.elementList.forEach(category => {
+            if (railConfigs[category]) return; // handled by curated rails
             const items = this.controller.filterItems(category).slice(0, 8);
             if (items.length === 0) return;
 
-            const sectionEl = document.getElementById(`sec-${category}`);
-            const contentEl = document.getElementById(`content-${category}`);
-
-            if (sectionEl && contentEl) {
-                sectionEl.style.display = 'block';
-                contentEl.innerHTML = '';
-                
-                if (category === 'Kitchen') {
-                    const heroItem = items[0];
-                    const listItems = items.slice(1, 5);
-                    
-                    const heroDiv = document.createElement('div');
-                    heroDiv.className = 'featured-hero';
-                    heroDiv.innerHTML = `
-                        <span style="font-size:0.68rem; font-weight:800; background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; padding:2px 8px; border-radius:4px; margin-bottom:8px;">⭐ SPOTLIGHT DEAL</span>
-                        <img src="${heroItem.src}" alt="${heroItem.name}" loading="lazy" onerror="this.src='/javascript.svg';">
-                        <h3>${heroItem.name}</h3>
-                        <p>Starting at ₹${heroItem.discount_price} <span style="font-size:0.75rem; text-decoration:line-through; color:var(--text-muted); margin-left:4px;">₹${heroItem.price}</span></p>
-                    `;
-                    heroDiv.addEventListener('click', () => this.showProductDetailView(heroItem));
-                    
-                    const listDiv = document.createElement('div');
-                    listDiv.className = 'featured-list';
-                    listItems.forEach(item => listDiv.appendChild(this.createProductCard(item)));
-                    
-                    contentEl.appendChild(heroDiv);
-                    contentEl.appendChild(listDiv);
-                } 
-                else if (category === 'Fresh Vegetables') {
-                    items.forEach(item => contentEl.appendChild(this.createProductCard(item)));
-                    items.forEach(item => contentEl.appendChild(this.createProductCard(item)));
-                }
-                else {
-                    items.forEach(item => contentEl.appendChild(this.createProductCard(item)));
-                }
-            } else if (otherCategoriesContainer) {
+            if (otherCategoriesContainer) {
                 const newSec = document.createElement('section');
                 newSec.className = 'cat-section style-grid container gs-reveal';
                 newSec.innerHTML = `
@@ -1027,12 +1107,34 @@ export class ContainerView {
             }
         });
 
-        // Bind View All buttons
-        document.querySelectorAll('.view-all-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.showCategoryView(e.currentTarget.dataset.category);
-            });
+        // Wire up Left & Right navigation arrows on each deal rail
+        document.querySelectorAll('.flipkart-curated-rail').forEach(section => {
+            const track = section.querySelector('.curated-rail-track');
+            const prevBtn = section.querySelector('.rail-nav-btn.rail-prev');
+            const nextBtn = section.querySelector('.rail-nav-btn.rail-next');
+
+            if (track && prevBtn && nextBtn) {
+                prevBtn.onclick = (e) => {
+                    e.preventDefault();
+                    track.scrollBy({ left: -320, behavior: 'smooth' });
+                };
+                nextBtn.onclick = (e) => {
+                    e.preventDefault();
+                    track.scrollBy({ left: 320, behavior: 'smooth' });
+                };
+            }
         });
+
+        // Wire up "View All" on deal rails & category sections
+        document.querySelectorAll('.flipkart-curated-rail .rail-view-all, .view-all-btn').forEach(btn => {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                const cat = e.currentTarget.dataset.category || 'All Products';
+                this.showCategoryView(cat);
+            };
+        });
+
+        if (window.lucide) lucide.createIcons();
     }
 
     renderNavCategories() {

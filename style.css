@@ -6133,16 +6133,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* Docked Bottom Pill Ribbon */
 .curated-card-ribbon {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  font-size: 0.78rem;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 90%;
+  font-size: 0.72rem;
   font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 3px 12px;
+  border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.35px;
   text-align: center;
   z-index: 2;
   box-sizing: border-box;
@@ -6150,21 +6151,25 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
 }
 
 .curated-card-ribbon.ribbon-red {
-  background: #E53935;
+  background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
   color: #FFFFFF;
 }
 
-.curated-card-ribbon.ribbon-amber {
-  background: #FF6F00;
+.curated-card-ribbon.ribbon-amber,
+.curated-card-ribbon.ribbon-orange {
+  background: linear-gradient(135deg, #ff6f00 0%, #e65100 100%);
   color: #FFFFFF;
 }
 
-.curated-card-ribbon.ribbon-green {
-  background: #059669;
+.curated-card-ribbon.ribbon-green,
+.curated-card-ribbon.ribbon-emerald,
+.curated-card-ribbon.ribbon-cyan {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: #FFFFFF;
 }
 

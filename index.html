@@ -340,6 +340,33 @@
                 </div>
             </section>
 
+            <!-- Video & Auto-Rotating Top Selling Slider -->
+            <section class="mega-hero container gs-reveal">
+                <div class="mega-hero-grid">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline class="bg-video">
+                            <source src="/megamartPoster.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay-text">
+                            <span class="hero-badge">⚡ 10 Min Delivery</span>
+                            <h2>Freshness Delivered</h2>
+                            <p>Handpicked quality for you.</p>
+                        </div>
+                    </div>
+                    <div class="auto-slider-container">
+                        <div class="slider-header">
+                            <h3><i data-lucide="trending-up"></i> Trending Now</h3>
+                        </div>
+                        <!-- Automatically changes images -->
+                        <div class="auto-slider" id="autoSlider">
+                            <div class="slider-track" id="sliderTrack">
+                                <!-- Slides injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Quick Utility Icon Strip (Flipkart App Icon Strip) -->
             <section class="utility-icon-strip container gs-reveal">
                 <div class="utility-grid">
@@ -460,55 +487,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Flipkart Curated Deal Rails (Matching Image 1 & Flipkart Store) -->
-            <!-- Rail 1: Farm Fresh Picks, Crazy Deals -->
-            <section class="flipkart-curated-rail container gs-reveal" id="railFarmFreshSection">
-                <div class="curated-rail-header">
-                    <div class="rail-title-group">
-                        <h2 class="rail-title">Farm Fresh Picks, Crazy Deals</h2>
-                        <span class="rail-subtitle">Direct from farms • Fresh daily</span>
-                    </div>
-                    <div class="rail-actions">
-                        <button class="rail-view-all" data-category="Fresh Fruits">View All <i data-lucide="chevron-right"></i></button>
-                        <div class="rail-nav-arrows">
-                            <button class="rail-nav-btn rail-prev" id="railPrevFarmFresh" aria-label="Previous items">
-                                <i data-lucide="chevron-left"></i>
-                            </button>
-                            <button class="rail-nav-btn rail-next" id="railNextFarmFresh" aria-label="Next items">
-                                <i data-lucide="chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="curated-rail-track" id="railFarmFreshTrack">
-                    <!-- Populated dynamically via containerView.js -->
-                </div>
-            </section>
-
-            <!-- Rail 2: Pantry & Kitchen Essentials -->
-            <section class="flipkart-curated-rail container gs-reveal" id="railPantryKitchenSection">
-                <div class="curated-rail-header">
-                    <div class="rail-title-group">
-                        <h2 class="rail-title">Pantry & Kitchen Essentials</h2>
-                        <span class="rail-subtitle">Top brands • Crazy bundle discounts</span>
-                    </div>
-                    <div class="rail-actions">
-                        <button class="rail-view-all" data-category="Kitchen">View All <i data-lucide="chevron-right"></i></button>
-                        <div class="rail-nav-arrows">
-                            <button class="rail-nav-btn rail-prev" id="railPrevPantry" aria-label="Previous items">
-                                <i data-lucide="chevron-left"></i>
-                            </button>
-                            <button class="rail-nav-btn rail-next" id="railNextPantry" aria-label="Next items">
-                                <i data-lucide="chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="curated-rail-track" id="railPantryKitchenTrack">
-                    <!-- Populated dynamically via containerView.js -->
-                </div>
-            </section>
             
             <!-- Mobile Search Bar (Appears on scroll or toggle) -->
             <div class="mobile-search-bar container">
@@ -517,33 +495,6 @@
                     <input type="text" id="mobileSearchInput" placeholder="Search for groceries...">
                 </div>
             </div>
-
-            <!-- Video & Auto-Rotating Top Selling Slider -->
-            <section class="mega-hero container gs-reveal">
-                <div class="mega-hero-grid">
-                    <div class="video-container">
-                        <video autoplay muted loop playsinline class="bg-video">
-                            <source src="/megamartPoster.mp4" type="video/mp4">
-                        </video>
-                        <div class="video-overlay-text">
-                            <span class="hero-badge">⚡ 10 Min Delivery</span>
-                            <h2>Freshness Delivered</h2>
-                            <p>Handpicked quality for you.</p>
-                        </div>
-                    </div>
-                    <div class="auto-slider-container">
-                        <div class="slider-header">
-                            <h3><i data-lucide="trending-up"></i> Trending Now</h3>
-                        </div>
-                        <!-- Automatically changes images -->
-                        <div class="auto-slider" id="autoSlider">
-                            <div class="slider-track" id="sliderTrack">
-                                <!-- Slides injected via JS -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- Quick Categories (Mobile only) -->
             <section class="quick-categories container mobile-only gs-reveal">
@@ -566,53 +517,102 @@
                 </div>
             </div>
 
-            <!-- Dynamic Category Sections -->
+            <!-- Dynamic Category Sections: Flipkart Curated Deal Rails -->
             <div id="homeCategoriesWrapper">
-                <!-- 1. Fresh Fruits: CSS Grid Style -->
-                <section class="cat-section style-grid container gs-reveal" id="sec-Fresh Fruits" style="display:none;">
-                    <div class="cat-header">
-                        <h2>Fresh Fruits</h2>
-                        <button class="view-all-btn" data-category="Fresh Fruits">View All <i data-lucide="arrow-right"></i></button>
+                <!-- Rail 1: Farm Fresh Picks, Crazy Deals (Fresh Fruits) -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fresh Fruits">
+                    <div class="curated-rail-header">
+                        <div class="rail-title-group">
+                            <h2 class="rail-title">Farm Fresh Picks, Crazy Deals</h2>
+                            <span class="rail-subtitle">Direct from farms • Fresh daily</span>
+                        </div>
+                        <div class="rail-actions">
+                            <button class="rail-view-all" data-category="Fresh Fruits">View All <i data-lucide="chevron-right"></i></button>
+                            <div class="rail-nav-arrows">
+                                <button class="rail-nav-btn rail-prev" data-rail="Fresh Fruits" aria-label="Previous items">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="rail-nav-btn rail-next" data-rail="Fresh Fruits" aria-label="Next items">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid-content" id="content-Fresh Fruits"></div>
-                </section>
-
-                <!-- 2. Kitchen: Featured Hero + List Style -->
-                <section class="cat-section style-featured bg-soft container gs-reveal" id="sec-Kitchen" style="display:none;">
-                    <div class="cat-header">
-                        <h2>Kitchen Essentials</h2>
-                        <button class="view-all-btn" data-category="Kitchen">View All <i data-lucide="arrow-right"></i></button>
-                    </div>
-                    <div class="featured-content" id="content-Kitchen"></div>
-                </section>
-
-                <!-- 3. Fresh Vegetables: Continuous Marquee Style -->
-                <section class="cat-section style-marquee gs-reveal" id="sec-Fresh Vegetables" style="display:none;">
-                    <div class="container cat-header">
-                        <h2>Fresh Vegetables</h2>
-                        <button class="view-all-btn" data-category="Fresh Vegetables">View All <i data-lucide="arrow-right"></i></button>
-                    </div>
-                    <div class="marquee-product-wrapper">
-                        <div class="marquee-product-track" id="content-Fresh Vegetables"></div>
+                    <div class="curated-rail-track" id="content-Fresh Fruits">
+                        <!-- Populated dynamically via containerView.js -->
                     </div>
                 </section>
 
-                <!-- 4. Exotic: Coverflow 3D Style -->
-                <section class="cat-section style-coverflow container gs-reveal" id="sec-Exotic" style="display:none;">
-                    <div class="cat-header">
-                        <h2>Exotic Range</h2>
-                        <button class="view-all-btn" data-category="Exotic">View All <i data-lucide="arrow-right"></i></button>
+                <!-- Rail 2: Pantry & Kitchen Essentials (Kitchen) -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Kitchen">
+                    <div class="curated-rail-header">
+                        <div class="rail-title-group">
+                            <h2 class="rail-title">Pantry & Kitchen Essentials</h2>
+                            <span class="rail-subtitle">Top brands • Crazy bundle discounts</span>
+                        </div>
+                        <div class="rail-actions">
+                            <button class="rail-view-all" data-category="Kitchen">View All <i data-lucide="chevron-right"></i></button>
+                            <div class="rail-nav-arrows">
+                                <button class="rail-nav-btn rail-prev" data-rail="Kitchen" aria-label="Previous items">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="rail-nav-btn rail-next" data-rail="Kitchen" aria-label="Next items">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="coverflow-content" id="content-Exotic"></div>
+                    <div class="curated-rail-track" id="content-Kitchen">
+                        <!-- Populated dynamically via containerView.js -->
+                    </div>
                 </section>
 
-                <!-- 5. House Hold: Horizontal Snap Scroll -->
-                <section class="cat-section style-snap container gs-reveal" id="sec-House Hold" style="display:none;">
-                    <div class="cat-header">
-                        <h2>House Hold Deals</h2>
-                        <button class="view-all-btn" data-category="House Hold">View All <i data-lucide="arrow-right"></i></button>
+                <!-- Rail 3: Home Sparkle, Pocket Friendly (House Hold) -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-House Hold">
+                    <div class="curated-rail-header">
+                        <div class="rail-title-group">
+                            <h2 class="rail-title">Home Sparkle, Pocket Friendly</h2>
+                            <span class="rail-subtitle">Sparkling clean home • Everyday low prices</span>
+                        </div>
+                        <div class="rail-actions">
+                            <button class="rail-view-all" data-category="House Hold">View All <i data-lucide="chevron-right"></i></button>
+                            <div class="rail-nav-arrows">
+                                <button class="rail-nav-btn rail-prev" data-rail="House Hold" aria-label="Previous items">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="rail-nav-btn rail-next" data-rail="House Hold" aria-label="Next items">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="snap-content" id="content-House Hold"></div>
+                    <div class="curated-rail-track" id="content-House Hold">
+                        <!-- Populated dynamically via containerView.js -->
+                    </div>
+                </section>
+
+                <!-- Rail 4: Farm Fresh Vegetables (Fresh Vegetables) -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fresh Vegetables">
+                    <div class="curated-rail-header">
+                        <div class="rail-title-group">
+                            <h2 class="rail-title">Farm Fresh Vegetables</h2>
+                            <span class="rail-subtitle">Crisp handpicked veggies starting from just ₹22</span>
+                        </div>
+                        <div class="rail-actions">
+                            <button class="rail-view-all" data-category="Fresh Vegetables">View All <i data-lucide="chevron-right"></i></button>
+                            <div class="rail-nav-arrows">
+                                <button class="rail-nav-btn rail-prev" data-rail="Fresh Vegetables" aria-label="Previous items">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="rail-nav-btn rail-next" data-rail="Fresh Vegetables" aria-label="Next items">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="curated-rail-track" id="content-Fresh Vegetables">
+                        <!-- Populated dynamically via containerView.js -->
+                    </div>
                 </section>
 
                 <!-- Other Categories: Standard Grid -->
