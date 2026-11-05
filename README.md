@@ -1,71 +1,79 @@
-# 🛒 MegaMart | Premium E-Commerce Platform
+# 🛒 MegaMart - Modern Full-Stack E-Commerce Platform
 
-![MegaMart Banner](https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Website-22c55e?style=for-the-badge&logo=render)](https://megamart-iyre.onrender.com)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/sahaniTripurari/MegaMartWeb)
 
-MegaMart is a cutting-edge, high-performance grocery and essentials delivery web application. Designed with a "10-minute delivery" philosophy, it offers a seamless shopping experience with a stunning UI, fluid animations, and a robust product management system.
+A robust, full-featured web-based e-commerce platform designed to deliver smooth shopping experiences with dynamic product management, cart workflows, user authentication, and responsive user interfaces.
 
-## ✨ Key Features
+---
 
-- **⚡ Lightning Fast UI**: Built with Vite for near-instant load times and a smooth SPA-like experience.
-- **🎥 Immersive Hero Section**: Featuring dynamic video backgrounds and auto-rotating product sliders.
-- **🏗️ Multiple Display Architectures**:
-  - **3D Coverflow**: Interactive 3D carousel for exotic products.
-  - **Product Marquee**: Continuous scrolling products for high visibility.
-  - **Snap Scroll**: Modern horizontal scrolling for household deals.
-  - **Smart Grids**: Optimized grid layouts for general categories.
-- **🛒 Real-time Cart System**: Dynamic cart management with instant price calculations and delivery estimates.
-- **🔍 Advanced Search & Filter**: Find products instantly with global search and multi-criteria sorting (Price, Relevance, Discounts).
-- **🎭 GSAP Animations**: Smooth, professional motion design and scroll-triggered reveals.
-- **📱 Fully Responsive**: Optimized for all devices from mobile to desktop.
+## 🌟 Key Features
 
-## 🚀 Tech Stack
+- 🛍️ **Interactive Product Catalog**: Real-time filtering, search, and categorized views.
+- 🛒 **Smart Shopping Cart**: Add, update quantity, remove items, and calculate totals in real-time.
+- 🔐 **User Authentication**: Secure signup/login and session management.
+- 📱 **Mobile-First Responsive UI**: Clean experience across smartphones, tablets, and desktops.
+- ⚡ **RESTful API Backend**: Scalable Express and Node.js architecture with MVC folder organization.
+- 🗄️ **Database Persistence**: MongoDB data models for products, orders, and users.
 
-- **Frontend**: HTML5, Vanilla CSS3 (Custom Design System)
-- **Logic**: JavaScript (ES6+ Modules)
-- **Animations**: [GSAP](https://greensock.com/gsap/) (GreenSock Animation Platform)
-- **Icons**: [Lucide Icons](https://lucide.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
+---
 
-## 🛠️ Installation & Setup
+## 🛠️ Tech Stack
 
-1. **Clone the repository**:
+- **Frontend**: HTML5, Modern JavaScript (ES6+), CSS3, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (Mongoose ODM)
+- **Deployment**: Render
+
+---
+
+## 📁 Project Structure
+
+```
+MegaMartWeb/
+├── controller/         # Request handling & business logic
+├── model/              # MongoDB Schemas & models
+├── view/               # Frontend template views & pages
+├── public/             # Static assets, styles, and scripts
+├── main.js             # Main client script
+├── server.js           # Express server entry point
+└── package.json        # Dependencies and scripts
+```
+
+---
+
+## 🚀 Local Installation & Setup
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/sahaniTripurari/MegaMartWeb.git
-   ```
-
-2. **Navigate to the project directory**:
-   ```bash
    cd MegaMartWeb
    ```
 
-3. **Install dependencies**:
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-4. **Start the development server**:
+3. **Environment Setup:**
+   Create a `.env` file in the root directory:
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret_key
+   ```
+
+4. **Start the application:**
    ```bash
+   npm start
+   # Or for development:
    npm run dev
    ```
 
-5. **Build for production**:
-   ```bash
-   npm run build
-   ```
-
-## 📂 Project Structure
-
-```
-├── public/          # Static assets (images, videos)
-├── controller/      # Business logic and state management
-├── model/           # Data structures and product definitions
-├── view/            # UI components and templates
-├── style.css        # Core design system and styles
-├── main.js          # Application entry point
-└── index.html       # Main entry page
-```
-
+5. **Open in browser:**
+   Navigate to `http://localhost:5000`
 
 ---
 
-Developed with ❤️ by [Sahani Tripurari](https://github.com/sahaniTripurari)
+## 👨‍💻 Author
+- **Tripurari Sahni** ([@sahaniTripurari](https://github.com/sahaniTripurari))

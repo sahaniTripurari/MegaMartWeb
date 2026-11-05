@@ -369,6 +369,89 @@
         <div class="cart-footer" id="cartFooter"></div>
     </div>
 
+    
+    <!-- Checkout Modal -->
+    <div class="checkout-modal-overlay" id="checkoutOverlay"></div>
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-modal-header">
+            <h3><i data-lucide="shield-check"></i> Secure Checkout</h3>
+            <button class="close-checkout" id="closeCheckout"><i data-lucide="x"></i></button>
+        </div>
+        <div class="checkout-body" id="checkoutBody">
+            <!-- Delivery Details -->
+            <div class="checkout-section">
+                <h4><i data-lucide="map-pin"></i> Delivery Address</h4>
+                <div class="checkout-form-grid">
+                    <input type="text" id="custName" placeholder="Full Name" required>
+                    <input type="tel" id="custPhone" placeholder="Mobile Number (10 digits)" required>
+                    <input type="text" id="custAddress" placeholder="Flat / House No, Street, Landmark" required style="grid-column: span 2;">
+                    <input type="text" id="custPin" placeholder="PIN Code (e.g. 400001)" required>
+                    <input type="text" id="custCity" placeholder="City" value="Mumbai" required>
+                </div>
+            </div>
+
+            <!-- Coupon Code Section -->
+            <div class="checkout-section">
+                <h4><i data-lucide="ticket"></i> Apply Coupon</h4>
+                <div class="coupon-box">
+                    <input type="text" id="couponInput" placeholder="Try 'MEGA50' or 'WELCOME10'" style="text-transform: uppercase;">
+                    <button type="button" id="applyCouponBtn">Apply</button>
+                </div>
+                <div id="couponStatus" class="coupon-status"></div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="checkout-section">
+                <h4><i data-lucide="credit-card"></i> Payment Method</h4>
+                <div class="payment-options">
+                    <label class="payment-card active">
+                        <input type="radio" name="paymentMethod" value="UPI" checked>
+                        <div class="payment-info">
+                            <span class="p-title">UPI / QR Code</span>
+                            <span class="p-sub">Google Pay, PhonePe, Paytm</span>
+                        </div>
+                    </label>
+                    <label class="payment-card">
+                        <input type="radio" name="paymentMethod" value="Card">
+                        <div class="payment-info">
+                            <span class="p-title">Credit / Debit Card</span>
+                            <span class="p-sub">Visa, Mastercard, RuPay</span>
+                        </div>
+                    </label>
+                    <label class="payment-card">
+                        <input type="radio" name="paymentMethod" value="COD">
+                        <div class="payment-info">
+                            <span class="p-title">Cash on Delivery</span>
+                            <span class="p-sub">Pay cash or scan QR at doorstep</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Bill Breakdown -->
+            <div class="checkout-section checkout-summary" id="checkoutSummaryBox"></div>
+
+            <button type="button" class="place-order-btn" id="placeOrderBtn">
+                <span>Confirm & Place Order</span>
+                <i data-lucide="arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- Order Placed Success View (Hidden initially) -->
+        <div class="checkout-success" id="checkoutSuccess" style="display: none;">
+            <div class="success-icon-box">
+                <i data-lucide="check-circle" class="success-check-icon"></i>
+            </div>
+            <h2>Order Placed Successfully!</h2>
+            <p class="order-id-label">Order ID: <strong id="successOrderId">#MM-98234</strong></p>
+            <div class="delivery-countdown">
+                <i data-lucide="zap"></i> Arriving in <span id="countdownTimer">10:00</span> mins
+            </div>
+            <div class="order-summary-card" id="successOrderDetails"></div>
+            <button class="continue-shopping-btn" id="continueShoppingBtn">Continue Shopping</button>
+        </div>
+    </div>
+
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

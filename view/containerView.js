@@ -46,6 +46,8 @@ export class ContainerView {
         this.setupBottomNav();
         this.updateCartUI();
         this.setupScrollAnimations();
+        this.loadCartFromStorage();
+        this.setupCheckoutModal();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -491,7 +493,7 @@ export class ContainerView {
                     const card = addBtn.closest('.itemName');
                     if(card) {
                         item = this.data.find(i => i.name === card.dataset.name);
-                        if (item) item.quantity = (item.quantity || 0) + 1;
+                        if (item) { item.quantity = (item.quantity || 0) + 1; this.saveCartToStorage(); }
                     }
                 }
 
@@ -520,7 +522,7 @@ export class ContainerView {
                     const card = subBtn.closest('.itemName');
                     if(card) {
                         item = this.data.find(i => i.name === card.dataset.name);
-                        if (item && item.quantity > 0) item.quantity -= 1;
+                        if (item && item.quantity > 0) { item.quantity -= 1; this.saveCartToStorage(); }
                     }
                 }
 
@@ -575,15 +577,29 @@ export class ContainerView {
 
     // ================= SEARCH & FILTER =================
     setupSearchAndFilter() {
-        const handleSearch = (e) => {
+        let debounceTimer;
+        const liveSearch = (e) => {
+            clearTimeout(debounceTimer);
+            const query = (e.target.value || '').trim();
             if (e.key === 'Enter') {
-                const query = e.target.value.trim();
                 if (query) this.showCategoryView('Search Results', query);
+                return;
             }
+            debounceTimer = setTimeout(() => {
+                if (query.length >= 2) {
+                    this.showCategoryView('Search Results', query);
+                } else if (query.length === 0 && this.currentCategory === 'Search Results') {
+                    this.showHomeView();
+                }
+            }, 300);
         };
 
-        this.globalSearchInput.addEventListener('keydown', handleSearch);
-        if (this.mobileSearchInput) this.mobileSearchInput.addEventListener('keydown', handleSearch);
+        this.globalSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') liveSearch(e); });
+        this.globalSearchInput.addEventListener('input', liveSearch);
+        if (this.mobileSearchInput) {
+            this.mobileSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') liveSearch(e); });
+            this.mobileSearchInput.addEventListener('input', liveSearch);
+        }
 
         this.sortSelect.addEventListener('change', (e) => {
             const currentSearch = this.globalSearchInput?.value || this.mobileSearchInput?.value || '';
@@ -736,4 +752,238 @@ export class ContainerView {
         const items = this.data.filter(item => this.normalizeCategoryName(item.type) === normalized);
         return items.length ? items : [...this.data];
     }
+
+    // ================= LOCALSTORAGE PERSISTENCE =================
+    saveCartToStorage() {
+        const cartState = {};
+        this.data.forEach(item => {
+            if (item.quantity > 0) {
+                cartState[item.name] = item.quantity;
+            }
+        });
+        localStorage.setItem('megamart_cart', JSON.stringify(cartState));
+    }
+
+    loadCartFromStorage() {
+        try {
+            const saved = localStorage.getItem('megamart_cart');
+            if (saved) {
+                const cartState = JSON.parse(saved);
+                let restoredCount = 0;
+                this.data.forEach(item => {
+                    if (cartState[item.name]) {
+                        item.quantity = cartState[item.name];
+                        restoredCount += item.quantity;
+                        this.updateAllCardDOMs(item);
+                    }
+                });
+                if (restoredCount > 0) {
+                    this.updateCartUI();
+                }
+            }
+        } catch (e) {
+            console.error('Error loading cart from storage:', e);
+        }
+    }
+
+    // ================= CHECKOUT MODAL LOGIC =================
+    setupCheckoutModal() {
+        const checkoutModal = document.getElementById('checkoutModal');
+        const checkoutOverlay = document.getElementById('checkoutOverlay');
+        const closeCheckout = document.getElementById('closeCheckout');
+        const applyCouponBtn = document.getElementById('applyCouponBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+        const cartFooter = document.getElementById('cartFooter');
+
+        if (!checkoutModal) return;
+
+        this.appliedDiscount = 0;
+        this.activeCouponCode = '';
+
+        // Open checkout from cart sidebar
+        if (cartFooter) {
+            cartFooter.addEventListener('click', (e) => {
+                if (e.target.classList.contains('checkout-btn')) {
+                    this.closeCartSidebar();
+                    this.openCheckoutModal();
+                }
+            });
+        }
+
+        // Close handlers
+        closeCheckout?.addEventListener('click', () => this.closeCheckoutModal());
+        checkoutOverlay?.addEventListener('click', () => this.closeCheckoutModal());
+        continueShoppingBtn?.addEventListener('click', () => {
+            this.closeCheckoutModal();
+            this.showHomeView();
+        });
+
+        // Payment cards toggle
+        document.querySelectorAll('.payment-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                const radio = card.querySelector('input[type="radio"]');
+                if (radio) radio.checked = true;
+            });
+        });
+
+        // Apply coupon handler
+        applyCouponBtn?.addEventListener('click', () => {
+            const input = document.getElementById('couponInput');
+            const status = document.getElementById('couponStatus');
+            const code = (input?.value || '').trim().toUpperCase();
+
+            if (code === 'MEGA50') {
+                this.appliedDiscount = 50;
+                this.activeCouponCode = 'MEGA50';
+                status.className = 'coupon-status success';
+                status.textContent = 'Coupon applied: ₹50 Instant Discount!';
+            } else if (code === 'WELCOME10') {
+                const subtotal = this.data.reduce((sum, item) => sum + (item.quantity > 0 ? item.discount_price * item.quantity : 0), 0);
+                this.appliedDiscount = Math.round(subtotal * 0.10);
+                this.activeCouponCode = 'WELCOME10';
+                status.className = 'coupon-status success';
+                status.textContent = `Coupon applied: 10% OFF (Saved ₹${this.appliedDiscount})!`;
+            } else {
+                this.appliedDiscount = 0;
+                this.activeCouponCode = '';
+                status.className = 'coupon-status error';
+                status.textContent = 'Invalid coupon code. Try MEGA50 or WELCOME10';
+            }
+            this.renderCheckoutSummary();
+        });
+
+        // Place order button
+        placeOrderBtn?.addEventListener('click', () => this.handlePlaceOrder());
+    }
+
+    openCheckoutModal() {
+        const cartItems = this.data.filter(item => item.quantity > 0);
+        if (cartItems.length === 0) {
+            this.showToast('Your cart is empty!');
+            return;
+        }
+
+        const modal = document.getElementById('checkoutModal');
+        const overlay = document.getElementById('checkoutOverlay');
+        const body = document.getElementById('checkoutBody');
+        const success = document.getElementById('checkoutSuccess');
+
+        if (body) body.style.display = 'flex';
+        if (success) success.style.display = 'none';
+
+        this.renderCheckoutSummary();
+        modal?.classList.add('active');
+        overlay?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
+
+    closeCheckoutModal() {
+        document.getElementById('checkoutModal')?.classList.remove('active');
+        document.getElementById('checkoutOverlay')?.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    renderCheckoutSummary() {
+        const summaryBox = document.getElementById('checkoutSummaryBox');
+        if (!summaryBox) return;
+
+        const cartItems = this.data.filter(item => item.quantity > 0);
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
+        const deliveryFee = subtotal > 499 ? 0 : 25;
+        const discount = Math.min(this.appliedDiscount || 0, subtotal);
+        const grandTotal = Math.max(0, subtotal - discount + deliveryFee);
+
+        summaryBox.innerHTML = `
+            <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;">
+                <span style="color:var(--text-muted);">Items Subtotal (${cartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                <span style="font-weight:600;">₹${subtotal.toFixed(2)}</span>
+            </div>
+            ${discount > 0 ? `
+            <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;color:var(--success);">
+                <span>Coupon Discount (${this.activeCouponCode})</span>
+                <span style="font-weight:600;">-₹${discount.toFixed(2)}</span>
+            </div>` : ''}
+            <div class="bill-row" style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.9rem;">
+                <span style="color:var(--text-muted);">Delivery Fee</span>
+                <span style="font-weight:600;">${deliveryFee === 0 ? '<strong style="color:var(--success);">FREE</strong>' : `₹${deliveryFee}`}</span>
+            </div>
+            <div class="bill-row total" style="display:flex;justify-content:space-between;padding-top:10px;margin-top:6px;border-top:1px solid #e5e7eb;font-weight:800;font-size:1.1rem;color:var(--text-dark);">
+                <span>To Pay</span>
+                <span style="color:var(--primary);">₹${grandTotal.toFixed(2)}</span>
+            </div>
+        `;
+    }
+
+    handlePlaceOrder() {
+        const name = (document.getElementById('custName')?.value || '').trim();
+        const phone = (document.getElementById('custPhone')?.value || '').trim();
+        const address = (document.getElementById('custAddress')?.value || '').trim();
+        const pin = (document.getElementById('custPin')?.value || '').trim();
+
+        if (!name || name.length < 2) {
+            this.showToast('Please enter your full name');
+            return;
+        }
+        if (!phone || phone.length < 10) {
+            this.showToast('Please enter a valid 10-digit mobile number');
+            return;
+        }
+        if (!address || address.length < 5) {
+            this.showToast('Please enter a complete delivery address');
+            return;
+        }
+
+        const cartItems = this.data.filter(item => item.quantity > 0);
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.discount_price * item.quantity), 0);
+        const discount = this.appliedDiscount || 0;
+        const grandTotal = Math.max(0, subtotal - discount + (subtotal > 499 ? 0 : 25));
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'UPI';
+
+        const orderId = '#MM-' + Math.floor(100000 + Math.random() * 900000);
+
+        // Save order to history
+        const orderRecord = {
+            orderId,
+            date: new Date().toISOString(),
+            customer: { name, phone, address, pin },
+            items: cartItems.map(i => ({ name: i.name, qty: i.quantity, price: i.discount_price })),
+            total: grandTotal,
+            paymentMethod,
+        };
+
+        const existingOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        existingOrders.unshift(orderRecord);
+        localStorage.setItem('megamart_orders', JSON.stringify(existingOrders));
+
+        // Clear cart
+        this.data.forEach(item => { item.quantity = 0; });
+        this.saveCartToStorage();
+        this.updateCartUI();
+        document.querySelectorAll('.itemName').forEach(c => {
+            const btnContainer = c.querySelector('.btn-container');
+            if (btnContainer) btnContainer.innerHTML = '<button class="add-btn">Add</button>';
+        });
+
+        // Switch to success view
+        const body = document.getElementById('checkoutBody');
+        const success = document.getElementById('checkoutSuccess');
+        if (body) body.style.display = 'none';
+        if (success) {
+            success.style.display = 'flex';
+            document.getElementById('successOrderId').textContent = orderId;
+            document.getElementById('successOrderDetails').innerHTML = `
+                <p><strong>Deliver to:</strong> ${name}, ${address} (${pin})</p>
+                <p><strong>Payment:</strong> ${paymentMethod} (₹${grandTotal.toFixed(2)})</p>
+                <p><strong>Items:</strong> ${cartItems.length} items ordered</p>
+            `;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        this.showToast('🎉 Order placed successfully!');
+    }
+
 }
