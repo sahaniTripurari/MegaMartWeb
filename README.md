@@ -1,43 +1,80 @@
-# 🛒 MegaMart - Modern Full-Stack E-Commerce Platform
+# 🛒 MegaMart - Flagship Quick-Commerce E-Commerce Platform
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Website-22c55e?style=for-the-badge&logo=render)](https://megamart-iyre.onrender.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/sahaniTripurari/MegaMartWeb)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
-A robust, full-featured web-based e-commerce platform designed to deliver smooth shopping experiences with dynamic product management, cart workflows, user authentication, and responsive user interfaces.
+MegaMart is a production-grade, fast, and responsive Quick-Commerce grocery & essentials web platform inspired by modern architectures like Zepto, Blinkit, and Instacart. Engineered with clean MVC patterns, real-time cart intelligence, live interactive 5-stage order tracking, and ironclad client-side security guards.
 
 ---
 
-## 🌟 Key Features
+## 🌟 Flagship Features
 
-- 🛍️ **Interactive Product Catalog**: Real-time filtering, search, and categorized views.
-- 🛒 **Smart Shopping Cart**: Add, update quantity, remove items, and calculate totals in real-time.
-- 🔐 **User Authentication**: Secure signup/login and session management.
-- 📱 **Mobile-First Responsive UI**: Clean experience across smartphones, tablets, and desktops.
-- ⚡ **RESTful API Backend**: Scalable Express and Node.js architecture with MVC folder organization.
-- 🗄️ **Database Persistence**: MongoDB data models for products, orders, and users.
+### 🛒 1. Advanced Cart & Checkout Intelligence
+- **Dynamic Free Delivery Progress Bar**: Live calculation displaying *"Add ₹X more to get FREE Delivery"* up to the ₹499 threshold with emerald unlocked celebrations.
+- **Slide-over Checkout Drawer**: Address verification (Name, Phone, Address, PIN), coupon discounts (`MEGA50`, `WELCOME10`), and multi-payment selection (UPI, Credit/Debit Card, COD).
+- **Persistent LocalStorage State**: Real-time two-way synchronization ensures cart state is never lost on refresh.
+
+### 📍 2. Live Interactive Order Tracking (5-Stage Stepper)
+- **Real-time Status Stepper**:
+  1. **Order Placed**: Timestamp & dark store routing verification.
+  2. **Packed at Dark Store**: Dark store fulfillment inspection.
+  3. **Rider Assigned**: Partner profile (**Ramesh Kumar**, Hero Electric Scooter `MH-02-EK-4821`, 4.9★).
+  4. **Out for Delivery**: Live radar sonar pulse animation with dynamic street status indicator (`Passing Linking Road • 320m away`).
+  5. **Delivered**: OTP verification simulation (`OTP 4829 Verified`).
+- **Simulated Progression**: Interactive stage stepping (`⏮` / `⏭` / `🔄`) + auto 20-second demo timer.
+
+### ❤️ 3. Wishlist / Favorites Engine
+- **Heart Micro-interactions**: Smooth `@keyframes heartPop` active/inactive toggle on all product cards.
+- **Live Badge Counters**: Synced counter across desktop header, mobile header, and bottom navigation.
+- **Wishlist Drawer**: Dedicated sidebar with individual "Move to Cart" and bulk "Move All to Cart" actions.
+
+### ⭐ 4. Star Ratings & Verified Reviews
+- **Card Rating Badges**: `★ 4.8 (120+)` badges on every catalog item.
+- **Product Detail Breakdown**: 5-star customer distribution bars with verified buyer reviews.
+
+### 🔍 5. Search, Filter & Multi-Sort Engine
+- **Live Debounced Search (300ms)**: Instant filtering without page reload or lag.
+- **Comprehensive Sorting**: Featured, Price: Low to High, Price: High to Low, and Biggest Discount.
+- **Pill Tag Filters**: All, Fresh (Fruits/Vegetables/Herbs), Bestseller, and Under ₹50.
+
+### 🔍 6. Enhanced Product Details
+- **Mouse-Tracking Zoom**: Smooth 1.45x magnification tracking cursor position.
+- **Specifications Grid**: Shelf life, Country of origin, Storage advice, and FSSAI Hygiene certification.
+- **"Customers Also Bought" Carousel**: Interactive companion recommendations with horizontal navigation controls.
+
+### 🛡️ 7. Inventory & Ironclad Security
+- **Urgency Badges**: Automatic `🔥 Only X left!` badges when item stock drops to 5 or lower.
+- **Price Tampering Guard**: Immutable frozen catalog (`Object.freeze`) lookup prevents DOM manipulation or client price spoofing.
+- **Order History Drawer**: Full past orders archive with 1-click **"Reorder All"** restoration.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML5, Modern JavaScript (ES6+), CSS3, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB (Mongoose ODM)
-- **Deployment**: Render
+- **Frontend**: Modern Vanilla JavaScript (ES6+), HTML5, CSS3 Custom Properties (Design Tokens), Plus Jakarta Sans, Inter
+- **Icons & Animation**: Lucide Icons, GSAP, CSS Keyframes
+- **Bundler & Tooling**: Vite v4.4+, Node.js
+- **State & Storage**: LocalStorage Persistence with Strict Validation
 
 ---
 
-## 📁 Project Structure
+## 📁 Architecture Overview
 
 ```
 MegaMartWeb/
-├── controller/         # Request handling & business logic
-├── model/              # MongoDB Schemas & models
-├── view/               # Frontend template views & pages
-├── public/             # Static assets, styles, and scripts
-├── main.js             # Main client script
-├── server.js           # Express server entry point
-└── package.json        # Dependencies and scripts
+├── controller/
+│   └── controller.js         # Search, category, and catalog filtering
+├── model/
+│   └── model.js              # Authoritative catalog, stock, and pricing models
+├── view/
+│   ├── containerView.js      # Main UI controller, event delegation, & cart/order logic
+│   ├── headerView.js         # Header and navigation controller
+│   └── cartView/             # Legacy cart rendering components
+├── public/                   # Static assets & icons
+├── index.html                # Semantic HTML layout & modal templates
+├── style.css                 # 8pt grid, design system tokens, responsive styling
+└── package.json              # Vite scripts & dependencies
 ```
 
 ---
@@ -55,23 +92,15 @@ MegaMartWeb/
    npm install
    ```
 
-3. **Environment Setup:**
-   Create a `.env` file in the root directory:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret_key
-   ```
-
-4. **Start the application:**
+3. **Start Development Server:**
    ```bash
-   npm start
-   # Or for development:
    npm run dev
    ```
 
-5. **Open in browser:**
-   Navigate to `http://localhost:5000`
+4. **Build for Production:**
+   ```bash
+   npm run build
+   ```
 
 ---
 

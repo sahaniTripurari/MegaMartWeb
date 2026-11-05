@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MegaMart | Premium E-Commerce</title>
+    <title>MegaMart | World-Class E-Commerce</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,6 +39,15 @@
             </div>
 
             <div class="header-actions">
+                <button class="action-btn orders-button desktop-orders" id="headerOrdersBtn" title="My Orders & Live Tracking">
+                    <div class="orders-icon-wrapper">
+                        <i data-lucide="package"></i>
+                    </div>
+                    <div class="orders-text">
+                        <span class="orders-label">Orders</span>
+                        <span class="orders-sub">Track Live</span>
+                    </div>
+                </button>
                 <button class="action-btn cart-button desktop-cart" id="cartButton">
                     <div class="cart-icon-wrapper">
                         <i data-lucide="shopping-cart"></i>
@@ -66,9 +75,9 @@
             <i data-lucide="layout-grid"></i>
             <span>Categories</span>
         </div>
-        <div class="bottom-nav-item" data-view="search">
-            <i data-lucide="search"></i>
-            <span>Search</span>
+        <div class="bottom-nav-item" data-view="orders" id="mobileOrdersBtn">
+            <i data-lucide="package"></i>
+            <span>Orders</span>
         </div>
         <div class="bottom-nav-item" id="mobileCartBtn">
             <div class="cart-icon-wrapper">
@@ -266,7 +275,7 @@
 
                     <div class="profile-stats">
                         <div class="stat-card">
-                            <span class="stat-value">12</span>
+                            <span class="stat-value" id="profileOrdersCount">0</span>
                             <span class="stat-label">Orders</span>
                         </div>
                         <div class="stat-card">
@@ -280,9 +289,14 @@
                     </div>
 
                     <div class="profile-menu">
-                        <div class="menu-item">
+                        <div class="menu-item" id="profileOrdersBtn">
                             <div class="menu-icon"><i data-lucide="shopping-bag"></i></div>
                             <span>My Orders</span>
+                            <i data-lucide="chevron-right" class="arrow"></i>
+                        </div>
+                        <div class="menu-item" id="profileTrackBtn">
+                            <div class="menu-icon"><i data-lucide="navigation"></i></div>
+                            <span>Live Order Tracking</span>
                             <i data-lucide="chevron-right" class="arrow"></i>
                         </div>
                         <div class="menu-item">
@@ -334,14 +348,15 @@
             </div>
             <div class="footer-col">
                 <h4>Explore</h4>
-                <a href="#">Home</a>
-                <a href="#">All Products</a>
-                <a href="#">Offers</a>
+                <a href="#" id="footerHomeLink">Home</a>
+                <a href="#" id="footerAllProductsLink">All Products</a>
+                <a href="#" id="footerOffersLink">Offers</a>
             </div>
             <div class="footer-col">
                 <h4>Customer Service</h4>
-                <a href="#">Contact Us</a>
-                <a href="#">Track Order</a>
+                <a href="#" id="contactUsFooterBtn">Contact Us</a>
+                <a href="#" id="trackOrderFooterBtn">Track Order</a>
+                <a href="#" id="orderHistoryFooterBtn">Order History</a>
                 <a href="#">Return Policy</a>
             </div>
             <div class="footer-col">
@@ -365,11 +380,25 @@
             <i data-lucide="zap"></i>
             <span>Delivery in <strong>10 minutes</strong></span>
         </div>
+
+        <!-- Dynamic Free Delivery Progress Bar -->
+        <div class="free-delivery-tracker" id="freeDeliveryTracker">
+            <div class="free-delivery-header">
+                <div class="fd-title">
+                    <i data-lucide="truck" class="fd-icon" id="fdIcon"></i>
+                    <span class="fd-label" id="freeDeliveryLabel">Add ₹499 more to get FREE Delivery</span>
+                </div>
+                <span class="fd-target" id="freeDeliveryTarget">₹499 Goal</span>
+            </div>
+            <div class="free-delivery-track">
+                <div class="free-delivery-fill" id="freeDeliveryFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
         <div class="cart-items" id="cartItems"></div>
         <div class="cart-footer" id="cartFooter"></div>
     </div>
 
-    
     <!-- Checkout Modal -->
     <div class="checkout-modal-overlay" id="checkoutOverlay"></div>
     <div class="checkout-modal" id="checkoutModal">
@@ -448,7 +477,214 @@
                 <i data-lucide="zap"></i> Arriving in <span id="countdownTimer">10:00</span> mins
             </div>
             <div class="order-summary-card" id="successOrderDetails"></div>
-            <button class="continue-shopping-btn" id="continueShoppingBtn">Continue Shopping</button>
+            <div class="success-actions-row">
+                <button type="button" class="track-live-btn" id="trackOrderFromSuccessBtn">
+                    <i data-lucide="navigation"></i> Track Live Order
+                </button>
+                <button type="button" class="continue-shopping-btn" id="continueShoppingBtn">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= LIVE INTERACTIVE ORDER TRACKING MODAL ================= -->
+    <div class="order-tracking-overlay" id="orderTrackingOverlay"></div>
+    <div class="order-tracking-modal" id="orderTrackingModal">
+        <div class="tracking-modal-header">
+            <div class="tracking-header-left">
+                <div class="live-pulse-badge">
+                    <span class="pulse-dot"></span>
+                    <span>LIVE TRACKING</span>
+                </div>
+                <h3 id="trackingModalOrderId">Order #MM-89214</h3>
+            </div>
+            <button class="close-tracking-modal" id="closeTrackingModal" title="Close tracker">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <div class="tracking-modal-body">
+            <!-- ETA & Quick Simulation Controls -->
+            <div class="tracking-eta-card">
+                <div class="eta-left">
+                    <span class="eta-title">Estimated Delivery</span>
+                    <div class="eta-time">
+                        <i data-lucide="clock"></i>
+                        <span id="trackerCountdownDisplay">09:48</span> mins
+                    </div>
+                </div>
+                <div class="simulation-controls">
+                    <span class="sim-label">Live Demo Stages (20s Auto):</span>
+                    <div class="sim-btns">
+                        <button class="sim-btn" id="simPrevStageBtn" title="Previous Stage"><i data-lucide="chevron-left"></i></button>
+                        <span class="sim-stage-indicator" id="simStageIndicator">Stage 1 of 5</span>
+                        <button class="sim-btn" id="simNextStageBtn" title="Next Stage"><i data-lucide="chevron-right"></i></button>
+                        <button class="sim-btn reset" id="simResetBtn" title="Restart Demo"><i data-lucide="rotate-ccw"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive 5-Stage Stepper -->
+            <div class="tracking-stages-container">
+                <!-- Stage 1 -->
+                <div class="tracking-stage-item active" data-stage="1" id="stageStep-1">
+                    <div class="stage-marker">
+                        <div class="stage-icon"><i data-lucide="check"></i></div>
+                        <div class="stage-line"></div>
+                    </div>
+                    <div class="stage-content">
+                        <div class="stage-header">
+                            <h4>1. Order Placed</h4>
+                            <span class="stage-time" id="stage1Time">Just now</span>
+                        </div>
+                        <p class="stage-desc">Payment confirmed & sent to dark store inventory system.</p>
+                    </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="tracking-stage-item" data-stage="2" id="stageStep-2">
+                    <div class="stage-marker">
+                        <div class="stage-icon"><i data-lucide="package"></i></div>
+                        <div class="stage-line"></div>
+                    </div>
+                    <div class="stage-content">
+                        <div class="stage-header">
+                            <h4>2. Packed at Dark Store</h4>
+                            <span class="stage-time" id="stage2Time">Pending</span>
+                        </div>
+                        <p class="stage-desc">Dark Store #04 (Bandra West) • Quality & temperature check passed.</p>
+                    </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="tracking-stage-item" data-stage="3" id="stageStep-3">
+                    <div class="stage-marker">
+                        <div class="stage-icon"><i data-lucide="user-check"></i></div>
+                        <div class="stage-line"></div>
+                    </div>
+                    <div class="stage-content">
+                        <div class="stage-header">
+                            <h4>3. Delivery Partner Assigned</h4>
+                            <span class="stage-time" id="stage3Time">Pending</span>
+                        </div>
+                        <p class="stage-desc">Partner picked up order and bags sealed securely.</p>
+                        <!-- Rider Profile Card -->
+                        <div class="rider-profile-card" id="riderProfileCard">
+                            <div class="rider-avatar">
+                                <i data-lucide="user"></i>
+                                <span class="rider-status-dot"></span>
+                            </div>
+                            <div class="rider-details">
+                                <div class="rider-name-row">
+                                    <strong>Ramesh Kumar</strong>
+                                    <span class="rider-rating"><i data-lucide="star"></i> 4.9 (1,420+ trips)</span>
+                                </div>
+                                <div class="rider-vehicle">
+                                    <i data-lucide="bike"></i>
+                                    <span>Hero Electric Scooter (MH-02-EK-4821)</span>
+                                </div>
+                            </div>
+                            <div class="rider-actions">
+                                <button class="rider-action-btn" id="riderCallBtn" title="Call Ramesh"><i data-lucide="phone"></i></button>
+                                <button class="rider-action-btn" id="riderChatBtn" title="Chat with Ramesh"><i data-lucide="message-square"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4 -->
+                <div class="tracking-stage-item" data-stage="4" id="stageStep-4">
+                    <div class="stage-marker">
+                        <div class="stage-icon"><i data-lucide="navigation"></i></div>
+                        <div class="stage-line"></div>
+                    </div>
+                    <div class="stage-content">
+                        <div class="stage-header">
+                            <h4>4. Out for Delivery</h4>
+                            <span class="stage-time" id="stage4Time">Pending</span>
+                        </div>
+                        <p class="stage-desc">Ramesh is on electric scooter speeding towards your address.</p>
+                        <!-- Live Pulse Map Simulation -->
+                        <div class="live-map-simulation" id="liveMapSimulation">
+                            <div class="map-radar-bg">
+                                <div class="radar-scan-line"></div>
+                                <div class="route-line-svg">
+                                    <svg viewBox="0 0 320 130" preserveAspectRatio="none">
+                                        <path d="M 35,95 C 100,20 180,120 285,35" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="6" stroke-dasharray="6,6"></path>
+                                        <path id="activeRoutePath" d="M 35,95 C 100,20 180,120 285,35" fill="none" stroke="#FF3269" stroke-width="4"></path>
+                                    </svg>
+                                </div>
+                                <!-- Dark Store Point -->
+                                <div class="map-node store-node" title="MegaMart Dark Store #04">
+                                    <div class="node-icon"><i data-lucide="store"></i></div>
+                                    <span>Dark Store #4</span>
+                                </div>
+                                <!-- Moving Pulse Delivery Ping -->
+                                <div class="map-node rider-node" id="riderMapNode" title="Rider Ramesh Kumar">
+                                    <div class="rider-pulse-ring ring-1"></div>
+                                    <div class="rider-pulse-ring ring-2"></div>
+                                    <div class="rider-icon-box"><i data-lucide="bike"></i></div>
+                                </div>
+                                <!-- Destination Node -->
+                                <div class="map-node dest-node" title="Delivery Address">
+                                    <div class="node-icon"><i data-lucide="home"></i></div>
+                                    <span>Your Home</span>
+                                </div>
+                            </div>
+                            <div class="map-live-status-bar">
+                                <span class="pulse-indicator-dot"></span>
+                                <span id="mapStreetStatus">Live: Passing Linking Road • 380m away from you</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 5 -->
+                <div class="tracking-stage-item" data-stage="5" id="stageStep-5">
+                    <div class="stage-marker">
+                        <div class="stage-icon"><i data-lucide="shield-check"></i></div>
+                    </div>
+                    <div class="stage-content">
+                        <div class="stage-header">
+                            <h4>5. Delivered</h4>
+                            <span class="stage-time" id="stage5Time">Pending</span>
+                        </div>
+                        <p class="stage-desc">Contactless delivery with secure OTP verification handshake.</p>
+                        <!-- OTP Verification Simulation Card -->
+                        <div class="otp-verification-card" id="otpCard">
+                            <div class="otp-badge-box">
+                                <span class="otp-sub-label">Share OTP with Rider</span>
+                                <div class="otp-code-display" id="otpCodeDisplay">4 8 2 9</div>
+                            </div>
+                            <div class="otp-status-text" id="otpStatusText">
+                                <i data-lucide="shield"></i>
+                                <span>Share this OTP with Ramesh upon arrival</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracked Order Items Summary -->
+            <div class="tracking-order-summary" id="trackingOrderSummary">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ORDER HISTORY DRAWER ================= -->
+    <div class="order-history-overlay" id="orderHistoryOverlay"></div>
+    <div class="order-history-drawer" id="orderHistoryDrawer">
+        <div class="history-header">
+            <div class="history-title-box">
+                <i data-lucide="shopping-bag"></i>
+                <h3>Order History</h3>
+            </div>
+            <button class="close-history" id="closeOrderHistory" title="Close history">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="history-body" id="orderHistoryBody">
+            <!-- Dynamically populated past orders -->
         </div>
     </div>
 
