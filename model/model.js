@@ -640,6 +640,595 @@ export const Model = [
             { unit: "500ml", price: 160, discount_price: 140 }
         ]
     },
+
+    // ================= EXPANDED FRESH FRUITS =================
+    {
+        id: "fruit-watermelon",
+        name: "Watermelon",
+        unit: "1 piece (approx 2-3kg)",
+        type: "Fresh Fruits",
+        quantity: 0,
+        price: 80,
+        discount_price: 59,
+        stock: 14,
+        maxPerOrder: 4,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/f47b2c01-766b-4e89-8d1e-8fe59da3fe76-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "26% OFF",
+        megaCoins: 15,
+        variants: [
+            { unit: "1 piece (approx 2-3kg)", price: 80, discount_price: 59 },
+            { unit: "2 pieces (approx 5kg)", price: 150, discount_price: 110 }
+        ]
+    },
+    {
+        id: "fruit-pomegranate",
+        name: "Pomegranate",
+        unit: "4 pcs (approx 800g)",
+        type: "Fresh Fruits",
+        quantity: 0,
+        price: 190,
+        discount_price: 155,
+        stock: 12,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/ea7f66a6-d667-4d9d-83b6-7db60d922bb6-1.jpeg",
+        megaCoins: 25,
+        variants: [
+            { unit: "2 pcs (approx 400g)", price: 100, discount_price: 82 },
+            { unit: "4 pcs (approx 800g)", price: 190, discount_price: 155 }
+        ]
+    },
+    {
+        id: "fruit-green-grapes",
+        name: "Green Grapes",
+        unit: "500g",
+        type: "Fresh Fruits",
+        quantity: 0,
+        price: 110,
+        discount_price: 85,
+        stock: 15,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/77519a4d-f952-4752-9b2f-7d1ae3e29f12-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "22% OFF",
+        megaCoins: 20,
+        variants: [
+            { unit: "250g", price: 60, discount_price: 46 },
+            { unit: "500g", price: 110, discount_price: 85 },
+            { unit: "1kg", price: 210, discount_price: 160 }
+        ]
+    },
+
+    // ================= EXPANDED FRESH VEGETABLES =================
+    {
+        id: "veg-carrot",
+        name: "Carrot",
+        unit: "500g",
+        type: "Fresh Vegetables",
+        quantity: 0,
+        price: 40,
+        discount_price: 29,
+        stock: 25,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/fa9e4034-e4df-4122-b5e5-397a7bb6c4db-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "500g", price: 40, discount_price: 29 },
+            { unit: "1kg", price: 75, discount_price: 55 }
+        ]
+    },
+    {
+        id: "veg-cucumber",
+        name: "Cucumber",
+        unit: "500g",
+        type: "Fresh Vegetables",
+        quantity: 0,
+        price: 35,
+        discount_price: 24,
+        stock: 20,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/97a81093-a417-48f5-a89e-2dc336eeb557-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "500g", price: 35, discount_price: 24 },
+            { unit: "1kg", price: 65, discount_price: 45 }
+        ]
+    },
+    {
+        id: "veg-lady-finger",
+        name: "Lady Finger",
+        unit: "500g",
+        type: "Fresh Vegetables",
+        quantity: 0,
+        price: 45,
+        discount_price: 32,
+        stock: 18,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/e10e78c8-1090-410a-b0df-246d84a30fa1-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "250g", price: 25, discount_price: 18 },
+            { unit: "500g", price: 45, discount_price: 32 },
+            { unit: "1kg", price: 85, discount_price: 60 }
+        ]
+    },
+    {
+        id: "veg-green-peas",
+        name: "Green Peas",
+        unit: "500g",
+        type: "Fresh Vegetables",
+        quantity: 0,
+        price: 65,
+        discount_price: 48,
+        stock: 16,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/88d8b6eb-2cfa-4db7-873b-5a1e27a1b660-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "26% OFF",
+        megaCoins: 15,
+        variants: [
+            { unit: "500g", price: 65, discount_price: 48 },
+            { unit: "1kg", price: 120, discount_price: 90 }
+        ]
+    },
+
+    // ================= DAIRY, BREAD & EGGS =================
+    {
+        id: "dairy-amul-butter",
+        name: "Amul Butter",
+        unit: "100g",
+        type: "Dairy, Bread & Eggs",
+        quantity: 0,
+        price: 58,
+        discount_price: 56,
+        stock: 30,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/6e0ee5ba-cf58-450f-a396-8eb5c696e14a-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "Instant Deal",
+        megaCoins: 15,
+        variants: [
+            { unit: "100g", price: 58, discount_price: 56 },
+            { unit: "500g", price: 275, discount_price: 265 }
+        ]
+    },
+    {
+        id: "dairy-farm-eggs",
+        name: "Farm Eggs",
+        unit: "Pack of 6",
+        type: "Dairy, Bread & Eggs",
+        quantity: 0,
+        price: 55,
+        discount_price: 46,
+        stock: 40,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/18cb7e42-7065-4f40-8a48-8dfca6b052d9-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "16% OFF",
+        megaCoins: 15,
+        variants: [
+            { unit: "Pack of 6", price: 55, discount_price: 46 },
+            { unit: "Pack of 12", price: 105, discount_price: 88 },
+            { unit: "Pack of 30 Tray", price: 240, discount_price: 199 }
+        ]
+    },
+    {
+        id: "dairy-amul-paneer",
+        name: "Paneer",
+        unit: "200g",
+        type: "Dairy, Bread & Eggs",
+        quantity: 0,
+        price: 95,
+        discount_price: 89,
+        stock: 22,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/58156157-1907-4e96-a886-302a9ebfa4a8-1.jpeg",
+        megaCoins: 20,
+        variants: [
+            { unit: "200g", price: 95, discount_price: 89 },
+            { unit: "400g", price: 185, discount_price: 172 }
+        ]
+    },
+    {
+        id: "dairy-mother-dairy-curd",
+        name: "Curd",
+        unit: "400g",
+        type: "Dairy, Bread & Eggs",
+        quantity: 0,
+        price: 40,
+        discount_price: 36,
+        stock: 25,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/fceb99bf-e10c-40ad-be00-47407a102715-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "400g", price: 40, discount_price: 36 },
+            { unit: "1kg Tub", price: 90, discount_price: 82 }
+        ]
+    },
+    {
+        id: "dairy-britannia-brown-bread",
+        name: "Brown Bread",
+        unit: "400g",
+        type: "Dairy, Bread & Eggs",
+        quantity: 0,
+        price: 50,
+        discount_price: 45,
+        stock: 20,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/751d38cb-f938-4e89-a3d8-5ecf36c53569-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "10% OFF",
+        megaCoins: 15,
+        variants: [
+            { unit: "400g", price: 50, discount_price: 45 }
+        ]
+    },
+
+    // ================= SNACKS & MUNCHIES =================
+    {
+        id: "snack-lays-chips",
+        name: "Lays Chips",
+        unit: "50g",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 20,
+        discount_price: 18,
+        stock: 45,
+        maxPerOrder: 10,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/ee7c0ef3-f42c-4a37-b7d6-7ae03a6bc150-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "Party Favourite",
+        megaCoins: 15,
+        variants: [
+            { unit: "50g", price: 20, discount_price: 18 },
+            { unit: "115g Party Pack", price: 50, discount_price: 42 }
+        ]
+    },
+    {
+        id: "snack-kurkure",
+        name: "Kurkure",
+        unit: "85g",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 20,
+        discount_price: 18,
+        stock: 40,
+        maxPerOrder: 10,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/c3b0dfae-24ec-4286-9a2c-15ba0567e9f3-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "85g", price: 20, discount_price: 18 },
+            { unit: "165g Family Pack", price: 40, discount_price: 35 }
+        ]
+    },
+    {
+        id: "snack-haldiram-bhujia",
+        name: "Haldiram Bhujia",
+        unit: "200g",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 65,
+        discount_price: 55,
+        stock: 30,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/556da87e-e374-4b82-9659-c2901dbdfc42-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "15% OFF",
+        megaCoins: 15,
+        variants: [
+            { unit: "200g", price: 65, discount_price: 55 },
+            { unit: "400g", price: 125, discount_price: 105 }
+        ]
+    },
+    {
+        id: "snack-parle-g",
+        name: "Parle-G",
+        unit: "250g",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 30,
+        discount_price: 27,
+        stock: 50,
+        maxPerOrder: 10,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/cbb5a526-a070-4f9e-a89c-4aa79872beea-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "250g", price: 30, discount_price: 27 },
+            { unit: "800g Super Saver", price: 90, discount_price: 79 }
+        ]
+    },
+    {
+        id: "snack-maggi-noodles",
+        name: "Maggi Noodles",
+        unit: "Pack of 4 (280g)",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 56,
+        discount_price: 50,
+        stock: 55,
+        maxPerOrder: 8,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/a63c659d-ea33-40a2-990e-b7d6fb8fa017-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "Best Seller",
+        megaCoins: 20,
+        variants: [
+            { unit: "70g Single", price: 14, discount_price: 13 },
+            { unit: "Pack of 4 (280g)", price: 56, discount_price: 50 },
+            { unit: "Pack of 12 (840g)", price: 168, discount_price: 148 }
+        ]
+    },
+    {
+        id: "snack-cadbury-dairy-milk",
+        name: "Cadbury Dairy Milk",
+        unit: "60g",
+        type: "Snacks & Munchies",
+        quantity: 0,
+        price: 80,
+        discount_price: 72,
+        stock: 35,
+        maxPerOrder: 8,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/981e9fa4-d130-4966-90c7-010e9f029a2c-1.jpeg",
+        megaCoins: 20,
+        variants: [
+            { unit: "60g", price: 80, discount_price: 72 },
+            { unit: "150g Giant Bar", price: 180, discount_price: 155 }
+        ]
+    },
+
+    // ================= COLD DRINKS & BEVERAGES =================
+    {
+        id: "bev-coca-cola",
+        name: "Coca-Cola",
+        unit: "750ml",
+        type: "Cold Drinks & Beverages",
+        quantity: 0,
+        price: 40,
+        discount_price: 38,
+        stock: 45,
+        maxPerOrder: 8,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/6e5f6e80-77a8-4c92-ba4a-ef7ca8840ca0-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "Chilled",
+        megaCoins: 15,
+        variants: [
+            { unit: "750ml", price: 40, discount_price: 38 },
+            { unit: "1.25L", price: 65, discount_price: 60 },
+            { unit: "2.25L Party Bottle", price: 99, discount_price: 89 }
+        ]
+    },
+    {
+        id: "bev-sprite",
+        name: "Sprite",
+        unit: "750ml",
+        type: "Cold Drinks & Beverages",
+        quantity: 0,
+        price: 40,
+        discount_price: 38,
+        stock: 40,
+        maxPerOrder: 8,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/bcfef187-db4a-4389-9fc6-c8f0ba7aa599-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "750ml", price: 40, discount_price: 38 },
+            { unit: "1.25L", price: 65, discount_price: 60 }
+        ]
+    },
+    {
+        id: "bev-real-mango-juice",
+        name: "Real Mango Juice",
+        unit: "1L",
+        type: "Cold Drinks & Beverages",
+        quantity: 0,
+        price: 130,
+        discount_price: 105,
+        stock: 30,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/a55c91cf-fe25-4c07-b3e1-ee2dc46ebc37-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "19% OFF",
+        megaCoins: 20,
+        variants: [
+            { unit: "1L", price: 130, discount_price: 105 },
+            { unit: "2x 1L Twin Pack", price: 260, discount_price: 199 }
+        ]
+    },
+    {
+        id: "bev-red-bull",
+        name: "Red Bull",
+        unit: "250ml Can",
+        type: "Cold Drinks & Beverages",
+        quantity: 0,
+        price: 125,
+        discount_price: 115,
+        stock: 25,
+        maxPerOrder: 6,
+        countryoforigin: "austria",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/f34382fa-fe11-4f11-9a70-74501a6cecc6-1.jpeg",
+        megaCoins: 25,
+        variants: [
+            { unit: "250ml Can", price: 125, discount_price: 115 },
+            { unit: "Pack of 4 Cans", price: 500, discount_price: 440 }
+        ]
+    },
+
+    // ================= STAPLES, ATTA & OIL =================
+    {
+        id: "staple-fortune-oil",
+        name: "Fortune Sunflower Oil",
+        unit: "1L Pouch",
+        type: "Staples, Atta & Oil",
+        quantity: 0,
+        price: 145,
+        discount_price: 128,
+        stock: 35,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/f47e3355-323c-4b95-a24c-1d02c46274e1-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "Essential Deal",
+        megaCoins: 20,
+        variants: [
+            { unit: "1L Pouch", price: 145, discount_price: 128 },
+            { unit: "5L Can", price: 720, discount_price: 625 }
+        ]
+    },
+    {
+        id: "staple-aashirvaad-atta",
+        name: "Aashirvaad Atta",
+        unit: "5kg",
+        type: "Staples, Atta & Oil",
+        quantity: 0,
+        price: 260,
+        discount_price: 228,
+        stock: 30,
+        maxPerOrder: 4,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/449191e3-cce3-446a-8d19-5d63503cb06d-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "12% OFF",
+        megaCoins: 30,
+        variants: [
+            { unit: "5kg", price: 260, discount_price: 228 },
+            { unit: "10kg", price: 495, discount_price: 435 }
+        ]
+    },
+    {
+        id: "staple-daawat-rice",
+        name: "Daawat Basmati Rice",
+        unit: "1kg",
+        type: "Staples, Atta & Oil",
+        quantity: 0,
+        price: 110,
+        discount_price: 89,
+        stock: 25,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/e7456d95-888f-43e6-95ff-559d7ea7ff8e-1.jpeg",
+        megaCoins: 20,
+        variants: [
+            { unit: "1kg", price: 110, discount_price: 89 },
+            { unit: "5kg Bag", price: 499, discount_price: 399 }
+        ]
+    },
+    {
+        id: "staple-tata-toor-dal",
+        name: "Tata Toor Dal",
+        unit: "1kg",
+        type: "Staples, Atta & Oil",
+        quantity: 0,
+        price: 195,
+        discount_price: 168,
+        stock: 25,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/2e23d130-9092-496a-86cf-90e66c7f999d-1.jpeg",
+        megaCoins: 25,
+        variants: [
+            { unit: "1kg", price: 195, discount_price: 168 },
+            { unit: "2kg", price: 380, discount_price: 325 }
+        ]
+    },
+
+    // ================= PERSONAL CARE & CLEANING =================
+    {
+        id: "pc-colgate-toothpaste",
+        name: "Colgate Toothpaste",
+        unit: "150g",
+        type: "Personal Care & Cleaning",
+        quantity: 0,
+        price: 125,
+        discount_price: 105,
+        stock: 35,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/d9ef0c4b-c741-4cfd-8aee-87612f0e8f00-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "16% OFF",
+        megaCoins: 20,
+        variants: [
+            { unit: "150g", price: 125, discount_price: 105 },
+            { unit: "Saver Pack 300g (150g x 2)", price: 240, discount_price: 195 }
+        ]
+    },
+    {
+        id: "pc-dettol-handwash",
+        name: "Dettol Handwash",
+        unit: "675ml",
+        type: "Personal Care & Cleaning",
+        quantity: 0,
+        price: 135,
+        discount_price: 115,
+        stock: 30,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/ea3c8734-bca5-4c04-aee3-bc1ee643ec13-1.jpeg",
+        megaCoins: 20,
+        variants: [
+            { unit: "675ml", price: 135, discount_price: 115 },
+            { unit: "1.5L Value Pack", price: 275, discount_price: 229 }
+        ]
+    },
+    {
+        id: "pc-nivea-lotion",
+        name: "Nivea Lotion",
+        unit: "200ml",
+        type: "Personal Care & Cleaning",
+        quantity: 0,
+        price: 249,
+        discount_price: 199,
+        stock: 20,
+        maxPerOrder: 4,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/88d1840f-7b19-4b2a-8ffc-99c6806509a2-1.jpeg",
+        isFlashDeal: true,
+        flashDiscount: "20% OFF",
+        megaCoins: 30,
+        variants: [
+            { unit: "200ml", price: 249, discount_price: 199 },
+            { unit: "400ml Pump Bottle", price: 449, discount_price: 349 }
+        ]
+    },
+    {
+        id: "pc-lizol-cleaner",
+        name: "Lizol Cleaner",
+        unit: "500ml",
+        type: "Personal Care & Cleaning",
+        quantity: 0,
+        price: 110,
+        discount_price: 98,
+        stock: 35,
+        maxPerOrder: 6,
+        countryoforigin: "india",
+        src: "https://cdn.zeptonow.com/production///tr:w-640,ar-1000-1000,pr-true,f-auto,q-80/inventory/product/d045d475-680c-43f1-b98f-a9db154aa1a4-1.jpeg",
+        megaCoins: 15,
+        variants: [
+            { unit: "500ml", price: 110, discount_price: 98 },
+            { unit: "1L Bottle", price: 215, discount_price: 185 },
+            { unit: "2L Family Pack", price: 399, discount_price: 339 }
+        ]
+    }
 ];
 
 /**

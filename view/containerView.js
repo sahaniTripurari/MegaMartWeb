@@ -11,6 +11,10 @@ export class ContainerView {
         this.productDetailView = document.getElementById('productDetailView');
         this.profileView = document.getElementById('profileView');
         this.cartPageView = document.getElementById('cartPageView');
+        this.wishlistPageView = document.getElementById('wishlistPageView');
+        this.ordersPageView = document.getElementById('ordersPageView');
+        this.searchSuggestionsDropdown = document.getElementById('searchSuggestionsDropdown');
+        this.searchClearBtn = document.getElementById('searchClearBtn');
         
         // Containers
         this.navCategories = document.getElementById('navCategories');
@@ -87,6 +91,8 @@ export class ContainerView {
         this.setupFlipkartDealCards();
         this.setupFlipkartCuratedRails();
         this.setupCartPageView();
+        this.setupWishlistPageView();
+        this.setupOrdersPageView();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -99,12 +105,19 @@ export class ContainerView {
             item.addEventListener('click', () => {
                 const view = item.dataset.view;
                 
-                // If it's cart, wishlist or orders drawer, don't change active view tab
-                if (item.id === 'mobileCartBtn' || item.id === 'bottomWishlistBtn' || item.id === 'mobileOrdersBtn') {
+                if (item.id === 'mobileCartBtn') {
+                    this.showCartPageView();
+                    return;
+                }
+                if (item.id === 'bottomWishlistBtn') {
+                    this.showWishlistPageView();
+                    return;
+                }
+                if (item.id === 'mobileOrdersBtn') {
+                    this.showOrdersPageView();
                     return;
                 }
                 
-                // Update active state
                 bottomNavItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
                 
@@ -113,7 +126,7 @@ export class ContainerView {
                 } else if (view === 'categories') {
                     this.showCategoryView('All Products');
                 } else if (view === 'search') {
-                    this.mobileSearchInput.focus();
+                    this.globalSearchInput?.focus();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else if (view === 'profile') {
                     this.showProfileView();
@@ -131,7 +144,14 @@ export class ContainerView {
         const bottomWishlistBtn = document.getElementById('bottomWishlistBtn');
         if (bottomWishlistBtn) {
             bottomWishlistBtn.addEventListener('click', () => {
-                this.openWishlistSidebar();
+                this.showWishlistPageView();
+            });
+        }
+
+        const mobileOrdersBtn = document.getElementById('mobileOrdersBtn');
+        if (mobileOrdersBtn) {
+            mobileOrdersBtn.addEventListener('click', () => {
+                this.showOrdersPageView();
             });
         }
     }
@@ -160,7 +180,7 @@ export class ContainerView {
 
     // ================= ROUTING & VIEWS =================
     setActiveView(activeView) {
-        [this.homeView, this.categoryView, this.productDetailView, this.profileView, this.cartPageView].forEach((view) => {
+        [this.homeView, this.categoryView, this.productDetailView, this.profileView, this.cartPageView, this.wishlistPageView, this.ordersPageView].forEach((view) => {
             if (!view) return;
             view.classList.remove('active');
             view.style.display = 'none';
@@ -183,6 +203,10 @@ export class ContainerView {
             document.querySelector('.bottom-nav-item[data-view="profile"]')?.classList.add('active');
         } else if (activeView === this.cartPageView) {
             document.getElementById('mobileCartBtn')?.classList.add('active');
+        } else if (activeView === this.wishlistPageView) {
+            document.getElementById('bottomWishlistBtn')?.classList.add('active');
+        } else if (activeView === this.ordersPageView) {
+            document.getElementById('mobileOrdersBtn')?.classList.add('active');
         }
     }
 
@@ -199,6 +223,22 @@ export class ContainerView {
             cartButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.showCartPageView();
+            });
+        }
+
+        const wishlistBtn = document.getElementById('wishlistButton');
+        if (wishlistBtn) {
+            wishlistBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showWishlistPageView();
+            });
+        }
+
+        const ordersBtn = document.getElementById('headerOrdersBtn');
+        if (ordersBtn) {
+            ordersBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showOrdersPageView();
             });
         }
         
@@ -333,171 +373,145 @@ export class ContainerView {
         const bundleFinalPrice = Math.max(1, bundleRawPrice - bundleSavings);
 
         detailContainer.innerHTML = `
-            <div class="pd-gallery">
-                <div class="pd-main-image-wrap" id="pdMainImageWrap">
-                    <button class="pd-wishlist-toggle-btn ${isWishlisted ? 'active' : ''}" data-name="${item.name}" id="pdWishlistBtn" aria-label="Toggle Wishlist" title="Wishlist">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <img id="pdMainImage" src="${item.src}" alt="${item.name}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='/javascript.svg';">
+            <!-- Top Fold: 2 Columns (Sticky Gallery Left, Core Purchase Info Right) -->
+            <div class="pd-top-fold">
+                <div class="pd-gallery">
+                    <div class="pd-main-image-wrap" id="pdMainImageWrap">
+                        <button class="pd-wishlist-toggle-btn ${isWishlisted ? 'active' : ''}" data-name="${item.name}" id="pdWishlistBtn" aria-label="Toggle Wishlist" title="Wishlist">
+                            <i data-lucide="heart"></i>
+                        </button>
+                        <img id="pdMainImage" src="${item.src}" alt="${item.name}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='/javascript.svg';">
+                    </div>
+                    <!-- Gallery Thumbnails -->
+                    <div class="pd-thumbnails">
+                        <div class="pd-thumb active" data-src="${item.src}">
+                            <img src="${item.src}" alt="${item.name} Front">
+                        </div>
+                        <div class="pd-thumb" data-src="${item.src}">
+                            <img src="${item.src}" alt="${item.name} Angle 2" style="transform: scale(0.9) rotate(5deg);">
+                        </div>
+                        <div class="pd-thumb" data-src="${item.src}">
+                            <img src="${item.src}" alt="${item.name} Angle 3" style="transform: scale(1.1) scaleX(-1);">
+                        </div>
+                        <div class="pd-thumb" data-src="${item.src}">
+                            <img src="${item.src}" alt="${item.name} Angle 4" style="filter: brightness(1.05);">
+                        </div>
+                    </div>
                 </div>
-                <!-- Gallery Thumbnails -->
-                <div class="pd-thumbnails">
-                    <div class="pd-thumb active" data-src="${item.src}">
-                        <img src="${item.src}" alt="${item.name} Front">
+
+                <div class="pd-info">
+                    <div class="pd-meta-row">
+                        <span class="pd-type">${item.type}</span>
+                        <div class="pd-rating-badge-large">
+                            <span class="star-icon">★</span>
+                            <span>${rating.score}</span>
+                            <span class="review-text">(${rating.reviewCount} verified ratings)</span>
+                        </div>
                     </div>
-                    <div class="pd-thumb" data-src="${item.src}">
-                        <img src="${item.src}" alt="${item.name} Angle 2" style="transform: scale(0.9) rotate(5deg);">
+
+                    ${item.isFlashDeal ? `<div class="pd-flash-badge"><span class="flame-icon">🔥</span> FLASH SALE DEAL • ${item.flashDiscount || '40% OFF'}</div>` : ''}
+
+                    <h2 class="pd-title">${item.name}</h2>
+
+                    <!-- Flipkart 'MegaAssured' Trust Badge & Guarantee -->
+                    <div class="pd-mega-assured-card">
+                        <div class="mega-assured-badge lg" title="100% Quality Assured & Quick Delivery">
+                            <span class="assured-check">✓</span>
+                            <span class="assured-text"><span class="assured-mega">Mega</span>Assured</span>
+                        </div>
+                        <div class="pd-mega-assured-content">
+                            <span class="pd-mega-assured-title">MegaAssured 100% Quality Guarantee</span>
+                            <span class="pd-mega-assured-desc">Direct farm & brand sourcing • Quality checked • 10-Min Superfast Delivery</span>
+                        </div>
                     </div>
-                    <div class="pd-thumb" data-src="${item.src}">
-                        <img src="${item.src}" alt="${item.name} Angle 3" style="transform: scale(1.1) scaleX(-1);">
+
+                    <p class="pd-net-qty" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Net Qty: <strong>${item.unit}</strong></p>
+
+                    <!-- Multi-Weight / Pack Size Variant Selector -->
+                    <div class="pd-variant-section">
+                        <div class="variant-label-row">
+                            <span class="variant-label">Pack Size / Weight:</span>
+                            <span class="variant-selected-value" id="pdSelectedVariantUnit">${item.unit}</span>
+                        </div>
+                        <div class="variant-pills" id="pdVariantPills">
+                            ${variants.map(v => `
+                                <button type="button" class="variant-pill ${v.unit === item.unit ? 'active' : ''}" 
+                                        data-unit="${v.unit}" 
+                                        data-price="${v.price}" 
+                                        data-discount="${v.discount_price}">
+                                    <span class="variant-unit-name">${v.unit}</span>
+                                    <span class="variant-unit-price">₹${v.discount_price}</span>
+                                    ${v.price > v.discount_price ? `<span class="variant-badge-save">Save ₹${v.price - v.discount_price}</span>` : ''}
+                                </button>
+                            `).join('')}
+                        </div>
                     </div>
-                    <div class="pd-thumb" data-src="${item.src}">
-                        <img src="${item.src}" alt="${item.name} Angle 4" style="filter: brightness(1.05);">
+
+                    <div class="pd-price-row">
+                        <span class="pd-price">₹${item.discount_price}</span>
+                        ${item.price > item.discount_price ? `<span class="pd-mrp">₹${item.price}</span> <span class="pd-discount">${discountPercent}% OFF</span>` : ''}
+                    </div>
+
+                    <!-- Flipkart-style 'MegaCoins' Rewards Banner -->
+                    <div class="pd-megacoins-reward">
+                        <div class="pd-coin-icon-box">🪙</div>
+                        <div class="pd-coin-text-box">
+                            <span class="pd-coin-title"><strong>Earn ${coins} MegaCoins</strong> on this purchase</span>
+                            <span class="pd-coin-sub">Redeem coins on checkout for instant ₹1/coin cash discount</span>
+                        </div>
+                    </div>
+
+                    <p class="pd-desc">Premium grade hand-picked ${item.name}. Sourced directly from certified farmers and ethical suppliers to ensure farm-to-doorstep freshness within 10 minutes.</p>
+
+                    <!-- Amazon Pincode & Delivery Estimator -->
+                    <div class="pd-delivery-estimator" id="pdDeliveryEstimator">
+                        <div class="estimator-header">
+                            <div class="estimator-icon"><i data-lucide="truck"></i></div>
+                            <div class="estimator-title-wrap">
+                                <span class="estimator-label">Delivery to</span>
+                                <span class="estimator-target" id="pdCurrentPincodeDisplay">${savedCity}, ${savedPin}</span>
+                            </div>
+                        </div>
+                        <div class="estimator-input-group">
+                            <div class="estimator-input-wrapper">
+                                <i data-lucide="map-pin" class="estimator-input-icon"></i>
+                                <input type="text" id="pdPincodeInput" placeholder="Enter 6-digit Pincode" maxlength="6" value="${savedPin}">
+                            </div>
+                            <button type="button" class="estimator-check-btn" id="pdPincodeCheckBtn">Check</button>
+                        </div>
+                        <div class="estimator-result-badge" id="pdEstimatorResult">
+                            <div class="estimator-speed-row">
+                                <i data-lucide="zap" class="zap-icon"></i>
+                                <span>⚡ Express Delivery in 10-15 mins! FREE on orders above ₹499</span>
+                            </div>
+                            <div class="estimator-meta-row">
+                                <span>✓ In stock at Dark Store #${Math.abs(savedPin.charCodeAt(0) % 20) + 1}</span>
+                                <span>✓ Cash & UPI on Delivery available</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions: Add to Cart + Amazon 'Buy Now' 1-Click Instant Checkout -->
+                    <div class="pd-actions" data-name="${item.name}">
+                        <div class="pd-btn-group">
+                            ${!item.quantity ? 
+                                `<button class="pd-add-btn add-btn-detail"><i data-lucide="shopping-cart"></i> Add to Cart</button>` :
+                                `<div class="pd-qty-controls">
+                                    <button class="pd-qty-btn subtract-detail">−</button>
+                                    <span class="pd-qty-display">${item.quantity}</span>
+                                    <button class="pd-qty-btn add-detail">+</button>
+                                </div>`
+                            }
+                            <button class="pd-buy-now-btn" data-name="${item.name}" title="Buy instantly with 1-click checkout">
+                                <i data-lucide="zap"></i> Buy Now
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pd-info">
-                <div class="pd-meta-row">
-                    <span class="pd-type">${item.type}</span>
-                    <div class="pd-rating-badge-large">
-                        <span class="star-icon">★</span>
-                        <span>${rating.score}</span>
-                        <span class="review-text">(${rating.reviewCount} verified ratings)</span>
-                    </div>
-                </div>
-
-                ${item.isFlashDeal ? `<div class="pd-flash-badge"><span class="flame-icon">🔥</span> FLASH SALE DEAL • ${item.flashDiscount || '40% OFF'}</div>` : ''}
-
-                <h2 class="pd-title">${item.name}</h2>
-
-                <!-- Flipkart 'MegaAssured' Trust Badge & Guarantee -->
-                <div class="pd-mega-assured-card">
-                    <div class="mega-assured-badge lg" title="100% Quality Assured & Quick Delivery">
-                        <span class="assured-check">✓</span>
-                        <span class="assured-text"><span class="assured-mega">Mega</span>Assured</span>
-                    </div>
-                    <div class="pd-mega-assured-content">
-                        <span class="pd-mega-assured-title">MegaAssured 100% Quality Guarantee</span>
-                        <span class="pd-mega-assured-desc">Direct farm & brand sourcing • Quality checked • 10-Min Superfast Delivery</span>
-                    </div>
-                </div>
-
-                <p class="pd-net-qty" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Net Qty: <strong>${item.unit}</strong></p>
-
-                <!-- Multi-Weight / Pack Size Variant Selector -->
-                <div class="pd-variant-section">
-                    <div class="variant-label-row">
-                        <span class="variant-label">Pack Size / Weight:</span>
-                        <span class="variant-selected-value" id="pdSelectedVariantUnit">${item.unit}</span>
-                    </div>
-                    <div class="variant-pills" id="pdVariantPills">
-                        ${variants.map(v => `
-                            <button type="button" class="variant-pill ${v.unit === item.unit ? 'active' : ''}" 
-                                    data-unit="${v.unit}" 
-                                    data-price="${v.price}" 
-                                    data-discount="${v.discount_price}">
-                                <span class="variant-unit-name">${v.unit}</span>
-                                <span class="variant-unit-price">₹${v.discount_price}</span>
-                                ${v.price > v.discount_price ? `<span class="variant-badge-save">Save ₹${v.price - v.discount_price}</span>` : ''}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div class="pd-price-row">
-                    <span class="pd-price">₹${item.discount_price}</span>
-                    ${item.price > item.discount_price ? `<span class="pd-mrp">₹${item.price}</span> <span class="pd-discount">${discountPercent}% OFF</span>` : ''}
-                </div>
-
-                <!-- Flipkart-style 'MegaCoins' Rewards Banner -->
-                <div class="pd-megacoins-reward">
-                    <div class="pd-coin-icon-box">🪙</div>
-                    <div class="pd-coin-text-box">
-                        <span class="pd-coin-title"><strong>Earn ${coins} MegaCoins</strong> on this purchase</span>
-                        <span class="pd-coin-sub">Redeem coins on checkout for instant ₹1/coin cash discount</span>
-                    </div>
-                </div>
-
-                <p class="pd-desc">Premium grade hand-picked ${item.name}. Sourced directly from certified farmers and ethical suppliers to ensure farm-to-doorstep freshness within 10 minutes.</p>
-
-                <!-- Amazon Pincode & Delivery Estimator -->
-                <div class="pd-delivery-estimator" id="pdDeliveryEstimator">
-                    <div class="estimator-header">
-                        <div class="estimator-icon"><i data-lucide="truck"></i></div>
-                        <div class="estimator-title-wrap">
-                            <span class="estimator-label">Delivery to</span>
-                            <span class="estimator-target" id="pdCurrentPincodeDisplay">${savedCity}, ${savedPin}</span>
-                        </div>
-                    </div>
-                    <div class="estimator-input-group">
-                        <div class="estimator-input-wrapper">
-                            <i data-lucide="map-pin" class="estimator-input-icon"></i>
-                            <input type="text" id="pdPincodeInput" placeholder="Enter 6-digit Pincode" maxlength="6" value="${savedPin}">
-                        </div>
-                        <button type="button" class="estimator-check-btn" id="pdPincodeCheckBtn">Check</button>
-                    </div>
-                    <div class="estimator-result-badge" id="pdEstimatorResult">
-                        <div class="estimator-speed-row">
-                            <i data-lucide="zap" class="zap-icon"></i>
-                            <span>⚡ Express Delivery in 10-15 mins! FREE on orders above ₹499</span>
-                        </div>
-                        <div class="estimator-meta-row">
-                            <span>✓ In stock at Dark Store #${Math.abs(savedPin.charCodeAt(0) % 20) + 1}</span>
-                            <span>✓ Cash & UPI on Delivery available</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions: Add to Cart + Amazon 'Buy Now' 1-Click Instant Checkout -->
-                <div class="pd-actions" data-name="${item.name}">
-                    <div class="pd-btn-group">
-                        ${!item.quantity ? 
-                            `<button class="pd-add-btn add-btn-detail"><i data-lucide="shopping-cart"></i> Add to Cart</button>` :
-                            `<div class="pd-qty-controls">
-                                <button class="pd-qty-btn subtract-detail">−</button>
-                                <span class="pd-qty-display">${item.quantity}</span>
-                                <button class="pd-qty-btn add-detail">+</button>
-                            </div>`
-                        }
-                        <button class="pd-buy-now-btn" data-name="${item.name}" title="Buy instantly with 1-click checkout">
-                            <i data-lucide="zap"></i> Buy Now
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Key Specifications Grid -->
-                <div class="pd-specs-grid">
-                    <div class="spec-card">
-                        <div class="spec-icon"><i data-lucide="clock"></i></div>
-                        <div>
-                            <div class="spec-label">Shelf Life</div>
-                            <div class="spec-value">${shelfLife}</div>
-                        </div>
-                    </div>
-                    <div class="spec-card">
-                        <div class="spec-icon"><i data-lucide="globe-2"></i></div>
-                        <div>
-                            <div class="spec-label">Country of Origin</div>
-                            <div class="spec-value">${countryOrigin}</div>
-                        </div>
-                    </div>
-                    <div class="spec-card">
-                        <div class="spec-icon"><i data-lucide="thermometer-snowflake"></i></div>
-                        <div>
-                            <div class="spec-label">Storage Advice</div>
-                            <div class="spec-value">${storageInstruction}</div>
-                        </div>
-                    </div>
-                    <div class="spec-card">
-                        <div class="spec-icon"><i data-lucide="shield-check"></i></div>
-                        <div>
-                            <div class="spec-label">Quality Assured</div>
-                            <div class="spec-value">FSSAI & Hygiene Verified</div>
-                        </div>
-                    </div>
-                </div>
-
+            <!-- Bottom Fold: FULL WIDTH 100% CONTAINER below top fold -->
+            <div class="pd-full-width-details">
                 <!-- Amazon 'Frequently Bought Together' Bundle -->
                 <div class="pd-fbt-card" id="pdFbtCard">
                     <div class="fbt-header">
@@ -555,6 +569,41 @@ export class ContainerView {
                             <button type="button" class="fbt-add-all-btn" id="fbtAddAllBtn" data-items="${item.name},${comp1.name},${comp2.name}">
                                 <i data-lucide="shopping-cart"></i> 🛒 Add All 3 to Cart
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Specifications Grid -->
+                <div class="pd-specs-section">
+                    <h3 class="specs-section-title"><i data-lucide="clipboard-list"></i> Product Specifications</h3>
+                    <div class="pd-specs-grid">
+                        <div class="spec-card">
+                            <div class="spec-icon"><i data-lucide="clock"></i></div>
+                            <div>
+                                <div class="spec-label">Shelf Life</div>
+                                <div class="spec-value">${shelfLife}</div>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-icon"><i data-lucide="globe-2"></i></div>
+                            <div>
+                                <div class="spec-label">Country of Origin</div>
+                                <div class="spec-value">${countryOrigin}</div>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-icon"><i data-lucide="thermometer-snowflake"></i></div>
+                            <div>
+                                <div class="spec-label">Storage Advice</div>
+                                <div class="spec-value">${storageInstruction}</div>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-icon"><i data-lucide="shield-check"></i></div>
+                            <div>
+                                <div class="spec-label">Quality Assured</div>
+                                <div class="spec-value">FSSAI & Hygiene Verified</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1141,6 +1190,11 @@ export class ContainerView {
         const categoryIcons = {
             'Fresh Fruits': '<i data-lucide="apple"></i>',
             'Fresh Vegetables': '<i data-lucide="carrot"></i>', 
+            'Dairy, Bread & Eggs': '<i data-lucide="egg"></i>',
+            'Snacks & Munchies': '<i data-lucide="cookie"></i>',
+            'Cold Drinks & Beverages': '<i data-lucide="cup-soda"></i>',
+            'Staples, Atta & Oil': '<i data-lucide="wheat"></i>',
+            'Personal Care & Cleaning': '<i data-lucide="sparkles"></i>',
             'leafy Herbs': '<i data-lucide="leaf"></i>',
             'Flowers': '<i data-lucide="flower"></i>',
             'Exotic': '<i data-lucide="sparkles"></i>',
@@ -1499,30 +1553,212 @@ export class ContainerView {
 
     // ================= SEARCH & FILTER =================
     setupSearchAndFilter() {
-        let debounceTimer;
-        const liveSearch = (e) => {
-            clearTimeout(debounceTimer);
-            const query = (e.target.value || '').trim();
-            if (e.key === 'Enter') {
-                if (query) this.showCategoryView('Search Results', query);
-                return;
-            }
-            debounceTimer = setTimeout(() => {
-                if (query.length >= 2) {
-                    this.showCategoryView('Search Results', query);
-                } else if (query.length === 0 && this.currentCategory === 'Search Results') {
-                    this.showHomeView();
-                }
-            }, 300);
+        const input = this.globalSearchInput;
+        const dropdown = this.searchSuggestionsDropdown;
+        const clearBtn = this.searchClearBtn;
+        let selectedIndex = -1;
+        let activeMatches = [];
+
+        const escapeHtml = (str) => {
+            return String(str || '').replace(/[&<>"']/g, (m) => {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+            });
         };
 
-        if (this.globalSearchInput) {
-            this.globalSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') liveSearch(e); });
-            this.globalSearchInput.addEventListener('input', liveSearch);
+        const highlightMatch = (text, query) => {
+            if (!query) return escapeHtml(text);
+            const safeText = escapeHtml(text);
+            const lowerText = text.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const index = lowerText.indexOf(lowerQuery);
+            if (index === -1) return safeText;
+            const match = escapeHtml(text.slice(index, index + query.length));
+            const before = escapeHtml(text.slice(0, index));
+            const after = escapeHtml(text.slice(index + query.length));
+            return `${before}<mark>${match}</mark>${after}`;
+        };
+
+        const closeDropdown = () => {
+            if (dropdown) dropdown.style.display = 'none';
+            selectedIndex = -1;
+            activeMatches = [];
+        };
+
+        const updateSelectionHighlight = () => {
+            if (!dropdown) return;
+            const items = dropdown.querySelectorAll('.suggestion-item, .suggestion-view-all');
+            items.forEach((item, idx) => {
+                if (idx === selectedIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        };
+
+        const renderSuggestions = (query) => {
+            if (!dropdown) return;
+            const q = (query || '').trim();
+            if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+
+            if (q.length < 1) {
+                closeDropdown();
+                return;
+            }
+
+            const lowerQ = q.toLowerCase();
+            const matches = this.data.filter(item => 
+                item.name.toLowerCase().includes(lowerQ) ||
+                (item.type && item.type.toLowerCase().includes(lowerQ))
+            );
+
+            activeMatches = matches.slice(0, 6);
+            selectedIndex = -1;
+
+            if (matches.length === 0) {
+                dropdown.innerHTML = `
+                    <div class="suggestion-empty-state">
+                        <i data-lucide="search-x" style="width:24px;height:24px;margin-bottom:6px;opacity:0.6;"></i>
+                        <div>No groceries found matching "<strong>${escapeHtml(q)}</strong>"</div>
+                    </div>
+                `;
+            } else {
+                const itemsHtml = activeMatches.map((item, index) => {
+                    return `
+                        <div class="suggestion-item" data-index="${index}" data-name="${escapeHtml(item.name)}" role="option">
+                            <img class="suggestion-thumb" src="${item.src}" alt="${escapeHtml(item.name)}" onerror="this.src='/javascript.svg';">
+                            <div class="suggestion-info">
+                                <div class="suggestion-name-row">
+                                    <span class="suggestion-name">${highlightMatch(item.name, q)}</span>
+                                    <span class="suggestion-cat-badge">${item.type}</span>
+                                </div>
+                                <div class="suggestion-sub">${item.unit}</div>
+                            </div>
+                            <div class="suggestion-price-col">
+                                <span class="suggestion-price">₹${item.discount_price}</span>
+                                ${item.price > item.discount_price ? `<span class="suggestion-mrp">₹${item.price}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const viewAllHtml = `
+                    <div class="suggestion-view-all" id="suggestionViewAllBtn" data-index="${activeMatches.length}" role="option">
+                        <span>View all <strong>${matches.length}</strong> results for "${escapeHtml(q)}"</span>
+                        <i data-lucide="arrow-right"></i>
+                    </div>
+                `;
+
+                dropdown.innerHTML = itemsHtml + viewAllHtml;
+            }
+
+            dropdown.style.display = 'block';
+            if (window.lucide) lucide.createIcons();
+        };
+
+        if (input) {
+            input.addEventListener('input', (e) => {
+                renderSuggestions(e.target.value);
+            });
+
+            input.addEventListener('focus', () => {
+                if (input.value.trim().length >= 1) {
+                    renderSuggestions(input.value);
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                const totalOptions = activeMatches.length + (activeMatches.length > 0 ? 1 : 0);
+
+                if (e.key === 'ArrowDown') {
+                    if (dropdown.style.display === 'none' && input.value.trim().length >= 1) {
+                        renderSuggestions(input.value);
+                        return;
+                    }
+                    if (totalOptions > 0) {
+                        e.preventDefault();
+                        selectedIndex = (selectedIndex + 1) % totalOptions;
+                        updateSelectionHighlight();
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    if (totalOptions > 0) {
+                        e.preventDefault();
+                        selectedIndex = (selectedIndex - 1 + totalOptions) % totalOptions;
+                        updateSelectionHighlight();
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (selectedIndex >= 0 && selectedIndex < activeMatches.length) {
+                        const chosen = activeMatches[selectedIndex];
+                        closeDropdown();
+                        this.showProductDetailView(chosen);
+                    } else {
+                        const q = input.value.trim();
+                        closeDropdown();
+                        if (q) {
+                            this.showCategoryView('Search Results', q);
+                        }
+                    }
+                } else if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
         }
+
+        if (dropdown) {
+            dropdown.addEventListener('click', (e) => {
+                const itemEl = e.target.closest('.suggestion-item');
+                if (itemEl) {
+                    const itemName = itemEl.dataset.name;
+                    const item = this.data.find(d => d.name === itemName);
+                    closeDropdown();
+                    if (item) {
+                        this.showProductDetailView(item);
+                    }
+                    return;
+                }
+
+                const viewAllEl = e.target.closest('.suggestion-view-all');
+                if (viewAllEl) {
+                    const q = input ? input.value.trim() : '';
+                    closeDropdown();
+                    if (q) {
+                        this.showCategoryView('Search Results', q);
+                    }
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (input) {
+                    input.value = '';
+                    input.focus();
+                }
+                closeDropdown();
+                clearBtn.style.display = 'none';
+                if (this.currentCategory === 'Search Results') {
+                    this.showHomeView();
+                }
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#globalSearchContainer')) {
+                closeDropdown();
+            }
+        });
+
+        // Mobile search bar
         if (this.mobileSearchInput) {
-            this.mobileSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') liveSearch(e); });
-            this.mobileSearchInput.addEventListener('input', liveSearch);
+            this.mobileSearchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const q = this.mobileSearchInput.value.trim();
+                    if (q) this.showCategoryView('Search Results', q);
+                }
+            });
         }
 
         if (this.sortSelect) {
@@ -1587,6 +1823,9 @@ export class ContainerView {
         this.saveWishlistToStorage();
         this.updateWishlistUI();
         this.updateWishlistButtonStates();
+        if (this.wishlistPageView && this.wishlistPageView.classList.contains('active')) {
+            this.renderWishlistPageView();
+        }
     }
 
     updateWishlistButtonStates() {
@@ -1621,6 +1860,9 @@ export class ContainerView {
         if (this.wishlistSidebar && this.wishlistSidebar.classList.contains('active')) {
             this.renderWishlistSidebar();
         }
+        if (this.wishlistPageView && this.wishlistPageView.classList.contains('active')) {
+            this.renderWishlistPageView();
+        }
     }
 
     setupWishlistModal() {
@@ -1629,8 +1871,8 @@ export class ContainerView {
         const closeWishlist = document.getElementById('closeWishlist');
         const overlay = document.getElementById('wishlistOverlay');
 
-        wishlistBtn?.addEventListener('click', () => this.openWishlistSidebar());
-        mobileWishlistBtn?.addEventListener('click', () => this.openWishlistSidebar());
+        wishlistBtn?.addEventListener('click', () => this.showWishlistPageView());
+        mobileWishlistBtn?.addEventListener('click', () => this.showWishlistPageView());
         closeWishlist?.addEventListener('click', () => this.closeWishlistSidebar());
         overlay?.addEventListener('click', () => this.closeWishlistSidebar());
 
@@ -2189,7 +2431,7 @@ export class ContainerView {
             orderId,
             date: new Date().toISOString(),
             customer: { name, phone, address, pin },
-            items: cartItems.map(i => ({ name: i.name, qty: i.quantity, price: i.discount_price })),
+            items: cartItems.map(i => ({ name: i.name, qty: i.quantity, price: i.discount_price, unit: i.unit, src: i.src })),
             total: grandTotal,
             paymentMethod,
             coinsEarned: earnedCoins,
@@ -2272,7 +2514,37 @@ export class ContainerView {
             'Room Freshners': ['Cleaners', 'Soap'],
             'Rose': ['Marigold', 'Whitelower'],
             'Marigold': ['Rose', 'Whitelower'],
-            'Whitelower': ['Rose', 'Marigold']
+            'Whitelower': ['Rose', 'Marigold'],
+            'Watermelon': ['Pomegranate', 'Green Grapes'],
+            'Pomegranate': ['Green Grapes', 'Apple'],
+            'Green Grapes': ['Pomegranate', 'Banana'],
+            'Carrot': ['Cucumber', 'Tomato'],
+            'Cucumber': ['Carrot', 'Tomato'],
+            'Lady Finger': ['Onion', 'Potato'],
+            'Green Peas': ['Paneer', 'Potato'],
+            'Amul Butter': ['Brown Bread', 'Farm Eggs'],
+            'Farm Eggs': ['Brown Bread', 'Amul Butter'],
+            'Paneer': ['Curd', 'Amul Butter'],
+            'Curd': ['Paneer', 'Brown Bread'],
+            'Brown Bread': ['Amul Butter', 'Farm Eggs'],
+            'Lays Chips': ['Coca-Cola', 'Kurkure'],
+            'Kurkure': ['Sprite', 'Lays Chips'],
+            'Haldiram Bhujia': ['Parle-G', 'Tea'],
+            'Parle-G': ['Tea', 'Milk'],
+            'Maggi Noodles': ['Coca-Cola', 'Lays Chips'],
+            'Cadbury Dairy Milk': ['Lays Chips', 'Coca-Cola'],
+            'Coca-Cola': ['Lays Chips', 'Kurkure'],
+            'Sprite': ['Kurkure', 'Lays Chips'],
+            'Real Mango Juice': ['Parle-G', 'Cadbury Dairy Milk'],
+            'Red Bull': ['Lays Chips', 'Cadbury Dairy Milk'],
+            'Fortune Sunflower Oil': ['Aashirvaad Atta', 'Tata Toor Dal'],
+            'Aashirvaad Atta': ['Fortune Sunflower Oil', 'Daawat Basmati Rice'],
+            'Daawat Basmati Rice': ['Tata Toor Dal', 'Fortune Sunflower Oil'],
+            'Tata Toor Dal': ['Daawat Basmati Rice', 'Fortune Sunflower Oil'],
+            'Colgate Toothpaste': ['Dettol Handwash', 'Nivea Lotion'],
+            'Dettol Handwash': ['Lizol Cleaner', 'Colgate Toothpaste'],
+            'Nivea Lotion': ['Dettol Handwash', 'Colgate Toothpaste'],
+            'Lizol Cleaner': ['Dettol Handwash', 'Colgate Toothpaste']
         };
 
         let comp1, comp2;
@@ -2519,13 +2791,7 @@ export class ContainerView {
     }
 
     setupMegaCoinsNav() {
-        const btn = document.getElementById('headerCoinsBtn');
-        if (btn) {
-            btn.addEventListener('click', () => {
-                this.showProfileView();
-                window.scrollTo({ top: 300, behavior: 'smooth' });
-            });
-        }
+        // Header MegaCoins button removed; loyalty balance kept in Profile & Checkout
     }
 
     // ================= DEDICATED FULL-PAGE CART VIEW =================
@@ -2869,10 +3135,20 @@ export class ContainerView {
                 const target = tab.dataset.tab;
                 if (target === 'For You') {
                     this.showHomeView();
-                } else if (target === 'Grocery') {
+                } else if (target === 'Grocery' || target === 'All') {
                     this.showCategoryView('All Products');
                 } else if (target === 'Fruits & Veggies') {
                     this.showCategoryView('Fresh Fruits');
+                } else if (target === 'Dairy, Bread & Eggs' || target === 'Dairy & Eggs') {
+                    this.showCategoryView('Dairy, Bread & Eggs');
+                } else if (target === 'Snacks & Munchies' || target === 'Snacks') {
+                    this.showCategoryView('Snacks & Munchies');
+                } else if (target === 'Cold Drinks & Beverages' || target === 'Beverages') {
+                    this.showCategoryView('Cold Drinks & Beverages');
+                } else if (target === 'Staples, Atta & Oil' || target === 'Staples') {
+                    this.showCategoryView('Staples, Atta & Oil');
+                } else if (target === 'Personal Care & Cleaning' || target === 'Personal Care') {
+                    this.showCategoryView('Personal Care & Cleaning');
                 } else if (target === 'Kitchen') {
                     this.showCategoryView('Kitchen');
                 } else if (target === 'Household') {
@@ -3284,13 +3560,13 @@ export class ContainerView {
         dropdownOrdersBtn?.addEventListener('click', () => {
             headerUserDropdown?.classList.remove('active');
             headerUserBtn?.setAttribute('aria-expanded', 'false');
-            this.openOrderHistoryDrawer();
+            this.showOrdersPageView();
         });
 
         dropdownWishlistBtn?.addEventListener('click', () => {
             headerUserDropdown?.classList.remove('active');
             headerUserBtn?.setAttribute('aria-expanded', 'false');
-            this.openWishlistSidebar();
+            this.showWishlistPageView();
         });
 
         dropdownCoinsBtn?.addEventListener('click', () => {
@@ -3702,16 +3978,16 @@ export class ContainerView {
         const closeHistory = document.getElementById('closeOrderHistory');
         const historyOverlay = document.getElementById('orderHistoryOverlay');
 
-        const openDrawer = () => this.openOrderHistoryDrawer();
+        const openOrdersPage = (e) => {
+            if (e && e.preventDefault) e.preventDefault();
+            this.showOrdersPageView();
+        };
         const closeDrawer = () => this.closeOrderHistoryDrawer();
 
-        headerOrdersBtn?.addEventListener('click', openDrawer);
-        mobileOrdersBtn?.addEventListener('click', openDrawer);
-        profileOrdersBtn?.addEventListener('click', openDrawer);
-        footerOrdersBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            openDrawer();
-        });
+        headerOrdersBtn?.addEventListener('click', openOrdersPage);
+        mobileOrdersBtn?.addEventListener('click', openOrdersPage);
+        profileOrdersBtn?.addEventListener('click', openOrdersPage);
+        footerOrdersBtn?.addEventListener('click', openOrdersPage);
 
         closeHistory?.addEventListener('click', closeDrawer);
         historyOverlay?.addEventListener('click', closeDrawer);
@@ -3864,4 +4140,283 @@ export class ContainerView {
         document.body.style.overflow = 'hidden';
         if (window.lucide) lucide.createIcons();
     }
+
+    // ================= FULL-PAGE DEDICATED WISHLIST VIEW =================
+    showWishlistPageView() {
+        this.currentCategory = 'Wishlist';
+        this.setActiveView(this.wishlistPageView);
+        this.renderWishlistPageView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderWishlistPageView() {
+        const grid = document.getElementById('wishlistPageGrid');
+        const empty = document.getElementById('wishlistPageEmpty');
+        const countPill = document.getElementById('wishlistPageItemCount');
+        const moveAllBtn = document.getElementById('wishlistPageMoveAllBtn');
+
+        const wishlistedItems = this.data.filter(item => this.wishlist.has(item.name));
+        const count = wishlistedItems.length;
+
+        if (countPill) countPill.textContent = `${count} Item${count === 1 ? '' : 's'}`;
+
+        if (count === 0) {
+            if (grid) grid.style.display = 'none';
+            if (empty) empty.style.display = 'block';
+            if (moveAllBtn) moveAllBtn.style.display = 'none';
+        } else {
+            if (empty) empty.style.display = 'none';
+            if (moveAllBtn) moveAllBtn.style.display = 'inline-flex';
+            if (grid) {
+                grid.style.display = 'grid';
+                grid.innerHTML = wishlistedItems.map(item => {
+                    const discountPercent = item.price > item.discount_price 
+                        ? Math.round(((item.price - item.discount_price) / item.price) * 100) 
+                        : 0;
+                    return `
+                        <div class="wishlist-card" data-name="${item.name}">
+                            <div class="wc-image-wrap" data-name="${item.name}">
+                                <img src="${item.src}" alt="${item.name}" onerror="this.src='/javascript.svg';">
+                                ${discountPercent > 0 ? `<span class="wc-discount-tag">${discountPercent}% OFF</span>` : ''}
+                                <button class="wc-remove-btn" data-name="${item.name}" title="Remove from wishlist">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                            <div class="wc-content">
+                                <span class="wc-category-pill">${item.type}</span>
+                                <h4 class="wc-title" data-name="${item.name}">${item.name}</h4>
+                                <div class="wc-unit">${item.unit}</div>
+                                <div class="wc-price-row">
+                                    <div class="wc-prices">
+                                        <span class="wc-current-price">₹${item.discount_price}</span>
+                                        ${item.price > item.discount_price ? `<span class="wc-mrp">₹${item.price}</span>` : ''}
+                                    </div>
+                                    <div class="wc-rating">
+                                        <i data-lucide="star"></i>
+                                        <span>4.8</span>
+                                    </div>
+                                </div>
+                                <button class="wc-move-to-cart-btn" data-name="${item.name}">
+                                    <i data-lucide="shopping-cart"></i>
+                                    <span>Move to Cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    setupWishlistPageView() {
+        document.getElementById('wishlistPageBackBtn')?.addEventListener('click', () => {
+            this.showHomeView();
+        });
+
+        document.getElementById('wishlistEmptyShopBtn')?.addEventListener('click', () => {
+            this.showCategoryView('All Products');
+        });
+
+        document.getElementById('wishlistPageMoveAllBtn')?.addEventListener('click', () => {
+            const wishlistedItems = this.data.filter(item => this.wishlist.has(item.name));
+            if (wishlistedItems.length === 0) return;
+
+            wishlistedItems.forEach(item => {
+                item.quantity = (item.quantity || 0) + 1;
+            });
+
+            this.saveCartToStorage();
+            this.data.forEach(item => this.updateAllCardDOMs(item));
+            this.updateCartUI();
+            this.showToast(`Moved all ${wishlistedItems.length} items to cart! 🛒`);
+        });
+
+        const grid = document.getElementById('wishlistPageGrid');
+        if (grid) {
+            grid.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.wc-remove-btn');
+                if (removeBtn) {
+                    const name = removeBtn.dataset.name;
+                    this.wishlist.delete(name);
+                    this.saveWishlistToStorage();
+                    this.updateWishlistUI();
+                    this.updateWishlistButtonStates();
+                    this.renderWishlistPageView();
+                    this.showToast(`Removed ${name} from wishlist`);
+                    return;
+                }
+
+                const moveBtn = e.target.closest('.wc-move-to-cart-btn');
+                if (moveBtn) {
+                    const name = moveBtn.dataset.name;
+                    const item = this.data.find(d => d.name === name);
+                    if (item) {
+                        item.quantity = (item.quantity || 0) + 1;
+                        this.saveCartToStorage();
+                        this.updateAllCardDOMs(item);
+                        this.updateCartUI();
+                        this.showToast(`Added ${item.name} to cart 🛒`);
+                    }
+                    return;
+                }
+
+                const titleOrImg = e.target.closest('.wc-title, .wc-image-wrap');
+                if (titleOrImg) {
+                    const name = titleOrImg.dataset.name;
+                    const item = this.data.find(d => d.name === name);
+                    if (item) {
+                        this.showProductDetailView(item);
+                    }
+                }
+            });
+        }
+    }
+
+    // ================= FULL-PAGE DEDICATED ORDERS VIEW =================
+    showOrdersPageView() {
+        this.currentCategory = 'Orders';
+        this.setActiveView(this.ordersPageView);
+        this.renderOrdersPageView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderOrdersPageView() {
+        const list = document.getElementById('ordersPageList');
+        const empty = document.getElementById('ordersPageEmpty');
+        const countPill = document.getElementById('ordersPageCountPill');
+
+        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const count = orders.length;
+
+        if (countPill) countPill.textContent = `${count} Order${count === 1 ? '' : 's'} Placed`;
+
+        if (count === 0) {
+            if (list) list.style.display = 'none';
+            if (empty) empty.style.display = 'block';
+        } else {
+            if (empty) empty.style.display = 'none';
+            if (list) {
+                list.style.display = 'flex';
+                list.innerHTML = orders.map((order, idx) => {
+                    const dateStr = order.date ? new Date(order.date).toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : 'Recently';
+
+                    const isLatestLive = idx === 0;
+                    const statusBadgeHtml = isLatestLive 
+                        ? `<span class="order-status-badge status-out-for-delivery"><i data-lucide="truck"></i> Out for Delivery (10 min)</span>`
+                        : `<span class="order-status-badge status-delivered"><i data-lucide="check-circle-2"></i> Delivered</span>`;
+
+                    const itemsHtml = (order.items || []).map(item => {
+                        const catalogItem = this.data.find(d => d.name === item.name);
+                        const img = item.src || catalogItem?.src || '/javascript.svg';
+                        const unit = item.unit || catalogItem?.unit || '1 unit';
+                        const unitPrice = item.price || catalogItem?.discount_price || 0;
+                        const qty = item.qty || 1;
+                        const totalItemPrice = unitPrice * qty;
+
+                        return `
+                            <div class="order-item-row">
+                                <img src="${img}" alt="${item.name}" class="order-item-img" onerror="this.src='/javascript.svg';">
+                                <div class="order-item-info">
+                                    <span class="order-item-name">${item.name}</span>
+                                    <span class="order-item-unit">${unit}</span>
+                                </div>
+                                <div class="order-item-qty">Qty: ${qty}</div>
+                                <div class="order-item-price">
+                                    ₹${totalItemPrice.toFixed(2)}
+                                    <span class="order-item-unit-calc">(₹${unitPrice} ea)</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    return `
+                        <div class="order-full-card" data-order-id="${order.orderId}">
+                            <div class="order-card-header">
+                                <div class="och-left">
+                                    <span class="och-order-id">${order.orderId}</span>
+                                    <span class="och-date">${dateStr}</span>
+                                </div>
+                                ${statusBadgeHtml}
+                            </div>
+                            <div class="order-card-items">
+                                ${itemsHtml}
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="ocf-bill">
+                                    <span class="ocf-total">Total: ₹${Number(order.total || 0).toFixed(2)}</span>
+                                    <span class="ocf-method">${order.paymentMethod || 'UPI'}</span>
+                                    ${order.coinsEarned ? `<span class="ocf-coins">🪙 +${order.coinsEarned} Coins Earned</span>` : ''}
+                                </div>
+                                <div class="ocf-actions">
+                                    <button class="order-track-btn" data-order-id="${order.orderId}">
+                                        <i data-lucide="navigation"></i>
+                                        <span>Track Live Order</span>
+                                    </button>
+                                    <button class="order-reorder-btn" data-order-id="${order.orderId}">
+                                        <i data-lucide="rotate-ccw"></i>
+                                        <span>Reorder All</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    setupOrdersPageView() {
+        document.getElementById('ordersPageBackBtn')?.addEventListener('click', () => {
+            this.showHomeView();
+        });
+
+        document.getElementById('ordersEmptyShopBtn')?.addEventListener('click', () => {
+            this.showCategoryView('All Products');
+        });
+
+        document.getElementById('profileOrdersCount')?.parentElement?.addEventListener('click', () => {
+            this.showOrdersPageView();
+        });
+
+        const list = document.getElementById('ordersPageList');
+        if (list) {
+            list.addEventListener('click', (e) => {
+                const trackBtn = e.target.closest('.order-track-btn');
+                if (trackBtn) {
+                    const orderId = trackBtn.dataset.orderId;
+                    this.openLiveTracker(orderId);
+                    return;
+                }
+
+                const reorderBtn = e.target.closest('.order-reorder-btn');
+                if (reorderBtn) {
+                    const orderId = reorderBtn.dataset.orderId;
+                    const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+                    const order = orders.find(o => o.orderId === orderId);
+                    if (order && order.items) {
+                        let reorderedCount = 0;
+                        order.items.forEach(orderItem => {
+                            const catalogItem = this.data.find(d => d.name === orderItem.name);
+                            if (catalogItem) {
+                                catalogItem.quantity = (catalogItem.quantity || 0) + (orderItem.qty || 1);
+                                reorderedCount += (orderItem.qty || 1);
+                            }
+                        });
+                        this.saveCartToStorage();
+                        this.data.forEach(item => this.updateAllCardDOMs(item));
+                        this.updateCartUI();
+                        this.showToast(`Reordered ${reorderedCount} items from ${orderId}! 🛒`);
+                        this.showCartPageView();
+                    }
+                }
+            });
+        }
+    }
+
 }

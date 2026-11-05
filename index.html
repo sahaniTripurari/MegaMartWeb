@@ -31,23 +31,18 @@
                 </div>
             </div>
             
-            <div class="global-search-container">
+            <div class="global-search-container" id="globalSearchContainer">
                 <div class="search-box">
                     <i data-lucide="search" class="search-icon"></i>
-                    <input type="text" id="globalSearchInput" placeholder="Search for groceries, kitchen essentials...">
+                    <input type="text" id="globalSearchInput" placeholder="Search for groceries, kitchen essentials..." autocomplete="off">
+                    <button class="search-clear-btn" id="searchClearBtn" type="button" aria-label="Clear search" style="display: none;">
+                        <i data-lucide="x"></i>
+                    </button>
                 </div>
+                <div class="search-suggestions-dropdown" id="searchSuggestionsDropdown" style="display: none;" role="listbox"></div>
             </div>
 
             <div class="header-actions">
-                <button class="action-btn megacoins-button" id="headerCoinsBtn" title="MegaCoins Loyalty Balance & Rewards">
-                    <div class="coins-icon-wrapper">
-                        <span class="coin-icon">🪙</span>
-                    </div>
-                    <div class="coins-text">
-                        <span class="coins-label">MegaCoins</span>
-                        <span class="coins-balance" id="headerCoinBalance">150</span>
-                    </div>
-                </button>
                 <button class="action-btn wishlist-button desktop-wishlist" id="wishlistButton" title="My Wishlist">
                     <div class="wishlist-icon-wrapper">
                         <i data-lucide="heart"></i>
@@ -195,6 +190,26 @@
                 <button class="sub-nav-tab" data-tab="Fruits & Veggies">
                     <i data-lucide="apple"></i>
                     <span>Fruits & Veggies</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Dairy & Eggs">
+                    <i data-lucide="egg"></i>
+                    <span>Dairy & Eggs</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Snacks">
+                    <i data-lucide="cookie"></i>
+                    <span>Snacks</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Beverages">
+                    <i data-lucide="cup-soda"></i>
+                    <span>Beverages</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Staples">
+                    <i data-lucide="wheat"></i>
+                    <span>Staples</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Personal Care">
+                    <i data-lucide="sparkles"></i>
+                    <span>Personal Care</span>
                 </button>
                 <button class="sub-nav-tab" data-tab="Kitchen">
                     <i data-lucide="utensils"></i>
@@ -880,6 +895,82 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= WISHLIST PAGE VIEW ================= -->
+        <div id="wishlistPageView" class="view-section" style="display: none;">
+            <div class="container wishlist-page-container">
+                <!-- Top Bar -->
+                <div class="wishlist-page-topbar">
+                    <button class="btn-wishlist-back" id="wishlistPageBackBtn">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Continue Shopping</span>
+                    </button>
+                    <div class="wishlist-page-heading-wrap">
+                        <h2>My Wishlist</h2>
+                        <span class="wishlist-badge-pill" id="wishlistPageItemCount">0 Items</span>
+                    </div>
+                    <div class="wishlist-topbar-actions">
+                        <button class="btn-wishlist-move-all" id="wishlistPageMoveAllBtn">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>Move All to Cart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content: Grid of saved items -->
+                <div class="wishlist-page-grid" id="wishlistPageGrid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="wishlist-empty-state" id="wishlistPageEmpty" style="display: none;">
+                    <div class="empty-icon-bubble">
+                        <i data-lucide="heart"></i>
+                    </div>
+                    <h3>Your Wishlist is Empty</h3>
+                    <p>Save items you love to easily reorder your daily grocery favorites!</p>
+                    <button class="btn-wishlist-shop" id="wishlistEmptyShopBtn">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>Start Shopping</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ORDERS PAGE VIEW ================= -->
+        <div id="ordersPageView" class="view-section" style="display: none;">
+            <div class="container orders-page-container">
+                <!-- Top Bar -->
+                <div class="orders-page-topbar">
+                    <button class="btn-orders-back" id="ordersPageBackBtn">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Continue Shopping</span>
+                    </button>
+                    <div class="orders-page-heading-wrap">
+                        <h2>My Orders & History</h2>
+                        <span class="orders-badge-pill" id="ordersPageCountPill">0 Orders Placed</span>
+                    </div>
+                </div>
+
+                <!-- Main Content: Orders List -->
+                <div class="orders-page-list" id="ordersPageList">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="orders-empty-state" id="ordersPageEmpty" style="display: none;">
+                    <div class="empty-icon-bubble">
+                        <i data-lucide="package"></i>
+                    </div>
+                    <h3>No Orders Yet</h3>
+                    <p>You haven't placed any grocery orders yet. Start adding items and enjoy lightning 10-minute delivery!</p>
+                    <button class="btn-orders-shop" id="ordersEmptyShopBtn">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>Explore Products</span>
+                    </button>
                 </div>
             </div>
         </div>
