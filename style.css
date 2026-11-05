@@ -7883,18 +7883,52 @@ footer.footer {
   width: 100% !important;
 }
 
-/* Category Grid Standard Widths */
+/* ==========================================================================
+   FLUID FULL-WIDTH RESPONSIVE PRODUCT GRIDS (ZERO RIGHT-SIDE BLANK GAP)
+   ========================================================================== */
 #categoryProductsGrid.category-grid,
-.category-grid {
+.category-grid,
+#relatedProductsGrid,
+.grid-content {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 240px)) !important;
-  justify-content: start !important;
-  gap: 20px !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
   width: 100% !important;
-  margin-bottom: 40px;
+  justify-content: stretch !important;
+  margin-bottom: 40px !important;
 }
 
-/* 2. Related Products Multi-Card Responsive Grid Fix (Images 4 & 5) */
+@media (min-width: 600px) {
+  #categoryProductsGrid.category-grid,
+  .category-grid,
+  #relatedProductsGrid,
+  .grid-content {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  #categoryProductsGrid.category-grid,
+  .category-grid,
+  #relatedProductsGrid,
+  .grid-content {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+@media (min-width: 1240px) {
+  #categoryProductsGrid.category-grid,
+  .category-grid,
+  #relatedProductsGrid,
+  .grid-content {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+/* Related Products Header */
 .related-products-section {
   width: 100% !important;
   margin-top: 48px !important;
@@ -7909,21 +7943,44 @@ footer.footer {
   color: var(--text-dark) !important;
 }
 
-#relatedProductsGrid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 230px)) !important;
-  justify-content: start !important;
-  gap: 20px !important;
+/* Ensure Every Card Fills Its Allocated Column (100% Width & Equal Height) */
+#categoryProductsGrid .itemName,
+.category-grid .itemName,
+#relatedProductsGrid .itemName,
+.grid-content .itemName {
   width: 100% !important;
-}
-
-#relatedProductsGrid .itemName {
-  width: 100% !important;
-  max-width: 230px !important;
+  max-width: 100% !important;
   min-width: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   margin: 0 !important;
+  box-sizing: border-box !important;
+  height: 100% !important;
+}
+
+.product-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 0 auto !important;
+  width: 100% !important;
+}
+
+.product-title {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  line-height: 1.35 !important;
+  margin: 6px 0 4px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  min-height: 2.6em !important;
+}
+
+.price-and-btn {
+  margin-top: auto !important;
+  padding-top: 10px !important;
 }
 
 /* 3. Strict Product Card Image Containment (Image 1 Blowup Immunity) */
