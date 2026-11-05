@@ -7847,24 +7847,26 @@ main {
   width: 100% !important;
 }
 
+/* View Section Switching System - Hidden by default, Flex only when active */
 .view-section {
-  flex: 1 0 auto !important;
-  min-height: calc(100vh - 280px) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  padding-bottom: 60px;
+  display: none !important;
+  width: 100%;
 }
 
-#categoryView, 
-#wishlistPageView, 
-#ordersPageView, 
-#profileView, 
-#cartPageView, 
-#productDetailView {
-  flex: 1 0 auto !important;
-  min-height: calc(100vh - 280px) !important;
+.view-section.active,
+#homeView.active,
+#categoryView.active, 
+#wishlistPageView.active, 
+#ordersPageView.active, 
+#profileView.active, 
+#cartPageView.active, 
+#productDetailView.active {
   display: flex !important;
   flex-direction: column !important;
+  flex: 1 0 auto !important;
+  min-height: calc(100vh - 280px) !important;
+  padding-bottom: 60px;
+  width: 100%;
 }
 
 #categoryView .container,

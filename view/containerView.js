@@ -180,7 +180,17 @@ export class ContainerView {
 
     // ================= ROUTING & VIEWS =================
     setActiveView(activeView) {
-        [this.homeView, this.categoryView, this.productDetailView, this.profileView, this.cartPageView, this.wishlistPageView, this.ordersPageView].forEach((view) => {
+        const allViews = [
+            this.homeView, 
+            this.categoryView, 
+            this.productDetailView, 
+            this.profileView, 
+            this.cartPageView, 
+            this.wishlistPageView, 
+            this.ordersPageView
+        ];
+
+        allViews.forEach((view) => {
             if (!view) return;
             view.classList.remove('active');
             view.style.display = 'none';
@@ -188,7 +198,7 @@ export class ContainerView {
 
         if (activeView) {
             activeView.classList.add('active');
-            activeView.style.display = 'block';
+            activeView.style.display = 'flex';
         }
         
         // Sync bottom nav active state
@@ -1377,14 +1387,19 @@ export class ContainerView {
                 return;
             }
 
-            // 3. Click on Product Image/Title -> Show Detail View
-            if (e.target.closest('.clickable-area')) {
-                const card = e.target.closest('.itemName');
+            // 3. Click on Any Product Card (Card, Media, Title, Price) -> Show Detail View
+            const actionBtn = e.target.closest('.add-btn, .subtract-btn, .addandsub, .wishlist-card-btn, .pd-buy-now-btn, button');
+            if (!actionBtn) {
+                const card = e.target.closest('.itemName, .deal-mini-item, .curated-deal-card, .slide-item');
                 if (card) {
-                    const item = this.data.find(i => i.name === card.dataset.name);
-                    if (item) this.showProductDetailView(item);
+                    const name = card.dataset.name;
+                    const item = this.data.find(i => i.name === name);
+                    if (item) {
+                        e.preventDefault();
+                        this.showProductDetailView(item);
+                        return;
+                    }
                 }
-                return;
             }
 
             // Amazon 'Buy Now' 1-Click Instant Checkout Button
