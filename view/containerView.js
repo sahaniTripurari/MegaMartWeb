@@ -85,6 +85,7 @@ export class ContainerView {
         this.setupBankOfferStrip();
         this.setupUtilityStrip();
         this.setupFlipkartDealCards();
+        this.setupFlipkartCuratedRails();
         this.setupCartPageView();
         
         this.setActiveView(this.homeView);
@@ -2917,6 +2918,112 @@ export class ContainerView {
                 this.showCategoryView(cat);
             });
         });
+    }
+
+    setupFlipkartCuratedRails() {
+        const farmTrack = document.getElementById('railFarmFreshTrack');
+        const pantryTrack = document.getElementById('railPantryKitchenTrack');
+
+        // Farm Fresh Items (Fruits + Vegetables)
+        const fruits = (this.controller && typeof this.controller.filterItems === 'function') 
+            ? this.controller.filterItems('Fresh Fruits') 
+            : this.data.filter(i => i.type === 'Fresh Fruits');
+        const veggies = (this.controller && typeof this.controller.filterItems === 'function')
+            ? this.controller.filterItems('Fresh Vegetables')
+            : this.data.filter(i => i.type === 'Fresh Vegetables');
+        const farmItems = [...(fruits || []), ...(veggies || [])].slice(0, 10);
+
+        // Pantry & Kitchen Items
+        const kitchen = (this.controller && typeof this.controller.filterItems === 'function')
+            ? this.controller.filterItems('Kitchen')
+            : this.data.filter(i => i.type === 'Kitchen');
+        const household = (this.controller && typeof this.controller.filterItems === 'function')
+            ? this.controller.filterItems('House Hold')
+            : this.data.filter(i => i.type === 'House Hold');
+        const pantryItems = [...(kitchen || []), ...(household || [])].slice(0, 10);
+
+        const ribbonThemes = ['ribbon-red', 'ribbon-amber', 'ribbon-green'];
+        const ribbonBadges = ['Min. 40% Off', 'Crazy Deal', 'Special Offer', 'Top Saver', 'Under ₹99', 'Best Seller', 'Extra 15% Off'];
+
+        const renderRailCards = (container, items, isWarm = false) => {
+            if (!container || !items || !items.length) return;
+            container.innerHTML = items.map((item, idx) => {
+                const ribbonClass = ribbonThemes[idx % ribbonThemes.length];
+                const ribbonText = item.flashDiscount ? `Min. ${item.flashDiscount}` : ribbonBadges[idx % ribbonBadges.length];
+                const safeName = item.name.replace(/"/g, '&quot;');
+                return `
+                    <div class="curated-deal-card" data-name="${safeName}">
+                        <div class="curated-card-media ${isWarm ? 'media-warm' : ''}">
+                            <img src="${item.src}" alt="${safeName}" loading="lazy" class="curated-card-img" onerror="this.src='/javascript.svg';">
+                            <div class="curated-card-ribbon ${ribbonClass}">${ribbonText}</div>
+                        </div>
+                        <div class="curated-card-info">
+                            <div class="curated-card-title" title="${safeName}">${item.name}</div>
+                            <div class="curated-card-price">
+                                <span class="curated-price-highlight">From ₹${item.discount_price}</span>
+                                ${item.price > item.discount_price ? `<span class="curated-original-price">₹${item.price}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.querySelectorAll('.curated-deal-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = card.dataset.name;
+                    const item = this.data.find(i => i.name === name);
+                    if (item) this.showProductDetailView(item);
+                });
+            });
+        };
+
+        renderRailCards(farmTrack, farmItems.length ? farmItems : this.data.slice(0, 8), true);
+        renderRailCards(pantryTrack, pantryItems.length ? pantryItems : this.data.slice(8, 16), false);
+
+        // Circular arrow smooth navigation buttons
+        const wireScrollButtons = (prevBtnId, nextBtnId, trackId) => {
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+            const track = document.getElementById(trackId);
+            if (!track) return;
+
+            const checkScrollLimits = () => {
+                if (prevBtn) prevBtn.disabled = track.scrollLeft <= 5;
+                if (nextBtn) nextBtn.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 5;
+            };
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    track.scrollBy({ left: -360, behavior: 'smooth' });
+                    setTimeout(checkScrollLimits, 350);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    track.scrollBy({ left: 360, behavior: 'smooth' });
+                    setTimeout(checkScrollLimits, 350);
+                });
+            }
+
+            track.addEventListener('scroll', checkScrollLimits, { passive: true });
+            checkScrollLimits();
+        };
+
+        wireScrollButtons('railPrevFarmFresh', 'railNextFarmFresh', 'railFarmFreshTrack');
+        wireScrollButtons('railPrevPantry', 'railNextPantry', 'railPantryKitchenTrack');
+
+        // View All click navigation
+        document.querySelectorAll('.flipkart-curated-rail .rail-view-all').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.category || 'All Products';
+                this.showCategoryView(cat);
+            });
+        });
+
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     }
 
     // ================= USER AUTHENTICATION & SECURITY SYSTEM =================

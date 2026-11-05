@@ -5924,6 +5924,348 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   color: #7c3aed;
 }
 
+/* ================= FLIPKART CURATED DEAL RAILS & CARDS ================= */
+.flipkart-curated-rail {
+  margin: 36px auto;
+  position: relative;
+}
+
+.curated-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.curated-rail-header .rail-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.curated-rail-header .rail-title,
+.flipkart-curated-rail .rail-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.curated-rail-header .rail-subtitle {
+  font-size: 0.84rem;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.curated-rail-header .rail-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.curated-rail-header .rail-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2563EB;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.curated-rail-header .rail-view-all:hover {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  transform: translateX(2px);
+}
+
+.curated-rail-header .rail-view-all svg,
+.curated-rail-header .rail-view-all i {
+  width: 16px;
+  height: 16px;
+}
+
+.rail-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rail-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  color: #374151;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+}
+
+.rail-nav-btn:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  color: #111827;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: scale(1.06);
+}
+
+.rail-nav-btn:active {
+  transform: scale(0.94);
+}
+
+.rail-nav-btn:disabled,
+.rail-nav-btn.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+.rail-nav-btn svg,
+.rail-nav-btn i {
+  width: 18px;
+  height: 18px;
+}
+
+/* Curated Rail Track */
+.curated-rail-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 16px;
+  padding: 8px 4px 16px 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.curated-rail-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Curated Deal Card */
+.curated-deal-card {
+  flex: 0 0 170px;
+  min-width: 170px;
+  max-width: 170px;
+  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  .curated-deal-card {
+    flex: 0 0 180px;
+    min-width: 180px;
+    max-width: 180px;
+  }
+}
+
+.curated-deal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+  border-color: #D1D5DB;
+}
+
+/* Card Image Container */
+.curated-card-media {
+  height: 150px;
+  background: #F8F9FA;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 12px 26px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: background 0.2s ease;
+}
+
+.curated-card-media.media-warm {
+  background: #FFF9F5;
+}
+
+.curated-card-media img,
+.curated-card-media .curated-card-img {
+  max-width: 100% !important;
+  max-height: 125px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.06));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.curated-deal-card:hover .curated-card-media img,
+.curated-deal-card:hover .curated-card-media .curated-card-img {
+  transform: scale(1.06);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.1));
+}
+
+/* Docked Bottom Pill Ribbon */
+.curated-card-ribbon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
+  z-index: 2;
+  box-sizing: border-box;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.curated-card-ribbon.ribbon-red {
+  background: #E53935;
+  color: #FFFFFF;
+}
+
+.curated-card-ribbon.ribbon-amber {
+  background: #FF6F00;
+  color: #FFFFFF;
+}
+
+.curated-card-ribbon.ribbon-green {
+  background: #059669;
+  color: #FFFFFF;
+}
+
+/* Card Details Container */
+.curated-card-info {
+  padding: 10px 8px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.curated-card-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #111827;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.3;
+}
+
+.curated-card-price,
+.curated-card-sub {
+  font-size: 0.8rem;
+  color: #6B7280;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.curated-card-price .curated-price-highlight {
+  color: #111827;
+  font-weight: 700;
+}
+
+.curated-card-price .curated-original-price {
+  font-size: 0.74rem;
+  text-decoration: line-through;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 640px) {
+  .flipkart-curated-rail {
+    margin: 24px auto;
+  }
+
+  .curated-rail-header {
+    margin-bottom: 12px;
+  }
+
+  .curated-rail-header .rail-title,
+  .flipkart-curated-rail .rail-title {
+    font-size: 1.15rem;
+  }
+
+  .curated-deal-card {
+    flex: 0 0 150px;
+    min-width: 150px;
+    max-width: 150px;
+    border-radius: 14px;
+  }
+
+  .curated-card-media {
+    height: 135px;
+    padding: 10px 10px 24px;
+  }
+
+  .curated-card-media img,
+  .curated-card-media .curated-card-img {
+    max-height: 105px !important;
+  }
+
+  .curated-card-ribbon {
+    font-size: 0.72rem;
+    padding: 3px 6px;
+  }
+
+  .curated-card-info {
+    padding: 8px 6px 10px;
+  }
+
+  .curated-card-title {
+    font-size: 0.85rem;
+  }
+
+  .rail-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
 /* ================= FULL-PAGE DEDICATED CART VIEW ================= */
 .cart-page-container {
   max-width: 1240px;
