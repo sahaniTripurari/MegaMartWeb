@@ -7821,3 +7821,335 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   width: 16px;
   height: 16px;
 }
+
+
+/* ==========================================================================
+   FLIPKART & AMAZON E-COMMERCE UPGRADE: STICKY FOOTER, CONTAINMENT & NAV
+   ========================================================================== */
+
+/* 1. Global Sticky Footer System - Guaranteed No Collapsing or Gap Bugs */
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  flex: 1 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.view-section {
+  flex: 1 0 auto !important;
+  min-height: calc(100vh - 280px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding-bottom: 60px;
+}
+
+#categoryView, 
+#wishlistPageView, 
+#ordersPageView, 
+#profileView, 
+#cartPageView, 
+#productDetailView {
+  flex: 1 0 auto !important;
+  min-height: calc(100vh - 280px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#categoryView .container,
+#wishlistPageView .container,
+#ordersPageView .container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+footer.footer {
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+}
+
+/* Category Grid Standard Widths */
+#categoryProductsGrid.category-grid,
+.category-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 240px)) !important;
+  justify-content: start !important;
+  gap: 20px !important;
+  width: 100% !important;
+  margin-bottom: 40px;
+}
+
+/* 2. Related Products Multi-Card Responsive Grid Fix (Images 4 & 5) */
+.related-products-section {
+  width: 100% !important;
+  margin-top: 48px !important;
+  padding-top: 32px !important;
+  border-top: 1px solid var(--border-color) !important;
+}
+
+.related-products-section h3 {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 24px !important;
+  color: var(--text-dark) !important;
+}
+
+#relatedProductsGrid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 230px)) !important;
+  justify-content: start !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+#relatedProductsGrid .itemName {
+  width: 100% !important;
+  max-width: 230px !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+}
+
+/* 3. Strict Product Card Image Containment (Image 1 Blowup Immunity) */
+.itemName {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px !important;
+  background: #ffffff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.itemName:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08) !important;
+}
+
+.itemName .product-image-container {
+  width: 100% !important;
+  height: 180px !important;
+  max-height: 180px !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f8fafc !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  margin-bottom: 12px !important;
+}
+
+.itemName .product-image-container img,
+.itemName img.itemImage,
+.itemName img {
+  max-width: 100% !important;
+  max-height: 160px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+  transition: transform 0.3s ease;
+}
+
+.itemName:hover .product-image-container img {
+  transform: scale(1.05);
+}
+
+/* 4. Unified Flipkart-Style Category Header Navigation */
+.sub-header-nav {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  position: sticky !important;
+  top: 72px !important;
+  z-index: 90 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
+}
+
+.sub-header-container {
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding: 0 16px !important;
+}
+
+.sub-header-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+.sub-nav-tabs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 0 !important;
+  white-space: nowrap !important;
+  min-width: max-content !important;
+}
+
+.sub-nav-tab {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 8px 16px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #4b5563 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+}
+
+.sub-nav-tab svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 1.8 !important;
+  color: #6b7280 !important;
+  transition: all 0.2s ease !important;
+}
+
+.sub-nav-tab:hover {
+  color: var(--primary) !important;
+  background: rgba(255, 50, 100, 0.05) !important;
+}
+
+.sub-nav-tab:hover svg {
+  color: var(--primary) !important;
+  transform: translateY(-2px);
+}
+
+.sub-nav-tab.active {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+}
+
+.sub-nav-tab.active svg {
+  color: var(--primary) !important;
+}
+
+.sub-nav-tab.active::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -8px !important;
+  left: 12px !important;
+  right: 12px !important;
+  height: 3px !important;
+  background: var(--primary) !important;
+  border-radius: 3px 3px 0 0 !important;
+}
+
+.sub-nav-tab.hot-tab .hot-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 10px;
+  position: absolute;
+  top: 2px;
+  right: 4px;
+}
+
+/* 5. Location Modal: GPS Live Detection & 12 Metro City Chips */
+.btn-detect-location {
+  width: 100% !important;
+  padding: 13px 18px !important;
+  background: #fff1f2 !important;
+  border: 1.5px dashed #f43f5e !important;
+  border-radius: var(--radius-md) !important;
+  color: #e11d48 !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  margin-bottom: 16px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-detect-location:hover {
+  background: #ffe4e6 !important;
+  transform: translateY(-1px);
+}
+
+.btn-detect-location svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.location-divider {
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin: 14px 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+}
+
+.location-divider::before, 
+.location-divider::after {
+  content: '' !important;
+  flex: 1 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.location-divider span {
+  padding: 0 12px !important;
+}
+
+.popular-cities-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.city-chip {
+  padding: 9px 12px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.city-chip:hover {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+@media (max-width: 640px) {
+  .popular-cities-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

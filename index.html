@@ -175,7 +175,7 @@
         </div>
     </nav>
 
-    <!-- Sub-header Category Navigation Tabs (Flipkart Inspired) -->
+    <!-- Unified Flipkart/Amazon-Style Category Navigation Bar -->
     <nav class="sub-header-nav" id="subHeaderNav">
         <div class="container sub-header-container">
             <div class="sub-nav-tabs" id="subNavTabs">
@@ -183,59 +183,54 @@
                     <i data-lucide="sparkles"></i>
                     <span>For You</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Grocery">
-                    <i data-lucide="shopping-basket"></i>
-                    <span>Grocery</span>
+                <button class="sub-nav-tab" data-tab="Electronics & Gadgets">
+                    <i data-lucide="smartphone"></i>
+                    <span>Electronics</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Fruits & Veggies">
-                    <i data-lucide="apple"></i>
-                    <span>Fruits & Veggies</span>
+                <button class="sub-nav-tab" data-tab="Fashion & Apparel">
+                    <i data-lucide="shirt"></i>
+                    <span>Fashion</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Dairy & Eggs">
-                    <i data-lucide="egg"></i>
-                    <span>Dairy & Eggs</span>
+                <button class="sub-nav-tab" data-tab="Home & Kitchen">
+                    <i data-lucide="home"></i>
+                    <span>Home & Kitchen</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Snacks">
+                <button class="sub-nav-tab" data-tab="Beauty & Personal Care">
+                    <i data-lucide="heart-handshake"></i>
+                    <span>Beauty & Care</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Snacks & Munchies">
                     <i data-lucide="cookie"></i>
                     <span>Snacks</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Beverages">
-                    <i data-lucide="cup-soda"></i>
-                    <span>Beverages</span>
-                </button>
-                <button class="sub-nav-tab" data-tab="Staples">
+                <button class="sub-nav-tab" data-tab="Staples, Atta & Oil">
                     <i data-lucide="wheat"></i>
                     <span>Staples</span>
                 </button>
-                <button class="sub-nav-tab" data-tab="Personal Care">
+                <button class="sub-nav-tab" data-tab="Cold Drinks & Beverages">
+                    <i data-lucide="cup-soda"></i>
+                    <span>Beverages</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="Dairy, Bread & Eggs">
+                    <i data-lucide="egg"></i>
+                    <span>Dairy & Eggs</span>
+                </button>
+                <button class="sub-nav-tab" data-tab="House Hold">
                     <i data-lucide="sparkles"></i>
-                    <span>Personal Care</span>
-                </button>
-                <button class="sub-nav-tab" data-tab="Kitchen">
-                    <i data-lucide="utensils"></i>
-                    <span>Kitchen</span>
-                </button>
-                <button class="sub-nav-tab" data-tab="Household">
-                    <i data-lucide="home"></i>
                     <span>Household</span>
                 </button>
+                <button class="sub-nav-tab" data-tab="All Products">
+                    <i data-lucide="layout-grid"></i>
+                    <span>All Products</span>
+                </button>
                 <button class="sub-nav-tab hot-tab" data-tab="Top Offers">
-                    <i data-lucide="tag"></i>
+                    <i data-lucide="flame"></i>
                     <span>Top Offers</span>
                     <span class="hot-badge">HOT</span>
                 </button>
             </div>
-        </div>
-    </nav>
-
-    <!-- Navigation Bar (Desktop) -->
-    <nav class="nav-bar desktop-nav">
-        <div class="container">
-            <div class="type-list" id="navCategories">
-                <div class="typeName active" data-category="Home"><i data-lucide="home"></i> Home</div>
-                <div class="typeName" data-category="All Products"><i data-lucide="layout-grid"></i> All</div>
-                <!-- Categories injected via JS -->
-            </div>
+            <!-- Backwards-compatible container for legacy script bindings -->
+            <div class="type-list" id="navCategories" style="display: none;"></div>
         </div>
     </nav>
 
@@ -433,9 +428,9 @@
                                 <h3>⚡ Deals of the Day</h3>
                                 <span class="deal-mini-timer"><i data-lucide="clock"></i> 02:45:10</span>
                             </div>
-                            <button class="deal-view-all" data-category="Fresh Fruits">View All <i data-lucide="chevron-right"></i></button>
+                            <button class="deal-view-all" data-category="Electronics & Gadgets">View All <i data-lucide="chevron-right"></i></button>
                         </div>
-                        <p class="deal-sub">Crazy limited-time prices on fresh favorites</p>
+                        <p class="deal-sub">Mega discounts on earbuds, smartwatches & accessories</p>
                         <div class="deal-mini-grid" id="dealCol1Grid">
                             <!-- Populated via JS -->
                         </div>
@@ -453,7 +448,7 @@
                             </div>
                             <button class="deal-view-all" data-category="All Products">View All <i data-lucide="chevron-right"></i></button>
                         </div>
-                        <p class="deal-sub">Bundle and save up to 70% on pantry staples</p>
+                        <p class="deal-sub">Up to 70% off on trending clothing, sneakers & watches</p>
                         <div class="deal-mini-grid" id="dealCol2Grid">
                             <!-- Populated via JS -->
                         </div>
@@ -535,98 +530,107 @@
             <!-- Dynamic Category Sections: Flipkart Curated Deal Rails -->
             <div id="homeCategoriesWrapper">
                 <!-- Rail 1: Farm Fresh Picks, Crazy Deals (Fresh Fruits) -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fresh Fruits">
+                <!-- Rail 1: Electronics & Gadgets -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Electronics & Gadgets">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">Farm Fresh Picks, Crazy Deals</h2>
-                            <span class="rail-subtitle">Direct from farms • Fresh daily</span>
+                            <h2 class="rail-title">⚡ Top Tech, Crazy Gadget Deals</h2>
+                            <span class="rail-subtitle">Wireless earbuds, smartwatches, power banks & fast chargers</span>
                         </div>
                         <div class="rail-actions">
-                            <button class="rail-view-all" data-category="Fresh Fruits">View All <i data-lucide="chevron-right"></i></button>
+                            <button class="rail-view-all" data-category="Electronics & Gadgets">View All <i data-lucide="chevron-right"></i></button>
                             <div class="rail-nav-arrows">
-                                <button class="rail-nav-btn rail-prev" data-rail="Fresh Fruits" aria-label="Previous items">
+                                <button class="rail-nav-btn rail-prev" data-rail="Electronics & Gadgets" aria-label="Previous items">
                                     <i data-lucide="chevron-left"></i>
                                 </button>
-                                <button class="rail-nav-btn rail-next" data-rail="Fresh Fruits" aria-label="Next items">
+                                <button class="rail-nav-btn rail-next" data-rail="Electronics & Gadgets" aria-label="Next items">
                                     <i data-lucide="chevron-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="curated-rail-track" id="content-Fresh Fruits">
-                        <!-- Populated dynamically via containerView.js -->
+                    <div class="curated-rail-track-wrapper">
+                        <div class="curated-rail-track" id="content-Electronics & Gadgets">
+                            <!-- Injected dynamically via JS -->
+                        </div>
                     </div>
                 </section>
 
-                <!-- Rail 2: Pantry & Kitchen Essentials (Kitchen) -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Kitchen">
+                <!-- Rail 2: Fashion & Apparel -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fashion & Apparel">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">Pantry & Kitchen Essentials</h2>
-                            <span class="rail-subtitle">Top brands • Crazy bundle discounts</span>
+                            <h2 class="rail-title">👟 Cool Kicks, Crazy Fashion Deals</h2>
+                            <span class="rail-subtitle">Trending polo t-shirts, sneakers, jeans & accessories</span>
                         </div>
                         <div class="rail-actions">
-                            <button class="rail-view-all" data-category="Kitchen">View All <i data-lucide="chevron-right"></i></button>
+                            <button class="rail-view-all" data-category="Fashion & Apparel">View All <i data-lucide="chevron-right"></i></button>
                             <div class="rail-nav-arrows">
-                                <button class="rail-nav-btn rail-prev" data-rail="Kitchen" aria-label="Previous items">
+                                <button class="rail-nav-btn rail-prev" data-rail="Fashion & Apparel" aria-label="Previous items">
                                     <i data-lucide="chevron-left"></i>
                                 </button>
-                                <button class="rail-nav-btn rail-next" data-rail="Kitchen" aria-label="Next items">
+                                <button class="rail-nav-btn rail-next" data-rail="Fashion & Apparel" aria-label="Next items">
                                     <i data-lucide="chevron-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="curated-rail-track" id="content-Kitchen">
-                        <!-- Populated dynamically via containerView.js -->
+                    <div class="curated-rail-track-wrapper">
+                        <div class="curated-rail-track" id="content-Fashion & Apparel">
+                            <!-- Injected dynamically via JS -->
+                        </div>
                     </div>
                 </section>
 
-                <!-- Rail 3: Home Sparkle, Pocket Friendly (House Hold) -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-House Hold">
+                <!-- Rail 3: Home & Kitchen -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Home & Kitchen">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">Home Sparkle, Pocket Friendly</h2>
-                            <span class="rail-subtitle">Sparkling clean home • Everyday low prices</span>
+                            <h2 class="rail-title">🍳 Modern Home & Kitchen Essentials</h2>
+                            <span class="rail-subtitle">Triply non-stick cookware, storage sets & study lamps</span>
                         </div>
                         <div class="rail-actions">
-                            <button class="rail-view-all" data-category="House Hold">View All <i data-lucide="chevron-right"></i></button>
+                            <button class="rail-view-all" data-category="Home & Kitchen">View All <i data-lucide="chevron-right"></i></button>
                             <div class="rail-nav-arrows">
-                                <button class="rail-nav-btn rail-prev" data-rail="House Hold" aria-label="Previous items">
+                                <button class="rail-nav-btn rail-prev" data-rail="Home & Kitchen" aria-label="Previous items">
                                     <i data-lucide="chevron-left"></i>
                                 </button>
-                                <button class="rail-nav-btn rail-next" data-rail="House Hold" aria-label="Next items">
+                                <button class="rail-nav-btn rail-next" data-rail="Home & Kitchen" aria-label="Next items">
                                     <i data-lucide="chevron-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="curated-rail-track" id="content-House Hold">
-                        <!-- Populated dynamically via containerView.js -->
+                    <div class="curated-rail-track-wrapper">
+                        <div class="curated-rail-track" id="content-Home & Kitchen">
+                            <!-- Injected dynamically via JS -->
+                        </div>
                     </div>
                 </section>
 
-                <!-- Rail 4: Farm Fresh Vegetables (Fresh Vegetables) -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fresh Vegetables">
+                <!-- Rail 4: Snacks & Munchies -->
+                <section class="flipkart-curated-rail container gs-reveal" id="sec-Snacks & Munchies">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">Farm Fresh Vegetables</h2>
-                            <span class="rail-subtitle">Crisp handpicked veggies starting from just ₹22</span>
+                            <h2 class="rail-title">🍪 Daily Munchies & Pantry Savers</h2>
+                            <span class="rail-subtitle">Crispy snacks, noodles, biscuits & chocolates</span>
                         </div>
                         <div class="rail-actions">
-                            <button class="rail-view-all" data-category="Fresh Vegetables">View All <i data-lucide="chevron-right"></i></button>
+                            <button class="rail-view-all" data-category="Snacks & Munchies">View All <i data-lucide="chevron-right"></i></button>
                             <div class="rail-nav-arrows">
-                                <button class="rail-nav-btn rail-prev" data-rail="Fresh Vegetables" aria-label="Previous items">
+                                <button class="rail-nav-btn rail-prev" data-rail="Snacks & Munchies" aria-label="Previous items">
                                     <i data-lucide="chevron-left"></i>
                                 </button>
-                                <button class="rail-nav-btn rail-next" data-rail="Fresh Vegetables" aria-label="Next items">
+                                <button class="rail-nav-btn rail-next" data-rail="Snacks & Munchies" aria-label="Next items">
                                     <i data-lucide="chevron-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="curated-rail-track" id="content-Fresh Vegetables">
-                        <!-- Populated dynamically via containerView.js -->
+                    <div class="curated-rail-track-wrapper">
+                        <div class="curated-rail-track" id="content-Snacks & Munchies">
+                            <!-- Injected dynamically via JS -->
+                        </div>
                     </div>
                 </section>
 
@@ -1208,7 +1212,14 @@
             <button class="close-pincode-modal" id="closePincodeModal" title="Close"><i data-lucide="x"></i></button>
         </div>
         <div class="pincode-modal-body">
-            <p class="pincode-modal-desc">Enter your 6-digit Pincode to check instant 10-15 minute grocery delivery availability, stock levels, and exclusive local discounts.</p>
+            <p class="pincode-modal-desc">Select your delivery city or enter your 6-digit Pincode to check instant express delivery availability and local stock.</p>
+            
+            <button type="button" class="btn-detect-location" id="detectLocationBtn">
+                <i data-lucide="navigation"></i>
+                <span>Detect My Current Location</span>
+            </button>
+
+            <div class="location-divider"><span>OR ENTER PINCODE</span></div>
             
             <div class="pincode-input-group">
                 <div class="pincode-input-wrap">

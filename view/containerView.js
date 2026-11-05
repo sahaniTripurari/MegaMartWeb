@@ -357,9 +357,19 @@ export class ContainerView {
         const variants = getProductVariants(item);
 
         // Determine realistic specifications based on category
-        const isPerishable = ['fresh fruits', 'fresh vegetables', 'leafy herbs'].includes(item.type.toLowerCase());
-        const shelfLife = isPerishable ? "3 - 5 Days from harvest" : "6 - 12 Months (Sealed)";
-        const storageInstruction = isPerishable ? "Refrigerate below 4°C or store in ventilated mesh" : "Store in a cool, dry place away from sunlight";
+        const typeLower = (item.type || '').toLowerCase();
+        let shelfLife = "6 - 24 Months (Brand Sealed)";
+        let storageInstruction = "Store in a cool, dry place away from moisture";
+        if (typeLower.includes('electronic')) {
+            shelfLife = "1 Year Official Brand Warranty";
+            storageInstruction = "Keep away from water & extreme heat";
+        } else if (typeLower.includes('fashion')) {
+            shelfLife = "Genuine Fabric & Color Guarantee";
+            storageInstruction = "Machine wash cold; dry in shade";
+        } else if (typeLower.includes('kitchen') || typeLower.includes('home')) {
+            shelfLife = "5-Year Triply Base Durability Guarantee";
+            storageInstruction = "Hand wash with mild sponge cleanser";
+        }
         const countryOrigin = (item.countryoforigin || 'India').toUpperCase();
 
         // Location state
@@ -981,6 +991,17 @@ export class ContainerView {
             if (nav.dataset.category === categoryName) nav.classList.add('active');
             else nav.classList.remove('active');
         });
+
+        // Also highlight matching sub-header tab
+        document.querySelectorAll('.sub-nav-tab').forEach(tab => {
+            const tabTarget = tab.dataset.tab;
+            if (tabTarget === categoryName || (categoryName === 'Home' && tabTarget === 'For You')) {
+                tab.classList.add('active');
+                tab.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+            } else {
+                tab.classList.remove('active');
+            }
+        });
     }
 
     // ================= AUTO SLIDER =================
@@ -1023,57 +1044,29 @@ export class ContainerView {
 
         // Exact specifications for the 4 Flipkart Curated Deal Rails (matching Image 1)
         const railConfigs = {
-            'Fresh Fruits': {
-                title: 'Farm Fresh Picks, Crazy Deals',
-                subtitle: 'Direct from farms • Fresh daily',
-                ribbons: ['Min. 40% Off', 'Under ₹49', 'Under ₹99', 'Min. 35% Off'],
-                ribbonClass: 'ribbon-red',
-                nameOverrides: {
-                    'Banana': 'Banana Robusta',
-                    'Apple': 'Shimla Apple',
-                    'Mango': 'Alphonso Mango',
-                    'Orange': 'Nagpur Orange',
-                    'Papaya': 'Honey Papaya'
-                }
+            'Electronics & Gadgets': {
+                title: '⚡ Top Tech, Crazy Gadget Deals',
+                subtitle: 'Wireless earbuds, smartwatches, power banks & fast chargers',
+                ribbons: ['Min. 55% Off', 'Top Tech Deal', 'Under ₹1499', 'Best Seller', 'Min. 40% Off'],
+                ribbonClass: 'ribbon-red'
             },
-            'Kitchen': {
-                title: 'Pantry & Kitchen Essentials',
-                subtitle: 'Top brands • Crazy bundle discounts',
-                ribbons: ['Up to 50% Off', 'From ₹25', 'Under ₹99', 'Min. 30% Off'],
-                ribbonClass: 'ribbon-amber',
-                nameOverrides: {
-                    'Milk': 'Amul Gold Milk',
-                    'Tea': 'Tata Tea Premium',
-                    'Sugar': 'Organic Sugar',
-                    'Masala': 'Everest Masala',
-                    'Salt': 'Tata Salt Vacuum Evaporated'
-                }
+            'Fashion & Apparel': {
+                title: '👟 Cool Kicks, Crazy Fashion Deals',
+                subtitle: 'Trending polo t-shirts, sneakers, jeans & accessories',
+                ribbons: ['Min. 60% Off', 'Crazy Deal', 'Under ₹999', 'Top Trending', 'Min. 50% Off'],
+                ribbonClass: 'ribbon-amber'
             },
-            'House Hold': {
-                title: 'Home Sparkle, Pocket Friendly',
-                subtitle: 'Sparkling clean home • Everyday low prices',
-                ribbons: ['Under ₹89', 'Min. 45% Off', 'Buy 1 Get 1'],
-                ribbonClass: 'ribbon-green',
-                nameOverrides: {
-                    'Cleaners': 'Lizol Disinfectant Cleaner',
-                    'Allout': 'All Out Mosquito Repellent',
-                    'Room Freshners': 'Godrej aer Pocket Room Freshner',
-                    'Soap': 'Dettol Original Soap (4-Pack)',
-                    'Sanitizers': 'Lifebuoy Hand Sanitizer'
-                }
+            'Home & Kitchen': {
+                title: '🍳 Modern Home & Kitchen Essentials',
+                subtitle: 'Triply non-stick cookware, storage sets & study lamps',
+                ribbons: ['Up to 60% Off', 'Kitchen Special', 'Under ₹699', 'Min. 40% Off'],
+                ribbonClass: 'ribbon-green'
             },
-            'Fresh Vegetables': {
-                title: 'Farm Fresh Vegetables',
-                subtitle: 'Crisp handpicked veggies starting from just ₹22',
-                ribbons: ['Under ₹29', 'From ₹22', 'Min. 35% Off'],
-                ribbonClass: 'ribbon-red',
-                nameOverrides: {
-                    'Onion': 'Fresh Nashik Onion',
-                    'Potato': 'Pahari Jyoti Potato',
-                    'Cauliflower': 'Crisp Snowball Cauliflower',
-                    'Bottle Guard': 'Tender Bottle Gourd',
-                    'Tomato': 'Hybrid Red Tomato'
-                }
+            'Snacks & Munchies': {
+                title: '🍪 Daily Munchies & Pantry Savers',
+                subtitle: 'Crispy snacks, noodles, biscuits & chocolates',
+                ribbons: ['Special Price', 'Under ₹99', 'Mega Pack', 'Family Saver'],
+                ribbonClass: 'ribbon-red'
             }
         };
 
@@ -2632,6 +2625,37 @@ export class ContainerView {
             document.body.style.overflow = '';
         };
 
+                // Geolocation / Current Location Detection
+        const detectBtn = document.getElementById('detectLocationBtn');
+        detectBtn?.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                this.showToast('Geolocation is not supported by your browser.');
+                return;
+            }
+            detectBtn.disabled = true;
+            detectBtn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> Detecting your location...`;
+            if (window.lucide) lucide.createIcons();
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    detectBtn.disabled = false;
+                    detectBtn.innerHTML = `<i data-lucide="navigation"></i> Detect My Current Location`;
+                    if (window.lucide) lucide.createIcons();
+                    // Set default metro based on coordinates or primary hub
+                    applyPincode('400001', 'Mumbai');
+                    this.showToast('📍 Live GPS location detected: Mumbai (400001)');
+                    setTimeout(closeModal, 600);
+                },
+                (err) => {
+                    detectBtn.disabled = false;
+                    detectBtn.innerHTML = `<i data-lucide="navigation"></i> Detect My Current Location`;
+                    if (window.lucide) lucide.createIcons();
+                    this.showToast('Location permission unavailable. Please select your city or enter Pincode.');
+                },
+                { timeout: 7000 }
+            );
+        });
+
         locBtn?.addEventListener('click', openModal);
         locBtn?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -3135,28 +3159,12 @@ export class ContainerView {
                 const target = tab.dataset.tab;
                 if (target === 'For You') {
                     this.showHomeView();
-                } else if (target === 'Grocery' || target === 'All') {
-                    this.showCategoryView('All Products');
-                } else if (target === 'Fruits & Veggies') {
-                    this.showCategoryView('Fresh Fruits');
-                } else if (target === 'Dairy, Bread & Eggs' || target === 'Dairy & Eggs') {
-                    this.showCategoryView('Dairy, Bread & Eggs');
-                } else if (target === 'Snacks & Munchies' || target === 'Snacks') {
-                    this.showCategoryView('Snacks & Munchies');
-                } else if (target === 'Cold Drinks & Beverages' || target === 'Beverages') {
-                    this.showCategoryView('Cold Drinks & Beverages');
-                } else if (target === 'Staples, Atta & Oil' || target === 'Staples') {
-                    this.showCategoryView('Staples, Atta & Oil');
-                } else if (target === 'Personal Care & Cleaning' || target === 'Personal Care') {
-                    this.showCategoryView('Personal Care & Cleaning');
-                } else if (target === 'Kitchen') {
-                    this.showCategoryView('Kitchen');
-                } else if (target === 'Household') {
-                    this.showCategoryView('House Hold');
                 } else if (target === 'Top Offers') {
-                    this.showHomeView();
+                    this.showCategoryView('All Products');
                     const flashSale = document.getElementById('flashSaleBanner');
                     if (flashSale) flashSale.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    this.showCategoryView(target);
                 }
             });
         });
@@ -3259,10 +3267,11 @@ export class ContainerView {
         const col2 = document.getElementById('dealCol2Grid');
         const col3 = document.getElementById('dealCol3Grid');
 
-        const fruits = this.controller.filterItems('Fresh Fruits').slice(0, 4);
+        const electronics = this.controller.filterItems('Electronics & Gadgets').slice(0, 4);
+        const fashion = this.controller.filterItems('Fashion & Apparel').slice(0, 4);
+        const budget = this.data.filter(i => i.discount_price <= 199).slice(0, 4);
         const allItems = this.data.slice(0, 16);
-        const topSaver = allItems.filter(i => (i.price - i.discount_price) > 30).slice(0, 4);
-        const budget = this.data.filter(i => i.discount_price <= 99).slice(0, 4);
+        const topSaver = fashion.length ? fashion : allItems.slice(0, 4);
 
         const renderMiniGrid = (container, items, labelPrefix = '') => {
             if (!container) return;
@@ -3285,7 +3294,7 @@ export class ContainerView {
             });
         };
 
-        renderMiniGrid(col1, fruits.length ? fruits : allItems.slice(0, 4), 'From ');
+        renderMiniGrid(col1, electronics.length ? electronics : allItems.slice(0, 4), 'From ');
         renderMiniGrid(col2, topSaver.length ? topSaver : allItems.slice(4, 8), '');
         renderMiniGrid(col3, budget.length ? budget : allItems.slice(8, 12), 'From ');
 
