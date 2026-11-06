@@ -1,3 +1,4 @@
+const MEGAMART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23f8fafc%22/%3E%3Ctext x=%22100%22 y=%22110%22 font-size=%2218%22 font-family=%22sans-serif%22 font-weight=%22bold%22 fill=%22%2394a3b8%22 text-anchor=%22middle%22%3EMegaMart%3C/text%3E%3C/svg%3E";
 import { Controller } from "../controller/controller";
 import { getProductVariants, getProductCoins } from "../model/model";
 
@@ -172,7 +173,7 @@ export class ContainerView {
             catItem.className = 'quick-cat-item';
             catItem.innerHTML = `
                 <div class="quick-cat-icon">
-                    <img src="${item.src}" alt="${category}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                    <img src="${item.src}" alt="${category}" onerror="this.src=MEGAMART_PLACEHOLDER">
                 </div>
                 <span>${category}</span>
             `;
@@ -453,7 +454,7 @@ export class ContainerView {
                         <button class="pd-wishlist-toggle-btn ${isWishlisted ? 'active' : ''}" data-name="${item.name}" id="pdWishlistBtn" aria-label="Toggle Wishlist" title="Wishlist">
                             <i data-lucide="heart"></i>
                         </button>
-                        <img id="pdMainImage" src="${item.src}" alt="${item.name}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                        <img id="pdMainImage" src="${item.src}" alt="${item.name}" loading="eager" decoding="async" onerror="this.onerror=null;this.src=MEGAMART_PLACEHOLDER">
                     </div>
                     <!-- Gallery Thumbnails -->
                     <div class="pd-thumbnails">
@@ -595,7 +596,7 @@ export class ContainerView {
                         <div class="fbt-items-row">
                             <div class="fbt-item" data-name="${item.name}">
                                 <div class="fbt-img-wrap">
-                                    <img src="${item.src}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                    <img src="${item.src}" alt="${item.name}" onerror="this.src=MEGAMART_PLACEHOLDER">
                                     <span class="fbt-this-badge">This item</span>
                                 </div>
                                 <div class="fbt-item-details">
@@ -608,7 +609,7 @@ export class ContainerView {
 
                             <div class="fbt-item" data-name="${comp1.name}">
                                 <div class="fbt-img-wrap">
-                                    <img src="${comp1.src}" alt="${comp1.name}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                    <img src="${comp1.src}" alt="${comp1.name}" onerror="this.src=MEGAMART_PLACEHOLDER">
                                 </div>
                                 <div class="fbt-item-details">
                                     <span class="fbt-item-name">${comp1.name}</span>
@@ -620,7 +621,7 @@ export class ContainerView {
 
                             <div class="fbt-item" data-name="${comp2.name}">
                                 <div class="fbt-img-wrap">
-                                    <img src="${comp2.src}" alt="${comp2.name}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                    <img src="${comp2.src}" alt="${comp2.name}" onerror="this.src=MEGAMART_PLACEHOLDER">
                                 </div>
                                 <div class="fbt-item-details">
                                     <span class="fbt-item-name">${comp2.name}</span>
@@ -1082,7 +1083,7 @@ export class ContainerView {
             const slide = document.createElement('div');
             slide.className = 'slide-item';
             slide.innerHTML = `
-                <img src="${item.src}" alt="${item.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                <img src="${item.src}" alt="${item.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=MEGAMART_PLACEHOLDER">
                 <h4>${item.name}</h4>
                 <div class="price">₹${item.discount_price}</div>
             `;
@@ -1166,7 +1167,7 @@ export class ContainerView {
 
                     card.innerHTML = `
                         <div class="curated-card-media ${isWarm ? 'media-warm' : ''}">
-                            <img src="${item.src}" alt="${displayTitle}" class="curated-card-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                            <img src="${item.src}" alt="${displayTitle}" class="curated-card-img" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                             <div class="curated-card-ribbon ${config.ribbonClass}">${ribbonText}</div>
                         </div>
                         <div class="curated-card-info">
@@ -1380,7 +1381,7 @@ export class ContainerView {
                 <button class="wishlist-card-btn ${isWishlisted ? 'active' : ''}" data-name="${element.name}" aria-label="Toggle Wishlist" title="Wishlist">
                     <i data-lucide="heart"></i>
                 </button>
-                <img class="itemImage" src="${element.src}" alt="${element.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                <img class="itemImage" src="${element.src}" alt="${element.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                 ${discountPercent > 0 ? `<div class="discount-badge">${discountPercent}% OFF</div>` : ''}
                 ${element.isFlashDeal ? `<div class="flash-flame-badge">🔥 ${element.flashDiscount || '40% OFF'}</div>` : ''}
                 <div class="delivery-badge"><i data-lucide="zap" style="width:10px;height:10px;color:var(--primary)"></i> 10 MINS</div>
@@ -1699,7 +1700,7 @@ export class ContainerView {
                 const itemsHtml = activeMatches.map((item, index) => {
                     return `
                         <div class="suggestion-item" data-index="${index}" data-name="${escapeHtml(item.name)}" role="option">
-                            <img class="suggestion-thumb" src="${item.src}" alt="${escapeHtml(item.name)}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                            <img class="suggestion-thumb" src="${item.src}" alt="${escapeHtml(item.name)}" onerror="this.src=MEGAMART_PLACEHOLDER">
                             <div class="suggestion-info">
                                 <div class="suggestion-name-row">
                                     <span class="suggestion-name">${highlightMatch(item.name, q)}</span>
@@ -2035,7 +2036,7 @@ export class ContainerView {
                 const discountPercent = Math.round(((item.price - item.discount_price) / item.price) * 100);
                 return `
                     <div class="wishlist-item">
-                        <img src="${item.src}" alt="${item.name}" class="wishlist-item-img" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                        <img src="${item.src}" alt="${item.name}" class="wishlist-item-img" onerror="this.src=MEGAMART_PLACEHOLDER">
                         <div class="wishlist-item-details">
                             <div class="wishlist-item-title">${item.name}</div>
                             <div class="wishlist-item-unit">${item.unit}</div>
@@ -2151,7 +2152,7 @@ export class ContainerView {
         } else {
             cartItemsContainer.innerHTML = cartItems.map(item => `
                 <div class="cart-item">
-                    <img src="${item.src}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                    <img src="${item.src}" alt="${item.name}" class="cart-item-image" onerror="this.src=MEGAMART_PLACEHOLDER">
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
                         <div class="cart-item-price">₹${item.discount_price}</div>
@@ -2990,7 +2991,7 @@ export class ContainerView {
                     return `
                         <div class="cart-item-full" data-name="${item.name}">
                             <div class="cart-item-full-img">
-                                <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                             </div>
                             <div class="cart-item-full-details">
                                 <h4 class="cart-item-full-title" data-name="${item.name}">${item.name}</h4>
@@ -3178,7 +3179,7 @@ export class ContainerView {
             savedList.innerHTML = this.savedForLater.map(item => `
                 <div class="cart-item-full" data-name="${item.name}">
                     <div class="cart-item-full-img">
-                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                     </div>
                     <div class="cart-item-full-details">
                         <h4 class="cart-item-full-title">${item.name}</h4>
@@ -3357,7 +3358,7 @@ export class ContainerView {
             container.innerHTML = items.map(item => `
                 <div class="deal-mini-item" data-name="${item.name}">
                     <div class="deal-mini-img-wrap">
-                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                        <img src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                     </div>
                     <span class="deal-mini-name">${item.name}</span>
                     <span class="deal-mini-price">${labelPrefix}₹${item.discount_price}</span>
@@ -3420,7 +3421,7 @@ export class ContainerView {
                 return `
                     <div class="curated-deal-card" data-name="${safeName}">
                         <div class="curated-card-media ${isWarm ? 'media-warm' : ''}">
-                            <img src="${item.src}" alt="${safeName}" loading="lazy" class="curated-card-img" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                            <img src="${item.src}" alt="${safeName}" loading="lazy" class="curated-card-img" onerror="this.src=MEGAMART_PLACEHOLDER">
                             <div class="curated-card-ribbon ${ribbonClass}">${ribbonText}</div>
                         </div>
                         <div class="curated-card-info">
@@ -4264,7 +4265,7 @@ export class ContainerView {
                     return `
                         <div class="wishlist-card" data-name="${item.name}">
                             <div class="wc-image-wrap" data-name="${item.name}">
-                                <img src="${item.src}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                <img src="${item.src}" alt="${item.name}" onerror="this.src=MEGAMART_PLACEHOLDER">
                                 ${discountPercent > 0 ? `<span class="wc-discount-tag">${discountPercent}% OFF</span>` : ''}
                                 <button class="wc-remove-btn" data-name="${item.name}" title="Remove from wishlist">
                                     <i data-lucide="trash-2"></i>
@@ -4399,7 +4400,7 @@ export class ContainerView {
 
                     const itemsHtml = (order.items || []).map(item => {
                         const catalogItem = this.data.find(d => d.name === item.name);
-                        const img = item.src || catalogItem?.src || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';
+                        const img = item.src || catalogItem?.src || MEGAMART_PLACEHOLDER;
                         const unit = item.unit || catalogItem?.unit || '1 unit';
                         const unitPrice = item.price || catalogItem?.discount_price || 0;
                         const qty = item.qty || 1;
@@ -4407,7 +4408,7 @@ export class ContainerView {
 
                         return `
                             <div class="order-item-row">
-                                <img src="${img}" alt="${item.name}" class="order-item-img" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60';">
+                                <img src="${img}" alt="${item.name}" class="order-item-img" onerror="this.src=MEGAMART_PLACEHOLDER">
                                 <div class="order-item-info">
                                     <span class="order-item-name">${item.name}</span>
                                     <span class="order-item-unit">${unit}</span>
