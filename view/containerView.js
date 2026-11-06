@@ -6452,7 +6452,7 @@ export class ContainerView {
         const chatBody = document.getElementById('megaAiChatBody');
         if (!chatBody) return;
 
-        // 1. Render User Message
+        // 1. Render User Outgoing Bubble
         const userMsg = document.createElement('div');
         userMsg.className = 'ai-message-row ai-outgoing';
         userMsg.innerHTML = `
@@ -6461,14 +6461,14 @@ export class ContainerView {
         `;
         chatBody.appendChild(userMsg);
 
-        // 2. Render Thinking Placeholder
+        // 2. Render Thinking Indicator
         const thinkingRow = document.createElement('div');
         thinkingRow.className = 'ai-message-row ai-incoming';
         thinkingRow.id = 'aiThinkingRow';
         thinkingRow.innerHTML = `
             <div class="ai-msg-avatar">✨</div>
             <div class="ai-thinking-row">
-                <span>MegaAI is analyzing 246 cloud products</span>
+                <span>MegaAI is thinking...</span>
                 <div class="ai-thinking-dots">
                     <div class="ai-thinking-dot"></div>
                     <div class="ai-thinking-dot"></div>
@@ -6479,70 +6479,310 @@ export class ContainerView {
         chatBody.appendChild(thinkingRow);
         chatBody.scrollTop = chatBody.scrollHeight;
 
-        // 3. Process with AI Copilot
-        const response = await this.aiCopilot.processQuery(query);
+        // User Context for History & Support
+        const userOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const activeCart = this.data.filter(i => i.quantity > 0);
+        const context = {
+            orders: userOrders,
+            cart: activeCart,
+            user: this.currentUser
+        };
+
+        // 3. Process with Autonomous AI Agent
+        const response = await this.aiCopilot.processQuery(query, context);
 
         // Remove thinking placeholder
         document.getElementById('aiThinkingRow')?.remove();
 
-        // 4. Render AI Response
+        // 4. Render Specialized Response Card
         const aiMsg = document.createElement('div');
         aiMsg.className = 'ai-message-row ai-incoming';
 
-        let itemsHtml = '';
-        if (response.items && response.items.length > 0) {
-            itemsHtml = `
-                <div class="ai-product-bundle-card">
-                    <div class="ai-bundle-header">
-                        <span>${response.title}</span>
-                        <span>₹${response.totalPrice}</span>
-                    </div>
-                    <div class="ai-bundle-items-list">
-                        ${response.items.map(item => `
-                            <div class="ai-bundle-item-row">
-                                <img src="${item.src || item.image_url}" alt="${item.name || item.title}" class="ai-bundle-item-img">
-                                <div class="ai-bundle-item-info">
-                                    <div class="ai-bundle-item-name">${item.name || item.title}</div>
-                                    <div class="ai-bundle-item-price">₹${item.discount_price || item.price} <span style="font-weight:400;color:#64748b;font-size:0.65rem;">(${item.unit || '1 unit'})</span></div>
-                                </div>
+        let cardHtml = '';
+
+        // --- A. Interactive Shopping Checklist ---
+        if (response.type === 'interactive_checklist' && response.checklist) {
+            let checklistState = response.checklist.map((item, idx) => ({
+                id: item.product.id,
+                name: item.product.name || item.product.title,
+                unit: item.product.unit || '1 unit',
+                price: Number(item.product.discount_price || item.product.price || 0),
+                img: item.product.src || item.product.image_url,
+                qty: 1,
+                selected: true
+            }));
+
+            const computeTotal = () => {
+                return checklistState
+                    .filter(i => i.selected)
+                    .reduce((sum, i) => sum + (i.price * i.qty), 0);
+            };
+
+            const renderChecklistRows = () => {
+                return checklistState.map((item, idx) => `
+                    <div class="ai-check-item-row ${item.selected ? '' : 'unselected'}" data-index="${idx}">
+                        <input type="checkbox" class="ai-check-box" data-index="${idx}" ${item.selected ? 'checked' : ''}>
+                        <img src="${item.img}" alt="${item.name}" class="ai-check-thumb">
+                        <div class="ai-check-details">
+                            <div class="ai-check-name">${item.name}</div>
+                            <div class="ai-check-meta">
+                                <span class="ai-check-price">₹${item.price}</span>
+                                <span>• ${item.unit}</span>
                             </div>
-                        `).join('')}
+                        </div>
+                        <div class="ai-micro-stepper">
+                            <button type="button" class="ai-step-btn ai-minus-btn" data-index="${idx}">-</button>
+                            <span class="ai-step-val">${item.qty}</span>
+                            <button type="button" class="ai-step-btn ai-plus-btn" data-index="${idx}">+</button>
+                        </div>
+                        <button type="button" class="ai-remove-item-btn" data-index="${idx}" title="Remove item">✕</button>
                     </div>
-                    <button class="ai-add-all-btn" type="button">
+                `).join('');
+            };
+
+            cardHtml = `
+                <div class="ai-checklist-card" id="aiChecklistCard">
+                    <div class="ai-checklist-header">
+                        <span class="ai-checklist-title">📋 Editable Shopping List</span>
+                        <span class="ai-checklist-live-total" id="aiLiveTotal">Total: ₹${computeTotal()}</span>
+                    </div>
+                    <div class="ai-checklist-items-container" id="aiChecklistRows">
+                        ${renderChecklistRows()}
+                    </div>
+                    <button class="ai-transfer-cart-btn" id="aiTransferBtn" type="button">
                         <i data-lucide="shopping-bag"></i>
-                        <span>${response.actionLabel || 'Add All to Cart'} (₹${response.totalPrice})</span>
+                        <span id="aiTransferBtnText">Transfer ${checklistState.filter(i => i.selected).length} Items to Cart (₹${computeTotal()})</span>
                     </button>
                 </div>
             `;
-        }
 
-        aiMsg.innerHTML = `
-            <div class="ai-msg-avatar">✨</div>
-            <div class="ai-msg-bubble">
-                <p>${response.reply}</p>
-                ${itemsHtml}
-            </div>
-        `;
-        chatBody.appendChild(aiMsg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p>${response.reply}</p>
+                    ${cardHtml}
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
 
-        // Handle Add All to Cart click
-        aiMsg.querySelector('.ai-add-all-btn')?.addEventListener('click', (e) => {
-            const btn = e.currentTarget;
-            response.items.forEach(item => {
-                const target = this.data.find(d => d.id === item.id);
-                if (target) {
-                    target.quantity = (target.quantity || 0) + 1;
+            // Wire up interactive checklist events
+            const cardEl = aiMsg.querySelector('#aiChecklistCard');
+            const updateTotalUI = () => {
+                const totalEl = cardEl.querySelector('#aiLiveTotal');
+                const btnText = cardEl.querySelector('#aiTransferBtnText');
+                const selectedCount = checklistState.filter(i => i.selected).length;
+                const grand = computeTotal();
+                if (totalEl) totalEl.textContent = `Total: ₹${grand}`;
+                if (btnText) btnText.textContent = `Transfer ${selectedCount} Items to Cart (₹${grand})`;
+            };
+
+            cardEl.addEventListener('click', (e) => {
+                // Checkbox toggle
+                if (e.target.classList.contains('ai-check-box')) {
+                    const idx = Number(e.target.dataset.index);
+                    checklistState[idx].selected = e.target.checked;
+                    const row = cardEl.querySelector(`.ai-check-item-row[data-index="${idx}"]`);
+                    row?.classList.toggle('unselected', !e.target.checked);
+                    updateTotalUI();
+                }
+                // Plus qty
+                if (e.target.classList.contains('ai-plus-btn')) {
+                    const idx = Number(e.target.dataset.index);
+                    checklistState[idx].qty += 1;
+                    const valEl = e.target.parentElement.querySelector('.ai-step-val');
+                    if (valEl) valEl.textContent = checklistState[idx].qty;
+                    updateTotalUI();
+                }
+                // Minus qty
+                if (e.target.classList.contains('ai-minus-btn')) {
+                    const idx = Number(e.target.dataset.index);
+                    if (checklistState[idx].qty > 1) {
+                        checklistState[idx].qty -= 1;
+                        const valEl = e.target.parentElement.querySelector('.ai-step-val');
+                        if (valEl) valEl.textContent = checklistState[idx].qty;
+                        updateTotalUI();
+                    }
+                }
+                // Remove item
+                if (e.target.classList.contains('ai-remove-item-btn')) {
+                    const idx = Number(e.target.dataset.index);
+                    checklistState.splice(idx, 1);
+                    const container = cardEl.querySelector('#aiChecklistRows');
+                    if (container) container.innerHTML = renderChecklistRows();
+                    updateTotalUI();
+                }
+                // Transfer to cart
+                if (e.target.closest('#aiTransferBtn')) {
+                    const selected = checklistState.filter(i => i.selected && i.qty > 0);
+                    if (selected.length === 0) {
+                        this.showToast('Please select at least 1 item to add!');
+                        return;
+                    }
+                    selected.forEach(item => {
+                        const target = this.data.find(d => d.id === item.id);
+                        if (target) {
+                            target.quantity = (target.quantity || 0) + item.qty;
+                        }
+                    });
+                    this.updateCartUI();
+                    this.saveCartToStorage();
+                    const btn = cardEl.querySelector('#aiTransferBtn');
+                    if (btn) {
+                        btn.innerHTML = `<i data-lucide="check"></i> <span>✓ Transferred ${selected.length} Items to Cart!</span>`;
+                        btn.style.background = '#059669';
+                    }
+                    this.showToast(`🎉 Added ${selected.length} items to your cart!`);
+                    if (window.lucide) lucide.createIcons();
                 }
             });
-            this.updateCartUI();
-            this.saveCartToStorage();
-            btn.innerHTML = `<i data-lucide="check"></i> <span>✓ Added ${response.items.length} Items to Cart!</span>`;
-            btn.style.background = '#059669';
-            this.showToast(`🎉 Added ${response.items.length} items to your cart!`);
-            if (window.lucide) lucide.createIcons();
-        });
+        }
+        // --- B. Live Order Tracking Card ---
+        else if (response.type === 'order_tracking_card') {
+            cardHtml = `
+                <div class="ai-tracking-card">
+                    <span class="ai-tracking-badge">⚡ 10-MIN EXPRESS DISPATCH</span>
+                    <div class="ai-tracking-stepper">
+                        <div class="ai-track-line"></div>
+                        <div class="ai-track-step">
+                            <div class="ai-track-dot">✓</div>
+                            <span>Placed</span>
+                        </div>
+                        <div class="ai-track-step">
+                            <div class="ai-track-dot">✓</div>
+                            <span>Packed</span>
+                        </div>
+                        <div class="ai-track-step">
+                            <div class="ai-track-dot">🚴</div>
+                            <span>On the way</span>
+                        </div>
+                        <div class="ai-track-step">
+                            <div class="ai-track-dot pending">📍</div>
+                            <span>Delivered</span>
+                        </div>
+                    </div>
+                    <button class="ai-add-all-btn" id="aiViewLiveOrderBtn" style="margin-top:8px;background:#16a34a;" type="button">
+                        <i data-lucide="package"></i>
+                        <span>Open Live Orders Page</span>
+                    </button>
+                </div>
+            `;
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p style="white-space:pre-line;">${response.reply}</p>
+                    ${cardHtml}
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
+            aiMsg.querySelector('#aiViewLiveOrderBtn')?.addEventListener('click', () => {
+                document.getElementById('megaAiDrawer')?.classList.remove('active');
+                document.getElementById('megaAiOverlay')?.classList.remove('active');
+                document.body.style.overflow = '';
+                this.showOrdersPageView();
+            });
+        }
+        // --- C. Feedback Card with Interactive Stars ---
+        else if (response.type === 'feedback_acknowledged') {
+            cardHtml = `
+                <div class="ai-feedback-stars-row" id="aiStarsRow">
+                    <button class="ai-star-btn" data-val="1">⭐</button>
+                    <button class="ai-star-btn" data-val="2">⭐</button>
+                    <button class="ai-star-btn" data-val="3">⭐</button>
+                    <button class="ai-star-btn" data-val="4">⭐</button>
+                    <button class="ai-star-btn" data-val="5">⭐</button>
+                </div>
+            `;
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p style="white-space:pre-line;">${response.reply}</p>
+                    ${cardHtml}
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
+            aiMsg.querySelectorAll('.ai-star-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const val = e.target.dataset.val;
+                    this.showToast(`⭐ Thank you for rating us ${val}/5 Stars!`);
+                    aiMsg.querySelector('#aiStarsRow').innerHTML = `<span style="font-weight:700;color:#16a34a;font-size:0.75rem;">✓ Recorded: ${val} Star Rating. Thank you!</span>`;
+                });
+            });
+        }
+        // --- D. Guardrail Rejection with Actionable Chips ---
+        else if (response.type === 'guardrail_reject' && response.suggestions) {
+            const chipsHtml = response.suggestions.map(s => `
+                <button class="ai-prompt-chip" data-prompt="${s}" style="margin:3px 2px;" type="button">${s}</button>
+            `).join('');
 
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p style="white-space:pre-line;">${response.reply}</p>
+                    <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">${chipsHtml}</div>
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
+            aiMsg.querySelectorAll('.ai-prompt-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    this.executeAiQuery(chip.dataset.prompt);
+                });
+            });
+        }
+        // --- E. Standard Product Bundles & Recommendations ---
+        else {
+            if (response.items && response.items.length > 0) {
+                cardHtml = `
+                    <div class="ai-product-bundle-card">
+                        <div class="ai-bundle-header">
+                            <span>${response.title}</span>
+                            <span>₹${response.totalPrice}</span>
+                        </div>
+                        <div class="ai-bundle-items-list">
+                            ${response.items.map(item => `
+                                <div class="ai-bundle-item-row">
+                                    <img src="${item.src || item.image_url}" alt="${item.name || item.title}" class="ai-bundle-item-img">
+                                    <div class="ai-bundle-item-info">
+                                        <div class="ai-bundle-item-name">${item.name || item.title}</div>
+                                        <div class="ai-bundle-item-price">₹${item.discount_price || item.price} <span style="font-weight:400;color:#64748b;font-size:0.65rem;">(${item.unit || '1 unit'})</span></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="ai-add-all-btn" type="button">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>${response.actionLabel || 'Add All to Cart'} (₹${response.totalPrice})</span>
+                        </button>
+                    </div>
+                `;
+            }
+
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p style="white-space:pre-line;">${response.reply}</p>
+                    ${cardHtml}
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
+
+            aiMsg.querySelector('.ai-add-all-btn')?.addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                response.items.forEach(item => {
+                    const target = this.data.find(d => d.id === item.id);
+                    if (target) {
+                        target.quantity = (target.quantity || 0) + 1;
+                    }
+                });
+                this.updateCartUI();
+                this.saveCartToStorage();
+                btn.innerHTML = `<i data-lucide="check"></i> <span>✓ Added ${response.items.length} Items to Cart!</span>`;
+                btn.style.background = '#059669';
+                this.showToast(`🎉 Added ${response.items.length} items to your cart!`);
+                if (window.lucide) lucide.createIcons();
+            });
+        }
+
+        chatBody.scrollTop = chatBody.scrollHeight;
         if (window.lucide) lucide.createIcons();
     }
 }

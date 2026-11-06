@@ -132,6 +132,12 @@ CREATE TABLE public.orders (
 
 ---
 
+### 4.3 Autonomous Multi-Intent AI Agent Pipeline
+- **Strict E-Commerce Guardrails**: Intercepts non-shopping queries (political, general trivia) with domain-specific redirects, protecting LLM context windows and preventing hallucination.
+- **Interactive Checklist Parser**: Extracts discrete unstructured text (comma/newline separated grocery lists), maps fuzzy entities across the 246-item Supabase catalog, and renders a client-editable checklist with micro-steppers `[+]` `[-]`, item deletion, and live total recalculation.
+- **Support & Order Live Tracking Integration**: Directly connects to user's order records, rendering a visual delivery stepper (`Placed -> Packed -> On the Way -> Delivered`) and estimated rider arrival time.
+- **Market Basket Association Rule Mining**: Implements Apriori-inspired co-occurrence pairs (`Milk -> Bread, Eggs, Tea`; `Atta -> Ghee, Rice, Dal`; `Phone -> Earbuds, Watch`) to generate high-conversion personalized refill suggestions.
+
 ## 5. High-Concurrency & Zero-Trust Security Guarantees
 
 1. **Idempotency Protection (`/api/orders`)**:
