@@ -2,6 +2,403 @@ const MEGAMART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.o
 import { Controller } from "../controller/controller";
 import { getProductVariants, getProductCoins } from "../model/model";
 
+const MEGA_MENU_DATA = {
+    'Fashion & Apparel': [
+        {
+            title: "Men's Apparel",
+            subType: "Men's Apparel",
+            items: [
+                { label: "Casual Shirts", query: "shirt" },
+                { label: "Denim & Jeans", query: "jeans" },
+                { label: "T-Shirts & Polos", query: "t-shirt" },
+                { label: "Formal Shirts", query: "formal" },
+                { label: "Jackets & Hoodies", query: "jacket" },
+                { label: "All Men's Apparel", subType: "Men's Apparel" }
+            ]
+        },
+        {
+            title: "Women's Ethnic",
+            subType: "Women's Ethnic",
+            items: [
+                { label: "Kurtas & Kurtis", query: "kurta" },
+                { label: "Sarees & Silk Drapes", query: "saree" },
+                { label: "Anarkali & Suits", query: "anarkali" },
+                { label: "Palazzos & Dupattas", query: "palazzo" },
+                { label: "Ethnic Festive Wear", query: "ethnic" },
+                { label: "All Women's Ethnic", subType: "Women's Ethnic" }
+            ]
+        },
+        {
+            title: "Footwear & Shoes",
+            subType: "Footwear & Shoes",
+            items: [
+                { label: "Running Shoes", query: "running" },
+                { label: "Casual Sneakers", query: "sneaker" },
+                { label: "Sports Performance", query: "sports" },
+                { label: "Clogs & Daily Slides", query: "clog" },
+                { label: "Leather & Boots", query: "leather" },
+                { label: "All Footwear", subType: "Footwear & Shoes" }
+            ]
+        },
+        {
+            title: "Watches & Accessories",
+            subType: "Watches & Accessories",
+            items: [
+                { label: "Chronograph Watches", query: "chronograph" },
+                { label: "Smart Wearables", query: "smart" },
+                { label: "Polarized Sunglasses", query: "sunglasses" },
+                { label: "Genuine Leather Belts", query: "belt" },
+                { label: "Bifold Wallets", query: "wallet" },
+                { label: "All Accessories", subType: "Watches & Accessories" }
+            ]
+        },
+        {
+            title: "Top Brands",
+            items: [
+                { label: "Nike", brand: "Nike" },
+                { label: "Adidas", brand: "Adidas" },
+                { label: "Puma", brand: "Puma" },
+                { label: "Levi's", brand: "Levi's" },
+                { label: "Allen Solly", brand: "Allen Solly" },
+                { label: "Titan", brand: "Titan" }
+            ]
+        }
+    ],
+    'Electronics & Gadgets': [
+        {
+            title: "Smartphones",
+            subType: "Smartphones",
+            items: [
+                { label: "Apple iPhone Series", brand: "Apple" },
+                { label: "Samsung Galaxy Ultra", brand: "Samsung" },
+                { label: "Google Pixel 8 AI", brand: "Google" },
+                { label: "OnePlus Fast 5G", brand: "OnePlus" },
+                { label: "Xiaomi & iQOO Power", query: "5G" },
+                { label: "All Smartphones", subType: "Smartphones" }
+            ]
+        },
+        {
+            title: "TWS & Audio",
+            subType: "TWS & Audio",
+            items: [
+                { label: "ANC Noise Cancelling", query: "anc" },
+                { label: "Wireless Earbuds", subType: "TWS & Audio" },
+                { label: "Over-Ear Headphones", query: "headphone" },
+                { label: "Sony Bass Audio", brand: "Sony" },
+                { label: "boAt Rockerz & Airdopes", brand: "boAt" },
+                { label: "All Audio", subType: "TWS & Audio" }
+            ]
+        },
+        {
+            title: "Smartwatches",
+            subType: "Smartwatches",
+            items: [
+                { label: "AMOLED Calling Watches", query: "amoled" },
+                { label: "Stainless Luxury Straps", query: "stainless" },
+                { label: "Fitness & Health Trackers", query: "health" },
+                { label: "Fire-Boltt & Noise", brand: "Fire-Boltt" },
+                { label: "All Smartwatches", subType: "Smartwatches" }
+            ]
+        },
+        {
+            title: "Power & Chargers",
+            subType: "Power & Chargers",
+            items: [
+                { label: "20,000mAh Power Banks", query: "power bank" },
+                { label: "65W GaN Fast Chargers", query: "gan" },
+                { label: "Type-C Braided Cables", query: "cable" },
+                { label: "MagSafe Wireless Docks", query: "wireless" },
+                { label: "All Power", subType: "Power & Chargers" }
+            ]
+        },
+        {
+            title: "Speakers & Accessories",
+            items: [
+                { label: "Bluetooth Speakers", subType: "Speakers" },
+                { label: "Soundbars & Home Audio", query: "soundbar" },
+                { label: "Tech & Laptop Stands", subType: "Tech Accessories" },
+                { label: "Protective Phone Cases", query: "case" }
+            ]
+        }
+    ],
+    'Home & Kitchen': [
+        {
+            title: "Kitchen Appliances",
+            subType: "Appliances",
+            items: [
+                { label: "Digital Air Fryers", query: "air fryer" },
+                { label: "Mixer Grinders & Blenders", query: "mixer" },
+                { label: "Electric Kettles", query: "kettle" },
+                { label: "Induction Cooktops", query: "induction" },
+                { label: "All Appliances", subType: "Appliances" }
+            ]
+        },
+        {
+            title: "Cookware & Utensils",
+            subType: "Cookware",
+            items: [
+                { label: "Triply Stainless Steel Kadai", query: "kadai" },
+                { label: "Non-Stick Fry Pans & Tawa", query: "pan" },
+                { label: "Prestige Hard Anodized", brand: "Prestige" },
+                { label: "Hawkins Pressure Cookers", brand: "Hawkins" },
+                { label: "All Cookware", subType: "Cookware" }
+            ]
+        },
+        {
+            title: "Storage & Flasks",
+            subType: "Storage & Flasks",
+            items: [
+                { label: "Airtight Glass Jars", query: "glass" },
+                { label: "Insulated Steel Flasks", query: "flask" },
+                { label: "Milton & Cello Containers", brand: "Milton" },
+                { label: "All Storage", subType: "Storage & Flasks" }
+            ]
+        },
+        {
+            title: "Furnishing & Decor",
+            subType: "Furnishing & Decor",
+            items: [
+                { label: "Pure Cotton Bedsheets", query: "bedsheet" },
+                { label: "Microfiber Pillows", query: "pillow" },
+                { label: "Plush Bath Towels", query: "towel" },
+                { label: "All Home Decor", subType: "Furnishing & Decor" }
+            ]
+        }
+    ],
+    'Beauty & Personal Care': [
+        {
+            title: "Grooming Tools",
+            subType: "Grooming Tools",
+            items: [
+                { label: "Cordless Beard Trimmers", query: "trimmer" },
+                { label: "Hair Dryers & Stylers", query: "dryer" },
+                { label: "Philips Male Grooming", brand: "Philips" },
+                { label: "All Grooming Tools", subType: "Grooming Tools" }
+            ]
+        },
+        {
+            title: "Skincare Essentials",
+            subType: "Skincare",
+            items: [
+                { label: "Hydrating Face Washes", query: "face wash" },
+                { label: "Moisturizers & Body Milk", query: "body" },
+                { label: "Nivea & Cetaphil Care", brand: "Nivea" },
+                { label: "All Skincare", subType: "Skincare" }
+            ]
+        },
+        {
+            title: "Haircare Solutions",
+            subType: "Haircare",
+            items: [
+                { label: "Anti-Dandruff Shampoos", query: "shampoo" },
+                { label: "Damage Repair Conditioners", query: "conditioner" },
+                { label: "L'Oreal & Tresemme", brand: "L'Oreal" },
+                { label: "All Haircare", subType: "Haircare" }
+            ]
+        },
+        {
+            title: "Fragrance & Hygiene",
+            subType: "Fragrance & Hygiene",
+            items: [
+                { label: "Long-Lasting Deodorants", query: "deodorant" },
+                { label: "Luxury Cologne & Perfumes", query: "perfume" },
+                { label: "Germ Protection Handwash", query: "handwash" },
+                { label: "All Fragrances", subType: "Fragrance & Hygiene" }
+            ]
+        }
+    ],
+    'Snacks & Munchies': [
+        {
+            title: "Chips & Crisps",
+            subType: "Chips & Crisps",
+            items: [
+                { label: "Potato Chips & Wafers", query: "chips" },
+                { label: "Nachos & Tortilla Crisps", query: "nachos" },
+                { label: "Pringles & Doritos", brand: "Pringles" },
+                { label: "All Chips", subType: "Chips & Crisps" }
+            ]
+        },
+        {
+            title: "Biscuits & Cookies",
+            subType: "Biscuits & Cookies",
+            items: [
+                { label: "Choco Chip & Cream", query: "choco" },
+                { label: "Digestive & Marie", query: "marie" },
+                { label: "Butter & Cashew Cookies", query: "butter" },
+                { label: "All Biscuits", subType: "Biscuits & Cookies" }
+            ]
+        },
+        {
+            title: "Chocolates & Sweets",
+            subType: "Chocolates & Sweets",
+            items: [
+                { label: "Cadbury Dairy Milk Silk", brand: "Cadbury" },
+                { label: "Ferrero Rocher Treats", brand: "Ferrero Rocher" },
+                { label: "Gift Boxes & Assorted", query: "celebration" },
+                { label: "All Sweets", subType: "Chocolates & Sweets" }
+            ]
+        },
+        {
+            title: "Namkeen & Traditional",
+            subType: "Namkeen & Traditional",
+            items: [
+                { label: "Haldiram's Bhujia & Sev", brand: "Haldiram's" },
+                { label: "Roasted Dry Fruits & Nuts", brand: "Happilo" },
+                { label: "Instant Noodles & Pasta", subType: "Instant Noodles & Pasta" }
+            ]
+        }
+    ],
+    'Cold Drinks & Beverages': [
+        {
+            title: "Tea & Gourmet Coffee",
+            subType: "Tea & Coffee",
+            items: [
+                { label: "Pure Freeze-Dried Coffee", query: "coffee" },
+                { label: "Assam Gold Leaf Tea", query: "tea" },
+                { label: "Twinings Green Tea", brand: "Twinings" },
+                { label: "Davidoff & Nescafe", brand: "Davidoff" },
+                { label: "All Tea & Coffee", subType: "Tea & Coffee" }
+            ]
+        },
+        {
+            title: "Chilled Soft Drinks",
+            subType: "Cold Drinks & Soda",
+            items: [
+                { label: "Thums Up & Coca-Cola", brand: "Coca-Cola" },
+                { label: "Sprite Lemon Soda", brand: "Sprite" },
+                { label: "Appy Fizz Sparkling", brand: "Appy Fizz" },
+                { label: "All Cold Drinks", subType: "Cold Drinks & Soda" }
+            ]
+        },
+        {
+            title: "Energy & Juices",
+            items: [
+                { label: "Red Bull Energy Drink", brand: "Red Bull" },
+                { label: "Monster Energy Drink", brand: "Monster" },
+                { label: "Tropicana 100% Real Fruit", brand: "Tropicana" },
+                { label: "Paper Boat Mango Aamras", brand: "Paper Boat" }
+            ]
+        }
+    ],
+    'Dairy, Bread & Eggs': [
+        {
+            title: "Milk & Fresh Dairy",
+            subType: "Milk & Dairy",
+            items: [
+                { label: "Fresh Cow Milk & Toned", brand: "Amul" },
+                { label: "Mother Dairy Pouch Milk", brand: "Mother Dairy" },
+                { label: "Epigamia Greek Yogurt", brand: "Epigamia" },
+                { label: "All Milk & Dairy", subType: "Milk & Dairy" }
+            ]
+        },
+        {
+            title: "Butter & Cheese",
+            subType: "Butter & Cheese",
+            items: [
+                { label: "Amul Pasteurized Butter", brand: "Amul" },
+                { label: "Go Cheese Slices & Cubes", brand: "Go Cheese" },
+                { label: "Britannia Cheese Block", brand: "Britannia" },
+                { label: "All Butter & Cheese", subType: "Butter & Cheese" }
+            ]
+        },
+        {
+            title: "Artisan Breads & Buns",
+            subType: "Breads & Buns",
+            items: [
+                { label: "100% Whole Wheat Bread", query: "wheat" },
+                { label: "English Oven Multigrain", brand: "English Oven" },
+                { label: "Harvest Gold Sweet Buns", brand: "Harvest Gold" },
+                { label: "All Breads & Buns", subType: "Breads & Buns" }
+            ]
+        },
+        {
+            title: "Farm Fresh Eggs",
+            subType: "Eggs & Poultry",
+            items: [
+                { label: "Eggoz Farm White Eggs", brand: "Eggoz" },
+                { label: "Kadaknath Free-Range Eggs", brand: "Kadaknath" },
+                { label: "Brown Protein Eggs", query: "brown" },
+                { label: "All Eggs", subType: "Eggs & Poultry" }
+            ]
+        }
+    ],
+    'House Hold': [
+        {
+            title: "Detergents & Laundry",
+            subType: "Detergents & Laundry",
+            items: [
+                { label: "Matic Top & Front Load Powder", query: "matic" },
+                { label: "Fabric Conditioner Liquids", query: "fabric" },
+                { label: "Ariel & Surf Excel", brand: "Surf Excel" },
+                { label: "All Laundry", subType: "Detergents & Laundry" }
+            ]
+        },
+        {
+            title: "Disinfectants & Cleaning",
+            subType: "Cleaning & Disinfectants",
+            items: [
+                { label: "Lizol Floor Cleaner Citrus", brand: "Lizol" },
+                { label: "Harpic Power Toilet Cleaner", brand: "Harpic" },
+                { label: "Colin Glass & Surface", brand: "Colin" },
+                { label: "Vim & Pril Dishwash Gel", brand: "Vim" },
+                { label: "All Cleaning", subType: "Cleaning & Disinfectants" }
+            ]
+        },
+        {
+            title: "Pest Control & Paper",
+            subType: "Pest Control & Paper",
+            items: [
+                { label: "Good knight Gold Mosquito Refills", brand: "Good knight" },
+                { label: "Hit Flying Insect Spray", brand: "Hit" },
+                { label: "Origami Soft Tissue Rolls", brand: "Origami" },
+                { label: "Odonil Room Fresheners", brand: "Odonil" }
+            ]
+        }
+    ],
+    'Staples, Atta & Oil': [
+        {
+            title: "Atta & Fresh Flours",
+            subType: "Atta & Flours",
+            items: [
+                { label: "Aashirvaad Shudh Chakki Atta", brand: "Aashirvaad" },
+                { label: "Fortune MP Sharbati Atta", brand: "Fortune" },
+                { label: "Pillsbury Whole Wheat", brand: "Pillsbury" },
+                { label: "All Atta & Flours", subType: "Atta & Flours" }
+            ]
+        },
+        {
+            title: "Edible Oils & Pure Ghee",
+            subType: "Edible Oils & Ghee",
+            items: [
+                { label: "Fortune Sunlite Refined Oil", brand: "Fortune" },
+                { label: "Saffola Gold Healthy Heart", brand: "Saffola" },
+                { label: "Dhara Pure Kachi Ghani Mustard", brand: "Dhara" },
+                { label: "Amul Pure Cow Ghee", brand: "Amul" },
+                { label: "All Oils & Ghee", subType: "Edible Oils & Ghee" }
+            ]
+        },
+        {
+            title: "Rice & Basmati",
+            subType: "Rice & Grains",
+            items: [
+                { label: "India Gate Basmati Rice", brand: "India Gate" },
+                { label: "Daawat Rozana Daily Rice", brand: "Daawat" },
+                { label: "Kohinoor Super Silver Aged", brand: "Kohinoor" },
+                { label: "All Rice & Grains", subType: "Rice & Grains" }
+            ]
+        },
+        {
+            title: "Dals, Pulses & Spices",
+            items: [
+                { label: "Tata Sampann Toor Dal", brand: "Tata Sampann" },
+                { label: "Organic Tattva Moong Dal", brand: "Organic Tattva" },
+                { label: "Everest & MDH Spices", brand: "Everest" },
+                { label: "Tata Salt Vacuum Evaporated", brand: "Tata Salt" }
+            ]
+        }
+    ]
+};
+
 export class ContainerView {
     constructor(data) {
         this.data = data;
@@ -57,6 +454,36 @@ export class ContainerView {
         this.megaCarouselIndex = 0;
         this.megaCarouselInterval = null;
         this.currentUser = this.loadUserFromStorage();
+
+        // Shopsy / Flipkart Dynamic Filter & Mega Menu Bindings
+        this.categoryFilterSidebar = document.getElementById('categoryFilterSidebar');
+        this.sidebarFilterSections = document.getElementById('sidebarFilterSections');
+        this.sidebarClearAllBtn = document.getElementById('sidebarClearAllBtn');
+        this.sidebarActiveCount = document.getElementById('sidebarActiveCount');
+        this.mobileFilterDrawerBtn = document.getElementById('mobileFilterDrawerBtn');
+        this.sidebarCloseMobileBtn = document.getElementById('sidebarCloseMobileBtn');
+        this.sidebarMobileBackdrop = document.getElementById('sidebarMobileBackdrop');
+        this.filterCountBadge = document.getElementById('filterCountBadge');
+        this.activeFilterChipsRow = document.getElementById('activeFilterChipsRow');
+        this.activeChipsList = document.getElementById('activeChipsList');
+        this.clearAllChipsBtn = document.getElementById('clearAllChipsBtn');
+        this.filterEmptyState = document.getElementById('filterEmptyState');
+        this.emptyResetFiltersBtn = document.getElementById('emptyResetFiltersBtn');
+        this.categoryItemCountPill = document.getElementById('categoryItemCountPill');
+        
+        this.shopsyMegaMenuDropdown = document.getElementById('shopsyMegaMenuDropdown');
+        this.shopsyMegaMenuOverlay = document.getElementById('shopsyMegaMenuOverlay');
+        this.megaMenuInner = document.getElementById('megaMenuInner');
+        this.megaMenuTimer = null;
+
+        this.selectedFilters = {
+            subTypes: new Set(),
+            brands: new Set(),
+            priceRanges: new Set(),
+            ratings: new Set(),
+            discounts: new Set(),
+            searchQuery: ''
+        };
         
         this.controller = new Controller(this.data);
         this.elementList = this.controller.categories(this.data);
@@ -98,6 +525,8 @@ export class ContainerView {
         this.setupCartPageView();
         this.setupWishlistPageView();
         this.setupOrdersPageView();
+        this.setupShopsyMegaMenu();
+        this.setupDynamicCategoryFilters();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -502,7 +931,7 @@ export class ContainerView {
         });
     }
 
-    showCategoryView(categoryName, searchQuery = '') {
+    showCategoryView(categoryName, initialFilter = '') {
         this.currentCategory = categoryName;
         this.setActiveView(this.categoryView);
         
@@ -510,8 +939,43 @@ export class ContainerView {
         if (this.sortSelect) this.sortSelect.value = 'featured';
         
         this.updateNavHighlight(categoryName);
+
+        // Reset and seed selected filters
+        this.selectedFilters = {
+            subTypes: new Set(),
+            brands: new Set(),
+            priceRanges: new Set(),
+            ratings: new Set(),
+            discounts: new Set(),
+            searchQuery: ''
+        };
+
+        if (initialFilter) {
+            if (typeof initialFilter === 'string' && initialFilter.trim() !== '') {
+                // If it matches a subType in this category, set subType; otherwise set searchQuery
+                const catItems = this.getItemsForCategory(categoryName);
+                const matchingSubType = catItems.find(it => it.subType && it.subType.toLowerCase() === initialFilter.toLowerCase());
+                if (matchingSubType) {
+                    this.selectedFilters.subTypes.add(matchingSubType.subType);
+                    this.activeSubType = matchingSubType.subType;
+                } else {
+                    this.selectedFilters.searchQuery = initialFilter.trim();
+                }
+            } else if (typeof initialFilter === 'object') {
+                if (initialFilter.subType) {
+                    this.selectedFilters.subTypes.add(initialFilter.subType);
+                    this.activeSubType = initialFilter.subType;
+                }
+                if (initialFilter.brand) this.selectedFilters.brands.add(initialFilter.brand);
+                if (initialFilter.query) this.selectedFilters.searchQuery = initialFilter.query;
+            }
+        } else {
+            this.activeSubType = 'All';
+        }
+
         this.renderSubFilterPills(categoryName);
-        this.renderCategoryProducts(categoryName, searchQuery, 'featured');
+        this.buildDynamicSidebarFilters(categoryName);
+        this.applyFiltersAndRender();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1453,79 +1917,8 @@ export class ContainerView {
 
     // ================= CATEGORY PRODUCTS RENDERING (WITH FILTER & SORT) =================
     renderCategoryProducts(categoryName, searchQuery = '', sortBy = 'featured') {
-        if (!this.categoryProductsGrid) return;
-        this.categoryProductsGrid.innerHTML = '';
-        
-        let items = this.getItemsForCategory(categoryName);
-            
-        // 0. SubType Filter
-        if (this.activeSubType && this.activeSubType !== 'All') {
-            items = items.filter(item => item.subType === this.activeSubType);
-        }
-
-        // 1. Search Query
-        if (searchQuery.trim() !== '') {
-            const query = searchQuery.toLowerCase();
-            items = items.filter(item => 
-                item.name.toLowerCase().includes(query) ||
-                item.type.toLowerCase().includes(query)
-            );
-        }
-
-        // 2. Tag Filters
-        if (this.activeFilterTag === 'fresh') {
-            items = items.filter(item => 
-                ['fresh fruits', 'fresh vegetables', 'leafy herbs'].includes(item.type.toLowerCase())
-            );
-        } else if (this.activeFilterTag === 'bestseller') {
-            items = items.filter(item => {
-                const disc = (item.price - item.discount_price) / item.price;
-                const rating = parseFloat(this.getProductRating(item).score);
-                return disc >= 0.15 || rating >= 4.8;
-            });
-        } else if (this.activeFilterTag === 'under50') {
-            items = items.filter(item => item.discount_price < 50);
-        }
-
-        // 3. Apply Sorting
-        if (sortBy === 'low-high') {
-            items.sort((a,b) => a.discount_price - b.discount_price);
-        } else if (sortBy === 'high-low') {
-            items.sort((a,b) => b.discount_price - a.discount_price);
-        } else if (sortBy === 'discount') {
-            items.sort((a,b) => {
-                const d1 = (a.price - a.discount_price)/a.price;
-                const d2 = (b.price - b.discount_price)/b.price;
-                return d2 - d1;
-            });
-        } else if (sortBy === 'featured') {
-            items.sort((a,b) => (b.price - b.discount_price) - (a.price - a.discount_price));
-        }
-
-        // Update count badge
-        if (this.categoryProductCount) {
-            this.categoryProductCount.textContent = `${items.length} Product${items.length === 1 ? '' : 's'}`;
-        }
-        
-        if (items.length === 0) {
-            this.categoryProductsGrid.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 0;">
-                    <i data-lucide="search-x" style="width: 48px; height: 48px; margin-bottom: 16px; color: var(--text-muted); opacity: 0.5;"></i>
-                    <h3 style="font-size: 1.25rem; margin-bottom: 8px; font-weight: 700;">No products found</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Try a different search or filter option.</p>
-                </div>
-            `;
-        } else {
-            items.forEach(item => {
-                this.categoryProductsGrid.appendChild(this.createProductCard(item));
-            });
-            
-            if (window.lucide) lucide.createIcons();
-
-            if (window.gsap) {
-                gsap.from("#categoryProductsGrid .itemName", { y: 20, opacity: 0, duration: 0.4, stagger: 0.04, ease: "power2.out" });
-            }
-        }
+        if (this.sortSelect && sortBy) this.sortSelect.value = sortBy;
+        this.applyFiltersAndRender(searchQuery);
     }
 
     createProductCard(element) {
@@ -3074,6 +3467,633 @@ export class ContainerView {
         try {
             localStorage.setItem('megamart_saved_for_later', JSON.stringify(this.savedForLater));
         } catch (e) {}
+    }
+
+    
+    // ================= SHOPSY / FLIPKART MEGA MENU =================
+    setupShopsyMegaMenu() {
+        const tabs = document.querySelectorAll('.sub-nav-tab');
+        if (!tabs.length || !this.shopsyMegaMenuDropdown || !this.shopsyMegaMenuOverlay) return;
+
+        tabs.forEach(tab => {
+            const cat = tab.dataset.tab;
+            if (MEGA_MENU_DATA[cat]) {
+                tab.classList.add('has-megamenu');
+            }
+
+            // Mouse enter on tab
+            tab.addEventListener('mouseenter', () => {
+                if (window.innerWidth <= 900) return; // Desktop mega menu
+                const tabCat = tab.dataset.tab;
+                if (MEGA_MENU_DATA[tabCat]) {
+                    clearTimeout(this.megaMenuTimer);
+                    this.openShopsyMegaMenu(tabCat, tab);
+                } else {
+                    this.closeShopsyMegaMenu();
+                }
+            });
+
+            // Mouse leave on tab
+            tab.addEventListener('mouseleave', () => {
+                if (window.innerWidth <= 900) return;
+                this.megaMenuTimer = setTimeout(() => {
+                    this.closeShopsyMegaMenu();
+                }, 180);
+            });
+        });
+
+        // Dropdown hover persistence
+        this.shopsyMegaMenuDropdown.addEventListener('mouseenter', () => {
+            clearTimeout(this.megaMenuTimer);
+        });
+
+        this.shopsyMegaMenuDropdown.addEventListener('mouseleave', () => {
+            this.megaMenuTimer = setTimeout(() => {
+                this.closeShopsyMegaMenu();
+            }, 180);
+        });
+
+        // Overlay click closes
+        this.shopsyMegaMenuOverlay.addEventListener('click', () => {
+            this.closeShopsyMegaMenu();
+        });
+
+        // Click on any link in mega menu
+        this.megaMenuInner.addEventListener('click', (e) => {
+            const link = e.target.closest('.mega-item-link');
+            if (!link) return;
+            e.preventDefault();
+            const cat = link.dataset.category;
+            const subType = link.dataset.subtype;
+            const brand = link.dataset.brand;
+            const query = link.dataset.query;
+
+            this.closeShopsyMegaMenu();
+            this.showCategoryView(cat, { subType, brand, query });
+        });
+    }
+
+    openShopsyMegaMenu(categoryName, tabElement) {
+        const menuConfig = MEGA_MENU_DATA[categoryName];
+        if (!menuConfig || !this.megaMenuInner) return;
+
+        // Active tab styling
+        document.querySelectorAll('.sub-nav-tab').forEach(t => t.classList.remove('megamenu-active'));
+        if (tabElement) tabElement.classList.add('megamenu-active');
+
+        // Render multi-column layout
+        let html = `<div class="mega-menu-content-grid cols-${menuConfig.length}">`;
+        menuConfig.forEach(col => {
+            html += `
+                <div class="mega-menu-col">
+                    <h4 class="mega-col-heading">
+                        <span>${col.title}</span>
+                    </h4>
+                    <ul class="mega-col-list">
+            `;
+            col.items.forEach(item => {
+                html += `
+                    <li>
+                        <a href="#" class="mega-item-link" 
+                           data-category="${categoryName}" 
+                           data-subtype="${item.subType || ''}" 
+                           data-brand="${item.brand || ''}" 
+                           data-query="${item.query || ''}">
+                            <i data-lucide="chevron-right" class="mega-link-icon"></i>
+                            <span>${item.label}</span>
+                        </a>
+                    </li>
+                `;
+            });
+            html += `</ul></div>`;
+        });
+        html += `</div>`;
+
+        this.megaMenuInner.innerHTML = html;
+        if (window.lucide) lucide.createIcons();
+
+        this.shopsyMegaMenuDropdown.classList.add('show');
+        this.shopsyMegaMenuOverlay.classList.add('show');
+    }
+
+    closeShopsyMegaMenu() {
+        if (this.shopsyMegaMenuDropdown) this.shopsyMegaMenuDropdown.classList.remove('show');
+        if (this.shopsyMegaMenuOverlay) this.shopsyMegaMenuOverlay.classList.remove('show');
+        document.querySelectorAll('.sub-nav-tab').forEach(t => t.classList.remove('megamenu-active'));
+    }
+
+    // ================= DYNAMIC CATEGORY FILTERS & 2-COLUMN ECOM ENGINE =================
+    setupDynamicCategoryFilters() {
+        // Clear all buttons
+        if (this.sidebarClearAllBtn) {
+            this.sidebarClearAllBtn.addEventListener('click', () => this.clearAllCategoryFilters());
+        }
+        if (this.clearAllChipsBtn) {
+            this.clearAllChipsBtn.addEventListener('click', () => this.clearAllCategoryFilters());
+        }
+        if (this.emptyResetFiltersBtn) {
+            this.emptyResetFiltersBtn.addEventListener('click', () => this.clearAllCategoryFilters());
+        }
+
+        // Mobile drawer toggles
+        if (this.mobileFilterDrawerBtn) {
+            this.mobileFilterDrawerBtn.addEventListener('click', () => {
+                if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.add('mobile-open');
+                if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        const closeMobileDrawer = () => {
+            if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.remove('mobile-open');
+            if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.remove('open');
+            document.body.style.overflow = '';
+        };
+
+        if (this.sidebarCloseMobileBtn) {
+            this.sidebarCloseMobileBtn.addEventListener('click', closeMobileDrawer);
+        }
+        if (this.sidebarMobileBackdrop) {
+            this.sidebarMobileBackdrop.addEventListener('click', closeMobileDrawer);
+        }
+
+        // Sort select listener
+        if (this.sortSelect) {
+            this.sortSelect.addEventListener('change', () => {
+                this.applyFiltersAndRender();
+            });
+        }
+    }
+
+    buildDynamicSidebarFilters(categoryName) {
+        if (!this.sidebarFilterSections) return;
+        this.sidebarFilterSections.innerHTML = '';
+
+        const allItems = this.getItemsForCategory(categoryName);
+        if (!allItems.length) return;
+
+        // 1. Gather SubTypes
+        const subTypeCounts = {};
+        allItems.forEach(it => {
+            if (it.subType) {
+                subTypeCounts[it.subType] = (subTypeCounts[it.subType] || 0) + 1;
+            }
+        });
+        const subTypes = Object.entries(subTypeCounts);
+
+        // 2. Gather Brands
+        const brandCounts = {};
+        allItems.forEach(it => {
+            if (it.brand) {
+                brandCounts[it.brand] = (brandCounts[it.brand] || 0) + 1;
+            }
+        });
+        const brands = Object.entries(brandCounts).sort((a,b) => b[1] - a[1]);
+
+        // 3. Price Brackets
+        const priceRanges = [
+            { id: 'under499', label: 'Under ₹499', min: 0, max: 499 },
+            { id: '500-999', label: '₹500 - ₹999', min: 500, max: 999 },
+            { id: '1000-2499', label: '₹1,000 - ₹2,499', min: 1000, max: 2499 },
+            { id: '2500-9999', label: '₹2,500 - ₹9,999', min: 2500, max: 9999 },
+            { id: 'above10000', label: '₹10,000 & Above', min: 10000, max: Infinity }
+        ];
+        const priceCounts = {};
+        priceRanges.forEach(r => {
+            priceCounts[r.id] = allItems.filter(it => it.discount_price >= r.min && it.discount_price <= r.max).length;
+        });
+
+        // 4. Customer Ratings
+        const ratingOptions = [
+            { id: '4.5', label: '4.5★ & Above', min: 4.5 },
+            { id: '4.0', label: '4.0★ & Above', min: 4.0 },
+            { id: '3.5', label: '3.5★ & Above', min: 3.5 }
+        ];
+
+        // 5. Discounts
+        const discountOptions = [
+            { id: '50', label: '50% or more', min: 0.50 },
+            { id: '30', label: '30% or more', min: 0.30 },
+            { id: '20', label: '20% or more', min: 0.20 },
+            { id: '10', label: '10% or more', min: 0.10 }
+        ];
+
+        let html = '';
+
+        // SubType Section (Categories)
+        if (subTypes.length > 0) {
+            html += `
+                <div class="sidebar-filter-group expanded" data-group="subTypes">
+                    <button type="button" class="filter-group-header">
+                        <span class="group-title">Category / Sub-Type</span>
+                        <i data-lucide="chevron-down" class="group-chevron"></i>
+                    </button>
+                    <div class="filter-group-content">
+                        <div class="filter-options-list">
+            `;
+            subTypes.forEach(([st, cnt]) => {
+                const checked = this.selectedFilters.subTypes.has(st) ? 'checked' : '';
+                html += `
+                    <label class="filter-option-item">
+                        <input type="checkbox" data-group="subTypes" value="${st}" ${checked}>
+                        <span class="custom-checkbox"></span>
+                        <span class="option-label">${st}</span>
+                        <span class="option-count">${cnt}</span>
+                    </label>
+                `;
+            });
+            html += `</div></div></div>`;
+        }
+
+        // Brand Section
+        if (brands.length > 0) {
+            html += `
+                <div class="sidebar-filter-group expanded" data-group="brands">
+                    <button type="button" class="filter-group-header">
+                        <span class="group-title">Brand</span>
+                        <i data-lucide="chevron-down" class="group-chevron"></i>
+                    </button>
+                    <div class="filter-group-content">
+                        ${brands.length > 6 ? `
+                        <div class="brand-search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" placeholder="Search brand..." class="brand-search-input">
+                        </div>` : ''}
+                        <div class="filter-options-list brand-options-list">
+            `;
+            brands.forEach(([br, cnt]) => {
+                const checked = this.selectedFilters.brands.has(br) ? 'checked' : '';
+                html += `
+                    <label class="filter-option-item brand-option-item">
+                        <input type="checkbox" data-group="brands" value="${br}" ${checked}>
+                        <span class="custom-checkbox"></span>
+                        <span class="option-label">${br}</span>
+                        <span class="option-count">${cnt}</span>
+                    </label>
+                `;
+            });
+            html += `</div></div></div>`;
+        }
+
+        // Price Section
+        html += `
+            <div class="sidebar-filter-group expanded" data-group="priceRanges">
+                <button type="button" class="filter-group-header">
+                    <span class="group-title">Price</span>
+                    <i data-lucide="chevron-down" class="group-chevron"></i>
+                </button>
+                <div class="filter-group-content">
+                    <div class="filter-options-list">
+        `;
+        priceRanges.forEach(r => {
+            const cnt = priceCounts[r.id] || 0;
+            if (cnt > 0) {
+                const checked = this.selectedFilters.priceRanges.has(r.id) ? 'checked' : '';
+                html += `
+                    <label class="filter-option-item">
+                        <input type="checkbox" data-group="priceRanges" value="${r.id}" ${checked}>
+                        <span class="custom-checkbox"></span>
+                        <span class="option-label">${r.label}</span>
+                        <span class="option-count">${cnt}</span>
+                    </label>
+                `;
+            }
+        });
+        html += `</div></div></div>`;
+
+        // Customer Rating Section
+        html += `
+            <div class="sidebar-filter-group expanded" data-group="ratings">
+                <button type="button" class="filter-group-header">
+                    <span class="group-title">Customer Ratings</span>
+                    <i data-lucide="chevron-down" class="group-chevron"></i>
+                </button>
+                <div class="filter-group-content">
+                    <div class="filter-options-list">
+        `;
+        ratingOptions.forEach(r => {
+            const checked = this.selectedFilters.ratings.has(r.id) ? 'checked' : '';
+            html += `
+                <label class="filter-option-item">
+                    <input type="checkbox" data-group="ratings" value="${r.id}" ${checked}>
+                    <span class="custom-checkbox"></span>
+                    <span class="option-label rating-label">
+                        <span class="star-pill">${r.id}★</span>
+                        <span>& Above</span>
+                    </span>
+                </label>
+            `;
+        });
+        html += `</div></div></div>`;
+
+        // Discount Section
+        html += `
+            <div class="sidebar-filter-group expanded" data-group="discounts">
+                <button type="button" class="filter-group-header">
+                    <span class="group-title">Discount</span>
+                    <i data-lucide="chevron-down" class="group-chevron"></i>
+                </button>
+                <div class="filter-group-content">
+                    <div class="filter-options-list">
+        `;
+        discountOptions.forEach(d => {
+            const checked = this.selectedFilters.discounts.has(d.id) ? 'checked' : '';
+            html += `
+                <label class="filter-option-item">
+                    <input type="checkbox" data-group="discounts" value="${d.id}" ${checked}>
+                    <span class="custom-checkbox"></span>
+                    <span class="option-label">${d.label}</span>
+                </label>
+            `;
+        });
+        html += `</div></div></div>`;
+
+        this.sidebarFilterSections.innerHTML = html;
+        if (window.lucide) lucide.createIcons();
+
+        // Bind Accordion headers toggle
+        this.sidebarFilterSections.querySelectorAll('.filter-group-header').forEach(hdr => {
+            hdr.addEventListener('click', () => {
+                const grp = hdr.closest('.sidebar-filter-group');
+                if (grp) grp.classList.toggle('expanded');
+            });
+        });
+
+        // Brand quick-search filter inside sidebar
+        const brandSearchInput = this.sidebarFilterSections.querySelector('.brand-search-input');
+        if (brandSearchInput) {
+            brandSearchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                const items = this.sidebarFilterSections.querySelectorAll('.brand-option-item');
+                items.forEach(it => {
+                    const txt = it.querySelector('.option-label')?.textContent.toLowerCase() || '';
+                    it.style.display = txt.includes(term) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // Bind Checkbox Changes
+        this.sidebarFilterSections.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+            chk.addEventListener('change', () => {
+                const group = chk.dataset.group;
+                const val = chk.value;
+                if (!this.selectedFilters[group]) this.selectedFilters[group] = new Set();
+                
+                if (chk.checked) {
+                    this.selectedFilters[group].add(val);
+                } else {
+                    this.selectedFilters[group].delete(val);
+                }
+
+                // If subType changed, sync activeSubType and subFilterPills
+                if (group === 'subTypes') {
+                    if (this.selectedFilters.subTypes.size === 1) {
+                        this.activeSubType = [...this.selectedFilters.subTypes][0];
+                    } else if (this.selectedFilters.subTypes.size === 0) {
+                        this.activeSubType = 'All';
+                    } else {
+                        this.activeSubType = 'Multiple';
+                    }
+                    this.syncSubFilterPillsWithSelection();
+                }
+
+                this.applyFiltersAndRender();
+            });
+        });
+    }
+
+    syncSubFilterPillsWithSelection() {
+        if (!this.categorySubFilterPills) return;
+        const pills = this.categorySubFilterPills.querySelectorAll('.category-sub-pill');
+        pills.forEach(p => {
+            const st = p.dataset.subtype;
+            if (st === 'All') {
+                if (this.selectedFilters.subTypes.size === 0) p.classList.add('active');
+                else p.classList.remove('active');
+            } else {
+                if (this.selectedFilters.subTypes.has(st)) p.classList.add('active');
+                else p.classList.remove('active');
+            }
+        });
+    }
+
+    applyFiltersAndRender(overrideQuery = null) {
+        if (!this.categoryProductsGrid) return;
+        this.categoryProductsGrid.innerHTML = '';
+
+        if (overrideQuery !== null) {
+            this.selectedFilters.searchQuery = overrideQuery;
+        }
+
+        let items = this.getItemsForCategory(this.currentCategory);
+        const totalCategoryCount = items.length;
+
+        // 1. SubType filter
+        if (this.selectedFilters.subTypes.size > 0) {
+            items = items.filter(it => this.selectedFilters.subTypes.has(it.subType));
+        }
+
+        // 2. Brand filter
+        if (this.selectedFilters.brands.size > 0) {
+            items = items.filter(it => this.selectedFilters.brands.has(it.brand));
+        }
+
+        // 3. Price Ranges filter
+        if (this.selectedFilters.priceRanges.size > 0) {
+            items = items.filter(it => {
+                const p = it.discount_price;
+                for (const range of this.selectedFilters.priceRanges) {
+                    if (range === 'under499' && p < 500) return true;
+                    if (range === '500-999' && p >= 500 && p <= 999) return true;
+                    if (range === '1000-2499' && p >= 1000 && p <= 2499) return true;
+                    if (range === '2500-9999' && p >= 2500 && p <= 9999) return true;
+                    if (range === 'above10000' && p >= 10000) return true;
+                }
+                return false;
+            });
+        }
+
+        // 4. Rating filter
+        if (this.selectedFilters.ratings.size > 0) {
+            const minRatingThreshold = Math.min(...[...this.selectedFilters.ratings].map(Number));
+            items = items.filter(it => {
+                const score = parseFloat(this.getProductRating(it).score);
+                return score >= minRatingThreshold;
+            });
+        }
+
+        // 5. Discount filter
+        if (this.selectedFilters.discounts.size > 0) {
+            const minDiscThreshold = Math.min(...[...this.selectedFilters.discounts].map(Number)) / 100;
+            items = items.filter(it => {
+                const disc = (it.price - it.discount_price) / it.price;
+                return disc >= minDiscThreshold;
+            });
+        }
+
+        // 6. Search Query
+        if (this.selectedFilters.searchQuery && this.selectedFilters.searchQuery.trim() !== '') {
+            const q = this.selectedFilters.searchQuery.toLowerCase().trim();
+            items = items.filter(it => 
+                it.name.toLowerCase().includes(q) ||
+                (it.brand && it.brand.toLowerCase().includes(q)) ||
+                (it.subType && it.subType.toLowerCase().includes(q)) ||
+                (it.type && it.type.toLowerCase().includes(q))
+            );
+        }
+
+        // 7. Apply Sorting
+        const sortBy = this.sortSelect ? this.sortSelect.value : 'featured';
+        if (sortBy === 'low-high') {
+            items.sort((a,b) => a.discount_price - b.discount_price);
+        } else if (sortBy === 'high-low') {
+            items.sort((a,b) => b.discount_price - a.discount_price);
+        } else if (sortBy === 'discount') {
+            items.sort((a,b) => {
+                const d1 = (a.price - a.discount_price)/a.price;
+                const d2 = (b.price - b.discount_price)/b.price;
+                return d2 - d1;
+            });
+        } else if (sortBy === 'rating') {
+            items.sort((a,b) => parseFloat(this.getProductRating(b).score) - parseFloat(this.getProductRating(a).score));
+        } else {
+            // Featured
+            items.sort((a,b) => (b.price - b.discount_price) - (a.price - a.discount_price));
+        }
+
+        // 8. Update Counts
+        const activeCount = 
+            this.selectedFilters.subTypes.size + 
+            this.selectedFilters.brands.size + 
+            this.selectedFilters.priceRanges.size + 
+            this.selectedFilters.ratings.size + 
+            this.selectedFilters.discounts.size + 
+            (this.selectedFilters.searchQuery ? 1 : 0);
+
+        if (this.categoryItemCountPill) {
+            this.categoryItemCountPill.textContent = `${items.length} of ${totalCategoryCount} items`;
+        }
+        if (this.categoryProductCount) {
+            this.categoryProductCount.textContent = `${items.length} Product${items.length === 1 ? '' : 's'}`;
+        }
+
+        if (this.sidebarActiveCount) {
+            this.sidebarActiveCount.textContent = activeCount;
+            this.sidebarActiveCount.style.display = activeCount > 0 ? 'inline-flex' : 'none';
+        }
+        if (this.filterCountBadge) {
+            this.filterCountBadge.textContent = activeCount;
+            this.filterCountBadge.style.display = activeCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        // 9. Render Active Filter Chips
+        this.renderActiveFilterChips();
+
+        // 10. Render Product Grid / Empty State
+        if (items.length === 0) {
+            this.categoryProductsGrid.style.display = 'none';
+            if (this.filterEmptyState) this.filterEmptyState.style.display = 'block';
+        } else {
+            this.categoryProductsGrid.style.display = 'grid';
+            if (this.filterEmptyState) this.filterEmptyState.style.display = 'none';
+            
+            items.forEach(item => {
+                this.categoryProductsGrid.appendChild(this.createProductCard(item));
+            });
+
+            if (window.lucide) lucide.createIcons();
+            if (window.gsap) {
+                gsap.from("#categoryProductsGrid .itemName", { y: 20, opacity: 0, duration: 0.35, stagger: 0.03, ease: "power2.out" });
+            }
+        }
+    }
+
+    renderActiveFilterChips() {
+        if (!this.activeFilterChipsRow || !this.activeChipsList) return;
+
+        const chips = [];
+        this.selectedFilters.subTypes.forEach(v => chips.push({ group: 'subTypes', value: v, label: v }));
+        this.selectedFilters.brands.forEach(v => chips.push({ group: 'brands', value: v, label: `Brand: ${v}` }));
+        this.selectedFilters.priceRanges.forEach(v => {
+            const labelMap = {
+                'under499': 'Under ₹499',
+                '500-999': '₹500 - ₹999',
+                '1000-2499': '₹1,000 - ₹2,499',
+                '2500-9999': '₹2,500 - ₹9,999',
+                'above10000': '₹10,000+'
+            };
+            chips.push({ group: 'priceRanges', value: v, label: labelMap[v] || v });
+        });
+        this.selectedFilters.ratings.forEach(v => chips.push({ group: 'ratings', value: v, label: `${v}★ & above` }));
+        this.selectedFilters.discounts.forEach(v => chips.push({ group: 'discounts', value: v, label: `${v}%+ Off` }));
+        if (this.selectedFilters.searchQuery) {
+            chips.push({ group: 'searchQuery', value: this.selectedFilters.searchQuery, label: `"${this.selectedFilters.searchQuery}"` });
+        }
+
+        if (chips.length === 0) {
+            this.activeFilterChipsRow.style.display = 'none';
+            this.activeChipsList.innerHTML = '';
+            return;
+        }
+
+        this.activeFilterChipsRow.style.display = 'flex';
+        this.activeChipsList.innerHTML = chips.map(c => `
+            <div class="active-filter-chip">
+                <span>${c.label}</span>
+                <button type="button" class="chip-remove-btn" data-group="${c.group}" data-value="${c.value}">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        `).join('');
+
+        if (window.lucide) lucide.createIcons();
+
+        // Delegate chip removal
+        this.activeChipsList.querySelectorAll('.chip-remove-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (group === 'searchQuery') {
+                    this.selectedFilters.searchQuery = '';
+                } else if (this.selectedFilters[group]) {
+                    this.selectedFilters[group].delete(value);
+                    const chk = this.sidebarFilterSections?.querySelector(`input[data-group="${group}"][value="${value}"]`);
+                    if (chk) chk.checked = false;
+                }
+
+                if (group === 'subTypes') {
+                    if (this.selectedFilters.subTypes.size === 1) {
+                        this.activeSubType = [...this.selectedFilters.subTypes][0];
+                    } else if (this.selectedFilters.subTypes.size === 0) {
+                        this.activeSubType = 'All';
+                    }
+                    this.syncSubFilterPillsWithSelection();
+                }
+
+                this.applyFiltersAndRender();
+            });
+        });
+    }
+
+    clearAllCategoryFilters() {
+        this.selectedFilters.subTypes.clear();
+        this.selectedFilters.brands.clear();
+        this.selectedFilters.priceRanges.clear();
+        this.selectedFilters.ratings.clear();
+        this.selectedFilters.discounts.clear();
+        this.selectedFilters.searchQuery = '';
+        this.activeSubType = 'All';
+
+        if (this.sidebarFilterSections) {
+            this.sidebarFilterSections.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
+            const brandSearch = this.sidebarFilterSections.querySelector('.brand-search-input');
+            if (brandSearch) brandSearch.value = '';
+            this.sidebarFilterSections.querySelectorAll('.brand-option-item').forEach(it => it.style.display = 'flex');
+        }
+
+        this.syncSubFilterPillsWithSelection();
+        this.applyFiltersAndRender();
     }
 
     setupCartPageView() {

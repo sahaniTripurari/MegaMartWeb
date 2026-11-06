@@ -173,6 +173,7 @@
             <i data-lucide="user"></i>
             <span>Profile</span>
         </div>
+
     </nav>
 
     <!-- Unified Flipkart/Amazon-Style Category Navigation Bar -->
@@ -231,6 +232,13 @@
             </div>
             <!-- Backwards-compatible container for legacy script bindings -->
             <div class="type-list" id="navCategories" style="display: none;"></div>
+        </div>
+        <!-- Shopsy / Flipkart Multi-Column Mega Menu Dropdown -->
+        <div class="shopsy-mega-menu-overlay" id="shopsyMegaMenuOverlay"></div>
+        <div class="shopsy-mega-menu-dropdown" id="shopsyMegaMenuDropdown">
+            <div class="container mega-menu-inner" id="megaMenuInner">
+                <!-- Dynamically populated or rendered on hover -->
+            </div>
         </div>
     </nav>
 
@@ -957,16 +965,27 @@
         <div id="categoryView" class="view-section" style="display: none;">
             <div class="container">
                 <div class="category-page-header">
-                    <h2 id="categoryPageTitle">Category Name</h2>
+                    <div class="category-title-wrap">
+                        <h2 id="categoryPageTitle">Category Name</h2>
+                        <span class="category-item-count" id="categoryItemCountPill">0 items</span>
+                    </div>
                     
-                    <div class="category-filters">
+                    <div class="category-header-controls">
+                        <!-- Mobile / Tablet Filter Toggle Button -->
+                        <button class="mobile-filter-drawer-btn" id="mobileFilterDrawerBtn" type="button">
+                            <i data-lucide="sliders-horizontal"></i>
+                            <span>Filters</span>
+                            <span class="filter-count-badge" id="filterCountBadge" style="display: none;">0</span>
+                        </button>
+
                         <div class="filter-box">
-                            <i data-lucide="filter"></i>
+                            <i data-lucide="arrow-down-up"></i>
                             <select id="sortSelect">
-                                <option value="relevance">Sort by Relevance</option>
+                                <option value="featured">Sort by: Featured</option>
                                 <option value="low-high">Price: Low to High</option>
                                 <option value="high-low">Price: High to Low</option>
                                 <option value="discount">Highest Discount</option>
+                                <option value="rating">Top Customer Rated</option>
                             </select>
                         </div>
                     </div>
@@ -979,8 +998,52 @@
                     </div>
                 </div>
 
-                <div class="category-grid grid-layout" id="categoryProductsGrid">
-                    <!-- Products injected here -->
+                <!-- 2-COLUMN LAYOUT: STICKY FILTER SIDEBAR (LEFT) + PRODUCTS GRID (RIGHT) -->
+                <div class="category-ecom-layout">
+                    <!-- Left Dynamic Filter Sidebar (Shopsy / Flipkart Style) -->
+                    <aside class="ecom-filter-sidebar" id="categoryFilterSidebar">
+                        <div class="sidebar-header">
+                            <div class="sidebar-header-title">
+                                <i data-lucide="sliders-horizontal"></i>
+                                <span>Filters</span>
+                                <span class="active-filter-indicator" id="sidebarActiveCount" style="display: none;">0</span>
+                            </div>
+                            <button type="button" class="sidebar-clear-all-btn" id="sidebarClearAllBtn">Clear All</button>
+                            <button type="button" class="sidebar-close-mobile-btn" id="sidebarCloseMobileBtn" aria-label="Close Filters">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+
+                        <div class="sidebar-scrollable-content" id="sidebarFilterSections">
+                            <!-- Dynamic Accordion Filter Groups Injected via JS based on current category -->
+                        </div>
+                    </aside>
+
+                    <!-- Mobile Sidebar Overlay Backdrop -->
+                    <div class="sidebar-mobile-backdrop" id="sidebarMobileBackdrop"></div>
+
+                    <!-- Right Products Area -->
+                    <main class="ecom-products-content">
+                        <!-- Active Filter Chips Row -->
+                        <div class="active-filter-chips-row" id="activeFilterChipsRow" style="display: none;">
+                            <span class="chips-label">Applied Filters:</span>
+                            <div class="chips-container" id="activeChipsList"></div>
+                            <button type="button" class="clear-chips-btn" id="clearAllChipsBtn">Clear All</button>
+                        </div>
+
+                        <!-- Product Grid (Full Width & Responsive) -->
+                        <div class="category-grid grid-layout" id="categoryProductsGrid">
+                            <!-- Products injected here -->
+                        </div>
+
+                        <!-- No Results Match Card -->
+                        <div class="filter-empty-state" id="filterEmptyState" style="display: none;">
+                            <div class="empty-icon-wrap"><i data-lucide="filter-x"></i></div>
+                            <h3>No Products Match Selected Filters</h3>
+                            <p>Try resetting some filters or searching for something else.</p>
+                            <button type="button" class="btn btn-primary" id="emptyResetFiltersBtn">Reset All Filters</button>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>
