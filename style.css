@@ -9857,13 +9857,15 @@ footer.footer {
 
 /* Hover bridge between pill and dropdown */
 .sub-mega-menu-dropdown::before {
-  content: "";
-  position: absolute;
-  top: -12px;
-  left: 0;
-  right: 0;
-  height: 12px;
-  background: transparent;
+  content: "" !important;
+  position: absolute !important;
+  top: -24px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 26px !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  z-index: 101 !important;
 }
 
 .sub-mega-menu-dropdown.show {

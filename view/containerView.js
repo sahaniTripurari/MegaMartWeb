@@ -1477,11 +1477,18 @@ export class ContainerView {
                     this.openSubMegaMenu(categoryName, subType, pill);
                 });
 
-                pill.addEventListener('mouseleave', () => {
+                pill.addEventListener('mouseleave', (e) => {
                     if (window.innerWidth <= 900) return;
+                    // If moving into dropdown or another pill, DO NOT close!
+                    if (e.relatedTarget && (
+                        this.subMegaMenuDropdown?.contains(e.relatedTarget) || 
+                        e.relatedTarget.closest?.('.category-sub-pill')
+                    )) {
+                        return;
+                    }
                     this.subMegaMenuTimer = setTimeout(() => {
                         this.closeSubMegaMenu();
-                    }, 280);
+                    }, 320);
                 });
 
                 pill.addEventListener('click', (e) => {
@@ -4065,21 +4072,44 @@ export class ContainerView {
     // ================= SHOPSY / FLIPKART SUB-CATEGORY MEGA MENU =================
     setupCategorySubMegaMenu() {
         if (!this.subMegaMenuDropdown) return;
+        if (!this.categorySubFilterBar) this.categorySubFilterBar = document.getElementById('categorySubFilterBar');
 
-        // Dropdown hover persistence
+        // Prevent premature closing while moving within the entire sub-filter bar
+        if (this.categorySubFilterBar) {
+            this.categorySubFilterBar.addEventListener('mouseenter', () => {
+                clearTimeout(this.subMegaMenuTimer);
+            });
+            this.categorySubFilterBar.addEventListener('mouseleave', (e) => {
+                if (e.relatedTarget && this.subMegaMenuDropdown?.contains(e.relatedTarget)) return;
+                this.subMegaMenuTimer = setTimeout(() => {
+                    this.closeSubMegaMenu();
+                }, 320);
+            });
+        }
+
+        // Dropdown hover persistence: NEVER close or reload while mouse is inside dropdown!
         this.subMegaMenuDropdown.addEventListener('mouseenter', () => {
             clearTimeout(this.subMegaMenuTimer);
         });
 
-        this.subMegaMenuDropdown.addEventListener('mouseleave', () => {
+        this.subMegaMenuDropdown.addEventListener('mouseleave', (e) => {
+            if (e.relatedTarget && (
+                this.categorySubFilterPills?.contains(e.relatedTarget) || 
+                this.categorySubFilterBar?.contains(e.relatedTarget)
+            )) {
+                return;
+            }
             this.subMegaMenuTimer = setTimeout(() => {
                 this.closeSubMegaMenu();
-            }, 250);
+            }, 320);
         });
 
-        // Overlay click closes
+        // Overlay click or touch closes immediately
         if (this.subMegaMenuOverlay) {
             this.subMegaMenuOverlay.addEventListener('click', () => {
+                this.closeSubMegaMenu();
+            });
+            this.subMegaMenuOverlay.addEventListener('mouseenter', () => {
                 this.closeSubMegaMenu();
             });
         }
@@ -4087,13 +4117,13 @@ export class ContainerView {
         // Click on any link in mega menu
         if (this.subMegaMenuInner) {
             this.subMegaMenuInner.addEventListener('click', (e) => {
-                const link = e.target.closest('.sub-mega-link');
+                const link = e.target.closest('.sub-mega-link') || e.target.closest('.sub-mega-promo-card');
                 if (!link) return;
                 e.preventDefault();
-                const cat = link.dataset.category;
-                const subType = link.dataset.subtype;
-                const brand = link.dataset.brand;
-                const query = link.dataset.query;
+                const cat = link.dataset.category || this.currentOpenCategory || this.currentCategory;
+                const subType = link.dataset.subtype || this.currentOpenSubType || '';
+                const brand = link.dataset.brand || '';
+                const query = link.dataset.query || '';
 
                 this.closeSubMegaMenu();
 
@@ -4126,7 +4156,7 @@ export class ContainerView {
 
         if (!config || !this.subMegaMenuInner || !this.subMegaMenuDropdown) return;
 
-        // GUARD: If already open for this exact category & subType, do NOT re-render / re-trigger animation!
+        // GUARD: If already open for this exact category & subType, DO NOT re-render / re-trigger animation!
         if (this.currentOpenCategory === catKey && this.currentOpenSubType === subKey && this.subMegaMenuDropdown.classList.contains('show')) {
             clearTimeout(this.subMegaMenuTimer);
             return;
@@ -4175,7 +4205,7 @@ export class ContainerView {
         // 5th Column: Shopsy-Style Rounded Visual Promo Card with Image
         html += `
             <div class="sub-mega-promo-col">
-                <div class="sub-mega-promo-card">
+                <div class="sub-mega-promo-card" data-category="${categoryName}" data-subtype="${subType}">
                     <div class="promo-img-wrap">
                         <img src="${heroImage}" alt="${subType}" class="promo-card-img" onerror="this.src=MEGAMART_PLACEHOLDER">
                         <span class="promo-tag-badge">⚡ 10 MINS</span>
