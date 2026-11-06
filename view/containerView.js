@@ -91,15 +91,123 @@ export class ContainerView {
         this.setupMegaCarousel();
         this.setupBankOfferStrip();
         this.setupUtilityStrip();
-        this.setupFlipkartDealCards();
+                this.setupFlipkartDealCards();
         this.setupFlipkartCuratedRails();
         this.setupPromoBanners();
+        this.setupCuratedRailAutoMotion();
         this.setupCartPageView();
         this.setupWishlistPageView();
         this.setupOrdersPageView();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
+    }
+
+    setupCuratedRailAutoMotion() {
+        const rails = document.querySelectorAll('.flipkart-curated-rail');
+        if (!rails.length) return;
+
+        rails.forEach(section => {
+            const track = section.querySelector('.curated-rail-track');
+            if (!track) return;
+
+            const direction = section.dataset.direction || 'left';
+            const speed = parseFloat(section.dataset.speed || '1.0');
+            
+            let isPaused = false;
+            let pauseTimeout = null;
+            let currentDir = (direction === 'right') ? -1 : 1;
+
+            section.addEventListener('mouseenter', () => { isPaused = true; });
+            section.addEventListener('mouseleave', () => { isPaused = false; });
+
+            section.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+            section.addEventListener('touchend', () => {
+                clearTimeout(pauseTimeout);
+                pauseTimeout = setTimeout(() => { isPaused = false; }, 2500);
+            }, { passive: true });
+
+            const prevBtn = section.querySelector('.rail-nav-btn.rail-prev');
+            const nextBtn = section.querySelector('.rail-nav-btn.rail-next');
+
+            if (prevBtn) {
+                prevBtn.onclick = (e) => {
+                    e.preventDefault();
+                    isPaused = true;
+                    track.scrollBy({ left: -320, behavior: 'smooth' });
+                    clearTimeout(pauseTimeout);
+                    pauseTimeout = setTimeout(() => { isPaused = false; }, 3000);
+                };
+            }
+
+            if (nextBtn) {
+                nextBtn.onclick = (e) => {
+                    e.preventDefault();
+                    isPaused = true;
+                    track.scrollBy({ left: 320, behavior: 'smooth' });
+                    clearTimeout(pauseTimeout);
+                    pauseTimeout = setTimeout(() => { isPaused = false; }, 3000);
+                };
+            }
+
+            let lastTimestamp = 0;
+            const step = (timestamp) => {
+                if (!lastTimestamp) lastTimestamp = timestamp;
+                const delta = Math.min(timestamp - lastTimestamp, 50);
+                lastTimestamp = timestamp;
+
+                if (!isPaused && track.scrollWidth > track.clientWidth) {
+                    const maxScroll = track.scrollWidth - track.clientWidth;
+                    const moveAmount = (speed * 0.7) * (delta / 16.6);
+
+                    if (currentDir === 1) {
+                        track.scrollLeft += moveAmount;
+                        if (track.scrollLeft >= maxScroll - 2) {
+                            currentDir = -1;
+                        }
+                    } else {
+                        track.scrollLeft -= moveAmount;
+                        if (track.scrollLeft <= 2) {
+                            currentDir = 1;
+                        }
+                    }
+                }
+                requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        });
+
+        this.setupBannerCountdowns();
+    }
+
+    setupBannerCountdowns() {
+        let totalSeconds = 3 * 3600 + 42 * 60 + 18;
+        const timerPills = document.querySelectorAll('.countdown-val');
+        
+        setInterval(() => {
+            if (totalSeconds > 0) totalSeconds--;
+            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            timerPills.forEach(el => {
+                el.textContent = `${h}:${m}:${s}`;
+            });
+        }, 1000);
+    }
+
+    setupPromoBanners() {
+        const bannerElements = document.querySelectorAll(
+            '.spotlight-card, .mega-festive-poster, .quad-deal-card, .promo-banner-card, .ecom-wide-poster, .spotlight-btn, .poster-main-cta, [data-category]'
+        );
+        bannerElements.forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const cat = el.getAttribute('data-category') || el.closest('[data-category]')?.getAttribute('data-category');
+                if (cat) {
+                    this.showCategoryView(cat);
+                }
+            });
+        });
     }
 
     // ================= MOBILE UI =================
