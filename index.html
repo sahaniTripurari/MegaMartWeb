@@ -1980,6 +1980,62 @@
         </div>
     </div>
 
+        <!-- MegaMart AI Shopping Assistant Floating Trigger -->
+    <button class="mega-ai-floating-pill" id="megaAiTriggerBtn" type="button" aria-label="Open MegaAI Shopping Copilot">
+        <div class="ai-sparkle-halo">
+            <span class="ai-sparkle-emoji">✨</span>
+        </div>
+        <div class="ai-pill-text">
+            <span class="ai-pill-title">Ask MegaAI</span>
+            <span class="ai-pill-sub">Recipes & Bundles</span>
+        </div>
+        <div class="ai-live-pulse-dot"></div>
+    </button>
+
+    <!-- MegaAI Shopping Copilot Drawer Modal -->
+    <div class="mega-ai-drawer-overlay" id="megaAiOverlay"></div>
+    <div class="mega-ai-drawer" id="megaAiDrawer" role="dialog" aria-modal="true" aria-labelledby="megaAiHeading">
+        <div class="mega-ai-drawer-header">
+            <div class="mega-ai-header-brand">
+                <div class="mega-ai-avatar">✨</div>
+                <div class="mega-ai-header-titles">
+                    <h3 id="megaAiHeading">MegaAI Shopping Copilot</h3>
+                    <p>Powered by Gemini & PostgreSQL pgvector</p>
+                </div>
+            </div>
+            <button class="close-mega-ai" id="closeMegaAiBtn" aria-label="Close MegaAI"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="mega-ai-quick-prompts">
+            <span class="prompts-label">✨ Quick Ideas:</span>
+            <div class="prompts-scroll-row">
+                <button class="ai-prompt-chip" data-prompt="Recipe for Paneer Butter Masala for 4 people">🍲 Paneer Butter Masala Kit</button>
+                <button class="ai-prompt-chip" data-prompt="Suggest high protein gym diet groceries under ₹1,500">💪 High-Protein Gym Pack</button>
+                <button class="ai-prompt-chip" data-prompt="Evening Kadak Chai and crunchy snacks pack">☕ Chai & Snacks Party</button>
+                <button class="ai-prompt-chip" data-prompt="Best flagship smartphones with 10-min delivery">📱 Flagship Smartphones</button>
+            </div>
+        </div>
+
+        <div class="mega-ai-chat-body" id="megaAiChatBody">
+            <!-- Initial welcome message from AI -->
+            <div class="ai-message-row ai-incoming">
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p>Namaste! I am your <strong>MegaAI Shopping Assistant</strong>. Ask me anything — recipes, high-protein fitness packs, party bundles, or product recommendations — and I can add all ingredients straight into your cart!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mega-ai-drawer-footer">
+            <form class="mega-ai-input-form" id="megaAiInputForm">
+                <input type="text" id="megaAiTextInput" placeholder="Ask MegaAI: 'Recipe for Paneer Butter Masala', 'Gym diet'..." autocomplete="off">
+                <button type="submit" id="megaAiSendBtn" aria-label="Send query">
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

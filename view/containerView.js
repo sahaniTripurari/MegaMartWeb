@@ -2,6 +2,8 @@ const MEGAMART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.o
 import { Controller } from "../controller/controller";
 import { getProductVariants, getProductCoins } from "../model/model";
 import { supabase, cloudSignUp, cloudSignIn, cloudSignOut, createCloudOrder, getCloudOrders } from "../services/supabaseClient";
+import { MegaAiCopilot } from "../services/aiCopilotService";
+import { executeSemanticSearch } from "../services/semanticSearch";
 
 const SUB_MEGA_MENU_DATA = {
     'Fashion & Apparel': {
@@ -1056,6 +1058,8 @@ export class ContainerView {
         this.setupOrdersPageView();
         this.setupCategorySubMegaMenu();
         this.setupDynamicCategoryFilters();
+        this.aiCopilot = new MegaAiCopilot(this.data);
+        this.setupMegaAiCopilot();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -6394,4 +6398,151 @@ export class ContainerView {
         }
     }
 
+
+    setupMegaAiCopilot() {
+        const triggerBtn = document.getElementById('megaAiTriggerBtn');
+        const drawer = document.getElementById('megaAiDrawer');
+        const overlay = document.getElementById('megaAiOverlay');
+        const closeBtn = document.getElementById('closeMegaAiBtn');
+        const form = document.getElementById('megaAiInputForm');
+        const textInput = document.getElementById('megaAiTextInput');
+        const chips = document.querySelectorAll('.ai-prompt-chip');
+
+        if (!triggerBtn || !drawer) return;
+
+        const openDrawer = () => {
+            drawer.classList.add('active');
+            overlay?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => textInput?.focus(), 300);
+            if (window.lucide) lucide.createIcons();
+        };
+
+        const closeDrawer = () => {
+            drawer.classList.remove('active');
+            overlay?.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        triggerBtn.addEventListener('click', openDrawer);
+        closeBtn?.addEventListener('click', closeDrawer);
+        overlay?.addEventListener('click', closeDrawer);
+
+        // Quick prompt chips
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const prompt = chip.dataset.prompt;
+                if (prompt) {
+                    this.executeAiQuery(prompt);
+                }
+            });
+        });
+
+        // Form submit
+        form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = (textInput?.value || '').trim();
+            if (!query) return;
+            textInput.value = '';
+            this.executeAiQuery(query);
+        });
+    }
+
+    async executeAiQuery(query) {
+        const chatBody = document.getElementById('megaAiChatBody');
+        if (!chatBody) return;
+
+        // 1. Render User Message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'ai-message-row ai-outgoing';
+        userMsg.innerHTML = `
+            <div class="ai-msg-bubble"><p>${query}</p></div>
+            <div class="ai-msg-avatar">👤</div>
+        `;
+        chatBody.appendChild(userMsg);
+
+        // 2. Render Thinking Placeholder
+        const thinkingRow = document.createElement('div');
+        thinkingRow.className = 'ai-message-row ai-incoming';
+        thinkingRow.id = 'aiThinkingRow';
+        thinkingRow.innerHTML = `
+            <div class="ai-msg-avatar">✨</div>
+            <div class="ai-thinking-row">
+                <span>MegaAI is analyzing 246 cloud products</span>
+                <div class="ai-thinking-dots">
+                    <div class="ai-thinking-dot"></div>
+                    <div class="ai-thinking-dot"></div>
+                    <div class="ai-thinking-dot"></div>
+                </div>
+            </div>
+        `;
+        chatBody.appendChild(thinkingRow);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // 3. Process with AI Copilot
+        const response = await this.aiCopilot.processQuery(query);
+
+        // Remove thinking placeholder
+        document.getElementById('aiThinkingRow')?.remove();
+
+        // 4. Render AI Response
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'ai-message-row ai-incoming';
+
+        let itemsHtml = '';
+        if (response.items && response.items.length > 0) {
+            itemsHtml = `
+                <div class="ai-product-bundle-card">
+                    <div class="ai-bundle-header">
+                        <span>${response.title}</span>
+                        <span>₹${response.totalPrice}</span>
+                    </div>
+                    <div class="ai-bundle-items-list">
+                        ${response.items.map(item => `
+                            <div class="ai-bundle-item-row">
+                                <img src="${item.src || item.image_url}" alt="${item.name || item.title}" class="ai-bundle-item-img">
+                                <div class="ai-bundle-item-info">
+                                    <div class="ai-bundle-item-name">${item.name || item.title}</div>
+                                    <div class="ai-bundle-item-price">₹${item.discount_price || item.price} <span style="font-weight:400;color:#64748b;font-size:0.65rem;">(${item.unit || '1 unit'})</span></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="ai-add-all-btn" type="button">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>${response.actionLabel || 'Add All to Cart'} (₹${response.totalPrice})</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        aiMsg.innerHTML = `
+            <div class="ai-msg-avatar">✨</div>
+            <div class="ai-msg-bubble">
+                <p>${response.reply}</p>
+                ${itemsHtml}
+            </div>
+        `;
+        chatBody.appendChild(aiMsg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // Handle Add All to Cart click
+        aiMsg.querySelector('.ai-add-all-btn')?.addEventListener('click', (e) => {
+            const btn = e.currentTarget;
+            response.items.forEach(item => {
+                const target = this.data.find(d => d.id === item.id);
+                if (target) {
+                    target.quantity = (target.quantity || 0) + 1;
+                }
+            });
+            this.updateCartUI();
+            this.saveCartToStorage();
+            btn.innerHTML = `<i data-lucide="check"></i> <span>✓ Added ${response.items.length} Items to Cart!</span>`;
+            btn.style.background = '#059669';
+            this.showToast(`🎉 Added ${response.items.length} items to your cart!`);
+            if (window.lucide) lucide.createIcons();
+        });
+
+        if (window.lucide) lucide.createIcons();
+    }
 }
