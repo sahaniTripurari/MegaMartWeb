@@ -42,8 +42,25 @@ body {
 h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-dark); }
 a { text-decoration: none; color: inherit; transition: color 0.2s; }
 button { cursor: pointer; font-family: inherit; border: none; background: none; transition: all 0.2s; }
-.container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 12px; }
-@media (min-width: 768px) { .container { padding: 0 24px; } }
+.container { 
+  width: 100%; 
+  max-width: 1760px; 
+  margin: 0 auto; 
+  padding: 0 16px; 
+  box-sizing: border-box;
+}
+@media (min-width: 768px) { 
+  .container { padding: 0 24px; } 
+}
+@media (min-width: 1280px) { 
+  .container { padding: 0 32px; } 
+}
+@media (min-width: 1600px) { 
+  .container { 
+    max-width: 1840px; 
+    padding: 0 40px; 
+  } 
+}
 
 .btn { padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255, 50, 105, 0.3); }
@@ -5541,10 +5558,12 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ================= Bank Offer Strip ================= */
 .bank-offer-strip {
   background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 50%, #eff6ff 100%);
-  border: 1px dashed #93c5fd;
+  border: 1.5px dashed #93c5fd;
   border-radius: 12px;
-  margin: 14px 0 16px;
-  padding: 10px 16px;
+  margin: 14px auto 16px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .bank-offer-inner {
@@ -5553,6 +5572,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  width: 100%;
 }
 
 .bank-offer-left {
@@ -10655,4 +10675,59 @@ footer.footer {
 .sub-mega-link:hover .link-bullet {
   background: var(--primary) !important;
   transform: scale(1.5) !important;
+}
+
+/* ================= WIDE DESKTOP SCREEN ENHANCEMENTS (1440px - 1920px+) ================= */
+@media (min-width: 1280px) {
+  .global-search-container {
+    max-width: 680px;
+  }
+  .sub-header-container {
+    padding: 0 !important;
+    overflow-x: visible !important;
+  }
+  .sub-nav-tabs {
+    width: 100% !important;
+    min-width: 100% !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+  .sub-nav-tab {
+    flex: 1 1 auto !important;
+    padding: 8px 10px !important;
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .global-search-container {
+    max-width: 740px;
+  }
+  .mega-banner-slide {
+    min-height: 320px;
+    padding: 48px 64px;
+  }
+  .banner-title {
+    font-size: 2.6rem;
+  }
+  .video-container {
+    height: 420px;
+  }
+  .utility-grid {
+    gap: 20px;
+  }
+  .flipkart-3col-grid {
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1650px) {
+  .category-ecom-layout .ecom-products-content .category-grid {
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 22px !important;
+  }
+  .category-ecom-layout.sidebar-open .ecom-products-content .category-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 20px !important;
+  }
 }
