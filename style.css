@@ -89,8 +89,26 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   gap: 20px;
 }
 
-.logo { display: flex; align-items: center; gap: 8px; }
-.logo-icon { background: var(--primary); color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo { display: flex; align-items: center; gap: 9px; }
+.logo-icon { 
+  width: 34px; 
+  height: 34px; 
+  border-radius: 9px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(255, 19, 88, 0.28);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.logo:hover .logo-icon {
+  transform: scale(1.05);
+}
+.logo-icon img, .logo-icon .logo-svg-img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+}
 .logo-icon i { width: 18px; height: 18px; }
 .logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; color: var(--text-dark); }
 
