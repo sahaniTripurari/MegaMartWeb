@@ -1240,6 +1240,12 @@ export class ContainerView {
                 ribbons: ['Special Price', 'Under ₹99', 'Mega Pack', 'Family Saver'],
                 ribbonClass: 'ribbon-red'
             },
+            'Cold Drinks & Beverages': {
+                title: '🥤 Chilled Drinks, Juices & Cold Brews',
+                subtitle: 'Red Bull, cold brews, Tropicana juices, green teas & soda mixers',
+                ribbons: ['Chilled at 4°C', 'Min. 30% Off', 'Under ₹99', 'Buy 2 Get 1', 'Party Pack'],
+                ribbonClass: 'ribbon-blue'
+            },
             'Dairy, Bread & Eggs': {
                 title: '🥛 Dairy, Bread & Morning Essentials',
                 subtitle: 'Farm fresh milk, butter, paneer, brown bread & organic eggs',
