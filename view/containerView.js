@@ -2,401 +2,883 @@ const MEGAMART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.o
 import { Controller } from "../controller/controller";
 import { getProductVariants, getProductCoins } from "../model/model";
 
-const MEGA_MENU_DATA = {
-    'Fashion & Apparel': [
-        {
-            title: "Men's Apparel",
-            subType: "Men's Apparel",
-            items: [
-                { label: "Casual Shirts", query: "shirt" },
-                { label: "Denim & Jeans", query: "jeans" },
-                { label: "T-Shirts & Polos", query: "t-shirt" },
-                { label: "Formal Shirts", query: "formal" },
-                { label: "Jackets & Hoodies", query: "jacket" },
-                { label: "All Men's Apparel", subType: "Men's Apparel" }
-            ]
-        },
-        {
-            title: "Women's Ethnic",
-            subType: "Women's Ethnic",
-            items: [
-                { label: "Kurtas & Kurtis", query: "kurta" },
-                { label: "Sarees & Silk Drapes", query: "saree" },
-                { label: "Anarkali & Suits", query: "anarkali" },
-                { label: "Palazzos & Dupattas", query: "palazzo" },
-                { label: "Ethnic Festive Wear", query: "ethnic" },
-                { label: "All Women's Ethnic", subType: "Women's Ethnic" }
-            ]
-        },
-        {
-            title: "Footwear & Shoes",
-            subType: "Footwear & Shoes",
-            items: [
-                { label: "Running Shoes", query: "running" },
-                { label: "Casual Sneakers", query: "sneaker" },
-                { label: "Sports Performance", query: "sports" },
-                { label: "Clogs & Daily Slides", query: "clog" },
-                { label: "Leather & Boots", query: "leather" },
-                { label: "All Footwear", subType: "Footwear & Shoes" }
-            ]
-        },
-        {
-            title: "Watches & Accessories",
-            subType: "Watches & Accessories",
-            items: [
-                { label: "Chronograph Watches", query: "chronograph" },
-                { label: "Smart Wearables", query: "smart" },
-                { label: "Polarized Sunglasses", query: "sunglasses" },
-                { label: "Genuine Leather Belts", query: "belt" },
-                { label: "Bifold Wallets", query: "wallet" },
-                { label: "All Accessories", subType: "Watches & Accessories" }
-            ]
-        },
-        {
-            title: "Top Brands",
-            items: [
-                { label: "Nike", brand: "Nike" },
-                { label: "Adidas", brand: "Adidas" },
-                { label: "Puma", brand: "Puma" },
-                { label: "Levi's", brand: "Levi's" },
-                { label: "Allen Solly", brand: "Allen Solly" },
-                { label: "Titan", brand: "Titan" }
-            ]
-        }
-    ],
-    'Electronics & Gadgets': [
-        {
-            title: "Smartphones",
-            subType: "Smartphones",
-            items: [
-                { label: "Apple iPhone Series", brand: "Apple" },
-                { label: "Samsung Galaxy Ultra", brand: "Samsung" },
-                { label: "Google Pixel 8 AI", brand: "Google" },
-                { label: "OnePlus Fast 5G", brand: "OnePlus" },
-                { label: "Xiaomi & iQOO Power", query: "5G" },
-                { label: "All Smartphones", subType: "Smartphones" }
-            ]
-        },
-        {
-            title: "TWS & Audio",
-            subType: "TWS & Audio",
-            items: [
-                { label: "ANC Noise Cancelling", query: "anc" },
-                { label: "Wireless Earbuds", subType: "TWS & Audio" },
-                { label: "Over-Ear Headphones", query: "headphone" },
-                { label: "Sony Bass Audio", brand: "Sony" },
-                { label: "boAt Rockerz & Airdopes", brand: "boAt" },
-                { label: "All Audio", subType: "TWS & Audio" }
-            ]
-        },
-        {
-            title: "Smartwatches",
-            subType: "Smartwatches",
-            items: [
-                { label: "AMOLED Calling Watches", query: "amoled" },
-                { label: "Stainless Luxury Straps", query: "stainless" },
-                { label: "Fitness & Health Trackers", query: "health" },
-                { label: "Fire-Boltt & Noise", brand: "Fire-Boltt" },
-                { label: "All Smartwatches", subType: "Smartwatches" }
-            ]
-        },
-        {
-            title: "Power & Chargers",
-            subType: "Power & Chargers",
-            items: [
-                { label: "20,000mAh Power Banks", query: "power bank" },
-                { label: "65W GaN Fast Chargers", query: "gan" },
-                { label: "Type-C Braided Cables", query: "cable" },
-                { label: "MagSafe Wireless Docks", query: "wireless" },
-                { label: "All Power", subType: "Power & Chargers" }
-            ]
-        },
-        {
-            title: "Speakers & Accessories",
-            items: [
-                { label: "Bluetooth Speakers", subType: "Speakers" },
-                { label: "Soundbars & Home Audio", query: "soundbar" },
-                { label: "Tech & Laptop Stands", subType: "Tech Accessories" },
-                { label: "Protective Phone Cases", query: "case" }
-            ]
-        }
-    ],
-    'Home & Kitchen': [
-        {
-            title: "Kitchen Appliances",
-            subType: "Appliances",
-            items: [
-                { label: "Digital Air Fryers", query: "air fryer" },
-                { label: "Mixer Grinders & Blenders", query: "mixer" },
-                { label: "Electric Kettles", query: "kettle" },
-                { label: "Induction Cooktops", query: "induction" },
-                { label: "All Appliances", subType: "Appliances" }
-            ]
-        },
-        {
-            title: "Cookware & Utensils",
-            subType: "Cookware",
-            items: [
-                { label: "Triply Stainless Steel Kadai", query: "kadai" },
-                { label: "Non-Stick Fry Pans & Tawa", query: "pan" },
-                { label: "Prestige Hard Anodized", brand: "Prestige" },
-                { label: "Hawkins Pressure Cookers", brand: "Hawkins" },
-                { label: "All Cookware", subType: "Cookware" }
-            ]
-        },
-        {
-            title: "Storage & Flasks",
-            subType: "Storage & Flasks",
-            items: [
-                { label: "Airtight Glass Jars", query: "glass" },
-                { label: "Insulated Steel Flasks", query: "flask" },
-                { label: "Milton & Cello Containers", brand: "Milton" },
-                { label: "All Storage", subType: "Storage & Flasks" }
-            ]
-        },
-        {
-            title: "Furnishing & Decor",
-            subType: "Furnishing & Decor",
-            items: [
-                { label: "Pure Cotton Bedsheets", query: "bedsheet" },
-                { label: "Microfiber Pillows", query: "pillow" },
-                { label: "Plush Bath Towels", query: "towel" },
-                { label: "All Home Decor", subType: "Furnishing & Decor" }
-            ]
-        }
-    ],
-    'Beauty & Personal Care': [
-        {
-            title: "Grooming Tools",
-            subType: "Grooming Tools",
-            items: [
-                { label: "Cordless Beard Trimmers", query: "trimmer" },
-                { label: "Hair Dryers & Stylers", query: "dryer" },
-                { label: "Philips Male Grooming", brand: "Philips" },
-                { label: "All Grooming Tools", subType: "Grooming Tools" }
-            ]
-        },
-        {
-            title: "Skincare Essentials",
-            subType: "Skincare",
-            items: [
-                { label: "Hydrating Face Washes", query: "face wash" },
-                { label: "Moisturizers & Body Milk", query: "body" },
-                { label: "Nivea & Cetaphil Care", brand: "Nivea" },
-                { label: "All Skincare", subType: "Skincare" }
-            ]
-        },
-        {
-            title: "Haircare Solutions",
-            subType: "Haircare",
-            items: [
-                { label: "Anti-Dandruff Shampoos", query: "shampoo" },
-                { label: "Damage Repair Conditioners", query: "conditioner" },
-                { label: "L'Oreal & Tresemme", brand: "L'Oreal" },
-                { label: "All Haircare", subType: "Haircare" }
-            ]
-        },
-        {
-            title: "Fragrance & Hygiene",
-            subType: "Fragrance & Hygiene",
-            items: [
-                { label: "Long-Lasting Deodorants", query: "deodorant" },
-                { label: "Luxury Cologne & Perfumes", query: "perfume" },
-                { label: "Germ Protection Handwash", query: "handwash" },
-                { label: "All Fragrances", subType: "Fragrance & Hygiene" }
-            ]
-        }
-    ],
-    'Snacks & Munchies': [
-        {
-            title: "Chips & Crisps",
-            subType: "Chips & Crisps",
-            items: [
-                { label: "Potato Chips & Wafers", query: "chips" },
-                { label: "Nachos & Tortilla Crisps", query: "nachos" },
-                { label: "Pringles & Doritos", brand: "Pringles" },
-                { label: "All Chips", subType: "Chips & Crisps" }
-            ]
-        },
-        {
-            title: "Biscuits & Cookies",
-            subType: "Biscuits & Cookies",
-            items: [
-                { label: "Choco Chip & Cream", query: "choco" },
-                { label: "Digestive & Marie", query: "marie" },
-                { label: "Butter & Cashew Cookies", query: "butter" },
-                { label: "All Biscuits", subType: "Biscuits & Cookies" }
-            ]
-        },
-        {
-            title: "Chocolates & Sweets",
-            subType: "Chocolates & Sweets",
-            items: [
-                { label: "Cadbury Dairy Milk Silk", brand: "Cadbury" },
-                { label: "Ferrero Rocher Treats", brand: "Ferrero Rocher" },
-                { label: "Gift Boxes & Assorted", query: "celebration" },
-                { label: "All Sweets", subType: "Chocolates & Sweets" }
-            ]
-        },
-        {
-            title: "Namkeen & Traditional",
-            subType: "Namkeen & Traditional",
-            items: [
-                { label: "Haldiram's Bhujia & Sev", brand: "Haldiram's" },
-                { label: "Roasted Dry Fruits & Nuts", brand: "Happilo" },
-                { label: "Instant Noodles & Pasta", subType: "Instant Noodles & Pasta" }
-            ]
-        }
-    ],
-    'Cold Drinks & Beverages': [
-        {
-            title: "Tea & Gourmet Coffee",
-            subType: "Tea & Coffee",
-            items: [
-                { label: "Pure Freeze-Dried Coffee", query: "coffee" },
-                { label: "Assam Gold Leaf Tea", query: "tea" },
-                { label: "Twinings Green Tea", brand: "Twinings" },
-                { label: "Davidoff & Nescafe", brand: "Davidoff" },
-                { label: "All Tea & Coffee", subType: "Tea & Coffee" }
-            ]
-        },
-        {
-            title: "Chilled Soft Drinks",
-            subType: "Cold Drinks & Soda",
-            items: [
-                { label: "Thums Up & Coca-Cola", brand: "Coca-Cola" },
-                { label: "Sprite Lemon Soda", brand: "Sprite" },
-                { label: "Appy Fizz Sparkling", brand: "Appy Fizz" },
-                { label: "All Cold Drinks", subType: "Cold Drinks & Soda" }
-            ]
-        },
-        {
-            title: "Energy & Juices",
-            items: [
-                { label: "Red Bull Energy Drink", brand: "Red Bull" },
-                { label: "Monster Energy Drink", brand: "Monster" },
-                { label: "Tropicana 100% Real Fruit", brand: "Tropicana" },
-                { label: "Paper Boat Mango Aamras", brand: "Paper Boat" }
-            ]
-        }
-    ],
-    'Dairy, Bread & Eggs': [
-        {
-            title: "Milk & Fresh Dairy",
-            subType: "Milk & Dairy",
-            items: [
-                { label: "Fresh Cow Milk & Toned", brand: "Amul" },
-                { label: "Mother Dairy Pouch Milk", brand: "Mother Dairy" },
-                { label: "Epigamia Greek Yogurt", brand: "Epigamia" },
-                { label: "All Milk & Dairy", subType: "Milk & Dairy" }
-            ]
-        },
-        {
-            title: "Butter & Cheese",
-            subType: "Butter & Cheese",
-            items: [
-                { label: "Amul Pasteurized Butter", brand: "Amul" },
-                { label: "Go Cheese Slices & Cubes", brand: "Go Cheese" },
-                { label: "Britannia Cheese Block", brand: "Britannia" },
-                { label: "All Butter & Cheese", subType: "Butter & Cheese" }
-            ]
-        },
-        {
-            title: "Artisan Breads & Buns",
-            subType: "Breads & Buns",
-            items: [
-                { label: "100% Whole Wheat Bread", query: "wheat" },
-                { label: "English Oven Multigrain", brand: "English Oven" },
-                { label: "Harvest Gold Sweet Buns", brand: "Harvest Gold" },
-                { label: "All Breads & Buns", subType: "Breads & Buns" }
-            ]
-        },
-        {
-            title: "Farm Fresh Eggs",
-            subType: "Eggs & Poultry",
-            items: [
-                { label: "Eggoz Farm White Eggs", brand: "Eggoz" },
-                { label: "Kadaknath Free-Range Eggs", brand: "Kadaknath" },
-                { label: "Brown Protein Eggs", query: "brown" },
-                { label: "All Eggs", subType: "Eggs & Poultry" }
-            ]
-        }
-    ],
-    'House Hold': [
-        {
-            title: "Detergents & Laundry",
-            subType: "Detergents & Laundry",
-            items: [
-                { label: "Matic Top & Front Load Powder", query: "matic" },
-                { label: "Fabric Conditioner Liquids", query: "fabric" },
-                { label: "Ariel & Surf Excel", brand: "Surf Excel" },
-                { label: "All Laundry", subType: "Detergents & Laundry" }
-            ]
-        },
-        {
-            title: "Disinfectants & Cleaning",
-            subType: "Cleaning & Disinfectants",
-            items: [
-                { label: "Lizol Floor Cleaner Citrus", brand: "Lizol" },
-                { label: "Harpic Power Toilet Cleaner", brand: "Harpic" },
-                { label: "Colin Glass & Surface", brand: "Colin" },
-                { label: "Vim & Pril Dishwash Gel", brand: "Vim" },
-                { label: "All Cleaning", subType: "Cleaning & Disinfectants" }
-            ]
-        },
-        {
-            title: "Pest Control & Paper",
-            subType: "Pest Control & Paper",
-            items: [
-                { label: "Good knight Gold Mosquito Refills", brand: "Good knight" },
-                { label: "Hit Flying Insect Spray", brand: "Hit" },
-                { label: "Origami Soft Tissue Rolls", brand: "Origami" },
-                { label: "Odonil Room Fresheners", brand: "Odonil" }
-            ]
-        }
-    ],
-    'Staples, Atta & Oil': [
-        {
-            title: "Atta & Fresh Flours",
-            subType: "Atta & Flours",
-            items: [
-                { label: "Aashirvaad Shudh Chakki Atta", brand: "Aashirvaad" },
-                { label: "Fortune MP Sharbati Atta", brand: "Fortune" },
-                { label: "Pillsbury Whole Wheat", brand: "Pillsbury" },
-                { label: "All Atta & Flours", subType: "Atta & Flours" }
-            ]
-        },
-        {
-            title: "Edible Oils & Pure Ghee",
-            subType: "Edible Oils & Ghee",
-            items: [
-                { label: "Fortune Sunlite Refined Oil", brand: "Fortune" },
-                { label: "Saffola Gold Healthy Heart", brand: "Saffola" },
-                { label: "Dhara Pure Kachi Ghani Mustard", brand: "Dhara" },
-                { label: "Amul Pure Cow Ghee", brand: "Amul" },
-                { label: "All Oils & Ghee", subType: "Edible Oils & Ghee" }
-            ]
-        },
-        {
-            title: "Rice & Basmati",
-            subType: "Rice & Grains",
-            items: [
-                { label: "India Gate Basmati Rice", brand: "India Gate" },
-                { label: "Daawat Rozana Daily Rice", brand: "Daawat" },
-                { label: "Kohinoor Super Silver Aged", brand: "Kohinoor" },
-                { label: "All Rice & Grains", subType: "Rice & Grains" }
-            ]
-        },
-        {
-            title: "Dals, Pulses & Spices",
-            items: [
-                { label: "Tata Sampann Toor Dal", brand: "Tata Sampann" },
-                { label: "Organic Tattva Moong Dal", brand: "Organic Tattva" },
-                { label: "Everest & MDH Spices", brand: "Everest" },
-                { label: "Tata Salt Vacuum Evaporated", brand: "Tata Salt" }
-            ]
-        }
-    ]
+const SUB_MEGA_MENU_DATA = {
+    'Fashion & Apparel': {
+        "Men's Apparel": [
+            {
+                title: "Ethnic Wear",
+                items: [
+                    { label: "Sherwani", query: "sherwani" },
+                    { label: "Dhotis", query: "dhoti" },
+                    { label: "Kurtas", query: "kurta" },
+                    { label: "Harem Pants", query: "harem" },
+                    { label: "Ethnic Bottom", query: "ethnic bottom" },
+                    { label: "All Ethnic Wear", query: "ethnic" }
+                ]
+            },
+            {
+                title: "Western Wear",
+                items: [
+                    { label: "Jeans", query: "jeans" },
+                    { label: "T-Shirts", query: "t-shirt" },
+                    { label: "Jackets", query: "jacket" },
+                    { label: "Sweatshirts", query: "sweatshirt" },
+                    { label: "Shrugs", query: "shrug" },
+                    { label: "Shorts", query: "shorts" },
+                    { label: "Cargo Pants", query: "cargo" },
+                    { label: "Co-ord Sets", query: "co-ord" },
+                    { label: "Topwear", query: "shirt" },
+                    { label: "Sweaters", query: "sweater" }
+                ]
+            },
+            {
+                title: "Mens Formal Wear",
+                items: [
+                    { label: "Shirts", query: "shirt" },
+                    { label: "Blazers", query: "blazer" },
+                    { label: "Waistcoats", query: "waistcoat" },
+                    { label: "Trousers", query: "trouser" },
+                    { label: "Suits", query: "suit" },
+                    { label: "Formal Shirts", query: "formal shirt" }
+                ]
+            },
+            {
+                title: "Inner Wear",
+                items: [
+                    { label: "Vests", query: "vest" },
+                    { label: "Underwear", query: "underwear" },
+                    { label: "Lungis", query: "lungi" },
+                    { label: "Night Suits", query: "night suit" },
+                    { label: "Bandana", query: "bandana" },
+                    { label: "Thermals", query: "thermal" },
+                    { label: "Innerwear", query: "innerwear" },
+                    { label: "Boxers", query: "boxer" },
+                    { label: "Tights", query: "tights" },
+                    { label: "Bodyshaper", query: "bodyshaper" }
+                ]
+            },
+            {
+                title: "Loungewear & Activewear",
+                items: [
+                    { label: "Track Pant", query: "track pant" },
+                    { label: "Tracksuits", query: "tracksuit" },
+                    { label: "Swimming Costume", query: "swim" },
+                    { label: "Bathrobes", query: "bathrobe" },
+                    { label: "Winter Wear", query: "winter" },
+                    { label: "Gloves", query: "gloves" }
+                ]
+            }
+        ],
+        "Women's Ethnic": [
+            {
+                title: "Kurtas & Suits",
+                items: [
+                    { label: "Kurtas & Kurtis", query: "kurta" },
+                    { label: "Anarkali Suits", query: "anarkali" },
+                    { label: "Straight Kurta Sets", query: "set" },
+                    { label: "Ethnic Tunics", query: "tunic" },
+                    { label: "Short Kurtis", query: "kurti" }
+                ]
+            },
+            {
+                title: "Sarees & Silk Drapes",
+                items: [
+                    { label: "Pure Silk Sarees", query: "silk" },
+                    { label: "Georgette Sarees", query: "georgette" },
+                    { label: "Cotton Handloom", query: "cotton" },
+                    { label: "Banarasi Silk", query: "banarasi" },
+                    { label: "Chiffon Sarees", query: "chiffon" }
+                ]
+            },
+            {
+                title: "Festive Occasion",
+                items: [
+                    { label: "Designer Lehenga Choli", query: "lehenga" },
+                    { label: "Festive Ethnic Gowns", query: "gown" },
+                    { label: "Sharara Sets", query: "sharara" },
+                    { label: "Festive Dupattas", query: "dupatta" }
+                ]
+            },
+            {
+                title: "Ethnic Bottoms",
+                items: [
+                    { label: "Palazzos", query: "palazzo" },
+                    { label: "Ethnic Skirts", query: "skirt" },
+                    { label: "Leggings & Salwars", query: "salwar" },
+                    { label: "Cigarette Pants", query: "pants" }
+                ]
+            },
+            {
+                title: "Top Ethnic Brands",
+                items: [
+                    { label: "Biba", brand: "Biba" },
+                    { label: "Aurelia", brand: "Aurelia" },
+                    { label: "FabIndia", brand: "FabIndia" },
+                    { label: "Libas", brand: "Libas" },
+                    { label: "W for Woman", brand: "W for Woman" }
+                ]
+            }
+        ],
+        "Footwear & Shoes": [
+            {
+                title: "Sports & Running",
+                items: [
+                    { label: "Running Shoes", query: "running" },
+                    { label: "Training & Gym Shoes", query: "gym" },
+                    { label: "Walking Shoes", query: "walking" },
+                    { label: "Turf Trainers", query: "sports" }
+                ]
+            },
+            {
+                title: "Casual Sneakers",
+                items: [
+                    { label: "Low-Top Sneakers", query: "sneaker" },
+                    { label: "Canvas Shoes", query: "canvas" },
+                    { label: "Slip-On Sneakers", query: "slip" },
+                    { label: "High-Top Streetwear", query: "high" }
+                ]
+            },
+            {
+                title: "Daily & Clogs",
+                items: [
+                    { label: "Lightweight Clogs", query: "clog" },
+                    { label: "Daily Sliders", query: "slide" },
+                    { label: "Flip-Flops", query: "flip" },
+                    { label: "Comfort Sandals", query: "sandal" }
+                ]
+            },
+            {
+                title: "Boots & Formal",
+                items: [
+                    { label: "Leather Ankle Boots", query: "boot" },
+                    { label: "Derby Formal Shoes", query: "derby" },
+                    { label: "Oxford Shoes", query: "oxford" },
+                    { label: "Loafers", query: "loafer" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Nike", brand: "Nike" },
+                    { label: "Adidas", brand: "Adidas" },
+                    { label: "Puma", brand: "Puma" },
+                    { label: "Crocs", brand: "Crocs" },
+                    { label: "Red Tape", brand: "Red Tape" },
+                    { label: "Woodland", brand: "Woodland" }
+                ]
+            }
+        ],
+        "Watches & Accessories": [
+            {
+                title: "Chronograph & Analog",
+                items: [
+                    { label: "Chronograph Watches", query: "chronograph" },
+                    { label: "Stainless Steel Dial", query: "stainless" },
+                    { label: "Minimalist Watches", query: "watch" },
+                    { label: "Sport Watches", query: "sport" }
+                ]
+            },
+            {
+                title: "Smart Wearables",
+                items: [
+                    { label: "Bluetooth Calling Watches", query: "smart" },
+                    { label: "Fitness Trackers", query: "fitness" },
+                    { label: "AMOLED Watches", query: "amoled" }
+                ]
+            },
+            {
+                title: "Sunglasses & Eyewear",
+                items: [
+                    { label: "Polarized Sunglasses", query: "sunglasses" },
+                    { label: "Classic Aviators", query: "aviator" },
+                    { label: "Wayfarer Frames", query: "wayfarer" },
+                    { label: "UV400 Protection", query: "uv" }
+                ]
+            },
+            {
+                title: "Leather Essentials",
+                items: [
+                    { label: "Pure Leather Belts", query: "belt" },
+                    { label: "Bifold Wallets", query: "wallet" },
+                    { label: "Slim Cardholders", query: "card" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Casio", brand: "Casio" },
+                    { label: "Titan", brand: "Titan" },
+                    { label: "Fastrack", brand: "Fastrack" },
+                    { label: "Ray-Ban", brand: "Ray-Ban" },
+                    { label: "Police", brand: "Police" }
+                ]
+            }
+        ]
+    },
+    'Electronics & Gadgets': {
+        "Smartphones": [
+            {
+                title: "Flagship 5G",
+                items: [
+                    { label: "Apple iPhone 15 Pro", brand: "Apple" },
+                    { label: "Samsung Galaxy S24 Ultra", brand: "Samsung" },
+                    { label: "Google Pixel 8 AI", brand: "Google" },
+                    { label: "OnePlus 12 5G", brand: "OnePlus" }
+                ]
+            },
+            {
+                title: "Performance & Gaming",
+                items: [
+                    { label: "iQOO 12 5G", brand: "iQOO" },
+                    { label: "Xiaomi 14 Leica", brand: "Xiaomi" },
+                    { label: "Snapdragon 8 Gen 3", query: "snapdragon" },
+                    { label: "120Hz AMOLED Phones", query: "amoled" }
+                ]
+            },
+            {
+                title: "Camera & Optics",
+                items: [
+                    { label: "200MP Ultra Vision", query: "camera" },
+                    { label: "Periscope Zoom", query: "zoom" },
+                    { label: "4K HDR Video", query: "video" }
+                ]
+            },
+            {
+                title: "Battery & Fast Charge",
+                items: [
+                    { label: "5000mAh+ Battery", query: "5000" },
+                    { label: "120W HyperCharge", query: "charge" },
+                    { label: "Wireless Qi Charging", query: "wireless" }
+                ]
+            },
+            {
+                title: "Top Phone Brands",
+                items: [
+                    { label: "Apple", brand: "Apple" },
+                    { label: "Samsung", brand: "Samsung" },
+                    { label: "Google", brand: "Google" },
+                    { label: "OnePlus", brand: "OnePlus" },
+                    { label: "Xiaomi", brand: "Xiaomi" }
+                ]
+            }
+        ],
+        "TWS & Audio": [
+            {
+                title: "Active Noise Cancelling",
+                items: [
+                    { label: "Flagship ANC Earbuds", query: "anc" },
+                    { label: "Sony High-Res ANC", brand: "Sony" },
+                    { label: "Dual Mic Clear Call", query: "mic" }
+                ]
+            },
+            {
+                title: "True Wireless Earbuds",
+                items: [
+                    { label: "40H+ Playtime TWS", query: "earbuds" },
+                    { label: "Gaming Low Latency", query: "gaming" },
+                    { label: "Touch Control Buds", query: "touch" }
+                ]
+            },
+            {
+                title: "Over-Ear Headphones",
+                items: [
+                    { label: "Studio Monitoring", query: "headphone" },
+                    { label: "Deep Bass Boost", query: "bass" },
+                    { label: "Wireless Foldable", query: "wireless" }
+                ]
+            },
+            {
+                title: "Neckbands & Sports",
+                items: [
+                    { label: "Magnetic Fast Charge", query: "neckband" },
+                    { label: "Water Resistant IPX5", query: "ipx" }
+                ]
+            },
+            {
+                title: "Top Audio Brands",
+                items: [
+                    { label: "Sony", brand: "Sony" },
+                    { label: "boAt", brand: "boAt" },
+                    { label: "JBL", brand: "JBL" },
+                    { label: "Boult", brand: "Boult" },
+                    { label: "Noise", brand: "Noise" }
+                ]
+            }
+        ],
+        "Smartwatches": [
+            {
+                title: "AMOLED Calling",
+                items: [
+                    { label: "Ultra AMOLED Displays", query: "amoled" },
+                    { label: "Bluetooth Calling", query: "calling" },
+                    { label: "Rotating Digital Crown", query: "crown" }
+                ]
+            },
+            {
+                title: "Luxury Straps",
+                items: [
+                    { label: "Stainless Steel Mesh", query: "stainless" },
+                    { label: "Magnetic Milanese", query: "magnetic" },
+                    { label: "Genuine Leather", query: "leather" }
+                ]
+            },
+            {
+                title: "Health & Sports",
+                items: [
+                    { label: "SpO2 & Heart Rate", query: "heart" },
+                    { label: "Sleep & Stress Tracking", query: "sleep" },
+                    { label: "100+ Sports Modes", query: "sports" }
+                ]
+            },
+            {
+                title: "Top Watch Brands",
+                items: [
+                    { label: "Fire-Boltt", brand: "Fire-Boltt" },
+                    { label: "Noise", brand: "Noise" },
+                    { label: "Amazfit", brand: "Amazfit" },
+                    { label: "Fastrack", brand: "Fastrack" }
+                ]
+            }
+        ],
+        "Power & Chargers": [
+            {
+                title: "High Capacity Banks",
+                items: [
+                    { label: "20,000mAh Power Banks", query: "20000" },
+                    { label: "10,000mAh Slim Pocket", query: "10000" },
+                    { label: "65W Laptop Banks", query: "65w" }
+                ]
+            },
+            {
+                title: "GaN Fast Adaptors",
+                items: [
+                    { label: "65W GaN Multi-Port", query: "gan" },
+                    { label: "33W Fast Charger", query: "33w" },
+                    { label: "Dual Type-C Adaptors", query: "dual" }
+                ]
+            },
+            {
+                title: "Braided Cables",
+                items: [
+                    { label: "100W Type-C to C", query: "type-c" },
+                    { label: "Braided Lightning", query: "lightning" },
+                    { label: "3-in-1 Universal Cable", query: "universal" }
+                ]
+            },
+            {
+                title: "Top Power Brands",
+                items: [
+                    { label: "Anker", brand: "Anker" },
+                    { label: "Ambrane", brand: "Ambrane" },
+                    { label: "URBN", brand: "URBN" },
+                    { label: "Spigen", brand: "Spigen" }
+                ]
+            }
+        ],
+        "Speakers": [
+            {
+                title: "Portable Bluetooth",
+                items: [
+                    { label: "IPX7 Waterproof", query: "waterproof" },
+                    { label: "20H Battery Outdoor", query: "portable" },
+                    { label: "Clip-On Travel", query: "clip" }
+                ]
+            },
+            {
+                title: "Home Soundbars",
+                items: [
+                    { label: "Dolby Soundbars", query: "soundbar" },
+                    { label: "Deep Bass Subwoofer", query: "subwoofer" },
+                    { label: "TV Optical Sound", query: "optical" }
+                ]
+            },
+            {
+                title: "Top Speaker Brands",
+                items: [
+                    { label: "JBL", brand: "JBL" },
+                    { label: "Marshall", brand: "Marshall" },
+                    { label: "Sony", brand: "Sony" },
+                    { label: "boAt", brand: "boAt" }
+                ]
+            }
+        ],
+        "Tech Accessories": [
+            {
+                title: "Laptop Stands & Hubs",
+                items: [
+                    { label: "Aluminum Laptop Stand", query: "stand" },
+                    { label: "USB-C Multi Hubs", query: "hub" },
+                    { label: "Cooling Pads", query: "cooling" }
+                ]
+            },
+            {
+                title: "Gaming & Productivity",
+                items: [
+                    { label: "RGB Mechanical Keyboard", query: "keyboard" },
+                    { label: "Wireless Precision Mouse", query: "mouse" },
+                    { label: "Extended Desk Mats", query: "mat" }
+                ]
+            },
+            {
+                title: "Phone Protection",
+                items: [
+                    { label: "Shockproof Armor Cases", query: "case" },
+                    { label: "9H Tempered Glass", query: "glass" },
+                    { label: "Camera Protectors", query: "lens" }
+                ]
+            }
+        ]
+    },
+    'Home & Kitchen': {
+        "Appliances": [
+            {
+                title: "Smart Cooking",
+                items: [
+                    { label: "Digital Air Fryers 5L+", query: "air fryer" },
+                    { label: "Convection OTG Ovens", query: "otg" },
+                    { label: "Induction Cooktops 2000W", query: "induction" }
+                ]
+            },
+            {
+                title: "Grinders & Blenders",
+                items: [
+                    { label: "750W Heavy Mixers", query: "mixer" },
+                    { label: "Nutri-Blenders", query: "blender" },
+                    { label: "Cold Press Juicers", query: "juicer" }
+                ]
+            },
+            {
+                title: "Kettles & Breakfast",
+                items: [
+                    { label: "Stainless Auto Kettles", query: "kettle" },
+                    { label: "Pop-Up Toasters", query: "toaster" },
+                    { label: "Egg Boilers", query: "egg boiler" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Philips", brand: "Philips" },
+                    { label: "Bajaj", brand: "Bajaj" },
+                    { label: "Morphy Richards", brand: "Morphy Richards" },
+                    { label: "Kent", brand: "Kent" }
+                ]
+            }
+        ],
+        "Cookware": [
+            {
+                title: "Triply Stainless Steel",
+                items: [
+                    { label: "Triply Heavy Base Kadai", query: "kadai" },
+                    { label: "Triply Saucepan", query: "saucepan" },
+                    { label: "Triply Deep Frypans", query: "frypan" }
+                ]
+            },
+            {
+                title: "Granite Non-Stick",
+                items: [
+                    { label: "5-Layer Dosa Tawa", query: "tawa" },
+                    { label: "Deep Fry Pans", query: "pan" },
+                    { label: "Grill Pans", query: "grill" }
+                ]
+            },
+            {
+                title: "Pressure Cookers",
+                items: [
+                    { label: "Hard Anodized Cookers", query: "cooker" },
+                    { label: "Stainless Steel Handi", query: "handi" }
+                ]
+            },
+            {
+                title: "Top Cookware Brands",
+                items: [
+                    { label: "Prestige", brand: "Prestige" },
+                    { label: "Hawkins", brand: "Hawkins" },
+                    { label: "Vinod", brand: "Vinod" },
+                    { label: "Wonderchef", brand: "Wonderchef" }
+                ]
+            }
+        ],
+        "Storage & Flasks": [
+            {
+                title: "Airtight Glass Jars",
+                items: [
+                    { label: "Borosilicate Spice Jars", query: "glass" },
+                    { label: "Bamboo Lid Containers", query: "container" },
+                    { label: "Oil Pourer Bottles", query: "pourer" }
+                ]
+            },
+            {
+                title: "Steel Flasks",
+                items: [
+                    { label: "24H Hot & Cold Bottles", query: "flask" },
+                    { label: "Insulated Sippers", query: "bottle" },
+                    { label: "Gym Shakers", query: "shaker" }
+                ]
+            },
+            {
+                title: "Top Storage Brands",
+                items: [
+                    { label: "Milton", brand: "Milton" },
+                    { label: "Cello", brand: "Cello" },
+                    { label: "Borosil", brand: "Borosil" },
+                    { label: "Tupperware", brand: "Tupperware" }
+                ]
+            }
+        ],
+        "Furnishing & Decor": [
+            {
+                title: "Bedding & Comfort",
+                items: [
+                    { label: "100% Cotton Bedsheets", query: "bedsheet" },
+                    { label: "Fitted Bed Sheets", query: "fitted" },
+                    { label: "Reversible Comforters", query: "comforter" }
+                ]
+            },
+            {
+                title: "Pillows & Cushions",
+                items: [
+                    { label: "Memory Foam Ortho Pillows", query: "pillow" },
+                    { label: "Microfiber Sleeping Pillows", query: "microfiber" },
+                    { label: "Velvet Cushions", query: "cushion" }
+                ]
+            },
+            {
+                title: "Bath Linen",
+                items: [
+                    { label: "600 GSM Cotton Towels", query: "towel" },
+                    { label: "Anti-Skid Memory Foam Mats", query: "mat" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Spaces", brand: "Spaces" },
+                    { label: "Solimo", brand: "Solimo" },
+                    { label: "Wakefit", brand: "Wakefit" }
+                ]
+            }
+        ]
+    },
+    'Beauty & Personal Care': {
+        "Grooming Tools": [
+            {
+                title: "Beard Trimmers",
+                items: [
+                    { label: "Cordless 90 Min Run-time", query: "trimmer" },
+                    { label: "Titanium Blades", query: "titanium" },
+                    { label: "Precision 0.5mm Dial", query: "precision" }
+                ]
+            },
+            {
+                title: "Hair Styling",
+                items: [
+                    { label: "Salon Hair Dryers 2000W", query: "dryer" },
+                    { label: "Ceramic Straighteners", query: "straightener" },
+                    { label: "Curling Wands", query: "curler" }
+                ]
+            },
+            {
+                title: "Top Grooming Brands",
+                items: [
+                    { label: "Philips", brand: "Philips" },
+                    { label: "Vega", brand: "Vega" },
+                    { label: "Syska", brand: "Syska" },
+                    { label: "Beardo", brand: "Beardo" }
+                ]
+            }
+        ],
+        "Skincare": [
+            {
+                title: "Cleansers & Facewash",
+                items: [
+                    { label: "Charcoal Deep Impact", query: "charcoal" },
+                    { label: "Gentle Skin Cleansers", query: "cleanser" },
+                    { label: "Foaming Face Wash", query: "face wash" }
+                ]
+            },
+            {
+                title: "Moisturizers & Body Milk",
+                items: [
+                    { label: "Deep Nourishing Milk", query: "milk" },
+                    { label: "Ceramide Creams", query: "cream" },
+                    { label: "Lightweight Gel Lotions", query: "gel" }
+                ]
+            },
+            {
+                title: "Top Skincare Brands",
+                items: [
+                    { label: "Nivea", brand: "Nivea" },
+                    { label: "Cetaphil", brand: "Cetaphil" },
+                    { label: "Mamaearth", brand: "Mamaearth" },
+                    { label: "Neutrogena", brand: "Neutrogena" }
+                ]
+            }
+        ],
+        "Haircare": [
+            {
+                title: "Shampoos & Conditioners",
+                items: [
+                    { label: "Anti-Dandruff Shampoos", query: "shampoo" },
+                    { label: "Total Repair 5 Keratin", query: "repair" },
+                    { label: "Deep Hair Spa Masks", query: "conditioner" }
+                ]
+            },
+            {
+                title: "Top Haircare Brands",
+                items: [
+                    { label: "L'Oreal", brand: "L'Oreal" },
+                    { label: "Tresemme", brand: "Tresemme" },
+                    { label: "Dove", brand: "Dove" },
+                    { label: "Head & Shoulders", brand: "Head & Shoulders" }
+                ]
+            }
+        ],
+        "Fragrance & Hygiene": [
+            {
+                title: "Deodorants & Perfumes",
+                items: [
+                    { label: "Long-Lasting Deodorants", query: "deodorant" },
+                    { label: "Eau De Parfum Luxury", query: "perfume" },
+                    { label: "Woody Gentleman Cologne", query: "cologne" }
+                ]
+            },
+            {
+                title: "Hand & Body Hygiene",
+                items: [
+                    { label: "Germ Protection Handwash", query: "handwash" },
+                    { label: "Moisture Glycerin Soaps", query: "soap" }
+                ]
+            },
+            {
+                title: "Top Fragrance Brands",
+                items: [
+                    { label: "Fogg", brand: "Fogg" },
+                    { label: "Wild Stone", brand: "Wild Stone" },
+                    { label: "Yardley", brand: "Yardley" },
+                    { label: "Dettol", brand: "Dettol" }
+                ]
+            }
+        ]
+    },
+    'Snacks & Munchies': {
+        "Chips & Crisps": [
+            {
+                title: "Crisps & Nachos",
+                items: [
+                    { label: "Potato Chips & Wafers", query: "chips" },
+                    { label: "Gourmet Corn Nachos", query: "nachos" },
+                    { label: "Roasted Makhana Puffs", query: "makhana" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Lay's", brand: "Lay's" },
+                    { label: "Pringles", brand: "Pringles" },
+                    { label: "Doritos", brand: "Doritos" },
+                    { label: "Bingo", brand: "Bingo" }
+                ]
+            }
+        ],
+        "Biscuits & Cookies": [
+            {
+                title: "Cookies & Bakery",
+                items: [
+                    { label: "Choco Filled Molten Lava", query: "choco" },
+                    { label: "Butter Cashew Cookies", query: "butter" },
+                    { label: "Whole Wheat Digestive", query: "digestive" }
+                ]
+            },
+            {
+                title: "Top Brands",
+                items: [
+                    { label: "Dark Fantasy", brand: "Dark Fantasy" },
+                    { label: "Oreo", brand: "Oreo" },
+                    { label: "Britannia", brand: "Britannia" },
+                    { label: "Unibic", brand: "Unibic" }
+                ]
+            }
+        ],
+        "Chocolates & Sweets": [
+            {
+                title: "Chocolates & Gifts",
+                items: [
+                    { label: "Dairy Milk Silk Hazelnut", brand: "Cadbury" },
+                    { label: "Ferrero Rocher Truffles", brand: "Ferrero Rocher" },
+                    { label: "Celebrations Gift Boxes", query: "celebration" }
+                ]
+            }
+        ],
+        "Namkeen & Traditional": [
+            {
+                title: "Traditional Namkeen",
+                items: [
+                    { label: "Aloo Bhujia Spicy", brand: "Haldiram's" },
+                    { label: "Royal Shahi Mixture", query: "mixture" },
+                    { label: "Salted Roasted Cashews", brand: "Happilo" }
+                ]
+            }
+        ]
+    },
+    'Cold Drinks & Beverages': {
+        "Tea & Coffee": [
+            {
+                title: "Gourmet Coffee",
+                items: [
+                    { label: "100% Freeze-Dried Pure Coffee", query: "freeze" },
+                    { label: "Rich Aroma Ground Coffee", query: "aroma" },
+                    { label: "Davidoff & Nescafe", brand: "Davidoff" }
+                ]
+            },
+            {
+                title: "Assam & Green Tea",
+                items: [
+                    { label: "Assam CTC Gold Leaf", query: "assam" },
+                    { label: "Twinings Green Tea", brand: "Twinings" },
+                    { label: "Wagh Bakri Leaf Tea", brand: "Wagh Bakri" }
+                ]
+            }
+        ],
+        "Cold Drinks & Soda": [
+            {
+                title: "Carbonated Drinks",
+                items: [
+                    { label: "Coca-Cola & Thums Up", brand: "Coca-Cola" },
+                    { label: "Sprite Lemon Soda", brand: "Sprite" },
+                    { label: "Appy Fizz Sparkling", brand: "Appy Fizz" }
+                ]
+            }
+        ],
+        "Energy Drinks & Juices": [
+            {
+                title: "Juices & Boosters",
+                items: [
+                    { label: "Red Bull Energy Drink", brand: "Red Bull" },
+                    { label: "Monster Energy", brand: "Monster" },
+                    { label: "Tropicana 100% Fruit", brand: "Tropicana" },
+                    { label: "Paper Boat Mango Aamras", brand: "Paper Boat" }
+                ]
+            }
+        ]
+    },
+    'Dairy, Bread & Eggs': {
+        "Milk & Dairy": [
+            {
+                title: "Fresh Milk & Paneer",
+                items: [
+                    { label: "Fresh Cow Milk & Toned", brand: "Amul" },
+                    { label: "Mother Dairy Pouch Milk", brand: "Mother Dairy" },
+                    { label: "Epigamia Greek Yogurt", brand: "Epigamia" }
+                ]
+            }
+        ],
+        "Butter & Cheese": [
+            {
+                title: "Butter & Cheese Blocks",
+                items: [
+                    { label: "Amul Pasteurized Butter", brand: "Amul" },
+                    { label: "Go Cheese Slices & Cubes", brand: "Go Cheese" },
+                    { label: "Britannia Cheese Block", brand: "Britannia" }
+                ]
+            }
+        ],
+        "Breads & Buns": [
+            {
+                title: "Artisan Bakery",
+                items: [
+                    { label: "100% Whole Wheat Bread", query: "wheat" },
+                    { label: "English Oven Multigrain", brand: "English Oven" },
+                    { label: "Harvest Gold Sweet Buns", brand: "Harvest Gold" }
+                ]
+            }
+        ],
+        "Eggs & Poultry": [
+            {
+                title: "Farm Fresh Eggs",
+                items: [
+                    { label: "Eggoz Farm White Eggs", brand: "Eggoz" },
+                    { label: "Kadaknath Protein Eggs", brand: "Kadaknath" }
+                ]
+            }
+        ]
+    },
+    'House Hold': {
+        "Detergents & Laundry": [
+            {
+                title: "Laundry Detergents",
+                items: [
+                    { label: "Matic Top & Front Load Powder", query: "matic" },
+                    { label: "Surf Excel Liquid Pouch", brand: "Surf Excel" },
+                    { label: "Ariel Matic Powder", brand: "Ariel" }
+                ]
+            }
+        ],
+        "Cleaning & Disinfectants": [
+            {
+                title: "Surface Cleaners",
+                items: [
+                    { label: "Lizol Citrus Surface Cleaner", brand: "Lizol" },
+                    { label: "Harpic Power Toilet Cleaner", brand: "Harpic" },
+                    { label: "Colin Glass Cleaner", brand: "Colin" },
+                    { label: "Vim & Pril Dishwash", brand: "Vim" }
+                ]
+            }
+        ],
+        "Pest Control & Paper": [
+            {
+                title: "Pest & Paper",
+                items: [
+                    { label: "Good knight Mosquito Refills", brand: "Good knight" },
+                    { label: "Hit Insect Spray", brand: "Hit" },
+                    { label: "Origami Soft Tissue Rolls", brand: "Origami" }
+                ]
+            }
+        ]
+    },
+    'Staples, Atta & Oil': {
+        "Atta & Flours": [
+            {
+                title: "Fresh Atta",
+                items: [
+                    { label: "Aashirvaad Shudh Chakki Atta", brand: "Aashirvaad" },
+                    { label: "Fortune MP Sharbati Atta", brand: "Fortune" },
+                    { label: "Pillsbury Whole Wheat", brand: "Pillsbury" }
+                ]
+            }
+        ],
+        "Edible Oils & Ghee": [
+            {
+                title: "Pure Oils & Ghee",
+                items: [
+                    { label: "Fortune Sunlite Refined Oil", brand: "Fortune" },
+                    { label: "Saffola Gold Blended Oil", brand: "Saffola" },
+                    { label: "Dhara Kachi Ghani Mustard", brand: "Dhara" },
+                    { label: "Amul Pure Cow Ghee", brand: "Amul" }
+                ]
+            }
+        ],
+        "Rice & Grains": [
+            {
+                title: "Basmati & Grains",
+                items: [
+                    { label: "Kohinoor Super Silver Aged", brand: "Kohinoor" },
+                    { label: "Daawat Rozana Daily Rice", brand: "Daawat" },
+                    { label: "Quaker Rolled Oats", brand: "Quaker" }
+                ]
+            }
+        ],
+        "Dals & Pulses": [
+            {
+                title: "Unpolished Pulses",
+                items: [
+                    { label: "Tata Sampann Toor Dal", brand: "Tata Sampann" },
+                    { label: "Organic Tattva Moong Dal", brand: "Organic Tattva" },
+                    { label: "Everest Chaat Masala", brand: "Everest" }
+                ]
+            }
+        ]
+    }
 };
 
 export class ContainerView {
@@ -471,10 +953,11 @@ export class ContainerView {
         this.emptyResetFiltersBtn = document.getElementById('emptyResetFiltersBtn');
         this.categoryItemCountPill = document.getElementById('categoryItemCountPill');
         
-        this.shopsyMegaMenuDropdown = document.getElementById('shopsyMegaMenuDropdown');
-        this.shopsyMegaMenuOverlay = document.getElementById('shopsyMegaMenuOverlay');
-        this.megaMenuInner = document.getElementById('megaMenuInner');
-        this.megaMenuTimer = null;
+        this.categorySubFilterBar = document.getElementById('categorySubFilterBar');
+        this.subMegaMenuDropdown = document.getElementById('subMegaMenuDropdown');
+        this.subMegaMenuOverlay = document.getElementById('subMegaMenuOverlay');
+        this.subMegaMenuInner = document.getElementById('subMegaMenuInner');
+        this.subMegaMenuTimer = null;
 
         this.selectedFilters = {
             subTypes: new Set(),
@@ -525,7 +1008,7 @@ export class ContainerView {
         this.setupCartPageView();
         this.setupWishlistPageView();
         this.setupOrdersPageView();
-        this.setupShopsyMegaMenu();
+        this.setupCategorySubMegaMenu();
         this.setupDynamicCategoryFilters();
         
         this.setActiveView(this.homeView);
@@ -885,7 +1368,7 @@ export class ContainerView {
     renderSubFilterPills(categoryName) {
         if (!this.categorySubFilterPills) return;
         this.categorySubFilterPills.innerHTML = '';
-        this.activeSubType = 'All';
+        this.closeSubMegaMenu();
 
         const catItems = this.getItemsForCategory(categoryName);
         if (!catItems || catItems.length === 0) return;
@@ -902,33 +1385,60 @@ export class ContainerView {
 
         // 1. "All" Pill
         const allBtn = document.createElement('button');
+        allBtn.type = 'button';
         allBtn.className = 'category-sub-pill active';
         allBtn.dataset.subtype = 'All';
         allBtn.innerHTML = `All <span class="pill-count">${catItems.length}</span>`;
         allBtn.addEventListener('click', () => {
-            this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(b => b.classList.remove('active'));
-            allBtn.classList.add('active');
+            this.closeSubMegaMenu();
+            this.selectedFilters.subTypes.clear();
             this.activeSubType = 'All';
-            const currentSort = this.sortSelect?.value || 'featured';
-            this.renderCategoryProducts(this.currentCategory, '', currentSort);
+            this.syncSubFilterPillsWithSelection();
+            this.applyFiltersAndRender();
         });
         this.categorySubFilterPills.appendChild(allBtn);
 
-        // 2. SubType Pills
+        // 2. SubType Pills with Shopsy Hover Mega Menu
         subTypes.forEach(([subType, count]) => {
-            const btn = document.createElement('button');
-            btn.className = 'category-sub-pill';
-            btn.dataset.subtype = subType;
-            btn.innerHTML = `${subType} <span class="pill-count">${count}</span>`;
-            btn.addEventListener('click', () => {
-                this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+            const hasMega = !!(SUB_MEGA_MENU_DATA[categoryName] && SUB_MEGA_MENU_DATA[categoryName][subType]);
+
+            const pill = document.createElement('div');
+            pill.className = `category-sub-pill ${hasMega ? 'has-sub-megamenu' : ''}`;
+            pill.dataset.subtype = subType;
+            pill.innerHTML = `
+                <span class="pill-title">${subType}</span>
+                <span class="pill-count">${count}</span>
+                ${hasMega ? '<i data-lucide="chevron-down" class="pill-chevron"></i>' : ''}
+            `;
+
+            if (hasMega) {
+                pill.addEventListener('mouseenter', () => {
+                    if (window.innerWidth <= 900) return;
+                    clearTimeout(this.subMegaMenuTimer);
+                    this.openSubMegaMenu(categoryName, subType, pill);
+                });
+
+                pill.addEventListener('mouseleave', () => {
+                    if (window.innerWidth <= 900) return;
+                    this.subMegaMenuTimer = setTimeout(() => {
+                        this.closeSubMegaMenu();
+                    }, 180);
+                });
+            }
+
+            pill.addEventListener('click', () => {
+                this.closeSubMegaMenu();
+                this.selectedFilters.subTypes.clear();
+                this.selectedFilters.subTypes.add(subType);
                 this.activeSubType = subType;
-                const currentSort = this.sortSelect?.value || 'featured';
-                this.renderCategoryProducts(this.currentCategory, '', currentSort);
+                this.syncSubFilterPillsWithSelection();
+                this.applyFiltersAndRender();
             });
-            this.categorySubFilterPills.appendChild(btn);
+
+            this.categorySubFilterPills.appendChild(pill);
         });
+
+        if (window.lucide) lucide.createIcons();
     }
 
     showCategoryView(categoryName, initialFilter = '') {
@@ -3470,96 +3980,90 @@ export class ContainerView {
     }
 
     
-    // ================= SHOPSY / FLIPKART MEGA MENU =================
-    setupShopsyMegaMenu() {
-        const tabs = document.querySelectorAll('.sub-nav-tab');
-        if (!tabs.length || !this.shopsyMegaMenuDropdown || !this.shopsyMegaMenuOverlay) return;
-
-        tabs.forEach(tab => {
-            const cat = tab.dataset.tab;
-            if (MEGA_MENU_DATA[cat]) {
-                tab.classList.add('has-megamenu');
-            }
-
-            // Mouse enter on tab
-            tab.addEventListener('mouseenter', () => {
-                if (window.innerWidth <= 900) return; // Desktop mega menu
-                const tabCat = tab.dataset.tab;
-                if (MEGA_MENU_DATA[tabCat]) {
-                    clearTimeout(this.megaMenuTimer);
-                    this.openShopsyMegaMenu(tabCat, tab);
-                } else {
-                    this.closeShopsyMegaMenu();
-                }
-            });
-
-            // Mouse leave on tab
-            tab.addEventListener('mouseleave', () => {
-                if (window.innerWidth <= 900) return;
-                this.megaMenuTimer = setTimeout(() => {
-                    this.closeShopsyMegaMenu();
-                }, 180);
-            });
-        });
+    // ================= SHOPSY / FLIPKART SUB-CATEGORY MEGA MENU =================
+    setupCategorySubMegaMenu() {
+        if (!this.subMegaMenuDropdown) return;
 
         // Dropdown hover persistence
-        this.shopsyMegaMenuDropdown.addEventListener('mouseenter', () => {
-            clearTimeout(this.megaMenuTimer);
+        this.subMegaMenuDropdown.addEventListener('mouseenter', () => {
+            clearTimeout(this.subMegaMenuTimer);
         });
 
-        this.shopsyMegaMenuDropdown.addEventListener('mouseleave', () => {
-            this.megaMenuTimer = setTimeout(() => {
-                this.closeShopsyMegaMenu();
+        this.subMegaMenuDropdown.addEventListener('mouseleave', () => {
+            this.subMegaMenuTimer = setTimeout(() => {
+                this.closeSubMegaMenu();
             }, 180);
         });
 
         // Overlay click closes
-        this.shopsyMegaMenuOverlay.addEventListener('click', () => {
-            this.closeShopsyMegaMenu();
-        });
+        if (this.subMegaMenuOverlay) {
+            this.subMegaMenuOverlay.addEventListener('click', () => {
+                this.closeSubMegaMenu();
+            });
+        }
 
         // Click on any link in mega menu
-        this.megaMenuInner.addEventListener('click', (e) => {
-            const link = e.target.closest('.mega-item-link');
-            if (!link) return;
-            e.preventDefault();
-            const cat = link.dataset.category;
-            const subType = link.dataset.subtype;
-            const brand = link.dataset.brand;
-            const query = link.dataset.query;
+        if (this.subMegaMenuInner) {
+            this.subMegaMenuInner.addEventListener('click', (e) => {
+                const link = e.target.closest('.sub-mega-link');
+                if (!link) return;
+                e.preventDefault();
+                const cat = link.dataset.category;
+                const subType = link.dataset.subtype;
+                const brand = link.dataset.brand;
+                const query = link.dataset.query;
 
-            this.closeShopsyMegaMenu();
-            this.showCategoryView(cat, { subType, brand, query });
-        });
+                this.closeSubMegaMenu();
+
+                this.selectedFilters.subTypes.clear();
+                this.selectedFilters.brands.clear();
+                this.selectedFilters.searchQuery = '';
+
+                if (subType) {
+                    this.selectedFilters.subTypes.add(subType);
+                    this.activeSubType = subType;
+                }
+                if (brand) this.selectedFilters.brands.add(brand);
+                if (query) this.selectedFilters.searchQuery = query;
+
+                this.syncSubFilterPillsWithSelection();
+                this.applyFiltersAndRender();
+
+                const grid = document.getElementById('categoryProductsGrid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
     }
 
-    openShopsyMegaMenu(categoryName, tabElement) {
-        const menuConfig = MEGA_MENU_DATA[categoryName];
-        if (!menuConfig || !this.megaMenuInner) return;
+    openSubMegaMenu(categoryName, subType, pillElement) {
+        const config = SUB_MEGA_MENU_DATA[categoryName]?.[subType];
+        if (!config || !this.subMegaMenuInner || !this.subMegaMenuDropdown) return;
 
-        // Active tab styling
-        document.querySelectorAll('.sub-nav-tab').forEach(t => t.classList.remove('megamenu-active'));
-        if (tabElement) tabElement.classList.add('megamenu-active');
+        // Active pill styling
+        if (this.categorySubFilterPills) {
+            this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(p => p.classList.remove('megamenu-open'));
+        }
+        if (pillElement) pillElement.classList.add('megamenu-open');
 
         // Render multi-column layout
-        let html = `<div class="mega-menu-content-grid cols-${menuConfig.length}">`;
-        menuConfig.forEach(col => {
+        let html = `<div class="sub-mega-grid cols-${config.length}">`;
+        config.forEach(col => {
             html += `
-                <div class="mega-menu-col">
-                    <h4 class="mega-col-heading">
+                <div class="sub-mega-col">
+                    <h4 class="sub-col-title">
                         <span>${col.title}</span>
                     </h4>
-                    <ul class="mega-col-list">
+                    <ul class="sub-col-list">
             `;
             col.items.forEach(item => {
                 html += `
                     <li>
-                        <a href="#" class="mega-item-link" 
+                        <a href="#" class="sub-mega-link" 
                            data-category="${categoryName}" 
-                           data-subtype="${item.subType || ''}" 
+                           data-subtype="${subType}" 
                            data-brand="${item.brand || ''}" 
                            data-query="${item.query || ''}">
-                            <i data-lucide="chevron-right" class="mega-link-icon"></i>
+                            <i data-lucide="chevron-right" class="sub-link-chevron"></i>
                             <span>${item.label}</span>
                         </a>
                     </li>
@@ -3569,17 +4073,19 @@ export class ContainerView {
         });
         html += `</div>`;
 
-        this.megaMenuInner.innerHTML = html;
+        this.subMegaMenuInner.innerHTML = html;
         if (window.lucide) lucide.createIcons();
 
-        this.shopsyMegaMenuDropdown.classList.add('show');
-        this.shopsyMegaMenuOverlay.classList.add('show');
+        this.subMegaMenuDropdown.classList.add('show');
+        if (this.subMegaMenuOverlay) this.subMegaMenuOverlay.classList.add('show');
     }
 
-    closeShopsyMegaMenu() {
-        if (this.shopsyMegaMenuDropdown) this.shopsyMegaMenuDropdown.classList.remove('show');
-        if (this.shopsyMegaMenuOverlay) this.shopsyMegaMenuOverlay.classList.remove('show');
-        document.querySelectorAll('.sub-nav-tab').forEach(t => t.classList.remove('megamenu-active'));
+    closeSubMegaMenu() {
+        if (this.subMegaMenuDropdown) this.subMegaMenuDropdown.classList.remove('show');
+        if (this.subMegaMenuOverlay) this.subMegaMenuOverlay.classList.remove('show');
+        if (this.categorySubFilterPills) {
+            this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(p => p.classList.remove('megamenu-open'));
+        }
     }
 
     // ================= DYNAMIC CATEGORY FILTERS & 2-COLUMN ECOM ENGINE =================

@@ -9695,159 +9695,214 @@ footer.footer {
 
 
 /* ==========================================================================
-   SHOPSY / FLIPKART STYLE MEGA MENU & 2-COLUMN DYNAMIC E-COMMERCE LAYOUT
+   SHOPSY / FLIPKART SUB-CATEGORY MEGA MENU & 2-COLUMN DYNAMIC E-COMMERCE LAYOUT
    ========================================================================== */
 
-/* Sub-Header Navigation Mega Menu Anchor */
-.sub-header-nav {
-  position: sticky !important;
-  top: 72px !important;
-  z-index: 95 !important;
-  overflow: visible !important;
+/* Category Sub-Filter Bar (Container for Sub-Pills & Dropdown) */
+.category-sub-filter-bar {
+  position: relative;
+  z-index: 55;
+  margin: 10px 0 18px;
 }
 
-.sub-header-container {
-  overflow: visible !important;
+.category-sub-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 6px 0;
+  -webkit-overflow-scrolling: touch;
 }
 
-.sub-nav-tab.has-megamenu {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
+.category-sub-filter-pills::-webkit-scrollbar {
+  display: none;
 }
 
-.sub-nav-tab .tab-chevron {
-  width: 14px !important;
-  height: 14px !important;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  opacity: 0.7;
+.category-sub-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 7px 16px;
+  border-radius: 24px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  user-select: none;
 }
 
-.sub-nav-tab.megamenu-active {
-  color: var(--primary) !important;
-  background: rgba(255, 50, 106, 0.08) !important;
-  font-weight: 700 !important;
+.category-sub-pill.has-sub-megamenu {
+  padding-right: 12px;
 }
 
-.sub-nav-tab.megamenu-active .tab-chevron {
-  transform: rotate(180deg) !important;
-  opacity: 1 !important;
+.category-sub-pill:hover,
+.category-sub-pill.megamenu-open {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(255, 50, 106, 0.05);
 }
 
-/* Mega Menu Dropdown (Full Width Flush Under Sub-Nav) */
-.shopsy-mega-menu-dropdown {
+.category-sub-pill.active {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(255, 50, 106, 0.25) !important;
+}
+
+.category-sub-pill .pill-count {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.category-sub-pill.active .pill-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.category-sub-pill .pill-chevron {
+  width: 14px;
+  height: 14px;
+  color: #94a3b8;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+}
+
+.category-sub-pill:hover .pill-chevron,
+.category-sub-pill.megamenu-open .pill-chevron {
+  color: var(--primary);
+}
+
+.category-sub-pill.megamenu-open .pill-chevron {
+  transform: rotate(180deg);
+}
+
+.category-sub-pill.active .pill-chevron {
+  color: #ffffff;
+}
+
+/* Shopsy Sub-Category Dropdown (Directly Under Sub-Filter Bar) */
+.sub-mega-menu-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
   width: 100%;
   background: #ffffff;
-  border-bottom: 2px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.16), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-6px);
+  transform: translateY(-8px);
   transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
-  z-index: 98;
+  z-index: 60;
+  max-height: 480px;
+  overflow-y: auto;
 }
 
-.shopsy-mega-menu-dropdown.show {
+.sub-mega-menu-dropdown.show {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
 }
 
-.shopsy-mega-menu-overlay {
+.sub-mega-menu-overlay {
   position: fixed;
-  top: 118px; /* Below sub-header bar */
+  top: 180px;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(3px);
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(2px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.2s ease, visibility 0.2s;
-  z-index: 90;
+  z-index: 45;
 }
 
-.shopsy-mega-menu-overlay.show {
+.sub-mega-menu-overlay.show {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.mega-menu-inner {
-  padding: 24px 20px 32px;
-  max-width: 1380px;
-  margin: 0 auto;
+.sub-mega-menu-inner {
+  padding: 24px 28px;
 }
 
-.mega-menu-content-grid {
+.sub-mega-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 28px;
+  gap: 24px;
 }
 
-.mega-menu-content-grid.cols-4 {
+.sub-mega-grid.cols-4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
-.mega-menu-content-grid.cols-3 {
+.sub-mega-grid.cols-3 {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.mega-menu-col {
+.sub-mega-col {
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding-right: 12px;
   border-right: 1px solid #f1f5f9;
 }
 
-.mega-menu-col:last-child {
+.sub-mega-col:last-child {
   border-right: none;
+  padding-right: 0;
 }
 
-.mega-col-heading {
-  font-size: 0.85rem;
+.sub-col-title {
+  font-size: 0.82rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #1e293b;
-  margin-bottom: 14px;
-  padding-bottom: 8px;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
   border-bottom: 2px solid rgba(255, 50, 106, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
-.mega-col-list {
+.sub-col-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
-.mega-item-link {
+.sub-mega-link {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #475569;
   text-decoration: none;
-  padding: 6px 8px;
+  padding: 5px 8px;
   border-radius: 6px;
   transition: all 0.18s ease;
   font-weight: 500;
 }
 
-.mega-link-icon {
+.sub-link-chevron {
   width: 12px;
   height: 12px;
   opacity: 0;
@@ -9856,13 +9911,13 @@ footer.footer {
   transition: all 0.18s ease;
 }
 
-.mega-item-link:hover {
+.sub-mega-link:hover {
   color: var(--primary);
   background: rgba(255, 50, 106, 0.06);
   transform: translateX(4px);
 }
 
-.mega-item-link:hover .mega-link-icon {
+.sub-mega-link:hover .sub-link-chevron {
   opacity: 1;
   transform: translateX(0);
 }
@@ -10254,7 +10309,7 @@ footer.footer {
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .chip-remove-btn {
@@ -10348,7 +10403,7 @@ footer.footer {
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 16px !important;
   }
-  .mega-menu-content-grid {
+  .sub-mega-grid {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
@@ -10359,12 +10414,12 @@ footer.footer {
     display: inline-flex !important;
   }
 
-  .shopsy-mega-menu-dropdown,
-  .shopsy-mega-menu-overlay {
-    display: none !important; /* Disabled on mobile; category pills / drawer used instead */
+  .sub-mega-menu-dropdown,
+  .sub-mega-menu-overlay {
+    display: none !important;
   }
 
-  .sub-nav-tab .tab-chevron {
+  .category-sub-pill .pill-chevron {
     display: none !important;
   }
 

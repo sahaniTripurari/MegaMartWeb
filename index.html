@@ -233,13 +233,6 @@
             <!-- Backwards-compatible container for legacy script bindings -->
             <div class="type-list" id="navCategories" style="display: none;"></div>
         </div>
-        <!-- Shopsy / Flipkart Multi-Column Mega Menu Dropdown -->
-        <div class="shopsy-mega-menu-overlay" id="shopsyMegaMenuOverlay"></div>
-        <div class="shopsy-mega-menu-dropdown" id="shopsyMegaMenuDropdown">
-            <div class="container mega-menu-inner" id="megaMenuInner">
-                <!-- Dynamically populated or rendered on hover -->
-            </div>
-        </div>
     </nav>
 
     <main class="main-content">
@@ -991,10 +984,17 @@
                     </div>
                 </div>
                 
-                <!-- Sub-Category & Brand Filter Pills Row -->
+                <!-- Sub-Category & Brand Filter Pills Row with Shopsy Sub Mega Menu -->
                 <div class="category-sub-filter-bar" id="categorySubFilterBar">
                     <div class="category-sub-filter-pills" id="categorySubFilterPills">
                         <!-- Subcategory filter chips dynamically populated here -->
+                    </div>
+                    <!-- Shopsy Multi-Column Dropdown attached right under the sub-category bar -->
+                    <div class="sub-mega-menu-overlay" id="subMegaMenuOverlay"></div>
+                    <div class="sub-mega-menu-dropdown" id="subMegaMenuDropdown">
+                        <div class="sub-mega-menu-inner" id="subMegaMenuInner">
+                            <!-- Injected dynamically based on the hovered sub-category -->
+                        </div>
                     </div>
                 </div>
 
