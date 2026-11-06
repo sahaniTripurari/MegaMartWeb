@@ -1,6 +1,7 @@
 const MEGAMART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23f8fafc%22/%3E%3Ctext x=%22100%22 y=%22110%22 font-size=%2218%22 font-family=%22sans-serif%22 font-weight=%22bold%22 fill=%22%2394a3b8%22 text-anchor=%22middle%22%3EMegaMart%3C/text%3E%3C/svg%3E";
 import { Controller } from "../controller/controller";
 import { getProductVariants, getProductCoins } from "../model/model";
+import { supabase, cloudSignUp, cloudSignIn, cloudSignOut, createCloudOrder, getCloudOrders } from "../services/supabaseClient";
 
 const SUB_MEGA_MENU_DATA = {
     'Fashion & Apparel': {
@@ -3676,6 +3677,23 @@ export class ContainerView {
         const existingOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
         existingOrders.unshift(orderRecord);
         localStorage.setItem('megamart_orders', JSON.stringify(existingOrders));
+
+        // Persist Order into Supabase Cloud PostgreSQL DB
+        try {
+            createCloudOrder(this.currentUser?.id || '00000000-0000-0000-0000-000000000000', {
+                orderNumber: orderId,
+                totalAmount: grandTotal,
+                paymentMethod,
+                address: { name, phone, address, pin },
+                items: orderRecord.items
+            }).then(res => {
+                if (res?.success) {
+                    console.log('[Supabase Cloud] Order saved successfully:', res.order?.order_number);
+                }
+            }).catch(e => console.warn('[Supabase Cloud] Order sync warning:', e));
+        } catch (e) {
+            console.warn('[Supabase Cloud] Order sync notice:', e);
+        }
 
         // Clear cart & reset redemption
         this.data.forEach(item => { item.quantity = 0; });
