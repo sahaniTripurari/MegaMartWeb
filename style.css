@@ -10808,59 +10808,76 @@ body {
   }
 }
 
-/* 2. Mobile Header: Logo + Delivery Location + Global Sticky Search */
+/* 2. Mobile Header: Logo + Delivery Location + User Account + Global Sticky Search */
 @media (max-width: 768px) {
   .header {
-    padding: 8px 0 10px !important;
+    padding: 8px 12px 10px !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    background: #ffffff !important;
   }
   
   .header-inner {
+    display: flex !important;
     flex-wrap: wrap !important;
-    gap: 8px !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 0 !important;
   }
   
+  /* Row 1 Left: Logo + Delivery Location Pill */
   .header-left {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
+    justify-content: flex-start !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
     gap: 8px !important;
   }
   
   .logo {
-    gap: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
   }
   
   .logo-icon {
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
+    padding: 3px !important;
   }
   
   .logo-text {
-    font-size: 1.15rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.4px !important;
   }
   
   .delivery-location {
     display: flex !important;
     align-items: center !important;
-    gap: 5px !important;
-    padding: 4px 10px !important;
+    gap: 4px !important;
+    padding: 4px 8px !important;
     background: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
-    border-radius: 20px !important;
-    max-width: 175px !important;
+    border-radius: 16px !important;
+    max-width: 140px !important;
     cursor: pointer !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
   }
   
-  .delivery-location .loc-icon-wrapper i {
-    width: 13px !important;
-    height: 13px !important;
+  .delivery-location .loc-icon-wrapper i,
+  .delivery-location .loc-icon-wrapper svg {
+    width: 12px !important;
+    height: 12px !important;
     color: var(--primary) !important;
+    flex-shrink: 0 !important;
   }
   
   .delivery-location .loc-label {
@@ -10868,29 +10885,105 @@ body {
   }
   
   .delivery-location .loc-address {
-    font-size: 0.72rem !important;
+    font-size: 0.7rem !important;
     font-weight: 700 !important;
     color: #1e293b !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    max-width: 130px !important;
+    display: block !important;
   }
   
+  .delivery-location .loc-address i,
+  .delivery-location .loc-address svg {
+    width: 11px !important;
+    height: 11px !important;
+    margin-left: 2px !important;
+  }
+
+  /* Row 1 Right: Account / Profile Pill */
+  .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .header-actions .desktop-wishlist,
+  .header-actions .desktop-orders,
+  .header-actions .desktop-cart,
+  .header-actions .mobile-search-toggle {
+    display: none !important;
+  }
+
+  .header-auth-box {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .auth-login-btn {
+    padding: 5px 10px !important;
+    min-height: 32px !important;
+    border-radius: 16px !important;
+    background: #fff1f2 !important;
+    border: 1px solid #fecdd3 !important;
+    color: var(--primary) !important;
+  }
+
+  .auth-login-btn .auth-text .auth-label {
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+  }
+
+  .auth-login-btn .auth-text .auth-sub {
+    display: none !important;
+  }
+
+  .header-user-btn {
+    padding: 3px 6px !important;
+    gap: 5px !important;
+    border-radius: 16px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  .user-avatar-pill {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .user-greeting-sub {
+    display: none !important;
+  }
+
+  .user-greeting-name {
+    font-size: 0.72rem !important;
+    max-width: 65px !important;
+  }
+  
+  /* Row 2: Full-width Edge-to-Edge Sticky Search */
   .global-search-container {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     order: 3 !important;
-    margin-top: 2px !important;
+    margin-top: 3px !important;
   }
   
+  .search-box {
+    position: relative !important;
+    width: 100% !important;
+  }
+
   .search-box input {
-    padding: 9px 36px 9px 36px !important;
-    font-size: 0.85rem !important;
-    border-radius: 12px !important;
+    padding: 8px 34px 8px 34px !important;
+    font-size: 0.82rem !important;
+    border-radius: 10px !important;
     background: #f1f5f9 !important;
     border: 1px solid transparent !important;
+    height: 36px !important;
+    width: 100% !important;
   }
   
   .search-box input:focus {
@@ -10900,66 +10993,75 @@ body {
   }
   
   .search-icon {
-    left: 12px !important;
-    width: 16px !important;
-    height: 16px !important;
+    left: 10px !important;
+    width: 15px !important;
+    height: 15px !important;
     color: #94a3b8 !important;
-  }
-  
-  .mobile-search-toggle,
-  .mobile-search-bar {
-    display: none !important;
   }
 }
 
-/* 3. Category Subnav Bar on Mobile */
+/* 3. Sub-Header Category Navigation Tabs on Mobile */
 @media (max-width: 768px) {
+  .sub-header-nav,
   .category-sub-nav {
-    top: 98px !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+    top: 92px !important;
+    position: sticky !important;
+    z-index: 90 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
   }
   
   .sub-header-container {
     padding: 0 10px !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .sub-header-container::-webkit-scrollbar {
+    display: none !important;
   }
   
   .sub-nav-tabs {
     gap: 6px !important;
     padding: 6px 0 !important;
+    display: flex !important;
+    white-space: nowrap !important;
   }
   
   .sub-nav-tab {
-    padding: 6px 12px !important;
-    font-size: 0.74rem !important;
+    padding: 5px 10px !important;
+    font-size: 0.72rem !important;
     gap: 3px !important;
-    border-radius: 8px !important;
+    border-radius: 6px !important;
+    flex-shrink: 0 !important;
   }
   
-  .sub-nav-tab svg {
-    width: 16px !important;
-    height: 16px !important;
+  .sub-nav-tab svg,
+  .sub-nav-tab i {
+    width: 14px !important;
+    height: 14px !important;
   }
 }
 
 /* 4. Bank Offer Strip on Mobile */
 @media (max-width: 768px) {
   .bank-offer-strip {
-    padding: 8px 12px !important;
-    margin: 8px auto 12px !important;
-    border-radius: 10px !important;
+    padding: 6px 10px !important;
+    margin: 6px auto 10px !important;
+    border-radius: 8px !important;
   }
   
   .bank-offer-inner {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 6px !important;
+    gap: 4px !important;
   }
   
   .bank-desc {
-    font-size: 0.75rem !important;
-    line-height: 1.3 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
   }
   
   .bank-offer-right {
@@ -10968,79 +11070,172 @@ body {
   }
   
   .coupon-chip {
-    padding: 3px 10px !important;
-    font-size: 0.72rem !important;
+    padding: 2px 8px !important;
+    font-size: 0.68rem !important;
   }
 }
 
-/* 5. Hero Carousel Banner on Mobile */
+/* 5. Hero Carousel Banner on Mobile (Scaled & Ergonomic) */
 @media (max-width: 768px) {
+  .mega-banner-carousel-section {
+    margin-bottom: 14px !important;
+  }
+
   .mega-banner-slide {
-    padding: 22px 18px !important;
-    min-height: 200px !important;
+    padding: 14px 14px !important;
+    min-height: 170px !important;
     border-radius: 14px !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
   
+  .banner-content {
+    max-width: calc(100% - 64px) !important;
+    z-index: 2 !important;
+  }
+
   .banner-title {
-    font-size: 1.35rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 6px !important;
+    font-size: 1.18rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 4px !important;
+    letter-spacing: -0.3px !important;
   }
   
   .banner-subtitle {
-    font-size: 0.82rem !important;
-    margin-bottom: 12px !important;
+    font-size: 0.75rem !important;
+    margin-bottom: 8px !important;
+    opacity: 0.95 !important;
   }
   
   .banner-pill-badge {
-    padding: 3px 8px !important;
-    font-size: 0.65rem !important;
-    margin-bottom: 8px !important;
+    padding: 2px 7px !important;
+    font-size: 0.62rem !important;
+    margin-bottom: 6px !important;
+    border-radius: 4px !important;
   }
   
   .banner-perks-row {
-    gap: 6px !important;
-    margin-bottom: 14px !important;
+    gap: 4px !important;
+    margin-bottom: 10px !important;
+    flex-wrap: wrap !important;
   }
   
   .banner-perk {
-    padding: 3px 8px !important;
-    font-size: 0.68rem !important;
+    padding: 2px 6px !important;
+    font-size: 0.64rem !important;
+    border-radius: 4px !important;
   }
   
   .banner-cta-btn {
-    padding: 8px 16px !important;
-    font-size: 0.76rem !important;
+    padding: 6px 14px !important;
+    font-size: 0.72rem !important;
+    border-radius: 8px !important;
   }
   
+  .banner-visual {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 3 !important;
+  }
+
   .banner-discount-seal {
-    width: 80px !important;
-    height: 80px !important;
+    width: 58px !important;
+    height: 58px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
   }
   
   .seal-percent {
-    font-size: 1.25rem !important;
+    font-size: 1.1rem !important;
+  }
+
+  .seal-sub, .seal-off {
+    font-size: 0.52rem !important;
   }
   
   .carousel-arrow {
-    display: none !important; /* Swipe navigation on mobile */
+    display: none !important; /* Swipe gesture only on mobile */
+  }
+
+  .carousel-dots {
+    bottom: 8px !important;
+    gap: 6px !important;
+  }
+
+  .carousel-dot {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  .carousel-dot.active {
+    width: 18px !important;
   }
 }
 
-/* 6. Utility Strip on Mobile: Smooth Horizontal Touch Swipe */
+/* 6. Hero Video & Trending Auto-Slider on Mobile */
+@media (max-width: 768px) {
+  .mega-hero {
+    margin-top: 8px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .mega-hero-grid {
+    gap: 10px !important;
+  }
+
+  .video-container {
+    height: 155px !important;
+    border-radius: 12px !important;
+    aspect-ratio: auto !important;
+  }
+
+  .video-overlay-text {
+    padding: 10px 12px !important;
+  }
+
+  .video-overlay-text .hero-badge {
+    padding: 2px 8px !important;
+    font-size: 0.55rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .video-overlay-text h2 {
+    font-size: 1.05rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .video-overlay-text p {
+    font-size: 0.68rem !important;
+  }
+
+  .auto-slider-container {
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .slider-header h3 {
+    font-size: 0.85rem !important;
+  }
+
+  .auto-slider {
+    height: 90px !important;
+  }
+}
+
+/* 7. Utility Icon Strip on Mobile: Smooth Horizontal Touch Swipe */
 @media (max-width: 768px) {
   .utility-icon-strip {
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
   }
   
   .utility-grid {
     display: flex !important;
     overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
     scroll-snap-type: x mandatory !important;
-    gap: 10px !important;
-    padding: 4px 2px 10px !important;
+    gap: 8px !important;
+    padding: 2px 2px 8px !important;
     scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
   }
   
   .utility-grid::-webkit-scrollbar {
@@ -11048,33 +11243,307 @@ body {
   }
   
   .utility-item {
-    flex: 0 0 105px !important;
-    min-width: 105px !important;
+    flex: 0 0 88px !important;
+    min-width: 88px !important;
     scroll-snap-align: start !important;
-    padding: 12px 8px !important;
-    border-radius: 12px !important;
+    padding: 10px 6px !important;
+    border-radius: 10px !important;
   }
   
   .utility-icon-box {
-    width: 40px !important;
-    height: 40px !important;
-    font-size: 1.1rem !important;
-    border-radius: 10px !important;
-    margin-bottom: 6px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 4px !important;
   }
   
   .util-title {
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     white-space: nowrap !important;
   }
   
   .util-sub {
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     white-space: nowrap !important;
   }
 }
 
-/* 7. Product Cards Grid on Mobile (2-Column Mobile App Standard) */
+/* 8. Flipkart 3-Column Deal Cards on Mobile */
+@media (max-width: 768px) {
+  .flipkart-deal-cards-section {
+    margin-bottom: 18px !important;
+  }
+
+  .flipkart-3col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .deal-card {
+    padding: 12px 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .deal-title-row h3 {
+    font-size: 0.92rem !important;
+  }
+
+  .deal-mini-timer,
+  .deal-badge-pill {
+    font-size: 0.65rem !important;
+    padding: 2px 5px !important;
+  }
+
+  .deal-sub {
+    font-size: 0.7rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .deal-mini-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .deal-mini-item {
+    padding: 6px 4px !important;
+    border-radius: 6px !important;
+  }
+
+  .deal-mini-img-wrap {
+    height: 56px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .deal-mini-title {
+    font-size: 0.66rem !important;
+  }
+
+  .deal-mini-offer {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* 9. Curated Deal Rails on Mobile (135px Cards, Smooth Carousel) */
+@media (max-width: 768px) {
+  .flipkart-curated-rail {
+    margin: 18px auto !important;
+  }
+
+  .curated-rail-header {
+    margin-bottom: 10px !important;
+  }
+
+  .curated-rail-header .rail-title {
+    font-size: 1.05rem !important;
+  }
+
+  .curated-rail-header .rail-subtitle {
+    font-size: 0.72rem !important;
+  }
+
+  .curated-rail-header .rail-view-all {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .rail-nav-arrows {
+    display: none !important; /* Swipe gesture on touch screen */
+  }
+
+  .curated-rail-track {
+    gap: 10px !important;
+    padding: 4px 2px 10px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .curated-deal-card {
+    flex: 0 0 135px !important;
+    min-width: 135px !important;
+    max-width: 135px !important;
+    border-radius: 12px !important;
+  }
+
+  .curated-card-media {
+    height: 100px !important;
+    padding: 8px 8px 18px !important;
+  }
+
+  .curated-card-media img {
+    max-height: 72px !important;
+  }
+
+  .curated-badge-discount {
+    font-size: 0.58rem !important;
+    padding: 2px 5px !important;
+  }
+
+  .curated-card-details {
+    padding: 8px 8px 10px !important;
+  }
+
+  .curated-card-title {
+    font-size: 0.72rem !important;
+    height: 2.3em !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .curated-pricing-row .curated-price-current {
+    font-size: 0.82rem !important;
+  }
+
+  .curated-pricing-row .curated-price-original {
+    font-size: 0.65rem !important;
+  }
+
+  .curated-card-actions .curated-add-btn {
+    font-size: 0.72rem !important;
+    padding: 5px 0 !important;
+    min-height: 28px !important;
+    border-radius: 6px !important;
+  }
+}
+
+/* 10. Dual Spotlight Posters on Mobile */
+@media (max-width: 768px) {
+  .mega-spotlight-section {
+    margin: 18px auto !important;
+  }
+
+  .mega-spotlight-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .spotlight-card {
+    padding: 16px 14px !important;
+    min-height: 150px !important;
+    border-radius: 14px !important;
+  }
+
+  .spotlight-card-body {
+    max-width: 65% !important;
+  }
+
+  .spotlight-title {
+    font-size: 1.12rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .spotlight-desc {
+    font-size: 0.74rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .spotlight-perks {
+    display: none !important;
+  }
+
+  .spotlight-btn {
+    padding: 6px 14px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .spotlight-visual-collage {
+    width: 95px !important;
+    height: 95px !important;
+  }
+
+  .spotlight-visual-collage img {
+    max-width: 65px !important;
+    max-height: 65px !important;
+  }
+}
+
+/* 11. Festive Posters on Mobile */
+@media (max-width: 768px) {
+  .mega-festive-poster-section {
+    margin: 20px auto !important;
+  }
+
+  .mega-festive-poster {
+    padding: 18px 14px !important;
+    min-height: 155px !important;
+    border-radius: 16px !important;
+  }
+
+  .poster-left-content {
+    max-width: 62% !important;
+  }
+
+  .poster-grand-title {
+    font-size: 1.18rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .poster-sub-title {
+    font-size: 0.75rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .poster-features-row {
+    display: none !important;
+  }
+
+  .poster-brand-logos-row {
+    gap: 4px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .brand-capsule {
+    font-size: 0.62rem !important;
+    padding: 2px 6px !important;
+  }
+
+  .poster-main-cta {
+    padding: 7px 15px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .poster-right-showcase {
+    width: 105px !important;
+    height: 105px !important;
+  }
+
+  .showcase-floating-card {
+    padding: 5px !important;
+    border-radius: 10px !important;
+  }
+
+  .showcase-floating-card img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+/* 12. Quad Matrix Cards on Mobile */
+@media (max-width: 768px) {
+  .mega-quad-matrix-section {
+    margin: 18px auto !important;
+  }
+
+  .quad-head-title {
+    font-size: 1.15rem !important;
+  }
+
+  .mega-quad-grid {
+    gap: 10px !important;
+  }
+
+  .quad-deal-card {
+    padding: 12px 10px !important;
+    min-height: 175px !important;
+    border-radius: 12px !important;
+  }
+
+  .quad-deal-title {
+    font-size: 0.88rem !important;
+  }
+}
+
+/* 13. Product Cards Grid on Mobile (2-Column Mobile App Standard) */
 @media (max-width: 768px) {
   .grid-content,
   .category-grid,
@@ -11082,19 +11551,15 @@ body {
   .category-ecom-layout .ecom-products-content .category-grid,
   .category-ecom-layout.sidebar-open .ecom-products-content .category-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
   
   .itemName {
-    padding: 8px !important;
-    border-radius: 12px !important;
+    padding: 8px 6px !important;
+    border-radius: 10px !important;
   }
   
-  .discount-badge {
-    font-size: 0.58rem !important;
-    padding: 2px 5px !important;
-  }
-  
+  .discount-badge,
   .flash-flame-badge {
     font-size: 0.58rem !important;
     padding: 2px 5px !important;
@@ -11106,9 +11571,9 @@ body {
   }
   
   .product-title {
-    font-size: 0.76rem !important;
-    height: 2.4em !important;
-    line-height: 1.25 !important;
+    font-size: 0.75rem !important;
+    height: 2.3em !important;
+    line-height: 1.22 !important;
     margin-bottom: 3px !important;
   }
   
@@ -11135,25 +11600,25 @@ body {
   }
   
   .current-price {
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
     font-weight: 800 !important;
   }
   
   .original-price {
-    font-size: 0.72rem !important;
+    font-size: 0.7rem !important;
   }
   
   .add-btn {
-    padding: 7px 0 !important;
-    font-size: 0.8rem !important;
-    border-radius: 8px !important;
+    padding: 6px 0 !important;
+    font-size: 0.78rem !important;
+    border-radius: 7px !important;
     min-height: 32px !important;
     box-shadow: 0 1px 3px rgba(255, 50, 105, 0.15) !important;
   }
   
   .quantity-controls {
     height: 32px !important;
-    border-radius: 8px !important;
+    border-radius: 7px !important;
   }
   
   .qty-btn {
@@ -11169,23 +11634,23 @@ body {
   #relatedProductsGrid,
   .category-ecom-layout .ecom-products-content .category-grid,
   .category-ecom-layout.sidebar-open .ecom-products-content .category-grid {
-    gap: 8px !important;
+    gap: 6px !important;
   }
   
   .itemName {
-    padding: 6px !important;
+    padding: 6px 4px !important;
   }
   
   .current-price {
-    font-size: 0.84rem !important;
+    font-size: 0.82rem !important;
   }
   
   .add-btn {
-    font-size: 0.74rem !important;
+    font-size: 0.72rem !important;
   }
 }
 
-/* 8. Mobile Bottom Navigation Styling & Haptics */
+/* 14. Mobile Bottom Navigation Styling & Touch Haptics */
 .bottom-nav {
   position: fixed !important;
   bottom: 0 !important;
@@ -11246,13 +11711,14 @@ body {
   transform: translateY(-2px) !important;
 }
 
-/* Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile) */
+/* ==========================================================================
+   15. UNIVERSAL MOBILE FOOTER REMOVAL (STRICTLY DISPLAY: NONE ON MOBILE)
+   Removes footer completely across ALL mobile views (Home, Categories, Cart, Orders, Wishlist, Profile)
+   ========================================================================== */
 @media (max-width: 768px) {
-  body.hide-mobile-footer footer.footer,
-  body:has(#ordersPageView.active) footer.footer,
-  body:has(#wishlistPageView.active) footer.footer,
-  body:has(#cartPageView.active) footer.footer,
-  body:has(#profileView.active) footer.footer {
+  footer.footer,
+  .footer,
+  footer {
     display: none !important;
   }
 }
