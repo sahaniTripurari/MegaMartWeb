@@ -8279,3 +8279,479 @@ footer.footer {
   background: rgba(255, 255, 255, 0.28) !important;
   color: #ffffff !important;
 }
+
+/* ==========================================================================
+   PROMOTIONAL BANNERS, POSTERS & QUAD-OFFER MATRIX (FLIPKART / AMAZON STYLE)
+   ========================================================================== */
+
+/* 1. Dual Feature Spotlight Section */
+.ecom-promo-banner-section {
+  margin: 32px 0;
+  width: 100%;
+}
+
+.ecom-promo-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ecom-promo-grid-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.promo-banner-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 28px 24px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 180px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.promo-banner-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+.promo-phones-spotlight {
+  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 60%, #415a77 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.promo-audio-spotlight {
+  background: linear-gradient(135deg, #2b0938 0%, #511845 60%, #900c3f 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.promo-banner-content {
+  flex: 1;
+  z-index: 2;
+  max-width: 65%;
+}
+
+.promo-badge-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.promo-phones-spotlight .promo-badge-tag {
+  background: #00f2fe;
+  color: #0d1b2a;
+}
+
+.promo-audio-spotlight .promo-badge-tag {
+  background: #ff758c;
+  color: #ffffff;
+}
+
+.promo-banner-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0 0 6px 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.promo-banner-sub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 14px 0;
+  line-height: 1.3;
+}
+
+.promo-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #ffffff;
+  color: #111827;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.promo-action-btn:hover {
+  background: #f3f4f6;
+  transform: translateX(3px);
+}
+
+.promo-action-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+.promo-banner-visual {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promo-visual-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  text-align: center;
+  animation: badgePulse 3s infinite ease-in-out;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.badge-upto {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.badge-num {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffeb3b;
+  line-height: 1;
+}
+
+.badge-off {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* 2. Wide Hero Panoramic Posters */
+.ecom-wide-poster {
+  position: relative;
+  border-radius: 20px;
+  padding: 36px 32px;
+  margin: 36px 0;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.poster-fashion {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 50%, #f77062 100%);
+  color: #ffffff;
+}
+
+.poster-pantry {
+  background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+  color: #ffffff;
+}
+
+.poster-content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.poster-brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.poster-badge {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.poster-fashion .poster-badge {
+  background: #ffffff;
+  color: #ff416c;
+}
+
+.poster-pantry .poster-badge {
+  background: #ffeb3b;
+  color: #134e5e;
+}
+
+.poster-brands-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.poster-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  line-height: 1.15;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.poster-sub {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 20px 0;
+  font-weight: 500;
+}
+
+.poster-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  background: #ffffff;
+  color: #111827;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
+
+.poster-action-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.poster-action-btn i {
+  width: 16px;
+  height: 16px;
+}
+
+/* 3. Quad Offer Matrix Section */
+.ecom-quad-promo-section {
+  margin: 32px 0;
+  width: 100%;
+}
+
+.quad-promo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .quad-promo-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.quad-promo-card {
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  min-height: 140px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.quad-promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.quad-under99 {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-color: #7dd3fc;
+}
+
+.quad-buymore {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #fcd34d;
+}
+
+.quad-kitchen {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-color: #86efac;
+}
+
+.quad-beauty {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border-color: #f472b6;
+}
+
+.quad-card-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.quad-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.quad-card-offer {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  margin: 0 0 12px 0;
+}
+
+.quad-card-action {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--primary, #e11d48);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quad-card-action i {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   DISTINCTIVE CATEGORY RAIL STYLES & HOVER MOTION (5 UNIQUE EXPERIENCES)
+   ========================================================================== */
+
+/* Rail 1: Top Tech & Gadgets (Cyber Blue & Neon Edge) */
+.curated-rail-tech .curated-deal-card {
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.08);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.curated-rail-tech .curated-deal-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #0ea5e9;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
+}
+
+.curated-rail-tech .curated-card-media {
+  background: radial-gradient(circle at center, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+/* Rail 2: Cool Kicks & Fashion Deals (Boutique Rose & Soft Luxury) */
+.curated-rail-fashion .curated-deal-card {
+  border-color: #fce7f3;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.08);
+  border-radius: 20px;
+}
+
+.curated-rail-fashion .curated-deal-card:hover {
+  transform: translateY(-5px);
+  border-color: #f43f5e;
+  box-shadow: 0 14px 30px rgba(244, 63, 94, 0.2);
+}
+
+.curated-rail-fashion .curated-card-media {
+  background: radial-gradient(circle at center, #fff1f2 0%, #ffe4e6 100%);
+  border-radius: 18px 18px 0 0;
+}
+
+/* Rail 3: Modern Home & Kitchen Essentials (Minimalist Slate & Copper) */
+.curated-rail-home .curated-deal-card {
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.curated-rail-home .curated-deal-card:hover {
+  transform: translateY(-4px);
+  border-color: #10b981;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.18);
+}
+
+.curated-rail-home .curated-card-media {
+  background: radial-gradient(circle at center, #f0fdf4 0%, #dcfce7 100%);
+}
+
+/* Rail 4: Daily Munchies & Pantry Savers (Warm Amber & Playful Tilt) */
+.curated-rail-snacks .curated-deal-card {
+  border-color: #fef3c7;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.08);
+}
+
+.curated-rail-snacks .curated-deal-card:hover {
+  transform: translateY(-5px) rotate(-0.8deg);
+  border-color: #f59e0b;
+  box-shadow: 0 12px 28px rgba(245, 158, 11, 0.22);
+}
+
+.curated-rail-snacks .curated-card-media {
+  background: radial-gradient(circle at center, #fffbeb 0%, #fef3c7 100%);
+}
+
+/* Rail 5: Dairy, Bread & Morning Essentials (Fresh Mint & Dewdrop) */
+.curated-rail-dairy .curated-deal-card {
+  border-color: #ccfbf1;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.08);
+}
+
+.curated-rail-dairy .curated-deal-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  border-color: #14b8a6;
+  box-shadow: 0 12px 28px rgba(20, 184, 166, 0.22);
+}
+
+.curated-rail-dairy .curated-card-media {
+  background: radial-gradient(circle at center, #f0fdfa 0%, #ccfbf1 100%);
+}
+
+/* Dairy Ribbon Badge */
+.curated-card-ribbon.ribbon-dairy {
+  background: linear-gradient(135deg, #0d9488 0%, #047857 100%) !important;
+  color: #ffffff !important;
+}
+
+/* Empty State Height & Centering Fix (Image 5 Fix) */
+.empty-state,
+#wishlistPageEmpty,
+#ordersPageEmpty {
+  min-height: 52vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 40px 20px !important;
+}

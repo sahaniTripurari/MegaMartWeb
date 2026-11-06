@@ -529,9 +529,8 @@
 
             <!-- Dynamic Category Sections: Flipkart Curated Deal Rails -->
             <div id="homeCategoriesWrapper">
-                <!-- Rail 1: Farm Fresh Picks, Crazy Deals (Fresh Fruits) -->
                 <!-- Rail 1: Electronics & Gadgets -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Electronics & Gadgets">
+                <section class="flipkart-curated-rail curated-rail-tech container gs-reveal" id="sec-Electronics & Gadgets">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
                             <h2 class="rail-title">⚡ Top Tech, Crazy Gadget Deals</h2>
@@ -550,17 +549,50 @@
                         </div>
                     </div>
                     <div class="curated-rail-track-wrapper">
-                        <div class="curated-rail-track" id="content-Electronics & Gadgets">
+                        <div class="curated-rail-track track-tech" id="content-Electronics & Gadgets">
                             <!-- Injected dynamically via JS -->
                         </div>
                     </div>
                 </section>
 
+                <!-- Promo Feature Banner 1: Smartphone & Audio Dual Spotlight -->
+                <section class="ecom-promo-banner-section container gs-reveal">
+                    <div class="ecom-promo-grid-2col">
+                        <div class="promo-banner-card promo-card-tech" data-category="Electronics & Gadgets">
+                            <div class="promo-card-content">
+                                <span class="promo-badge-pill">⚡ FLIPKART SPECIAL • BIG SAVINGS</span>
+                                <h3>FLAGSHIP SMARTPHONE ARENA</h3>
+                                <p>iPhone 15, Galaxy S24 & OnePlus 12 • Up to ₹25,000 Off + 10-Min Delivery</p>
+                                <button class="promo-cta-btn">SHOP SMARTPHONES <i data-lucide="arrow-right"></i></button>
+                            </div>
+                            <div class="promo-card-badge-seal">
+                                <span>UP TO</span>
+                                <strong>40%</strong>
+                                <span>OFF</span>
+                            </div>
+                        </div>
+
+                        <div class="promo-banner-card promo-card-audio" data-category="Electronics & Gadgets">
+                            <div class="promo-card-content">
+                                <span class="promo-badge-pill pill-cyan">🎧 BASS EXPLOSION</span>
+                                <h3>AUDIO & WEARABLES BONANZA</h3>
+                                <p>Sony, boAt & JBL ANC Earbuds & Smartwatches Starting at Just ₹1,199</p>
+                                <button class="promo-cta-btn">GRAB AUDIO DEALS <i data-lucide="arrow-right"></i></button>
+                            </div>
+                            <div class="promo-card-badge-seal seal-cyan">
+                                <span>MIN</span>
+                                <strong>60%</strong>
+                                <span>OFF</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Rail 2: Fashion & Apparel -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Fashion & Apparel">
+                <section class="flipkart-curated-rail curated-rail-fashion container gs-reveal" id="sec-Fashion & Apparel">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">👟 Cool Kicks, Crazy Fashion Deals</h2>
+                            <h2 class="rail-title">👗 Cool Kicks, Crazy Fashion Deals</h2>
                             <span class="rail-subtitle">Trending polo t-shirts, sneakers, jeans & accessories</span>
                         </div>
                         <div class="rail-actions">
@@ -576,14 +608,40 @@
                         </div>
                     </div>
                     <div class="curated-rail-track-wrapper">
-                        <div class="curated-rail-track" id="content-Fashion & Apparel">
+                        <div class="curated-rail-track track-fashion" id="content-Fashion & Apparel">
                             <!-- Injected dynamically via JS -->
                         </div>
                     </div>
                 </section>
 
+                <!-- Promo Feature Banner 2: Fashion Fiesta Wide Poster -->
+                <section class="ecom-wide-poster-section container gs-reveal">
+                    <div class="ecom-wide-poster poster-fashion" data-category="Fashion & Apparel">
+                        <div class="poster-overlay-glow"></div>
+                        <div class="poster-content">
+                            <div class="poster-tag-row">
+                                <span class="poster-sparkle-badge">🔥 MYNTRA & FLIPKART FASHION CARNIVAL</span>
+                                <span class="poster-timer-badge"><i data-lucide="clock"></i> ENDING SOON</span>
+                            </div>
+                            <h2 class="poster-headline">COOL KICKS & ETHNIC FESTIVE WARDROBE</h2>
+                            <p class="poster-subline">Flat 50% - 80% OFF on Adidas, Nike, Puma, Levi's, Biba & Titan Watches</p>
+                            <div class="poster-perks-row">
+                                <span><i data-lucide="check-circle-2"></i> 100% Genuine Brands</span>
+                                <span><i data-lucide="zap"></i> Instant 10-Min Delivery</span>
+                                <span><i data-lucide="coins"></i> Extra 10% MegaCoins</span>
+                            </div>
+                            <button class="poster-cta-btn">EXPLORE FASHION DEALS <i data-lucide="arrow-right"></i></button>
+                        </div>
+                        <div class="poster-visual-seal">
+                            <span class="seal-super">SUPER DEALS</span>
+                            <span class="seal-huge">80%</span>
+                            <span class="seal-off">OFF</span>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Rail 3: Home & Kitchen -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Home & Kitchen">
+                <section class="flipkart-curated-rail curated-rail-home container gs-reveal" id="sec-Home & Kitchen">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
                             <h2 class="rail-title">🍳 Modern Home & Kitchen Essentials</h2>
@@ -602,17 +660,51 @@
                         </div>
                     </div>
                     <div class="curated-rail-track-wrapper">
-                        <div class="curated-rail-track" id="content-Home & Kitchen">
+                        <div class="curated-rail-track track-home" id="content-Home & Kitchen">
                             <!-- Injected dynamically via JS -->
                         </div>
                     </div>
                 </section>
 
+                <!-- Promo Feature 3: Quad Offer Matrix -->
+                <section class="ecom-quad-promo-section container gs-reveal">
+                    <div class="ecom-quad-header">
+                        <h2>✨ Magical Shopping Carnival</h2>
+                        <span>Handpicked mega-savings across every aisle</span>
+                    </div>
+                    <div class="ecom-quad-grid">
+                        <div class="quad-promo-card card-under99" data-category="Snacks & Munchies">
+                            <div class="quad-icon-box"><i data-lucide="sparkles"></i></div>
+                            <h4>Under ₹99 Store</h4>
+                            <p>Snacks, biscuits, chocolates & instant food</p>
+                            <span class="quad-deal-pill">FROM ₹20</span>
+                        </div>
+                        <div class="quad-promo-card card-bogo" data-category="Cold Drinks & Beverages">
+                            <div class="quad-icon-box"><i data-lucide="flame"></i></div>
+                            <h4>Buy More Save More</h4>
+                            <p>Tea, premium coffees & chilled party sodas</p>
+                            <span class="quad-deal-pill pill-red">UP TO 35% OFF</span>
+                        </div>
+                        <div class="quad-promo-card card-kitchen" data-category="Home & Kitchen">
+                            <div class="quad-icon-box"><i data-lucide="utensils"></i></div>
+                            <h4>Kitchen Steals</h4>
+                            <p>Prestige cookers, kettles & Milton flasks</p>
+                            <span class="quad-deal-pill pill-blue">MIN 40% OFF</span>
+                        </div>
+                        <div class="quad-promo-card card-grooming" data-category="Beauty & Personal Care">
+                            <div class="quad-icon-box"><i data-lucide="smile"></i></div>
+                            <h4>Glow-Up Bar</h4>
+                            <p>L'Oreal, Nivea body milk, trimmers & scents</p>
+                            <span class="quad-deal-pill pill-purple">UP TO 50% OFF</span>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Rail 4: Snacks & Munchies -->
-                <section class="flipkart-curated-rail container gs-reveal" id="sec-Snacks & Munchies">
+                <section class="flipkart-curated-rail curated-rail-snacks container gs-reveal" id="sec-Snacks & Munchies">
                     <div class="curated-rail-header">
                         <div class="rail-title-group">
-                            <h2 class="rail-title">🍪 Daily Munchies & Pantry Savers</h2>
+                            <h2 class="rail-title">🍟 Daily Munchies & Pantry Savers</h2>
                             <span class="rail-subtitle">Crispy snacks, noodles, biscuits & chocolates</span>
                         </div>
                         <div class="rail-actions">
@@ -628,13 +720,64 @@
                         </div>
                     </div>
                     <div class="curated-rail-track-wrapper">
-                        <div class="curated-rail-track" id="content-Snacks & Munchies">
+                        <div class="curated-rail-track track-snacks" id="content-Snacks & Munchies">
                             <!-- Injected dynamically via JS -->
                         </div>
                     </div>
                 </section>
 
-                <!-- Other Categories: Standard Grid -->
+                <!-- Rail 5: Dairy, Bread & Morning Essentials -->
+                <section class="flipkart-curated-rail curated-rail-dairy container gs-reveal" id="sec-Dairy, Bread & Eggs">
+                    <div class="curated-rail-header">
+                        <div class="rail-title-group">
+                            <h2 class="rail-title">🥛 Dairy, Bread & Morning Essentials</h2>
+                            <span class="rail-subtitle">Farm fresh milk, butter, cheese, brown bread & organic eggs</span>
+                        </div>
+                        <div class="rail-actions">
+                            <button class="rail-view-all" data-category="Dairy, Bread & Eggs">View All <i data-lucide="chevron-right"></i></button>
+                            <div class="rail-nav-arrows">
+                                <button class="rail-nav-btn rail-prev" data-rail="Dairy, Bread & Eggs" aria-label="Previous items">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="rail-nav-btn rail-next" data-rail="Dairy, Bread & Eggs" aria-label="Next items">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="curated-rail-track-wrapper">
+                        <div class="curated-rail-track track-dairy" id="content-Dairy, Bread & Eggs">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Promo Feature Banner 3: Morning Express & Daily Pantry Saver -->
+                <section class="ecom-wide-poster-section container gs-reveal">
+                    <div class="ecom-wide-poster poster-grocery" data-category="Staples, Atta & Oil">
+                        <div class="poster-overlay-glow glow-green"></div>
+                        <div class="poster-content">
+                            <div class="poster-tag-row">
+                                <span class="poster-sparkle-badge badge-green">🌾 100% UNPOLISHED & FRESH HARVEST</span>
+                                <span class="poster-timer-badge badge-green"><i data-lucide="zap"></i> 10-MIN EXPRESS</span>
+                            </div>
+                            <h2 class="poster-headline">SUPER PANTRY BONANZA: ATTA, GHEE & BASMATI</h2>
+                            <p class="poster-subline">Aashirvaad Shudh Atta, Fortune Oil, Amul Cow Ghee & India Gate Basmati Rice at Wholesale Prices</p>
+                            <div class="poster-perks-row">
+                                <span><i data-lucide="check-circle-2"></i> Quality Assured</span>
+                                <span><i data-lucide="truck"></i> Free Delivery ₹499+</span>
+                                <span><i data-lucide="shield-check"></i> FSSAI Certified</span>
+                            </div>
+                            <button class="poster-cta-btn btn-green">SHOP PANTRY SAVERS <i data-lucide="arrow-right"></i></button>
+                        </div>
+                        <div class="poster-visual-seal seal-green">
+                            <span class="seal-super">BIG SAVINGS</span>
+                            <span class="seal-huge">40%</span>
+                            <span class="seal-off">OFF</span>
+                        </div>
+                    </div>
+                </section>
+
                 <div id="otherCategories"></div>
             </div>
         </div>
