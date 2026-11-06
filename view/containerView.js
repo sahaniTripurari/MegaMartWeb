@@ -942,9 +942,11 @@ export class ContainerView {
         this.sidebarFilterSections = document.getElementById('sidebarFilterSections');
         this.sidebarClearAllBtn = document.getElementById('sidebarClearAllBtn');
         this.sidebarActiveCount = document.getElementById('sidebarActiveCount');
-        this.mobileFilterDrawerBtn = document.getElementById('mobileFilterDrawerBtn');
-        this.sidebarCloseMobileBtn = document.getElementById('sidebarCloseMobileBtn');
+        this.categoryFilterToggleBtn = document.getElementById('categoryFilterToggleBtn') || document.getElementById('mobileFilterDrawerBtn');
+        this.sidebarCloseBtn = document.getElementById('sidebarCloseBtn') || document.getElementById('sidebarCloseMobileBtn');
         this.sidebarMobileBackdrop = document.getElementById('sidebarMobileBackdrop');
+        this.categoryEcomLayout = document.querySelector('.category-ecom-layout');
+        this.isFilterSidebarOpen = false;
         this.filterCountBadge = document.getElementById('filterCountBadge');
         this.activeFilterChipsRow = document.getElementById('activeFilterChipsRow');
         this.activeChipsList = document.getElementById('activeChipsList');
@@ -1422,18 +1424,33 @@ export class ContainerView {
                     if (window.innerWidth <= 900) return;
                     this.subMegaMenuTimer = setTimeout(() => {
                         this.closeSubMegaMenu();
-                    }, 180);
+                    }, 250);
+                });
+
+                pill.addEventListener('click', (e) => {
+                    // If clicked on chevron or dropdown is not show, open it!
+                    if (!this.subMegaMenuDropdown?.classList.contains('show') || !pill.classList.contains('megamenu-open')) {
+                        clearTimeout(this.subMegaMenuTimer);
+                        this.openSubMegaMenu(categoryName, subType, pill);
+                    } else {
+                        this.closeSubMegaMenu();
+                    }
+                    this.selectedFilters.subTypes.clear();
+                    this.selectedFilters.subTypes.add(subType);
+                    this.activeSubType = subType;
+                    this.syncSubFilterPillsWithSelection();
+                    this.applyFiltersAndRender();
+                });
+            } else {
+                pill.addEventListener('click', () => {
+                    this.closeSubMegaMenu();
+                    this.selectedFilters.subTypes.clear();
+                    this.selectedFilters.subTypes.add(subType);
+                    this.activeSubType = subType;
+                    this.syncSubFilterPillsWithSelection();
+                    this.applyFiltersAndRender();
                 });
             }
-
-            pill.addEventListener('click', () => {
-                this.closeSubMegaMenu();
-                this.selectedFilters.subTypes.clear();
-                this.selectedFilters.subTypes.add(subType);
-                this.activeSubType = subType;
-                this.syncSubFilterPillsWithSelection();
-                this.applyFiltersAndRender();
-            });
 
             this.categorySubFilterPills.appendChild(pill);
         });
@@ -1447,6 +1464,15 @@ export class ContainerView {
         
         if (this.categoryPageTitle) this.categoryPageTitle.textContent = categoryName;
         if (this.sortSelect) this.sortSelect.value = 'featured';
+        
+        // Ensure filter sidebar is closed by default on new category visit
+        this.isFilterSidebarOpen = false;
+        if (!this.categoryEcomLayout) this.categoryEcomLayout = document.querySelector('.category-ecom-layout');
+        if (this.categoryEcomLayout) this.categoryEcomLayout.classList.remove('sidebar-open');
+        if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.remove('mobile-open');
+        if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.remove('open');
+        if (this.categoryFilterToggleBtn) this.categoryFilterToggleBtn.classList.remove('btn-active');
+        document.body.style.overflow = '';
         
         this.updateNavHighlight(categoryName);
 
@@ -3992,7 +4018,7 @@ export class ContainerView {
         this.subMegaMenuDropdown.addEventListener('mouseleave', () => {
             this.subMegaMenuTimer = setTimeout(() => {
                 this.closeSubMegaMenu();
-            }, 180);
+            }, 250);
         });
 
         // Overlay click closes
@@ -4036,7 +4062,12 @@ export class ContainerView {
     }
 
     openSubMegaMenu(categoryName, subType, pillElement) {
-        const config = SUB_MEGA_MENU_DATA[categoryName]?.[subType];
+        // Robust case-insensitive lookup
+        const catKey = Object.keys(SUB_MEGA_MENU_DATA).find(k => k.toLowerCase() === (categoryName || '').toLowerCase()) || categoryName;
+        const subMap = SUB_MEGA_MENU_DATA[catKey] || {};
+        const subKey = Object.keys(subMap).find(s => s.toLowerCase() === (subType || '').toLowerCase()) || subType;
+        const config = subMap[subKey];
+
         if (!config || !this.subMegaMenuInner || !this.subMegaMenuDropdown) return;
 
         // Active pill styling
@@ -4101,26 +4132,45 @@ export class ContainerView {
             this.emptyResetFiltersBtn.addEventListener('click', () => this.clearAllCategoryFilters());
         }
 
-        // Mobile drawer toggles
-        if (this.mobileFilterDrawerBtn) {
-            this.mobileFilterDrawerBtn.addEventListener('click', () => {
-                if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.add('mobile-open');
-                if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.add('open');
-                document.body.style.overflow = 'hidden';
-            });
+        // Desktop & Mobile Filter Toggle Button
+        const toggleSidebar = () => {
+            if (!this.categoryEcomLayout) this.categoryEcomLayout = document.querySelector('.category-ecom-layout');
+            this.isFilterSidebarOpen = !this.isFilterSidebarOpen;
+            
+            if (this.categoryEcomLayout) {
+                this.categoryEcomLayout.classList.toggle('sidebar-open', this.isFilterSidebarOpen);
+            }
+            if (this.categoryFilterToggleBtn) {
+                this.categoryFilterToggleBtn.classList.toggle('btn-active', this.isFilterSidebarOpen);
+            }
+
+            // On mobile / tablet, also handle off-canvas drawer
+            if (window.innerWidth <= 900) {
+                if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.toggle('mobile-open', this.isFilterSidebarOpen);
+                if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.toggle('open', this.isFilterSidebarOpen);
+                document.body.style.overflow = this.isFilterSidebarOpen ? 'hidden' : '';
+            }
+        };
+
+        if (this.categoryFilterToggleBtn) {
+            this.categoryFilterToggleBtn.addEventListener('click', toggleSidebar);
         }
 
-        const closeMobileDrawer = () => {
+        const closeSidebar = () => {
+            this.isFilterSidebarOpen = false;
+            if (!this.categoryEcomLayout) this.categoryEcomLayout = document.querySelector('.category-ecom-layout');
+            if (this.categoryEcomLayout) this.categoryEcomLayout.classList.remove('sidebar-open');
+            if (this.categoryFilterToggleBtn) this.categoryFilterToggleBtn.classList.remove('btn-active');
             if (this.categoryFilterSidebar) this.categoryFilterSidebar.classList.remove('mobile-open');
             if (this.sidebarMobileBackdrop) this.sidebarMobileBackdrop.classList.remove('open');
             document.body.style.overflow = '';
         };
 
-        if (this.sidebarCloseMobileBtn) {
-            this.sidebarCloseMobileBtn.addEventListener('click', closeMobileDrawer);
+        if (this.sidebarCloseBtn) {
+            this.sidebarCloseBtn.addEventListener('click', closeSidebar);
         }
         if (this.sidebarMobileBackdrop) {
-            this.sidebarMobileBackdrop.addEventListener('click', closeMobileDrawer);
+            this.sidebarMobileBackdrop.addEventListener('click', closeSidebar);
         }
 
         // Sort select listener
