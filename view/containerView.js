@@ -1217,12 +1217,6 @@ export class ContainerView {
 
     // ================= MOBILE UI =================
     setupBottomNav() {
-        const mfcPill = document.getElementById('mobileFloatingCartPill');
-        if (mfcPill) {
-            mfcPill.addEventListener('click', () => {
-                this.showCartPageView();
-            });
-        }
         const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
         bottomNavItems.forEach(item => {
             item.addEventListener('click', () => {
@@ -1328,10 +1322,6 @@ export class ContainerView {
         const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
         bottomNavItems.forEach(nav => nav.classList.remove('active'));
         
-        const mfcPill = document.getElementById('mobileFloatingCartPill');
-        if (mfcPill && activeView === this.cartPageView) {
-            mfcPill.style.display = 'none';
-        }
         if (activeView === this.homeView) {
             document.querySelector('.bottom-nav-item[data-view="home"]')?.classList.add('active');
         } else if (activeView === this.categoryView) {
@@ -3290,22 +3280,6 @@ export class ContainerView {
         if (this.mobileCount) this.mobileCount.textContent = totalItems;
         if (this.cartTotalHeader) this.cartTotalHeader.textContent = `₹${totalPrice.toFixed(2)}`;
         
-        // Update Mobile Floating Quick Cart Pill (Zepto / Blinkit style)
-        const mfcPill = document.getElementById('mobileFloatingCartPill');
-        const mfcCount = document.getElementById('mfcTotalCount');
-        const mfcPrice = document.getElementById('mfcTotalPrice');
-        if (mfcPill) {
-            const isCartActive = this.cartPageView?.classList.contains('active');
-            if (totalItems > 0 && !isCartActive) {
-                mfcPill.style.display = 'flex';
-                if (mfcCount) mfcCount.textContent = `${totalItems} Item${totalItems > 1 ? 's' : ''}`;
-                if (mfcPrice) mfcPrice.textContent = `₹${totalPrice.toFixed(0)}`;
-                if (window.lucide) lucide.createIcons();
-            } else {
-                mfcPill.style.display = 'none';
-            }
-        }
-
         if (document.getElementById('cartSidebar')?.classList.contains('active')) {
             this.renderCartSidebar();
         }
