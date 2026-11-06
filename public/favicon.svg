@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="megamart-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ff3b6c"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#881337" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#megamart-grad)"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+  <path d="M35 8L16 34H32L29 56L48 30H32L35 8Z" fill="#ffffff" filter="url(#shadow)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
