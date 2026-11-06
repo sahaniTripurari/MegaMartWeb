@@ -5792,6 +5792,29 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
+}
+
+.banner-showcase-box {
+  width: 220px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.banner-showcase-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+  transition: transform 0.4s ease;
+  border-radius: 14px;
+}
+
+.mega-banner-slide:hover .banner-showcase-img {
+  transform: scale(1.06) rotate(-2deg);
 }
 
 .banner-discount-seal {
@@ -11075,86 +11098,137 @@ body {
   }
 }
 
-/* 5. Hero Carousel Banner on Mobile (Scaled & Ergonomic) */
+/* 5. Hero Carousel Poster Banner on Mobile (Stunning Retail Poster Design) */
 @media (max-width: 768px) {
   .mega-banner-carousel-section {
-    margin-bottom: 14px !important;
+    margin-bottom: 16px !important;
   }
 
   .mega-banner-slide {
-    padding: 14px 14px !important;
-    min-height: 170px !important;
-    border-radius: 14px !important;
+    padding: 16px 14px !important;
+    min-height: 185px !important;
+    border-radius: 18px !important;
     position: relative !important;
     overflow: hidden !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
   }
   
   .banner-content {
-    max-width: calc(100% - 64px) !important;
+    flex: 1 1 58% !important;
+    max-width: 58% !important;
     z-index: 2 !important;
+    padding-right: 6px !important;
+  }
+
+  .banner-pill-badge {
+    padding: 3px 8px !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 6px !important;
+    border-radius: 20px !important;
+    display: inline-flex !important;
+    background: rgba(255, 255, 255, 0.22) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #ffffff !important;
   }
 
   .banner-title {
-    font-size: 1.18rem !important;
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
     line-height: 1.15 !important;
     margin-bottom: 4px !important;
     letter-spacing: -0.3px !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
   }
   
   .banner-subtitle {
-    font-size: 0.75rem !important;
-    margin-bottom: 8px !important;
-    opacity: 0.95 !important;
-  }
-  
-  .banner-pill-badge {
-    padding: 2px 7px !important;
-    font-size: 0.62rem !important;
-    margin-bottom: 6px !important;
-    border-radius: 4px !important;
+    font-size: 0.74rem !important;
+    margin-bottom: 10px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.3 !important;
+    font-weight: 500 !important;
   }
   
   .banner-perks-row {
-    gap: 4px !important;
-    margin-bottom: 10px !important;
-    flex-wrap: wrap !important;
-  }
-  
-  .banner-perk {
-    padding: 2px 6px !important;
-    font-size: 0.64rem !important;
-    border-radius: 4px !important;
+    display: none !important; /* Keep mobile poster clean and focused */
   }
   
   .banner-cta-btn {
-    padding: 6px 14px !important;
-    font-size: 0.72rem !important;
-    border-radius: 8px !important;
+    padding: 7px 16px !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    border-radius: 20px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
   }
   
   .banner-visual {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    z-index: 3 !important;
+    flex: 0 0 42% !important;
+    max-width: 42% !important;
+    height: 130px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2 !important;
+  }
+
+  .banner-showcase-box {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+
+  .banner-showcase-img {
+    max-width: 105px !important;
+    max-height: 105px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45)) !important;
+    border-radius: 12px !important;
   }
 
   .banner-discount-seal {
-    width: 58px !important;
-    height: 58px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    width: 50px !important;
+    height: 50px !important;
+    position: absolute !important;
+    top: -2px !important;
+    right: -2px !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    z-index: 4 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
   
   .seal-percent {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
   }
 
   .seal-sub, .seal-off {
-    font-size: 0.52rem !important;
+    font-size: 0.48rem !important;
   }
   
   .carousel-arrow {
-    display: none !important; /* Swipe gesture only on mobile */
+    display: none !important; /* Swipe gesture on touch screen */
   }
 
   .carousel-dots {
@@ -11175,50 +11249,59 @@ body {
 /* 6. Hero Video & Trending Auto-Slider on Mobile */
 @media (max-width: 768px) {
   .mega-hero {
-    margin-top: 8px !important;
-    margin-bottom: 16px !important;
+    margin-top: 10px !important;
+    margin-bottom: 18px !important;
   }
 
   .mega-hero-grid {
-    gap: 10px !important;
+    gap: 12px !important;
   }
 
   .video-container {
-    height: 155px !important;
-    border-radius: 12px !important;
+    height: 165px !important;
+    border-radius: 16px !important;
     aspect-ratio: auto !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
   }
 
   .video-overlay-text {
-    padding: 10px 12px !important;
+    padding: 12px 14px !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%) !important;
   }
 
   .video-overlay-text .hero-badge {
-    padding: 2px 8px !important;
-    font-size: 0.55rem !important;
+    padding: 3px 8px !important;
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
     margin-bottom: 4px !important;
   }
 
   .video-overlay-text h2 {
-    font-size: 1.05rem !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
     margin-bottom: 2px !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
   }
 
   .video-overlay-text p {
-    font-size: 0.68rem !important;
+    font-size: 0.72rem !important;
+    opacity: 0.95 !important;
   }
 
   .auto-slider-container {
-    padding: 10px 12px !important;
-    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
   }
 
   .slider-header h3 {
-    font-size: 0.85rem !important;
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
   }
 
   .auto-slider {
-    height: 90px !important;
+    height: 95px !important;
   }
 }
 
@@ -11406,35 +11489,89 @@ body {
   }
 }
 
-/* 10. Dual Spotlight Posters on Mobile */
+/* 10. Dual Spotlight Retail Launch Posters on Mobile */
 @media (max-width: 768px) {
   .mega-spotlight-section {
-    margin: 18px auto !important;
+    margin: 22px auto !important;
   }
 
   .mega-spotlight-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 14px !important;
   }
 
   .spotlight-card {
-    padding: 16px 14px !important;
-    min-height: 150px !important;
-    border-radius: 14px !important;
+    padding: 18px 16px !important;
+    min-height: 175px !important;
+    border-radius: 18px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .card-cyber-tech {
+    background: linear-gradient(135deg, #091220 0%, #0d1e38 55%, #183863 100%) !important;
+    border-color: rgba(56, 189, 248, 0.35) !important;
+    box-shadow: 0 10px 28px rgba(14, 165, 233, 0.22) !important;
+  }
+
+  .card-audio-purple {
+    background: linear-gradient(135deg, #180724 0%, #300f45 55%, #591973 100%) !important;
+    border-color: rgba(244, 114, 182, 0.35) !important;
+    box-shadow: 0 10px 28px rgba(217, 70, 239, 0.22) !important;
   }
 
   .spotlight-card-body {
-    max-width: 65% !important;
+    flex: 1 1 58% !important;
+    max-width: 58% !important;
+    z-index: 2 !important;
+    padding-right: 6px !important;
+  }
+
+  .spotlight-badge-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .spotlight-pill {
+    font-size: 0.65rem !important;
+    padding: 3px 8px !important;
+    font-weight: 800 !important;
+  }
+
+  .spotlight-timer-pill {
+    font-size: 0.65rem !important;
+    padding: 3px 7px !important;
+    font-weight: 800 !important;
   }
 
   .spotlight-title {
-    font-size: 1.12rem !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
     margin-bottom: 4px !important;
+    color: #ffffff !important;
+    letter-spacing: -0.3px !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
   }
 
   .spotlight-desc {
-    font-size: 0.74rem !important;
-    margin-bottom: 8px !important;
+    font-size: 0.72rem !important;
+    margin-bottom: 12px !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    line-height: 1.3 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
   }
 
   .spotlight-perks {
@@ -11442,45 +11579,161 @@ body {
   }
 
   .spotlight-btn {
-    padding: 6px 14px !important;
-    font-size: 0.72rem !important;
+    padding: 7px 16px !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    border-radius: 20px !important;
   }
 
   .spotlight-visual-collage {
-    width: 95px !important;
-    height: 95px !important;
+    flex: 0 0 42% !important;
+    max-width: 42% !important;
+    height: 125px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2 !important;
   }
 
-  .spotlight-visual-collage img {
-    max-width: 65px !important;
-    max-height: 65px !important;
+  .floating-product-img {
+    border-radius: 12px !important;
+    padding: 5px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
+    position: absolute !important;
+  }
+
+  .floating-product-img img {
+    width: 68px !important;
+    height: 68px !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .img-phone-1,
+  .img-headphone {
+    top: 6px !important;
+    left: 0 !important;
+    transform: rotate(-6deg) !important;
+    z-index: 2 !important;
+  }
+
+  .img-phone-2,
+  .img-watch {
+    bottom: 6px !important;
+    right: 0 !important;
+    transform: rotate(8deg) !important;
+    z-index: 1 !important;
+  }
+
+  .spotlight-3d-seal {
+    width: 46px !important;
+    height: 46px !important;
+    position: absolute !important;
+    top: -6px !important;
+    right: -4px !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    z-index: 4 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .spotlight-3d-seal .seal-upto {
+    font-size: 0.45rem !important;
+  }
+
+  .spotlight-3d-seal .seal-num {
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+  }
+
+  .spotlight-3d-seal .seal-lbl {
+    font-size: 0.48rem !important;
   }
 }
 
-/* 11. Festive Posters on Mobile */
+/* 11. Grand Festive Sale Posters on Mobile */
 @media (max-width: 768px) {
   .mega-festive-poster-section {
-    margin: 20px auto !important;
+    margin: 24px auto !important;
   }
 
   .mega-festive-poster {
-    padding: 18px 14px !important;
-    min-height: 155px !important;
-    border-radius: 16px !important;
+    padding: 18px 16px !important;
+    min-height: 185px !important;
+    border-radius: 18px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  }
+
+  .poster-fashion-carnival {
+    background: linear-gradient(135deg, #991b1b 0%, #dc2626 45%, #f43f5e 100%) !important;
+    box-shadow: 0 12px 32px rgba(220, 38, 38, 0.28) !important;
+  }
+
+  .poster-grocery-panorama {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 45%, #059669 80%, #10b981 100%) !important;
+    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.28) !important;
   }
 
   .poster-left-content {
-    max-width: 62% !important;
+    flex: 1 1 58% !important;
+    max-width: 58% !important;
+    z-index: 2 !important;
+    padding-right: 6px !important;
+  }
+
+  .poster-super-tag {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .tag-pill-gold,
+  .tag-pill-emerald {
+    font-size: 0.65rem !important;
+    padding: 3px 8px !important;
+    font-weight: 800 !important;
+  }
+
+  .tag-live-clock {
+    font-size: 0.65rem !important;
+    padding: 3px 7px !important;
   }
 
   .poster-grand-title {
-    font-size: 1.18rem !important;
-    margin-bottom: 4px !important;
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+    margin-bottom: 5px !important;
+    color: #ffffff !important;
+    letter-spacing: -0.3px !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
   }
 
   .poster-sub-title {
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     margin-bottom: 8px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.3 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
   }
 
   .poster-features-row {
@@ -11488,33 +11741,103 @@ body {
   }
 
   .poster-brand-logos-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
     gap: 4px !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 12px !important;
   }
 
   .brand-capsule {
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     padding: 2px 6px !important;
+    border-radius: 4px !important;
+    font-weight: 800 !important;
   }
 
   .poster-main-cta {
-    padding: 7px 15px !important;
+    padding: 7px 16px !important;
     font-size: 0.74rem !important;
+    font-weight: 900 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
   }
 
   .poster-right-showcase {
-    width: 105px !important;
-    height: 105px !important;
+    flex: 0 0 42% !important;
+    max-width: 42% !important;
+    height: 135px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2 !important;
   }
 
   .showcase-floating-card {
+    border-radius: 12px !important;
     padding: 5px !important;
-    border-radius: 10px !important;
+    background: #ffffff !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35) !important;
+    position: absolute !important;
   }
 
   .showcase-floating-card img {
-    width: 60px !important;
-    height: 60px !important;
+    width: 68px !important;
+    height: 68px !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .mini-offer-badge {
+    font-size: 0.52rem !important;
+    padding: 2px 4px !important;
+    border-radius: 4px !important;
+  }
+
+  .card-shoe,
+  .card-ghee {
+    top: 6px !important;
+    left: 0 !important;
+    transform: rotate(-7deg) !important;
+    z-index: 2 !important;
+  }
+
+  .card-watch-gold,
+  .card-rice {
+    bottom: 6px !important;
+    right: 0 !important;
+    transform: rotate(9deg) !important;
+    z-index: 1 !important;
+  }
+
+  .poster-giant-discount-ring {
+    width: 48px !important;
+    height: 48px !important;
+    position: absolute !important;
+    top: -6px !important;
+    right: -4px !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    z-index: 4 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .poster-giant-discount-ring .ring-upto {
+    font-size: 0.44rem !important;
+  }
+
+  .poster-giant-discount-ring .ring-pct {
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
+  }
+
+  .poster-giant-discount-ring .ring-off {
+    font-size: 0.46rem !important;
   }
 }
 
