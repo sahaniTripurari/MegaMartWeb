@@ -111,22 +111,44 @@ export class ContainerView {
             const track = section.querySelector('.curated-rail-track');
             if (!track) return;
 
+            // Crucial: remove smooth scroll-behavior during frame-by-frame animation to eliminate micro-stutters
+            track.style.scrollBehavior = 'auto';
+
             const direction = section.dataset.direction || 'left';
-            const speed = parseFloat(section.dataset.speed || '1.0');
+            const baseSpeed = parseFloat(section.dataset.speed || '1.0');
+            // Silky smooth cruising speed (~110-130px/sec)
+            const speedMultiplier = 1.85 * baseSpeed; 
             
             let isPaused = false;
-            let pauseTimeout = null;
+            let pauseTimer = null;
             let currentDir = (direction === 'right') ? -1 : 1;
+            
+            // If direction is right, start initially scrolled towards the end so both directions move simultaneously
+            if (direction === 'right' && track.scrollWidth > track.clientWidth) {
+                track.scrollLeft = track.scrollWidth - track.clientWidth - 10;
+            }
 
+            // Accurate subpixel float position tracker
+            let exactScroll = track.scrollLeft;
+
+            // Pause on mouse hover
             section.addEventListener('mouseenter', () => { isPaused = true; });
-            section.addEventListener('mouseleave', () => { isPaused = false; });
+            section.addEventListener('mouseleave', () => { 
+                isPaused = false; 
+                exactScroll = track.scrollLeft; 
+            });
 
+            // Pause on mobile touch
             section.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
             section.addEventListener('touchend', () => {
-                clearTimeout(pauseTimeout);
-                pauseTimeout = setTimeout(() => { isPaused = false; }, 2500);
+                clearTimeout(pauseTimer);
+                pauseTimer = setTimeout(() => { 
+                    isPaused = false; 
+                    exactScroll = track.scrollLeft;
+                }, 2000);
             }, { passive: true });
 
+            // Prev & Next arrow button clicks
             const prevBtn = section.querySelector('.rail-nav-btn.rail-prev');
             const nextBtn = section.querySelector('.rail-nav-btn.rail-next');
 
@@ -134,9 +156,14 @@ export class ContainerView {
                 prevBtn.onclick = (e) => {
                     e.preventDefault();
                     isPaused = true;
-                    track.scrollBy({ left: -320, behavior: 'smooth' });
-                    clearTimeout(pauseTimeout);
-                    pauseTimeout = setTimeout(() => { isPaused = false; }, 3000);
+                    track.style.scrollBehavior = 'smooth';
+                    track.scrollBy({ left: -360 });
+                    clearTimeout(pauseTimer);
+                    pauseTimer = setTimeout(() => { 
+                        track.style.scrollBehavior = 'auto';
+                        exactScroll = track.scrollLeft;
+                        isPaused = false; 
+                    }, 3000);
                 };
             }
 
@@ -144,32 +171,53 @@ export class ContainerView {
                 nextBtn.onclick = (e) => {
                     e.preventDefault();
                     isPaused = true;
-                    track.scrollBy({ left: 320, behavior: 'smooth' });
-                    clearTimeout(pauseTimeout);
-                    pauseTimeout = setTimeout(() => { isPaused = false; }, 3000);
+                    track.style.scrollBehavior = 'smooth';
+                    track.scrollBy({ left: 360 });
+                    clearTimeout(pauseTimer);
+                    pauseTimer = setTimeout(() => { 
+                        track.style.scrollBehavior = 'auto';
+                        exactScroll = track.scrollLeft;
+                        isPaused = false; 
+                    }, 3000);
                 };
             }
 
+            // High-precision 60fps/120fps smooth animation loop
             let lastTimestamp = 0;
+            let endWaitTimer = null;
+            let isWaitingAtEnd = false;
+
             const step = (timestamp) => {
                 if (!lastTimestamp) lastTimestamp = timestamp;
                 const delta = Math.min(timestamp - lastTimestamp, 50);
                 lastTimestamp = timestamp;
 
-                if (!isPaused && track.scrollWidth > track.clientWidth) {
+                if (!isPaused && !isWaitingAtEnd && track.scrollWidth > track.clientWidth) {
                     const maxScroll = track.scrollWidth - track.clientWidth;
-                    const moveAmount = (speed * 0.7) * (delta / 16.6);
+                    const moveAmount = speedMultiplier * (delta / 16.66);
 
-                    if (currentDir === 1) {
-                        track.scrollLeft += moveAmount;
-                        if (track.scrollLeft >= maxScroll - 2) {
+                    exactScroll += (currentDir * moveAmount);
+
+                    if (exactScroll >= maxScroll) {
+                        exactScroll = maxScroll;
+                        track.scrollLeft = maxScroll;
+                        isWaitingAtEnd = true;
+                        clearTimeout(endWaitTimer);
+                        endWaitTimer = setTimeout(() => {
                             currentDir = -1;
-                        }
-                    } else {
-                        track.scrollLeft -= moveAmount;
-                        if (track.scrollLeft <= 2) {
+                            isWaitingAtEnd = false;
+                        }, 1200); // 1.2s graceful pause at the end
+                    } else if (exactScroll <= 0) {
+                        exactScroll = 0;
+                        track.scrollLeft = 0;
+                        isWaitingAtEnd = true;
+                        clearTimeout(endWaitTimer);
+                        endWaitTimer = setTimeout(() => {
                             currentDir = 1;
-                        }
+                            isWaitingAtEnd = false;
+                        }, 1200); // 1.2s graceful pause at the beginning
+                    } else {
+                        track.scrollLeft = exactScroll;
                     }
                 }
                 requestAnimationFrame(step);

@@ -9685,3 +9685,10 @@ footer.footer {
   background: #ecfeff !important; 
   border-color: #a5f3fc !important; 
 }
+
+/* Hardware-Accelerated Anti-Stutter Rules for Auto-Scrolling Rails */
+.curated-rail-track.auto-scroll-track {
+  scroll-behavior: auto !important;
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
