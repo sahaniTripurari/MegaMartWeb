@@ -9723,18 +9723,62 @@ footer.footer {
   align-items: center !important;
   gap: 8px !important;
   background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  padding: 7px 16px !important;
-  border-radius: 24px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  padding: 4px 14px 4px 5px !important;
+  border-radius: 9999px !important;
   font-size: 0.88rem !important;
   font-weight: 600 !important;
   color: #334155 !important;
   cursor: pointer !important;
   white-space: nowrap !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
   user-select: none !important;
   position: relative;
+}
+
+/* Crucial: Prevent child elements from capturing pointer-events causing hover jitter */
+.category-sub-pill * {
+  pointer-events: none !important;
+}
+
+.pill-thumb-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f8fafc !important;
+}
+
+.pill-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.pill-avatar-all {
+  background: rgba(255, 50, 106, 0.1) !important;
+  color: var(--primary) !important;
+}
+
+.pill-avatar-all i {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.pill-text-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.category-sub-pill.active .pill-thumb-avatar {
+  border-color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .category-sub-pill.has-sub-megamenu {
@@ -10506,4 +10550,107 @@ footer.footer {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
+}
+
+
+/* Shopsy-Style Rounded Visual Promo Card in Sub-Mega Menu */
+.sub-mega-promo-col {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.sub-mega-promo-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.22s ease !important;
+}
+
+.sub-mega-promo-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(255, 50, 106, 0.3) !important;
+}
+
+.promo-img-wrap {
+  width: 100% !important;
+  height: 130px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.promo-card-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.3s ease !important;
+}
+
+.sub-mega-promo-card:hover .promo-card-img {
+  transform: scale(1.06) !important;
+}
+
+.promo-tag-badge {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(4px) !important;
+  color: #ffffff !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 12px !important;
+}
+
+.promo-content {
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.promo-content h5 {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.promo-content p {
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  margin: 0 !important;
+}
+
+.promo-explore-pill {
+  margin-top: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+}
+
+.promo-explore-pill i {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.link-bullet {
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: #cbd5e1 !important;
+  flex-shrink: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.sub-mega-link:hover .link-bullet {
+  background: var(--primary) !important;
+  transform: scale(1.5) !important;
 }

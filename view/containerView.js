@@ -881,6 +881,49 @@ const SUB_MEGA_MENU_DATA = {
     }
 };
 
+const SUB_TYPE_IMAGES = {
+    "Appliances": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=500&auto=format&fit=crop&q=80",
+    "Atta & Flours": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&auto=format&fit=crop&q=80",
+    "Biscuits & Cookies": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500&auto=format&fit=crop&q=80",
+    "Breads & Buns": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&auto=format&fit=crop&q=80&sig=dry-britannia-brown-bread",
+    "Butter & Cheese": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=500&auto=format&fit=crop&q=80&sig=dry-amul-pasteurised-butter",
+    "Chips & Crisps": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=500&auto=format&fit=crop&q=80",
+    "Chocolates & Sweets": "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=500&auto=format&fit=crop&q=80",
+    "Cleaning & Disinfectants": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=80&sig=hh-lizol-disinfectant-floor-cleaner",
+    "Cold Drinks & Soda": "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&auto=format&fit=crop&q=80",
+    "Cookware": "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=500&auto=format&fit=crop&q=80",
+    "Dals & Pulses": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop&q=80",
+    "Detergents & Laundry": "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=500&auto=format&fit=crop&q=80",
+    "Edible Oils & Ghee": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&auto=format&fit=crop&q=80",
+    "Eggs & Poultry": "https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?w=500&auto=format&fit=crop&q=80",
+    "Energy Drinks": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&auto=format&fit=crop&q=80",
+    "Footwear & Shoes": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80",
+    "Fragrance & Hygiene": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500&auto=format&fit=crop&q=80",
+    "Furnishing & Decor": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&auto=format&fit=crop&q=80",
+    "Grooming Tools": "https://images.unsplash.com/photo-1621607512214-68297480165e?w=500&auto=format&fit=crop&q=80",
+    "Haircare": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=80",
+    "Instant Noodles & Pasta": "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=500&auto=format&fit=crop&q=80",
+    "Juices & Health Drinks": "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500&auto=format&fit=crop&q=80",
+    "Men's Apparel": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80",
+    "Milk & Dairy": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500&auto=format&fit=crop&q=80",
+    "Namkeen & Traditional": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop&q=80",
+    "Pest Control & Paper": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=80&sig=hh-goodknight-gold-flash",
+    "Power & Chargers": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500&auto=format&fit=crop&q=80",
+    "Rice & Grains": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop&q=80&sig=stp-indiagate-basmati-rice",
+    "Salt & Sugar": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop&q=80&sig=stp-tata-salt-iodized",
+    "Skincare": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&auto=format&fit=crop&q=80",
+    "Smartphones": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop&q=80",
+    "Smartwatches": "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&auto=format&fit=crop&q=80",
+    "Speakers": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&auto=format&fit=crop&q=80",
+    "Spices & Masalas": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&auto=format&fit=crop&q=80",
+    "Storage & Flasks": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=80",
+    "TWS & Audio": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=500&auto=format&fit=crop&q=80",
+    "Tea & Coffee": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=80",
+    "Tech Accessories": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&auto=format&fit=crop&q=80",
+    "Watches & Accessories": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500&auto=format&fit=crop&q=80&sig=fsh-titan-octane-chronograph",
+    "Women's Ethnic": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80"
+};
+
 export class ContainerView {
     constructor(data) {
         this.data = data;
@@ -1385,12 +1428,20 @@ export class ContainerView {
         const subTypes = Object.entries(subTypeCounts);
         if (subTypes.length <= 1) return;
 
-        // 1. "All" Pill
+        // 1. "All" Pill (Rounded with Icon Avatar)
         const allBtn = document.createElement('button');
         allBtn.type = 'button';
         allBtn.className = 'category-sub-pill active';
         allBtn.dataset.subtype = 'All';
-        allBtn.innerHTML = `All <span class="pill-count">${catItems.length}</span>`;
+        allBtn.innerHTML = `
+            <div class="pill-thumb-avatar pill-avatar-all">
+                <i data-lucide="layout-grid"></i>
+            </div>
+            <div class="pill-text-wrap">
+                <span class="pill-title">All</span>
+                <span class="pill-count">${catItems.length}</span>
+            </div>
+        `;
         allBtn.addEventListener('click', () => {
             this.closeSubMegaMenu();
             this.selectedFilters.subTypes.clear();
@@ -1400,16 +1451,22 @@ export class ContainerView {
         });
         this.categorySubFilterPills.appendChild(allBtn);
 
-        // 2. SubType Pills with Shopsy Hover Mega Menu
+        // 2. SubType Pills (Rounded with Real Images & Chevron)
         subTypes.forEach(([subType, count]) => {
             const hasMega = !!(SUB_MEGA_MENU_DATA[categoryName] && SUB_MEGA_MENU_DATA[categoryName][subType]);
+            const imgSrc = SUB_TYPE_IMAGES[subType] || MEGAMART_PLACEHOLDER;
 
             const pill = document.createElement('div');
             pill.className = `category-sub-pill ${hasMega ? 'has-sub-megamenu' : ''}`;
             pill.dataset.subtype = subType;
             pill.innerHTML = `
-                <span class="pill-title">${subType}</span>
-                <span class="pill-count">${count}</span>
+                <div class="pill-thumb-avatar">
+                    <img src="${imgSrc}" alt="${subType}" class="pill-avatar-img" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                </div>
+                <div class="pill-text-wrap">
+                    <span class="pill-title">${subType}</span>
+                    <span class="pill-count">${count}</span>
+                </div>
                 ${hasMega ? '<i data-lucide="chevron-down" class="pill-chevron"></i>' : ''}
             `;
 
@@ -1424,11 +1481,10 @@ export class ContainerView {
                     if (window.innerWidth <= 900) return;
                     this.subMegaMenuTimer = setTimeout(() => {
                         this.closeSubMegaMenu();
-                    }, 250);
+                    }, 280);
                 });
 
                 pill.addEventListener('click', (e) => {
-                    // If clicked on chevron or dropdown is not show, open it!
                     if (!this.subMegaMenuDropdown?.classList.contains('show') || !pill.classList.contains('megamenu-open')) {
                         clearTimeout(this.subMegaMenuTimer);
                         this.openSubMegaMenu(categoryName, subType, pill);
@@ -4070,14 +4126,27 @@ export class ContainerView {
 
         if (!config || !this.subMegaMenuInner || !this.subMegaMenuDropdown) return;
 
+        // GUARD: If already open for this exact category & subType, do NOT re-render / re-trigger animation!
+        if (this.currentOpenCategory === catKey && this.currentOpenSubType === subKey && this.subMegaMenuDropdown.classList.contains('show')) {
+            clearTimeout(this.subMegaMenuTimer);
+            return;
+        }
+
+        this.currentOpenCategory = catKey;
+        this.currentOpenSubType = subKey;
+        clearTimeout(this.subMegaMenuTimer);
+
         // Active pill styling
         if (this.categorySubFilterPills) {
             this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(p => p.classList.remove('megamenu-open'));
         }
         if (pillElement) pillElement.classList.add('megamenu-open');
 
-        // Render multi-column layout
-        let html = `<div class="sub-mega-grid cols-${config.length}">`;
+        const heroImage = SUB_TYPE_IMAGES[subType] || SUB_TYPE_IMAGES[subKey] || MEGAMART_PLACEHOLDER;
+
+        // Render multi-column layout with right visual promo card
+        let html = `<div class="sub-mega-grid cols-${config.length + 1}">`;
+        
         config.forEach(col => {
             html += `
                 <div class="sub-mega-col">
@@ -4094,7 +4163,7 @@ export class ContainerView {
                            data-subtype="${subType}" 
                            data-brand="${item.brand || ''}" 
                            data-query="${item.query || ''}">
-                            <i data-lucide="chevron-right" class="sub-link-chevron"></i>
+                            <span class="link-bullet"></span>
                             <span>${item.label}</span>
                         </a>
                     </li>
@@ -4102,6 +4171,27 @@ export class ContainerView {
             });
             html += `</ul></div>`;
         });
+
+        // 5th Column: Shopsy-Style Rounded Visual Promo Card with Image
+        html += `
+            <div class="sub-mega-promo-col">
+                <div class="sub-mega-promo-card">
+                    <div class="promo-img-wrap">
+                        <img src="${heroImage}" alt="${subType}" class="promo-card-img" onerror="this.src=MEGAMART_PLACEHOLDER">
+                        <span class="promo-tag-badge">⚡ 10 MINS</span>
+                    </div>
+                    <div class="promo-content">
+                        <h5>${subType} Deals</h5>
+                        <p>100% Genuine • MegaAssured Quality</p>
+                        <div class="promo-explore-pill">
+                            <span>Explore Store</span>
+                            <i data-lucide="arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         html += `</div>`;
 
         this.subMegaMenuInner.innerHTML = html;
@@ -4112,6 +4202,8 @@ export class ContainerView {
     }
 
     closeSubMegaMenu() {
+        this.currentOpenCategory = null;
+        this.currentOpenSubType = null;
         if (this.subMegaMenuDropdown) this.subMegaMenuDropdown.classList.remove('show');
         if (this.subMegaMenuOverlay) this.subMegaMenuOverlay.classList.remove('show');
         if (this.categorySubFilterPills) {
