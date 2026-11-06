@@ -11245,3 +11245,14 @@ body {
   color: var(--primary) !important;
   transform: translateY(-2px) !important;
 }
+
+/* Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile) */
+@media (max-width: 768px) {
+  body.hide-mobile-footer footer.footer,
+  body:has(#ordersPageView.active) footer.footer,
+  body:has(#wishlistPageView.active) footer.footer,
+  body:has(#cartPageView.active) footer.footer,
+  body:has(#profileView.active) footer.footer {
+    display: none !important;
+  }
+}

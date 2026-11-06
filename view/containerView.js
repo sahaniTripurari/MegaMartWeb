@@ -1318,6 +1318,14 @@ export class ContainerView {
             activeView.style.display = 'flex';
         }
         
+        // Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile)
+        const hideFooterViews = [this.ordersPageView, this.wishlistPageView, this.cartPageView, this.profileView];
+        if (hideFooterViews.includes(activeView)) {
+            document.body.classList.add('hide-mobile-footer');
+        } else {
+            document.body.classList.remove('hide-mobile-footer');
+        }
+
         // Sync bottom nav active state
         const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
         bottomNavItems.forEach(nav => nav.classList.remove('active'));
