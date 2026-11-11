@@ -1006,6 +1006,8 @@ export class ContainerView {
         this.subMegaMenuOverlay = document.getElementById('subMegaMenuOverlay');
         this.subMegaMenuInner = document.getElementById('subMegaMenuInner');
         this.subMegaMenuTimer = null;
+        this.subMegaMenuHoverTimer = null;
+        this.subMegaMenuCache = new Map();
 
         this.selectedFilters = {
             subTypes: new Set(),
@@ -1058,6 +1060,7 @@ export class ContainerView {
         this.setupOrdersPageView();
         this.setupCategorySubMegaMenu();
         this.setupDynamicCategoryFilters();
+        this.setupFooterLinks();
         this.aiCopilot = new MegaAiCopilot(this.data);
         this.setupMegaAiCopilot();
         
@@ -1487,28 +1490,50 @@ export class ContainerView {
                 pill.addEventListener('mouseenter', () => {
                     if (window.innerWidth <= 900) return;
                     clearTimeout(this.subMegaMenuTimer);
-                    this.openSubMegaMenu(categoryName, subType, pill);
+
+                    // If menu is already open, switch pills smoothly with short 40ms debounce
+                    if (this.subMegaMenuDropdown?.classList.contains('show')) {
+                        clearTimeout(this.subMegaMenuHoverTimer);
+                        this.subMegaMenuHoverTimer = setTimeout(() => {
+                            this.openSubMegaMenu(categoryName, subType, pill, true);
+                        }, 40);
+                    } else {
+                        // User hovered from outside: require 120ms hover intent to eliminate fly-by flicker
+                        clearTimeout(this.subMegaMenuHoverTimer);
+                        this.subMegaMenuHoverTimer = setTimeout(() => {
+                            this.openSubMegaMenu(categoryName, subType, pill, false);
+                        }, 120);
+                    }
                 });
 
                 pill.addEventListener('mouseleave', (e) => {
                     if (window.innerWidth <= 900) return;
-                    // If moving into dropdown or another pill, DO NOT close!
+                    clearTimeout(this.subMegaMenuHoverTimer);
+
+                    // If moving into dropdown, another pill, or the sub-filter bar container, DO NOT close!
                     if (e.relatedTarget && (
                         this.subMegaMenuDropdown?.contains(e.relatedTarget) || 
-                        e.relatedTarget.closest?.('.category-sub-pill')
+                        e.relatedTarget.closest?.('.category-sub-pill') ||
+                        e.relatedTarget.closest?.('.category-sub-filter-bar')
                     )) {
                         return;
                     }
                     this.subMegaMenuTimer = setTimeout(() => {
                         this.closeSubMegaMenu();
-                    }, 320);
+                    }, 280);
                 });
 
                 pill.addEventListener('click', (e) => {
-                    if (!this.subMegaMenuDropdown?.classList.contains('show') || !pill.classList.contains('megamenu-open')) {
-                        clearTimeout(this.subMegaMenuTimer);
-                        this.openSubMegaMenu(categoryName, subType, pill);
+                    clearTimeout(this.subMegaMenuHoverTimer);
+                    // On touch or small screens, toggle menu
+                    if (window.innerWidth <= 900) {
+                        if (!this.subMegaMenuDropdown?.classList.contains('show') || !pill.classList.contains('megamenu-open')) {
+                            this.openSubMegaMenu(categoryName, subType, pill);
+                        } else {
+                            this.closeSubMegaMenu();
+                        }
                     } else {
+                        // On desktop click, close mega menu and filter
                         this.closeSubMegaMenu();
                     }
                     this.selectedFilters.subTypes.clear();
@@ -1519,6 +1544,7 @@ export class ContainerView {
                 });
             } else {
                 pill.addEventListener('click', () => {
+                    clearTimeout(this.subMegaMenuHoverTimer);
                     this.closeSubMegaMenu();
                     this.selectedFilters.subTypes.clear();
                     this.selectedFilters.subTypes.add(subType);
@@ -4113,13 +4139,14 @@ export class ContainerView {
                 if (e.relatedTarget && this.subMegaMenuDropdown?.contains(e.relatedTarget)) return;
                 this.subMegaMenuTimer = setTimeout(() => {
                     this.closeSubMegaMenu();
-                }, 320);
+                }, 280);
             });
         }
 
         // Dropdown hover persistence: NEVER close or reload while mouse is inside dropdown!
         this.subMegaMenuDropdown.addEventListener('mouseenter', () => {
             clearTimeout(this.subMegaMenuTimer);
+            clearTimeout(this.subMegaMenuHoverTimer);
         });
 
         this.subMegaMenuDropdown.addEventListener('mouseleave', (e) => {
@@ -4131,18 +4158,25 @@ export class ContainerView {
             }
             this.subMegaMenuTimer = setTimeout(() => {
                 this.closeSubMegaMenu();
-            }, 320);
+            }, 280);
         });
 
-        // Overlay click or touch closes immediately
+        // Overlay: closes ONLY on click or touch (NEVER on mouseenter to avoid deadzone flicker!)
         if (this.subMegaMenuOverlay) {
             this.subMegaMenuOverlay.addEventListener('click', () => {
                 this.closeSubMegaMenu();
             });
-            this.subMegaMenuOverlay.addEventListener('mouseenter', () => {
+            this.subMegaMenuOverlay.addEventListener('touchstart', () => {
                 this.closeSubMegaMenu();
-            });
+            }, { passive: true });
         }
+
+        // Close on Escape Key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.subMegaMenuDropdown?.classList.contains('show')) {
+                this.closeSubMegaMenu();
+            }
+        });
 
         // Click on any link in mega menu
         if (this.subMegaMenuInner) {
@@ -4177,7 +4211,7 @@ export class ContainerView {
         }
     }
 
-    openSubMegaMenu(categoryName, subType, pillElement) {
+    openSubMegaMenu(categoryName, subType, pillElement, isFastSwitch = false) {
         // Robust case-insensitive lookup
         const catKey = Object.keys(SUB_MEGA_MENU_DATA).find(k => k.toLowerCase() === (categoryName || '').toLowerCase()) || categoryName;
         const subMap = SUB_MEGA_MENU_DATA[catKey] || {};
@@ -4192,6 +4226,7 @@ export class ContainerView {
             return;
         }
 
+        const isAlreadyOpen = this.subMegaMenuDropdown.classList.contains('show');
         this.currentOpenCategory = catKey;
         this.currentOpenSubType = subKey;
         clearTimeout(this.subMegaMenuTimer);
@@ -4202,66 +4237,86 @@ export class ContainerView {
         }
         if (pillElement) pillElement.classList.add('megamenu-open');
 
-        const heroImage = SUB_TYPE_IMAGES[subType] || SUB_TYPE_IMAGES[subKey] || MEGAMART_PLACEHOLDER;
+        // Check in-memory template cache to eliminate image reloading and DOM thrashing
+        const cacheKey = `${catKey}::${subKey}`;
+        let html = this.subMegaMenuCache ? this.subMegaMenuCache.get(cacheKey) : null;
 
-        // Render multi-column layout with right visual promo card
-        let html = `<div class="sub-mega-grid cols-${config.length + 1}">`;
-        
-        config.forEach(col => {
-            html += `
-                <div class="sub-mega-col">
-                    <h4 class="sub-col-title">
-                        <span>${col.title}</span>
-                    </h4>
-                    <ul class="sub-col-list">
-            `;
-            col.items.forEach(item => {
+        if (!html) {
+            const heroImage = SUB_TYPE_IMAGES[subType] || SUB_TYPE_IMAGES[subKey] || MEGAMART_PLACEHOLDER;
+
+            // Render multi-column layout with right visual promo card
+            html = `<div class="sub-mega-grid cols-${config.length + 1}">`;
+            
+            config.forEach(col => {
                 html += `
-                    <li>
-                        <a href="#" class="sub-mega-link" 
-                           data-category="${categoryName}" 
-                           data-subtype="${subType}" 
-                           data-brand="${item.brand || ''}" 
-                           data-query="${item.query || ''}">
-                            <span class="link-bullet"></span>
-                            <span>${item.label}</span>
-                        </a>
-                    </li>
+                    <div class="sub-mega-col">
+                        <h4 class="sub-col-title">
+                            <span>${col.title}</span>
+                        </h4>
+                        <ul class="sub-col-list">
                 `;
+                col.items.forEach(item => {
+                    html += `
+                        <li>
+                            <a href="#" class="sub-mega-link" 
+                               data-category="${categoryName}" 
+                               data-subtype="${subType}" 
+                               data-brand="${item.brand || ''}" 
+                               data-query="${item.query || ''}">
+                                <span class="link-bullet"></span>
+                                <span>${item.label}</span>
+                            </a>
+                        </li>
+                    `;
+                });
+                html += `</ul></div>`;
             });
-            html += `</ul></div>`;
-        });
 
-        // 5th Column: Shopsy-Style Rounded Visual Promo Card with Image
-        html += `
-            <div class="sub-mega-promo-col">
-                <div class="sub-mega-promo-card" data-category="${categoryName}" data-subtype="${subType}">
-                    <div class="promo-img-wrap">
-                        <img src="${heroImage}" alt="${subType}" class="promo-card-img" onerror="this.src=MEGAMART_PLACEHOLDER">
-                        <span class="promo-tag-badge">⚡ 10 MINS</span>
-                    </div>
-                    <div class="promo-content">
-                        <h5>${subType} Deals</h5>
-                        <p>100% Genuine • MegaAssured Quality</p>
-                        <div class="promo-explore-pill">
-                            <span>Explore Store</span>
-                            <i data-lucide="arrow-right"></i>
+            // 5th Column: Shopsy-Style Rounded Visual Promo Card with Image
+            html += `
+                <div class="sub-mega-promo-col">
+                    <div class="sub-mega-promo-card" data-category="${categoryName}" data-subtype="${subType}">
+                        <div class="promo-img-wrap">
+                            <img src="${heroImage}" alt="${subType}" class="promo-card-img" onerror="this.src='${MEGAMART_PLACEHOLDER}'">
+                            <span class="promo-tag-badge">⚡ 10 MINS</span>
+                        </div>
+                        <div class="promo-content">
+                            <h5>${subType} Deals</h5>
+                            <p>100% Genuine • MegaAssured Quality</p>
+                            <div class="promo-explore-pill">
+                                <span>Explore Store</span>
+                                <i data-lucide="arrow-right"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        html += `</div>`;
+            html += `</div>`;
+            if (this.subMegaMenuCache) this.subMegaMenuCache.set(cacheKey, html);
+        }
 
-        this.subMegaMenuInner.innerHTML = html;
-        if (window.lucide) lucide.createIcons();
-
-        this.subMegaMenuDropdown.classList.add('show');
-        if (this.subMegaMenuOverlay) this.subMegaMenuOverlay.classList.add('show');
+        // Seamless Cross-Fade if already open, or smooth open
+        if (isAlreadyOpen) {
+            // Dropdown is already open: cross-fade content with zero layout jump
+            this.subMegaMenuInner.style.opacity = '0.35';
+            requestAnimationFrame(() => {
+                this.subMegaMenuInner.innerHTML = html;
+                if (window.lucide) lucide.createIcons();
+                this.subMegaMenuInner.style.opacity = '1';
+            });
+        } else {
+            this.subMegaMenuInner.style.opacity = '1';
+            this.subMegaMenuInner.innerHTML = html;
+            if (window.lucide) lucide.createIcons();
+            this.subMegaMenuDropdown.classList.add('show');
+            if (this.subMegaMenuOverlay) this.subMegaMenuOverlay.classList.add('show');
+        }
     }
 
     closeSubMegaMenu() {
+        clearTimeout(this.subMegaMenuTimer);
+        clearTimeout(this.subMegaMenuHoverTimer);
         this.currentOpenCategory = null;
         this.currentOpenSubType = null;
         if (this.subMegaMenuDropdown) this.subMegaMenuDropdown.classList.remove('show');
@@ -4269,6 +4324,66 @@ export class ContainerView {
         if (this.categorySubFilterPills) {
             this.categorySubFilterPills.querySelectorAll('.category-sub-pill').forEach(p => p.classList.remove('megamenu-open'));
         }
+    }
+
+    // ================= FOOTER LINKS & NAVIGATION SYSTEM =================
+    setupFooterLinks() {
+        const footerLogoBtn = document.getElementById('footerLogoBtn');
+        const footerHomeLink = document.getElementById('footerHomeLink');
+        const footerAllProductsLink = document.getElementById('footerAllProductsLink');
+        const footerOffersLink = document.getElementById('footerOffersLink');
+        const contactUsFooterBtn = document.getElementById('contactUsFooterBtn');
+        const returnPolicyFooterBtn = document.getElementById('returnPolicyFooterBtn');
+        const appStoreBtn = document.getElementById('appStoreBtn');
+        const googlePlayBtn = document.getElementById('googlePlayBtn');
+
+        footerLogoBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showHomeView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        footerHomeLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showHomeView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        footerAllProductsLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showCategoryView('All Products');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        footerOffersLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showCategoryView('All Products');
+            setTimeout(() => {
+                const flashSale = document.getElementById('flashSaleBanner');
+                if (flashSale) flashSale.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        });
+
+        contactUsFooterBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.openMegaAiDrawer();
+            const aiInput = document.getElementById('megaAiInput');
+            if (aiInput) {
+                aiInput.value = 'Mera order status check karo aur customer support se baat karvao';
+                this.sendAiMessage();
+            }
+        });
+
+        returnPolicyFooterBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showToast('🛡️ MegaMart 100% Genuine Return Policy: Instant refunds within 24 hours on all groceries & electronics!');
+        });
+
+        const showAppComingSoon = () => {
+            this.showToast('📱 MegaMart Mobile App coming soon to App Store & Google Play with 10-Minute lightning delivery!');
+        };
+        appStoreBtn?.addEventListener('click', showAppComingSoon);
+        googlePlayBtn?.addEventListener('click', showAppComingSoon);
     }
 
     // ================= DYNAMIC CATEGORY FILTERS & 2-COLUMN ECOM ENGINE =================

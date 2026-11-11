@@ -1384,36 +1384,75 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-col brand-col">
-                <a href="#" class="logo">
-                    <div class="logo-icon"><i data-lucide="zap"></i></div>
+                <a href="#" class="logo" id="footerLogoBtn" title="MegaMart Home">
+                    <div class="logo-icon">
+                        <img src="/favicon.svg" alt="MegaMart" class="logo-svg-img" width="34" height="34">
+                    </div>
                     <span class="logo-text">MegaMart</span>
                 </a>
                 <p>MegaMart is your ultimate destination for lightning-fast delivery of groceries and household essentials.</p>
-                <!-- Fixed Footer Social Icons -->
+                <!-- Verified Brand Social Icons (Crisp Inline SVGs) -->
                 <div class="social-links">
-                    <a href="#" class="social-icon"><i data-lucide="instagram"></i></a>
-                    <a href="#" class="social-icon"><i data-lucide="twitter"></i></a>
-                    <a href="#" class="social-icon"><i data-lucide="facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon instagram" aria-label="Instagram" title="Follow us on Instagram">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-icon twitter" aria-label="X / Twitter" title="Follow us on X">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-icon facebook" aria-label="Facebook" title="Follow us on Facebook">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon linkedin" aria-label="LinkedIn" title="Connect on LinkedIn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect width="4" height="12" x="2" y="9"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="footer-col">
                 <h4>Explore</h4>
                 <a href="#" id="footerHomeLink">Home</a>
                 <a href="#" id="footerAllProductsLink">All Products</a>
-                <a href="#" id="footerOffersLink">Offers</a>
+                <a href="#" id="footerOffersLink">Offers & Flash Deals</a>
             </div>
             <div class="footer-col">
                 <h4>Customer Service</h4>
-                <a href="#" id="contactUsFooterBtn">Contact Us</a>
-                <a href="#" id="trackOrderFooterBtn">Track Order</a>
+                <a href="#" id="contactUsFooterBtn">Contact Us / MegaAI</a>
+                <a href="#" id="trackOrderFooterBtn">Track Order Live</a>
                 <a href="#" id="orderHistoryFooterBtn">Order History</a>
-                <a href="#">Return Policy</a>
+                <a href="#" id="returnPolicyFooterBtn">Return Policy (100% Genuine)</a>
             </div>
             <div class="footer-col">
                 <h4>Download MegaMart App</h4>
                 <div class="app-buttons">
-                    <button class="app-btn"><i data-lucide="apple"></i> <span>App Store</span></button>
-                    <button class="app-btn"><i data-lucide="play"></i> <span>Google Play</span></button>
+                    <button class="app-btn app-store-btn" id="appStoreBtn" type="button" aria-label="Download on App Store">
+                        <svg class="app-btn-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 1.01-2.87-.96.04-2.08.64-2.73 1.4-.56.64-1.06 1.7-1 2.73 1.07.08 2.12-.54 2.72-1.26z"/>
+                        </svg>
+                        <div class="app-btn-text">
+                            <span class="app-btn-sub">Download on the</span>
+                            <span class="app-btn-main">App Store</span>
+                        </div>
+                    </button>
+                    <button class="app-btn google-play-btn" id="googlePlayBtn" type="button" aria-label="Get it on Google Play">
+                        <svg class="app-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.792 12 3.61 22.186a1.99 1.99 0 0 1-.61-1.428V3.242c0-.555.225-1.058.609-1.428zm11.233 11.233l2.25 2.25-11.897 6.868 9.647-9.118zm0-2.094L5.195 1.835l11.897 6.868-2.25 2.25zm1.488 1.047l3.682 2.126c.867.5 1.408 1.431 1.408 2.43 0 .998-.541 1.93-1.408 2.43l-3.682 2.126-2.584-2.584 2.584-6.528z"/>
+                        </svg>
+                        <div class="app-btn-text">
+                            <span class="app-btn-sub">GET IT ON</span>
+                            <span class="app-btn-main">Google Play</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
