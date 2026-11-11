@@ -1337,6 +1337,25 @@ export class ContainerView {
             document.body.classList.remove('hide-mobile-footer');
         }
 
+        // Hide 2nd row category navbar on dedicated views (Product details, Wishlist, Orders, Cart, Profile/Settings, Categories Hub)
+        const hideSubNavViews = [
+            this.productDetailView, 
+            this.wishlistPageView, 
+            this.ordersPageView, 
+            this.cartPageView, 
+            this.profileView, 
+            this.categoriesHubView
+        ];
+        
+        const subHeaderNav = document.getElementById('subHeaderNav');
+        if (hideSubNavViews.includes(activeView)) {
+            document.body.classList.add('hide-sub-nav');
+            if (subHeaderNav) subHeaderNav.style.display = 'none';
+        } else {
+            document.body.classList.remove('hide-sub-nav');
+            if (subHeaderNav) subHeaderNav.style.display = '';
+        }
+
         // Sync bottom nav active state
         const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
         bottomNavItems.forEach(nav => nav.classList.remove('active'));
