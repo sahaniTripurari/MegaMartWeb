@@ -934,11 +934,13 @@ export class ContainerView {
         // Views
         this.homeView = document.getElementById('homeView');
         this.categoryView = document.getElementById('categoryView');
+        this.categoriesHubView = document.getElementById('categoriesHubView');
         this.productDetailView = document.getElementById('productDetailView');
         this.profileView = document.getElementById('profileView');
         this.cartPageView = document.getElementById('cartPageView');
         this.wishlistPageView = document.getElementById('wishlistPageView');
         this.ordersPageView = document.getElementById('ordersPageView');
+        this.productInterstitialOverlay = document.getElementById('productInterstitialOverlay');
         this.searchSuggestionsDropdown = document.getElementById('searchSuggestionsDropdown');
         this.searchClearBtn = document.getElementById('searchClearBtn');
         
@@ -1249,7 +1251,7 @@ export class ContainerView {
                 if (view === 'home') {
                     this.showHomeView();
                 } else if (view === 'categories') {
-                    this.showCategoryView('All Products');
+                    this.showCategoriesHubView();
                 } else if (view === 'search') {
                     this.globalSearchInput?.focus();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1308,6 +1310,7 @@ export class ContainerView {
         const allViews = [
             this.homeView, 
             this.categoryView, 
+            this.categoriesHubView,
             this.productDetailView, 
             this.profileView, 
             this.cartPageView, 
@@ -1326,8 +1329,8 @@ export class ContainerView {
             activeView.style.display = 'flex';
         }
         
-        // Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile)
-        const hideFooterViews = [this.ordersPageView, this.wishlistPageView, this.cartPageView, this.profileView];
+        // Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile, Categories Hub)
+        const hideFooterViews = [this.ordersPageView, this.wishlistPageView, this.cartPageView, this.profileView, this.categoriesHubView];
         if (hideFooterViews.includes(activeView)) {
             document.body.classList.add('hide-mobile-footer');
         } else {
@@ -1340,7 +1343,7 @@ export class ContainerView {
         
         if (activeView === this.homeView) {
             document.querySelector('.bottom-nav-item[data-view="home"]')?.classList.add('active');
-        } else if (activeView === this.categoryView) {
+        } else if (activeView === this.categoryView || activeView === this.categoriesHubView) {
             document.querySelector('.bottom-nav-item[data-view="categories"]')?.classList.add('active');
         } else if (activeView === this.profileView) {
             document.querySelector('.bottom-nav-item[data-view="profile"]')?.classList.add('active');
@@ -1393,11 +1396,41 @@ export class ContainerView {
         const backBtn = document.getElementById('backFromProductBtn');
         if (backBtn) {
             backBtn.addEventListener('click', () => {
-                if (this.currentCategory && this.currentCategory !== 'All Products' && this.currentCategory !== 'Home') {
+                if (this.currentCategory === 'Categories Hub') {
+                    this.showCategoriesHubView();
+                } else if (this.currentCategory && this.currentCategory !== 'All Products' && this.currentCategory !== 'Home') {
                     this.showCategoryView(this.currentCategory);
                 } else {
                     this.showHomeView();
                 }
+            });
+        }
+
+        const hubBackBtn = document.getElementById('categoriesHubBackBtn');
+        if (hubBackBtn) {
+            hubBackBtn.addEventListener('click', () => {
+                this.showHomeView();
+            });
+        }
+
+        const hubWishlistBtn = document.getElementById('hubWishlistBtn');
+        if (hubWishlistBtn) {
+            hubWishlistBtn.addEventListener('click', () => {
+                this.showWishlistPageView();
+            });
+        }
+
+        const hubCartBtn = document.getElementById('hubCartBtn');
+        if (hubCartBtn) {
+            hubCartBtn.addEventListener('click', () => {
+                this.showCartPageView();
+            });
+        }
+
+        const allCategoriesHubBtn = document.getElementById('allCategoriesHubBtn');
+        if (allCategoriesHubBtn) {
+            allCategoriesHubBtn.addEventListener('click', () => {
+                this.showCategoriesHubView();
             });
         }
     }
@@ -1424,6 +1457,271 @@ export class ContainerView {
         this.updateAuthUI();
         this.updateProfileStats();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    showCategoriesHubView(initialCategory = 'Trending Now') {
+        this.currentCategory = 'Categories Hub';
+        this.setActiveView(this.categoriesHubView);
+        this.renderCategoriesHub(initialCategory);
+
+        // Update hub badges
+        const hubWishlistBadge = document.getElementById('hubWishlistBadge');
+        if (hubWishlistBadge) hubWishlistBadge.textContent = this.wishlist ? this.wishlist.size : 0;
+
+        const hubCartBadge = document.getElementById('hubCartBadge');
+        if (hubCartBadge) hubCartBadge.textContent = this.cartCount ? this.cartCount.textContent : '0';
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        if (window.lucide) lucide.createIcons();
+    }
+
+    renderCategoriesHub(selectedCategory = 'Trending Now') {
+        const sidebarContainer = document.getElementById('categoriesHubSidebar');
+        const panelContainer = document.getElementById('categoriesHubPanel');
+        if (!sidebarContainer || !panelContainer) return;
+
+        // Hub category definitions (Matching Myntra/Flipkart UI from Img 4)
+        const hubCategories = [
+            {
+                name: 'Trending Now',
+                icon: '🔥',
+                isEmoji: true,
+                targetCategory: 'All Products',
+                description: 'Viral trends, flash deals & high discounts'
+            },
+            {
+                name: 'Fashion & Apparel',
+                img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Fashion & Apparel',
+                description: 'Western, ethnic, footwear & accessories'
+            },
+            {
+                name: 'Electronics & Gadgets',
+                img: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Electronics & Gadgets',
+                description: 'Smartphones, audio, smartwatches & accessories'
+            },
+            {
+                name: 'Beauty & Personal Care',
+                img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Beauty & Personal Care',
+                description: 'Skincare, haircare, perfumes & grooming'
+            },
+            {
+                name: 'Home & Kitchen',
+                img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Home & Kitchen',
+                description: 'Cookware, dining, decor & smart appliances'
+            },
+            {
+                name: 'Snacks & Munchies',
+                img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Snacks & Munchies',
+                description: 'Chips, biscuits, chocolates & cold beverages'
+            },
+            {
+                name: 'Staples, Atta & Oil',
+                img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Staples, Atta & Oil',
+                description: 'Atta, rice, unpolished dals & pure ghee'
+            },
+            {
+                name: 'Dairy, Bread & Eggs',
+                img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'Dairy, Bread & Eggs',
+                description: 'Farm milk, artisan breads, butter & fresh eggs'
+            },
+            {
+                name: 'Household Essentials',
+                img: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=200&auto=format&fit=crop&q=80',
+                targetCategory: 'House Hold',
+                description: 'Cleaners, detergents & daily paper products'
+            }
+        ];
+
+        // 1. Render Left Sidebar
+        sidebarContainer.innerHTML = hubCategories.map(cat => {
+            const isActive = cat.name === selectedCategory;
+            return `
+                <button class="hub-sidebar-item ${isActive ? 'active' : ''}" data-cat="${cat.name}">
+                    <div class="hub-sidebar-avatar">
+                        ${cat.isEmoji ? `<span class="hub-sidebar-icon">${cat.icon}</span>` : `<img src="${cat.img}" alt="${cat.name}" loading="lazy">`}
+                    </div>
+                    <span class="hub-sidebar-name">${cat.name}</span>
+                </button>
+            `;
+        }).join('');
+
+        // Wire sidebar clicks
+        sidebarContainer.querySelectorAll('.hub-sidebar-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const catName = btn.dataset.cat;
+                this.renderCategoriesHub(catName);
+            });
+        });
+
+        // Current Category Object
+        const curCat = hubCategories.find(c => c.name === selectedCategory) || hubCategories[0];
+        const targetCategory = curCat.targetCategory;
+
+        // Filter products in target category
+        const categoryProducts = targetCategory === 'All Products' 
+            ? this.data 
+            : this.data.filter(p => p.type && (p.type.toLowerCase() === targetCategory.toLowerCase() || p.type.toLowerCase().includes(targetCategory.toLowerCase())));
+
+        // Extract subTypes with counts
+        const subTypesMap = new Map();
+        categoryProducts.forEach(p => {
+            if (p.subType) {
+                subTypesMap.set(p.subType, (subTypesMap.get(p.subType) || 0) + 1);
+            }
+        });
+
+        if (subTypesMap.size === 0) {
+            subTypesMap.set('Top Trending', categoryProducts.length);
+        }
+
+        // 2. Render Right Panel
+        panelContainer.innerHTML = `
+            <!-- In The Spotlight (Image 4 Style Circular Story Chips) -->
+            <section class="hub-section">
+                <h3 class="hub-section-title">
+                    <span>✨ In The Spotlight</span>
+                </h3>
+                <div class="hub-spotlight-grid">
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="new">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=160&auto=format&fit=crop&q=80" alt="What's New">
+                        </div>
+                        <span class="hub-chip-label">What's New</span>
+                    </button>
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="rated">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=160&auto=format&fit=crop&q=80" alt="Top Rated">
+                        </div>
+                        <span class="hub-chip-label">Top Rated</span>
+                    </button>
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="deals">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=160&auto=format&fit=crop&q=80" alt="Hot Deals">
+                        </div>
+                        <span class="hub-chip-label">Hot Deals %</span>
+                    </button>
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="budget">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=160&auto=format&fit=crop&q=80" alt="Budget Finds">
+                        </div>
+                        <span class="hub-chip-label">Budget Finds</span>
+                    </button>
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="vibe">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=160&auto=format&fit=crop&q=80" alt="Shop Your Vibe">
+                        </div>
+                        <span class="hub-chip-label">Shop Your Vibe</span>
+                    </button>
+                    <button class="hub-spotlight-chip" data-action="spotlight" data-filter="rewards">
+                        <div class="hub-chip-circle">
+                            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=160&auto=format&fit=crop&q=80" alt="MegaCoins Perks">
+                        </div>
+                        <span class="hub-chip-label">MegaCoins</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- MegaMart Universe (Image 4 Style Collections) -->
+            <section class="hub-section">
+                <h3 class="hub-section-title">
+                    <span>🛍️ MegaMart Universe</span>
+                </h3>
+                <div class="hub-universe-grid">
+                    <div class="hub-universe-card" data-universe="Rising Stars">
+                        <span class="hub-universe-icon">⭐</span>
+                        <span class="hub-universe-title">Rising Stars</span>
+                    </div>
+                    <div class="hub-universe-card" data-universe="MegaMart Luxe">
+                        <span class="hub-universe-icon">👑</span>
+                        <span class="hub-universe-title">LUXE</span>
+                    </div>
+                    <div class="hub-universe-card" data-universe="MegaMart FWD">
+                        <span class="hub-universe-icon">⚡</span>
+                        <span class="hub-universe-title">FWD Trends</span>
+                    </div>
+                    <div class="hub-universe-card" data-universe="House of Brands">
+                        <span class="hub-universe-icon">🏢</span>
+                        <span class="hub-universe-title">Brand Hub</span>
+                    </div>
+                    <div class="hub-universe-card" data-universe="Global Imports">
+                        <span class="hub-universe-icon">🌐</span>
+                        <span class="hub-universe-title">Global Picks</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Subcategories Grid -->
+            <section class="hub-section">
+                <h3 class="hub-section-title">
+                    <span>📦 Explore ${curCat.name}</span>
+                </h3>
+                <div class="hub-subcat-grid">
+                    ${Array.from(subTypesMap.entries()).map(([subType, count]) => {
+                        const img = SUB_TYPE_IMAGES[subType] || (curCat.img || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=80');
+                        return `
+                            <div class="hub-subcat-card" data-category="${targetCategory}" data-subtype="${subType}">
+                                <div class="hub-subcat-img-wrap">
+                                    <img src="${img}" alt="${subType}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=80'">
+                                </div>
+                                <div class="hub-subcat-body">
+                                    <div class="hub-subcat-name">${subType}</div>
+                                    <div class="hub-subcat-count">${count} Products</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </section>
+        `;
+
+        // Wire subcategory cards
+        panelContainer.querySelectorAll('.hub-subcat-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const category = card.dataset.category;
+                const subType = card.dataset.subtype;
+                this.showCategoryView(category, subType);
+            });
+        });
+
+        // Wire spotlight chips
+        panelContainer.querySelectorAll('.hub-spotlight-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const filter = chip.dataset.filter;
+                if (filter === 'deals') {
+                    this.showCategoryView('All Products');
+                    const flashSale = document.getElementById('flashSaleBanner');
+                    if (flashSale) flashSale.scrollIntoView({ behavior: 'smooth' });
+                } else if (filter === 'rated') {
+                    this.showCategoryView(targetCategory);
+                    if (this.sortSelect) {
+                        this.sortSelect.value = 'rating-desc';
+                        this.sortSelect.dispatchEvent(new Event('change'));
+                    }
+                } else if (filter === 'budget') {
+                    this.showCategoryView(targetCategory);
+                    if (this.sortSelect) {
+                        this.sortSelect.value = 'price-asc';
+                        this.sortSelect.dispatchEvent(new Event('change'));
+                    }
+                } else {
+                    this.showCategoryView(targetCategory);
+                }
+            });
+        });
+
+        // Wire universe cards
+        panelContainer.querySelectorAll('.hub-universe-card').forEach(card => {
+            card.addEventListener('click', () => {
+                this.showCategoryView(targetCategory);
+            });
+        });
     }
 
     renderSubFilterPills(categoryName) {
@@ -1668,9 +1966,46 @@ export class ContainerView {
     }
 
     // ================= ENHANCED PRODUCT DETAIL VIEW =================
-    showProductDetailView(item) {
+    showProductDetailView(item, skipLoader = false) {
+        if (!item) return;
+
+        // If interstitial overlay is present and not skipped, show Meesho-style 850ms transition
+        if (!skipLoader && this.productInterstitialOverlay) {
+            this.productInterstitialOverlay.classList.remove('fade-out');
+            this.productInterstitialOverlay.classList.add('active');
+            this.productInterstitialOverlay.setAttribute('aria-hidden', 'false');
+
+            // Preload product image so it renders crisp and instantly
+            if (item.src) {
+                const img = new Image();
+                img.src = item.src;
+            }
+
+            // Populate the DOM while the loader is active
+            this.renderProductDetailDOM(item);
+
+            setTimeout(() => {
+                if (this.productInterstitialOverlay) {
+                    this.productInterstitialOverlay.classList.add('fade-out');
+                    setTimeout(() => {
+                        this.productInterstitialOverlay.classList.remove('active', 'fade-out');
+                        this.productInterstitialOverlay.setAttribute('aria-hidden', 'true');
+                    }, 260);
+                }
+                this.setActiveView(this.productDetailView);
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                if (window.lucide) lucide.createIcons();
+            }, 850);
+            return;
+        }
+
         this.setActiveView(this.productDetailView);
-        
+        this.renderProductDetailDOM(item);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.lucide) lucide.createIcons();
+    }
+
+    renderProductDetailDOM(item) {
         const detailContainer = document.getElementById('productDetailContent');
         const discountPercent = Math.round(((item.price - item.discount_price) / item.price) * 100);
         const rating = this.getProductRating(item);
@@ -5248,6 +5583,8 @@ export class ContainerView {
                     this.showCategoryView('All Products');
                     const flashSale = document.getElementById('flashSaleBanner');
                     if (flashSale) flashSale.scrollIntoView({ behavior: 'smooth' });
+                } else if (target === 'All Categories' || tab.id === 'allCategoriesHubBtn') {
+                    this.showCategoriesHubView();
                 } else {
                     this.showCategoryView(target);
                 }
