@@ -51,7 +51,7 @@ export class MegaAiCopilot {
     const raw = (userMessage || '').trim();
     const q = raw.toLowerCase();
 
-    // 0. Attempt Serverless Google Gemini 1.5 Flash Endpoint First
+    // 0. Attempt Serverless Google Gemini 3.5 Flash Endpoint First
     try {
       const geminiResp = await fetch('/api/ai-copilot', {
         method: 'POST',
@@ -66,6 +66,17 @@ export class MegaAiCopilot {
       }
     } catch (e) {
       // Graceful offline/local fallback
+    }
+
+    // 0.1 Direct Google Gemini 3.5 Flash Call (Client-Side Fallback if running standalone or serverless is offline)
+    const clientGeminiKey = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY) || '';
+    if (clientGeminiKey && clientGeminiKey !== 'your_gemini_api_key_here') {
+      try {
+        const directData = await this.callGeminiDirect(raw, context, clientGeminiKey);
+        if (directData) return directData;
+      } catch (err) {
+        console.warn('[Direct Gemini Call]:', err);
+      }
     }
 
     // Small latency for natural conversational cadence
@@ -428,5 +439,130 @@ export class MegaAiCopilot {
     }
 
     return results;
+  }
+
+  /**
+   * Direct Google Gemini 3.5 Flash Inference
+   */
+  async callGeminiDirect(userMessage, context, apiKey) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const systemPrompt = `You are MegaAI, the official autonomous AI Shopping Assistant for MegaMart (an Indian 10-minute quick-commerce delivery platform like Blinkit/Zepto).
+RULES:
+1. STRICT E-COMMERCE GUARDRAIL: You ONLY answer questions related to shopping, products, groceries, meal recipes, ingredients, gym/fitness nutrition, prices, discounts, order tracking, returns, and customer feedback.
+2. If non-shopping, set intentType: "guardrail_reject".
+3. If shopping list, set intentType: "interactive_checklist" and list items in "itemsToSearch".
+4. If recipe, set intentType: "recipe_bundle" and list ingredients in "itemsToSearch".
+5. If order status, set intentType: "order_support".
+Output strictly valid JSON with keys: intentType, title, reply, itemsToSearch, actionLabel.`;
+
+    const payload = {
+      contents: [{
+        parts: [{
+          text: `User Query: "${userMessage}"\nActive Orders: ${(context?.orders || []).length}\nCart Items: ${(context?.cart || []).length}`
+        }]
+      }],
+      systemInstruction: {
+        parts: [{ text: systemPrompt }]
+      },
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: 'application/json'
+      }
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawText) return null;
+
+    let parsed = null;
+    try {
+      rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const firstBrace = rawText.indexOf('{');
+      const lastBrace = rawText.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1) {
+        parsed = JSON.parse(rawText.substring(firstBrace, lastBrace + 1));
+      } else {
+        parsed = JSON.parse(rawText);
+      }
+    } catch (parseErr) {
+      console.warn('[Gemini JSON Parse Error]:', parseErr);
+      return null;
+    }
+
+    if (!parsed) return null;
+
+    if (parsed.intentType === 'guardrail_reject') {
+      return {
+        success: true,
+        engine: 'Google Gemini 3.5 Flash (Direct API)',
+        type: 'guardrail_reject',
+        title: parsed.title || '🛡️ MegaMart AI Shopping Assistant',
+        reply: parsed.reply,
+        suggestions: [
+          "Ghar ka rashan list banao",
+          "Mera order kahan hai?",
+          "Gym ke liye high protein products",
+          "Best smartphones under 70k"
+        ]
+      };
+    }
+
+    // Match items with this.catalog
+    const matchedProducts = [];
+    const checklist = [];
+    const seenIds = new Set();
+    const searchTerms = parsed.itemsToSearch || parsed.items || [];
+
+    for (const itemKw of searchTerms) {
+      const kw = (typeof itemKw === 'string' ? itemKw : itemKw.name || itemKw.title || '').toLowerCase().trim();
+      if (!kw) continue;
+      const matched = this.catalog.find(p => {
+        const t = (p.title || p.name || '').toLowerCase();
+        return t.includes(kw) && !seenIds.has(p.id);
+      });
+      if (matched) {
+        seenIds.add(matched.id);
+        matchedProducts.push(matched);
+        checklist.push({
+          requestedText: typeof itemKw === 'string' ? itemKw : itemKw.name || itemKw.title,
+          product: matched,
+          quantity: 1,
+          selected: true
+        });
+      }
+    }
+
+    const total = matchedProducts.reduce((sum, p) => sum + Number(p.discount_price || p.price || 0), 0);
+
+    if ((parsed.intentType === 'interactive_checklist' || parsed.intentType === 'shopping_list' || checklist.length > 1) && checklist.length > 0) {
+      return {
+        success: true,
+        engine: 'Google Gemini 3.5 Flash (Direct API)',
+        type: 'interactive_checklist',
+        title: parsed.title || '📋 MegaAI Smart Shopping Checklist',
+        reply: parsed.reply || 'Aapki shopping list ke products ready hain:',
+        checklist: checklist,
+        totalPrice: total,
+        actionLabel: parsed.actionLabel || 'Transfer Selected Items to Cart'
+      };
+    }
+
+    return {
+      success: true,
+      engine: 'Google Gemini 3.5 Flash (Direct API)',
+      type: parsed.intentType || 'product_recommendation',
+      title: parsed.title || '✨ MegaAI Recommended Products',
+      reply: parsed.reply || 'Maine aapke liye top-rated products select kiye hain:',
+      items: matchedProducts.length > 0 ? matchedProducts.slice(0, 5) : this.catalog.slice(0, 4),
+      totalPrice: total > 0 ? total : this.catalog.slice(0, 4).reduce((s, p) => s + Number(p.discount_price || p.price || 0), 0),
+      actionLabel: parsed.actionLabel || 'Add All to Cart'
+    };
   }
 }

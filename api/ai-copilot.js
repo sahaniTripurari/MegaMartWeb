@@ -1,9 +1,9 @@
 /**
- * MegaMart AI Copilot Serverless API Endpoint (Powered by Google Gemini 1.5 Flash)
+ * MegaMart AI Copilot Serverless API Endpoint (Powered by Google Gemini 3.5 Flash)
  * POST /api/ai-copilot
  * 
  * Features:
- * - Direct Google Gemini 1.5 Flash REST API Integration with JSON Schema Output
+ * - Direct Google Gemini 3.5 Flash REST API Integration with JSON Schema Output
  * - Strict E-commerce Domain Guardrails (Prompt Engineering + System Instructions)
  * - Intelligent Entity Matching with Supabase PostgreSQL Catalog (246 Products)
  * - Fallback to Local Semantic Engine if GEMINI_API_KEY is not configured
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Query message is required' });
   }
 
-  // 1. Check for Gemini API Key (from env or incoming header)
+  // 1. Check for Gemini API Key (from env, header, or request body)
   const geminiApiKey = process.env.GEMINI_API_KEY || req.headers['x-gemini-api-key'] || req.body?.apiKey;
 
   // 2. Fetch live products from Supabase Cloud Catalog
@@ -50,10 +50,10 @@ export default async function handler(req, res) {
     console.warn('[Supabase Catalog Fetch Error]:', err.message);
   }
 
-  // 3. If Gemini API Key is provided, call Google Gemini 1.5 Flash
+  // 3. If Gemini API Key is provided, call Google Gemini 3.5 Flash
   if (geminiApiKey) {
     try {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${geminiApiKey}`;
 
       const geminiPayload = {
         contents: [
@@ -105,7 +105,7 @@ export default async function handler(req, res) {
           if (parsed.intentType === 'guardrail_reject') {
             return res.status(200).json({
               success: true,
-              engine: 'Google Gemini 1.5 Flash (Direct API)',
+              engine: 'Google Gemini 3.5 Flash (Direct API)',
               type: 'guardrail_reject',
               title: parsed.title || '🛡️ MegaMart AI Shopping Assistant',
               reply: parsed.reply,
@@ -143,10 +143,10 @@ export default async function handler(req, res) {
 
           const total = matchedProducts.reduce((sum, p) => sum + Number(p.price || 0), 0);
 
-          if (parsed.intentType === 'interactive_checklist' && checklist.length > 0) {
+          if ((parsed.intentType === 'interactive_checklist' || parsed.intentType === 'shopping_list') && checklist.length > 0) {
             return res.status(200).json({
               success: true,
-              engine: 'Google Gemini 1.5 Flash (Direct API)',
+              engine: 'Google Gemini 3.5 Flash (Direct API)',
               type: 'interactive_checklist',
               title: parsed.title || '📋 MegaAI Smart Shopping Checklist',
               reply: parsed.reply,
@@ -158,7 +158,7 @@ export default async function handler(req, res) {
 
           return res.status(200).json({
             success: true,
-            engine: 'Google Gemini 1.5 Flash (Direct API)',
+            engine: 'Google Gemini 3.5 Flash (Direct API)',
             type: parsed.intentType || 'product_recommendation',
             title: parsed.title,
             reply: parsed.reply,
