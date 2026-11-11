@@ -51,6 +51,23 @@ export class MegaAiCopilot {
     const raw = (userMessage || '').trim();
     const q = raw.toLowerCase();
 
+    // 0. Attempt Serverless Google Gemini 1.5 Flash Endpoint First
+    try {
+      const geminiResp = await fetch('/api/ai-copilot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: raw, context })
+      });
+      if (geminiResp.ok) {
+        const data = await geminiResp.json();
+        if (data && data.success && data.engine && data.engine.includes('Gemini')) {
+          return data;
+        }
+      }
+    } catch (e) {
+      // Graceful offline/local fallback
+    }
+
     // Small latency for natural conversational cadence
     await new Promise(r => setTimeout(r, 400));
 
