@@ -4545,6 +4545,11 @@ export class ContainerView {
 
                 this.closeSubMegaMenu();
 
+                // If user clicked while viewing another view, switch to target category first
+                if (cat && this.currentCategory !== cat) {
+                    this.showCategoryView(cat);
+                }
+
                 this.selectedFilters.subTypes.clear();
                 this.selectedFilters.brands.clear();
                 this.selectedFilters.searchQuery = '';
@@ -5065,9 +5070,31 @@ export class ContainerView {
         let items = this.getItemsForCategory(this.currentCategory);
         const totalCategoryCount = items.length;
 
-        // 1. SubType filter
+        // 1. SubType filter (with intelligent fallback for mega-menu cross-category queries)
         if (this.selectedFilters.subTypes.size > 0) {
-            items = items.filter(it => this.selectedFilters.subTypes.has(it.subType));
+            const subTypeFiltered = items.filter(it => this.selectedFilters.subTypes.has(it.subType));
+            // Check if combining subType with active brand/searchQuery yields at least 1 match
+            const hasQuery = Boolean(this.selectedFilters.searchQuery && this.selectedFilters.searchQuery.trim() !== '');
+            const hasBrands = this.selectedFilters.brands.size > 0;
+            if (hasQuery || hasBrands) {
+                const q = hasQuery ? this.selectedFilters.searchQuery.toLowerCase().trim() : '';
+                const wouldMatch = subTypeFiltered.filter(it => {
+                    const brandOk = !hasBrands || this.selectedFilters.brands.has(it.brand);
+                    const queryOk = !hasQuery || (
+                        it.name.toLowerCase().includes(q) ||
+                        (it.brand && it.brand.toLowerCase().includes(q)) ||
+                        (it.subType && it.subType.toLowerCase().includes(q))
+                    );
+                    return brandOk && queryOk;
+                });
+
+                if (wouldMatch.length > 0) {
+                    items = subTypeFiltered;
+                }
+                // If 0 matches inside subType, keep all category items so brand/query search finds them!
+            } else {
+                items = subTypeFiltered;
+            }
         }
 
         // 2. Brand filter

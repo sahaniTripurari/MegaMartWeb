@@ -6169,6 +6169,3360 @@ export const Model = [
             }
         ]
     }
+,
+    {
+            "id": "fsh-manyavar-royal-sherwani",
+            "name": "Manyavar Royal Zari Embroidered Silk Sherwani with Stole - Maroon & Gold",
+            "brand": "Manyavar",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 18999,
+            "discount_price": 12999,
+            "stock": 12,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "31% OFF",
+            "megaCoins": 350,
+            "variants": [
+                    {
+                            "unit": "Size: S (36)",
+                            "price": 18999,
+                            "discount_price": 12999
+                    },
+                    {
+                            "unit": "Size: M (38)",
+                            "price": 18999,
+                            "discount_price": 12999
+                    },
+                    {
+                            "unit": "Size: L (40)",
+                            "price": 19999,
+                            "discount_price": 13499
+                    },
+                    {
+                            "unit": "Size: XL (42)",
+                            "price": 20999,
+                            "discount_price": 13999
+                    },
+                    {
+                            "unit": "Size: XXL (44)",
+                            "price": 21999,
+                            "discount_price": 14999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-ceremonial-sherwani",
+            "name": "Raymond Ceremonial Velvet Bandhgala Sherwani - Midnight Navy",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 21999,
+            "discount_price": 15499,
+            "stock": 9,
+            "maxPerOrder": 1,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 400,
+            "variants": [
+                    {
+                            "unit": "Size: 38 (S)",
+                            "price": 21999,
+                            "discount_price": 15499
+                    },
+                    {
+                            "unit": "Size: 40 (M)",
+                            "price": 21999,
+                            "discount_price": 15499
+                    },
+                    {
+                            "unit": "Size: 42 (L)",
+                            "price": 22999,
+                            "discount_price": 15999
+                    },
+                    {
+                            "unit": "Size: 44 (XL)",
+                            "price": 23999,
+                            "discount_price": 16999
+                    },
+                    {
+                            "unit": "Size: 46 (XXL)",
+                            "price": 24999,
+                            "discount_price": 17999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-festive-sherwani",
+            "name": "Peter England Men Brocade Wedding Festive Sherwani - Pearl Cream",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 14999,
+            "discount_price": 9999,
+            "stock": 14,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "33% OFF",
+            "megaCoins": 250,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 14999,
+                            "discount_price": 9999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 14999,
+                            "discount_price": 9999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 15499,
+                            "discount_price": 10499
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 15999,
+                            "discount_price": 10999
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 16499,
+                            "discount_price": 11499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-regal-sherwani",
+            "name": "Allen Solly Regal Jacquard Weave Sherwani - Royal Black",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 16999,
+            "discount_price": 11499,
+            "stock": 10,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 300,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 16999,
+                            "discount_price": 11499
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 16999,
+                            "discount_price": 11499
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 17499,
+                            "discount_price": 11999
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 17999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 18499,
+                            "discount_price": 12999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-art-silk-sherwani",
+            "name": "FabIndia Handcrafted Art Silk Sherwani with Zari Collar - Ivory",
+            "brand": "FabIndia",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 17999,
+            "discount_price": 12499,
+            "stock": 8,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "30% OFF",
+            "megaCoins": 320,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 17999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 17999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 18499,
+                            "discount_price": 12999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 18999,
+                            "discount_price": 13499
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 19499,
+                            "discount_price": 13999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-manyavar-festive-silk-kurta",
+            "name": "Manyavar Men Embroidered Festive Silk Kurta Set - Mustard Yellow",
+            "brand": "Manyavar",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4999,
+            "discount_price": 2999,
+            "stock": 25,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 120,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 5299,
+                            "discount_price": 3199
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 5499,
+                            "discount_price": 3399
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-linen-kurta",
+            "name": "Raymond Men Pure Linen Mandarin Collar Festive Kurta - Navy Blue",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3999,
+            "discount_price": 2499,
+            "stock": 30,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 90,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 3999,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 3999,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 3999,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 4299,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 4499,
+                            "discount_price": 2799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-cotton-chikankari-kurta",
+            "name": "FabIndia Hand Embroidered Cotton Chikankari Kurta - Pure White",
+            "brand": "FabIndia",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3499,
+            "discount_price": 2199,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 80,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3699,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3899,
+                            "discount_price": 2499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-festive-kurta",
+            "name": "Peter England Men Jacquard Self-Design Festive Kurta - Rich Maroon",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2499,
+            "discount_price": 1499,
+            "stock": 40,
+            "maxPerOrder": 5,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2699,
+                            "discount_price": 1599
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 2899,
+                            "discount_price": 1699
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-ethnic-kurta",
+            "name": "Allen Solly Solid Casual Mandarin Collar Kurta - Olive Green",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2799,
+            "discount_price": 1699,
+            "stock": 28,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 70,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2999,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3199,
+                            "discount_price": 1899
+                    }
+            ]
+    },
+    {
+            "id": "fsh-manyavar-nehru-jacket",
+            "name": "Manyavar Men Brocade Woven Sleeveless Nehru Modi Jacket - Royal Wine",
+            "brand": "Manyavar",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3999,
+            "discount_price": 2599,
+            "stock": 20,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "35% OFF",
+            "megaCoins": 100,
+            "variants": [
+                    {
+                            "unit": "Size: 38 (S)",
+                            "price": 3999,
+                            "discount_price": 2599
+                    },
+                    {
+                            "unit": "Size: 40 (M)",
+                            "price": 3999,
+                            "discount_price": 2599
+                    },
+                    {
+                            "unit": "Size: 42 (L)",
+                            "price": 3999,
+                            "discount_price": 2599
+                    },
+                    {
+                            "unit": "Size: 44 (XL)",
+                            "price": 4299,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Size: 46 (XXL)",
+                            "price": 4499,
+                            "discount_price": 2999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-tussar-nehru-jacket",
+            "name": "Raymond Men Tussar Silk Blend Tailored Nehru Jacket - Classic Black",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 42",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4999,
+            "discount_price": 3299,
+            "stock": 18,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 130,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 4999,
+                            "discount_price": 3299
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 4999,
+                            "discount_price": 3299
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 4999,
+                            "discount_price": 3299
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 5299,
+                            "discount_price": 3499
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 5599,
+                            "discount_price": 3699
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-silk-nehru-jacket",
+            "name": "FabIndia Handwoven Silk Blend Nehru Waistcoat - Natural Beige",
+            "brand": "FabIndia",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4499,
+            "discount_price": 2899,
+            "stock": 22,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 110,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 4499,
+                            "discount_price": 2899
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 4499,
+                            "discount_price": 2899
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 4499,
+                            "discount_price": 2899
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 4799,
+                            "discount_price": 3099
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 4999,
+                            "discount_price": 3299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-nehru-jacket",
+            "name": "Peter England Men Textured Jacquard Nehru Modi Jacket - Deep Navy",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1899,
+            "stock": 30,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 3299,
+                            "discount_price": 2099
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 3499,
+                            "discount_price": 2299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-nehru-jacket",
+            "name": "Allen Solly Woven Tweed Mandarin Sleeveless Jacket - Charcoal Grey",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3499,
+            "discount_price": 2199,
+            "stock": 25,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 85,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 3799,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 3999,
+                            "discount_price": 2599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-manyavar-silk-dhoti-pant",
+            "name": "Manyavar Men Pre-Stitched Silk Dupion Dhoti Pants - Gold",
+            "brand": "Manyavar",
+            "subType": "Men's Apparel",
+            "unit": "Free Size",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1999,
+            "discount_price": 1299,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "35% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "Free Size (Elastic Waist)",
+                            "price": 1999,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Pack of 2 (Gold & Cream)",
+                            "price": 3699,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Plus Size (40-46 Waist)",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "With Matching Zari Stole",
+                            "price": 2499,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Family Pack of 3",
+                            "price": 5299,
+                            "discount_price": 3299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-cotton-dhoti",
+            "name": "Raymond Men Premium Cotton Rich Traditional Dhoti - Pure White",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Free Size",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1499,
+            "discount_price": 999,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "33% OFF",
+            "megaCoins": 50,
+            "variants": [
+                    {
+                            "unit": "Single Pack (4 Mtr)",
+                            "price": 1499,
+                            "discount_price": 999
+                    },
+                    {
+                            "unit": "Pack of 2 (White)",
+                            "price": 2799,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Pack of 3 (White)",
+                            "price": 3999,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "With Angavastram Stole",
+                            "price": 1999,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Gold Zari Border Special",
+                            "price": 2199,
+                            "discount_price": 1499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-silk-border-dhoti",
+            "name": "FabIndia Men Woven Silk Border Wedding Dhoti with Angavastram - Off White & Gold",
+            "brand": "FabIndia",
+            "subType": "Men's Apparel",
+            "unit": "Free Size",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1999,
+            "stock": 20,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "33% OFF",
+            "megaCoins": 80,
+            "variants": [
+                    {
+                            "unit": "Standard (4.5 Mtr)",
+                            "price": 2999,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Standard + Silk Stole Set",
+                            "price": 3999,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "Temple Zari Border Edition",
+                            "price": 3499,
+                            "discount_price": 2299
+                    },
+                    {
+                            "unit": "Pack of 2 Festive Dhotis",
+                            "price": 5499,
+                            "discount_price": 3699
+                    },
+                    {
+                            "unit": "Royal Gold Border Grand",
+                            "price": 3799,
+                            "discount_price": 2499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-temple-dhoti",
+            "name": "Peter England Traditional Temple Border Festive Dhoti - Cream Gold",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Free Size",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1299,
+            "discount_price": 799,
+            "stock": 45,
+            "maxPerOrder": 5,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "38% OFF",
+            "megaCoins": 40,
+            "variants": [
+                    {
+                            "unit": "Standard 4 Mtr",
+                            "price": 1299,
+                            "discount_price": 799
+                    },
+                    {
+                            "unit": "Twin Pack (2 Pcs)",
+                            "price": 2399,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Pre-Pleated Ready to Wear",
+                            "price": 1699,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "With Matching Border Shawl",
+                            "price": 1899,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Family Pack of 3",
+                            "price": 3499,
+                            "discount_price": 2199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-stitched-dhoti",
+            "name": "Allen Solly Men Ready-to-Wear Elasticated Cotton Dhoti Pants - Ivory Cream",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Free Size",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1799,
+            "discount_price": 1199,
+            "stock": 30,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "33% OFF",
+            "megaCoins": 55,
+            "variants": [
+                    {
+                            "unit": "Free Size (28-36)",
+                            "price": 1799,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Plus Size (38-44)",
+                            "price": 1999,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Pack of 2 (Ivory & Gold)",
+                            "price": 3299,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "With Brocade Dupatta",
+                            "price": 2299,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Premium Festive 3-Piece Pack",
+                            "price": 4499,
+                            "discount_price": 2899
+                    }
+            ]
+    },
+    {
+            "id": "fsh-levis-512-tapered-jeans",
+            "name": "Levi's Men 512 Slim Tapered Clean Denim Jeans - Heavy Washed Blue",
+            "brand": "Levi's",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4299,
+            "discount_price": 2699,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 110,
+            "variants": [
+                    {
+                            "unit": "30W",
+                            "price": 4299,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "32W",
+                            "price": 4299,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "34W",
+                            "price": 4299,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "36W",
+                            "price": 4299,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "38W",
+                            "price": 4599,
+                            "discount_price": 2899
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-slim-jeans",
+            "name": "Peter England Men Classic Slim Fit Stretch Jeans - Charcoal Black",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2299,
+            "discount_price": 1399,
+            "stock": 50,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "30 Waist",
+                            "price": 2299,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "32 Waist",
+                            "price": 2299,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "34 Waist",
+                            "price": 2299,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "36 Waist",
+                            "price": 2299,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "38 Waist",
+                            "price": 2499,
+                            "discount_price": 1499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-washed-jeans",
+            "name": "Allen Solly Men Mid-Rise Whiskered Regular Fit Jeans - Sky Light Blue",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2699,
+            "discount_price": 1699,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "30 Waist",
+                            "price": 2699,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "32 Waist",
+                            "price": 2699,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "34 Waist",
+                            "price": 2699,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "36 Waist",
+                            "price": 2699,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "38 Waist",
+                            "price": 2899,
+                            "discount_price": 1799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-flying-machine-distressed-jeans",
+            "name": "Flying Machine Men Jackson Slim Mildly Distressed Denim Jeans - Raw Blue",
+            "brand": "Levi's",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3199,
+            "discount_price": 1899,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1560243563-062bfc001d68?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 85,
+            "variants": [
+                    {
+                            "unit": "30 Waist",
+                            "price": 3199,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "32 Waist",
+                            "price": 3199,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "34 Waist",
+                            "price": 3199,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "36 Waist",
+                            "price": 3199,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "38 Waist",
+                            "price": 3399,
+                            "discount_price": 1999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-levis-batwing-tshirt",
+            "name": "Levi's Men 100% Pure Combed Cotton Classic Batwing Graphic T-Shirt - Jet Black",
+            "brand": "Levi's",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1499,
+            "discount_price": 899,
+            "stock": 60,
+            "maxPerOrder": 5,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 40,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1499,
+                            "discount_price": 899
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1499,
+                            "discount_price": 899
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1499,
+                            "discount_price": 899
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1499,
+                            "discount_price": 899
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 1599,
+                            "discount_price": 949
+                    }
+            ]
+    },
+    {
+            "id": "fsh-puma-crew-tshirt",
+            "name": "Puma Men Essentials Ribbed Crew Neck Performance T-Shirt - Bright White",
+            "brand": "Puma",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1299,
+            "discount_price": 799,
+            "stock": 55,
+            "maxPerOrder": 5,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 35,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1299,
+                            "discount_price": 799
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1299,
+                            "discount_price": 799
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1299,
+                            "discount_price": 799
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1299,
+                            "discount_price": 799
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 1399,
+                            "discount_price": 849
+                    }
+            ]
+    },
+    {
+            "id": "fsh-adidas-aeroready-tshirt",
+            "name": "Adidas Men AEROREADY Moisture-Wicking Training T-Shirt - Legend Ink Navy",
+            "brand": "Adidas",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1799,
+            "discount_price": 1099,
+            "stock": 45,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 50,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 1999,
+                            "discount_price": 1199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-polo-tshirt",
+            "name": "Allen Solly Men Solid Honeycomb Pique Polo T-Shirt - Heather Grey",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1599,
+            "discount_price": 999,
+            "stock": 50,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 45,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1599,
+                            "discount_price": 999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1599,
+                            "discount_price": 999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1599,
+                            "discount_price": 999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1599,
+                            "discount_price": 999
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 1699,
+                            "discount_price": 1049
+                    }
+            ]
+    },
+    {
+            "id": "fsh-nike-dri-fit-tshirt",
+            "name": "Nike Dri-FIT Men Legend Short-Sleeve Athletic Training Tee - Carbon Black",
+            "brand": "Nike",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1995,
+            "discount_price": 1299,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "35% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1995,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1995,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1995,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1995,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 2195,
+                            "discount_price": 1399
+                    }
+            ]
+    },
+    {
+            "id": "fsh-levis-trucker-denim-jacket",
+            "name": "Levi's Authentic Heavyweight Denim Trucker Jacket - Faded Light Blue",
+            "brand": "Levi's",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 5999,
+            "discount_price": 3599,
+            "stock": 22,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 150,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 5999,
+                            "discount_price": 3599
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 5999,
+                            "discount_price": 3599
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 5999,
+                            "discount_price": 3599
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 5999,
+                            "discount_price": 3599
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 6299,
+                            "discount_price": 3799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-puma-fleece-hoodie",
+            "name": "Puma Men Classic Kangaroo Pocket Fleece Pullover Hoodie - Pure Black",
+            "brand": "Puma",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3499,
+            "discount_price": 2199,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "37% OFF",
+            "megaCoins": 95,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3799,
+                            "discount_price": 2399
+                    }
+            ]
+    },
+    {
+            "id": "fsh-adidas-trefoil-hoodie",
+            "name": "Adidas Originals French Terry Trefoil Hooded Sweatshirt - Medium Grey",
+            "brand": "Adidas",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4599,
+            "discount_price": 2799,
+            "stock": 25,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 120,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 4599,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 4599,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 4599,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 4599,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 4899,
+                            "discount_price": 2999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-zip-sweatshirt",
+            "name": "Allen Solly Men Full-Zip Mock Neck Winter Sweatshirt - Navy Blue",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1899,
+            "stock": 30,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 80,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3299,
+                            "discount_price": 2099
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-bomber-jacket",
+            "name": "Peter England Casual Lightweight Ribbed Hem Bomber Jacket - Khaki Beige",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3799,
+            "discount_price": 2299,
+            "stock": 28,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1544441893-675973e31985?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 95,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3799,
+                            "discount_price": 2299
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3799,
+                            "discount_price": 2299
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3799,
+                            "discount_price": 2299
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3799,
+                            "discount_price": 2299
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3999,
+                            "discount_price": 2499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-supima-shirt",
+            "name": "Raymond Men Supima Cotton Wrinkle-Resistant Formal Shirt - Crisp White",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1899,
+            "stock": 50,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 80,
+            "variants": [
+                    {
+                            "unit": "Size: 38 (Slim)",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 40 (Slim)",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 42 (Regular)",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 44 (Regular)",
+                            "price": 3199,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: 46 (Comfort)",
+                            "price": 3399,
+                            "discount_price": 2099
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-formal-shirt",
+            "name": "Peter England Men Anti-Stain Easy-Iron Formal Shirt - Sky Blue",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1799,
+            "discount_price": 1099,
+            "stock": 55,
+            "maxPerOrder": 5,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 45,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 1899,
+                            "discount_price": 1149
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 1999,
+                            "discount_price": 1199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-oxford-shirt",
+            "name": "Allen Solly Men Pure Cotton Oxford Button-Down Formal Shirt - Pink Pastel",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2199,
+            "discount_price": 1399,
+            "stock": 45,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1589310243389-9685613133b5?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 2299,
+                            "discount_price": 1449
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 2399,
+                            "discount_price": 1499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-check-shirt",
+            "name": "Peter England Men Classic Micro-Check Business Formal Shirt - Navy & White",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1899,
+            "discount_price": 1199,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 50,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 1899,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 1899,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 1899,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 1999,
+                            "discount_price": 1249
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 2099,
+                            "discount_price": 1299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-striped-formal-shirt",
+            "name": "Raymond Men Fine Pinstripe Italian Cotton Formal Shirt - Slate Grey",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 42",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2799,
+            "discount_price": 1799,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 2799,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 2799,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 2799,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 3199,
+                            "discount_price": 1999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-wool-blazer",
+            "name": "Raymond Formal Slim-Fit Single-Breasted Italian Wool Blazer - Charcoal Grey",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 8999,
+            "discount_price": 5499,
+            "stock": 18,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 200,
+            "variants": [
+                    {
+                            "unit": "Size: 38 (Slim)",
+                            "price": 8999,
+                            "discount_price": 5499
+                    },
+                    {
+                            "unit": "Size: 40 (Regular)",
+                            "price": 8999,
+                            "discount_price": 5499
+                    },
+                    {
+                            "unit": "Size: 42 (Regular)",
+                            "price": 8999,
+                            "discount_price": 5499
+                    },
+                    {
+                            "unit": "Size: 44 (Plus)",
+                            "price": 9499,
+                            "discount_price": 5799
+                    },
+                    {
+                            "unit": "Size: 46 (Plus)",
+                            "price": 9999,
+                            "discount_price": 5999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-party-blazer",
+            "name": "Allen Solly Men Textured Notch Lapel Party Blazer - Midnight Navy",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 6999,
+            "discount_price": 4199,
+            "stock": 22,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 160,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 7499,
+                            "discount_price": 4499
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 7999,
+                            "discount_price": 4799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-textured-blazer",
+            "name": "Peter England Men Formal Single Breasted Blazer - Jet Black",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 5999,
+            "discount_price": 3699,
+            "stock": 25,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "38% OFF",
+            "megaCoins": 150,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 5999,
+                            "discount_price": 3699
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 5999,
+                            "discount_price": 3699
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 5999,
+                            "discount_price": 3699
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 6299,
+                            "discount_price": 3899
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 6599,
+                            "discount_price": 4099
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-check-blazer",
+            "name": "Raymond Men Glen Check Tailored Evening Blazer - Navy Houndstooth",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 42",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 9499,
+            "discount_price": 5899,
+            "stock": 15,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 220,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 9499,
+                            "discount_price": 5899
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 9499,
+                            "discount_price": 5899
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 9499,
+                            "discount_price": 5899
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 9999,
+                            "discount_price": 6199
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 10499,
+                            "discount_price": 6499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-tweed-blazer",
+            "name": "Allen Solly Men Scottish Tweed Winter Blazer - Earthy Khaki",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 7499,
+            "discount_price": 4599,
+            "stock": 16,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "38% OFF",
+            "megaCoins": 180,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 7499,
+                            "discount_price": 4599
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 7499,
+                            "discount_price": 4599
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 7499,
+                            "discount_price": 4599
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 7999,
+                            "discount_price": 4899
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 8499,
+                            "discount_price": 5199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-formal-trousers",
+            "name": "Peter England Men Formal Wrinkle-Free Slim Fit Trousers - Khaki Beige",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1999,
+            "discount_price": 1199,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 60,
+            "variants": [
+                    {
+                            "unit": "Size 30 Waist",
+                            "price": 1999,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size 32 Waist",
+                            "price": 1999,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size 34 Waist",
+                            "price": 1999,
+                            "discount_price": 1199
+                    },
+                    {
+                            "unit": "Size 36 Waist",
+                            "price": 2199,
+                            "discount_price": 1299
+                    },
+                    {
+                            "unit": "Size 38 Waist",
+                            "price": 2299,
+                            "discount_price": 1399
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-stretch-trousers",
+            "name": "Raymond Men Premium Formal Poly-Viscose Stretch Trousers - Jet Black",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2499,
+            "discount_price": 1599,
+            "stock": 45,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "Size 30 Waist",
+                            "price": 2499,
+                            "discount_price": 1599
+                    },
+                    {
+                            "unit": "Size 32 Waist",
+                            "price": 2499,
+                            "discount_price": 1599
+                    },
+                    {
+                            "unit": "Size 34 Waist",
+                            "price": 2499,
+                            "discount_price": 1599
+                    },
+                    {
+                            "unit": "Size 36 Waist",
+                            "price": 2699,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size 38 Waist",
+                            "price": 2799,
+                            "discount_price": 1799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-chino-trousers",
+            "name": "Allen Solly Men Prime Comfort Stretch Chino Trousers - Slate Grey",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2299,
+            "discount_price": 1449,
+            "stock": 50,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 65,
+            "variants": [
+                    {
+                            "unit": "Size 30 Waist",
+                            "price": 2299,
+                            "discount_price": 1449
+                    },
+                    {
+                            "unit": "Size 32 Waist",
+                            "price": 2299,
+                            "discount_price": 1449
+                    },
+                    {
+                            "unit": "Size 34 Waist",
+                            "price": 2299,
+                            "discount_price": 1449
+                    },
+                    {
+                            "unit": "Size 36 Waist",
+                            "price": 2499,
+                            "discount_price": 1549
+                    },
+                    {
+                            "unit": "Size 38 Waist",
+                            "price": 2599,
+                            "discount_price": 1649
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-wool-trousers",
+            "name": "Raymond Men Formal Pleated Italian Wool Blend Trousers - Deep Navy",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 34",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1899,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 90,
+            "variants": [
+                    {
+                            "unit": "Size 30 Waist",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size 32 Waist",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size 34 Waist",
+                            "price": 2999,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Size 36 Waist",
+                            "price": 3199,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size 38 Waist",
+                            "price": 3299,
+                            "discount_price": 2099
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-cotton-trousers",
+            "name": "Peter England Casual Flat-Front Washed Cotton Trousers - Olive Green",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 32",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1899,
+            "discount_price": 1149,
+            "stock": 45,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 55,
+            "variants": [
+                    {
+                            "unit": "Size 30 Waist",
+                            "price": 1899,
+                            "discount_price": 1149
+                    },
+                    {
+                            "unit": "Size 32 Waist",
+                            "price": 1899,
+                            "discount_price": 1149
+                    },
+                    {
+                            "unit": "Size 34 Waist",
+                            "price": 1899,
+                            "discount_price": 1149
+                    },
+                    {
+                            "unit": "Size 36 Waist",
+                            "price": 2099,
+                            "discount_price": 1249
+                    },
+                    {
+                            "unit": "Size 38 Waist",
+                            "price": 2199,
+                            "discount_price": 1299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-bandhgala-suit",
+            "name": "Raymond Men Royal Bandhgala 2-Piece Suit - Jet Black",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 14999,
+            "discount_price": 9999,
+            "stock": 12,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "33% OFF",
+            "megaCoins": 300,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 14999,
+                            "discount_price": 9999
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 14999,
+                            "discount_price": 9999
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 14999,
+                            "discount_price": 9999
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 15999,
+                            "discount_price": 10499
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 16999,
+                            "discount_price": 10999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-business-suit",
+            "name": "Peter England Men Classic Tailored 2-Piece Business Suit - Navy Blue",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 9999,
+            "discount_price": 5999,
+            "stock": 20,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 220,
+            "variants": [
+                    {
+                            "unit": "Size: 38 (30W)",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: 40 (32W)",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: 42 (34W)",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: 44 (36W)",
+                            "price": 10499,
+                            "discount_price": 6299
+                    },
+                    {
+                            "unit": "Size: 46 (38W)",
+                            "price": 10999,
+                            "discount_price": 6599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-tuxedo-suit",
+            "name": "Allen Solly Men Peak Lapel Velvet Trim Tuxedo Suit - Midnight Black",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 12999,
+            "discount_price": 7999,
+            "stock": 14,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "38% OFF",
+            "megaCoins": 260,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 12999,
+                            "discount_price": 7999
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 12999,
+                            "discount_price": 7999
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 12999,
+                            "discount_price": 7999
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 13499,
+                            "discount_price": 8299
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 13999,
+                            "discount_price": 8599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-raymond-3piece-suit",
+            "name": "Raymond Men Ceremonial 3-Piece Suit with Waistcoat - Steel Grey",
+            "brand": "Raymond",
+            "subType": "Men's Apparel",
+            "unit": "Size: 42",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 18999,
+            "discount_price": 12499,
+            "stock": 10,
+            "maxPerOrder": 1,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 350,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 18999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 18999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 18999,
+                            "discount_price": 12499
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 19999,
+                            "discount_price": 12999
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 20999,
+                            "discount_price": 13499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-royal-suit",
+            "name": "Peter England Men Party Wear Jacquard Tuxedo Suit - Royal Sapphire",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: 40",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 11999,
+            "discount_price": 7299,
+            "stock": 15,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 240,
+            "variants": [
+                    {
+                            "unit": "Size: 38",
+                            "price": 11999,
+                            "discount_price": 7299
+                    },
+                    {
+                            "unit": "Size: 40",
+                            "price": 11999,
+                            "discount_price": 7299
+                    },
+                    {
+                            "unit": "Size: 42",
+                            "price": 11999,
+                            "discount_price": 7299
+                    },
+                    {
+                            "unit": "Size: 44",
+                            "price": 12499,
+                            "discount_price": 7599
+                    },
+                    {
+                            "unit": "Size: 46",
+                            "price": 12999,
+                            "discount_price": 7899
+                    }
+            ]
+    },
+    {
+            "id": "fsh-puma-cotton-track-pants",
+            "name": "Puma Men Modern Basics Regular Fit Cotton Track Pants - Black",
+            "brand": "Puma",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2499,
+            "discount_price": 1499,
+            "stock": 35,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2499,
+                            "discount_price": 1499
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 2699,
+                            "discount_price": 1599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-adidas-french-terry-joggers",
+            "name": "Adidas Men Essentials French Terry Tapered Cuff Joggers - Heather Grey",
+            "brand": "Adidas",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3299,
+            "discount_price": 1999,
+            "stock": 28,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 90,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3299,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3299,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3299,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3299,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3499,
+                            "discount_price": 2099
+                    }
+            ]
+    },
+    {
+            "id": "fsh-nike-drifit-track-pants",
+            "name": "Nike Dri-FIT Men Woven Training Track Pants - Navy Blue",
+            "brand": "Nike",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3995,
+            "discount_price": 2499,
+            "stock": 24,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1584865288642-42078afe6942?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "37% OFF",
+            "megaCoins": 110,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3995,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3995,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3995,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3995,
+                            "discount_price": 2499
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 4195,
+                            "discount_price": 2699
+                    }
+            ]
+    },
+    {
+            "id": "fsh-allen-solly-cotton-joggers",
+            "name": "Allen Solly Men Pure Cotton Drawstring Casual Joggers - Olive Green",
+            "brand": "Allen Solly",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2199,
+            "discount_price": 1399,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "36% OFF",
+            "megaCoins": 65,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2199,
+                            "discount_price": 1399
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 2399,
+                            "discount_price": 1499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-peter-england-active-track-pants",
+            "name": "Peter England Activewear Rapid Dry Straight Fit Track Pants - Charcoal",
+            "brand": "Peter England",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 1799,
+            "discount_price": 1099,
+            "stock": 45,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 50,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 1799,
+                            "discount_price": 1099
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 1999,
+                            "discount_price": 1199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-biba-kanjivaram-saree",
+            "name": "Biba Women Traditional Kanjivaram Pure Silk Festive Saree - Deep Emerald & Gold",
+            "brand": "Biba",
+            "subType": "Women's Ethnic",
+            "unit": "With Blouse Piece (5.5 + 0.8 Mtr)",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 5999,
+            "discount_price": 3499,
+            "stock": 30,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "41% OFF",
+            "megaCoins": 150,
+            "variants": [
+                    {
+                            "unit": "Emerald Green & Gold",
+                            "price": 5999,
+                            "discount_price": 3499
+                    },
+                    {
+                            "unit": "Ruby Maroon & Gold",
+                            "price": 5999,
+                            "discount_price": 3499
+                    },
+                    {
+                            "unit": "Royal Indigo Blue",
+                            "price": 5999,
+                            "discount_price": 3499
+                    },
+                    {
+                            "unit": "Mustard Turmeric Gold",
+                            "price": 5999,
+                            "discount_price": 3499
+                    },
+                    {
+                            "unit": "Rose Gold Pastel Drape",
+                            "price": 6299,
+                            "discount_price": 3699
+                    }
+            ]
+    },
+    {
+            "id": "fsh-libas-banarasi-saree",
+            "name": "Libas Women Banarasi Jacquard Woven Art Silk Saree - Royal Red",
+            "brand": "Libas",
+            "subType": "Women's Ethnic",
+            "unit": "With Blouse Piece (6.3 Mtr)",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4999,
+            "discount_price": 2799,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "44% OFF",
+            "megaCoins": 120,
+            "variants": [
+                    {
+                            "unit": "Royal Scarlet Red",
+                            "price": 4999,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Festive Magenta Pink",
+                            "price": 4999,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Bottle Green Peacock",
+                            "price": 4999,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Midnight Navy Blue",
+                            "price": 4999,
+                            "discount_price": 2799
+                    },
+                    {
+                            "unit": "Antique Gold Rich Drape",
+                            "price": 5299,
+                            "discount_price": 2999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-chanderi-saree",
+            "name": "FabIndia Handwoven Chanderi Cotton Silk Saree with Zari Palla - Pastel Mustard",
+            "brand": "FabIndia",
+            "subType": "Women's Ethnic",
+            "unit": "With Blouse Piece",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4499,
+            "discount_price": 2699,
+            "stock": 25,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 110,
+            "variants": [
+                    {
+                            "unit": "Mustard & Gold Border",
+                            "price": 4499,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "Blush Pink & Silver Border",
+                            "price": 4499,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "Mint Green & Zari",
+                            "price": 4499,
+                            "discount_price": 2699
+                    },
+                    {
+                            "unit": "Lavender Festive Hue",
+                            "price": 4799,
+                            "discount_price": 2899
+                    },
+                    {
+                            "unit": "Off White Handloom Drape",
+                            "price": 4999,
+                            "discount_price": 2999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-aurelia-georgette-saree",
+            "name": "Aurelia Women Lightweight Printed Georgette Party Wear Saree - Rose Pink",
+            "brand": "Aurelia",
+            "subType": "Women's Ethnic",
+            "unit": "With Blouse Piece",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2999,
+            "discount_price": 1799,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "megaCoins": 75,
+            "variants": [
+                    {
+                            "unit": "Rose Pink Floral",
+                            "price": 2999,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Teal Green Botanical",
+                            "price": 2999,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Mustard Polka Elegance",
+                            "price": 2999,
+                            "discount_price": 1799
+                    },
+                    {
+                            "unit": "Powder Blue Geometric",
+                            "price": 3199,
+                            "discount_price": 1899
+                    },
+                    {
+                            "unit": "Peach Ombre Designer",
+                            "price": 3399,
+                            "discount_price": 1999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-manyavar-mohey-silk-saree",
+            "name": "Mohey by Manyavar Heritage Kanjivaram Brocade Silk Saree - Sapphire Blue",
+            "brand": "Manyavar",
+            "subType": "Women's Ethnic",
+            "unit": "With Unstitched Blouse",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 7999,
+            "discount_price": 4999,
+            "stock": 20,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "37% OFF",
+            "megaCoins": 210,
+            "variants": [
+                    {
+                            "unit": "Sapphire Blue & Rich Gold",
+                            "price": 7999,
+                            "discount_price": 4999
+                    },
+                    {
+                            "unit": "Rani Pink & Temple Zari",
+                            "price": 7999,
+                            "discount_price": 4999
+                    },
+                    {
+                            "unit": "Parrot Green Heritage Weave",
+                            "price": 7999,
+                            "discount_price": 4999
+                    },
+                    {
+                            "unit": "Crimson Red Bridal Palla",
+                            "price": 8499,
+                            "discount_price": 5299
+                    },
+                    {
+                            "unit": "Dual Tone Violet Gold",
+                            "price": 8999,
+                            "discount_price": 5599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-manyavar-bridal-lehenga",
+            "name": "Mohey by Manyavar Semi-Stitched Velvet Embroidered Bridal Lehenga - Ruby Red",
+            "brand": "Manyavar",
+            "subType": "Women's Ethnic",
+            "unit": "Semi-Stitched",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 24999,
+            "discount_price": 16999,
+            "stock": 8,
+            "maxPerOrder": 1,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "32% OFF",
+            "megaCoins": 500,
+            "variants": [
+                    {
+                            "unit": "Semi-Stitched (Up to 44 Waist)",
+                            "price": 24999,
+                            "discount_price": 16999
+                    },
+                    {
+                            "unit": "Ready to Wear Size 34",
+                            "price": 26999,
+                            "discount_price": 17999
+                    },
+                    {
+                            "unit": "Ready to Wear Size 36",
+                            "price": 26999,
+                            "discount_price": 17999
+                    },
+                    {
+                            "unit": "Ready to Wear Size 38",
+                            "price": 26999,
+                            "discount_price": 17999
+                    },
+                    {
+                            "unit": "Custom Tailored Fitting",
+                            "price": 28999,
+                            "discount_price": 18999
+                    }
+            ]
+    },
+    {
+            "id": "fsh-biba-embroidered-lehenga",
+            "name": "Biba Festive Embroidered Georgette Lehenga Choli with Dupatta - Blush Pink",
+            "brand": "Biba",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 11999,
+            "discount_price": 6999,
+            "stock": 15,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "42% OFF",
+            "megaCoins": 250,
+            "variants": [
+                    {
+                            "unit": "Size: XS",
+                            "price": 11999,
+                            "discount_price": 6999
+                    },
+                    {
+                            "unit": "Size: S",
+                            "price": 11999,
+                            "discount_price": 6999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 11999,
+                            "discount_price": 6999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 11999,
+                            "discount_price": 6999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 12499,
+                            "discount_price": 7299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-libas-zari-lehenga",
+            "name": "Libas Heavy Zari Embroidered Semi-Stitched Silk Lehenga Set - Wine Purple",
+            "brand": "Libas",
+            "subType": "Women's Ethnic",
+            "unit": "Semi-Stitched",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 13999,
+            "discount_price": 7999,
+            "stock": 14,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "43% OFF",
+            "megaCoins": 280,
+            "variants": [
+                    {
+                            "unit": "Semi-Stitched (Up to 42 Waist)",
+                            "price": 13999,
+                            "discount_price": 7999
+                    },
+                    {
+                            "unit": "Ready to Wear Size 34",
+                            "price": 14999,
+                            "discount_price": 8499
+                    },
+                    {
+                            "unit": "Ready to Wear Size 36",
+                            "price": 14999,
+                            "discount_price": 8499
+                    },
+                    {
+                            "unit": "Ready to Wear Size 38",
+                            "price": 14999,
+                            "discount_price": 8499
+                    },
+                    {
+                            "unit": "Ready to Wear Size 40",
+                            "price": 15499,
+                            "discount_price": 8799
+                    }
+            ]
+    },
+    {
+            "id": "fsh-fabindia-chanderi-lehenga",
+            "name": "FabIndia Handcrafted Chanderi Silk Festive Lehenga - Marigold Yellow",
+            "brand": "FabIndia",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 9999,
+            "discount_price": 5999,
+            "stock": 18,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 200,
+            "variants": [
+                    {
+                            "unit": "Size: XS",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: S",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 9999,
+                            "discount_price": 5999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 10499,
+                            "discount_price": 6299
+                    }
+            ]
+    },
+    {
+            "id": "fsh-aurelia-flared-lehenga",
+            "name": "Aurelia Women Foil Printed Crop Top & Flared Lehenga Skirt - Peacock Teal",
+            "brand": "Aurelia",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 7999,
+            "discount_price": 4499,
+            "stock": 25,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "44% OFF",
+            "megaCoins": 170,
+            "variants": [
+                    {
+                            "unit": "Size: XS",
+                            "price": 7999,
+                            "discount_price": 4499
+                    },
+                    {
+                            "unit": "Size: S",
+                            "price": 7999,
+                            "discount_price": 4499
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 7999,
+                            "discount_price": 4499
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 7999,
+                            "discount_price": 4499
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 8299,
+                            "discount_price": 4699
+                    }
+            ]
+    }
+,
+    {
+            "id": "fsh-biba-straight-kurta-set",
+            "name": "Biba Women Embroidered Straight Cut Chanderi Kurta Set - Mint Green",
+            "brand": "Biba",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 4999,
+            "discount_price": 2999,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 120,
+            "variants": [
+                    {
+                            "unit": "Size: XS (32)",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: S (34)",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: M (36)",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: L (38)",
+                            "price": 4999,
+                            "discount_price": 2999
+                    },
+                    {
+                            "unit": "Size: XL (40)",
+                            "price": 5299,
+                            "discount_price": 3199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-biba-flared-anarkali-suit",
+            "name": "Biba Women Festive Silk Blend Flared Anarkali Suit with Dupatta - Ruby Maroon",
+            "brand": "Biba",
+            "subType": "Women's Ethnic",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 6999,
+            "discount_price": 4199,
+            "stock": 25,
+            "maxPerOrder": 2,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 160,
+            "variants": [
+                    {
+                            "unit": "Size: XS",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: S",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 6999,
+                            "discount_price": 4199
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 7499,
+                            "discount_price": 4499
+                    }
+            ]
+    },
+    {
+            "id": "fsh-libas-silk-churidar-suit",
+            "name": "Libas Women Classic Yoke Embroidered Silk Blend Churidar Suit - Royal Indigo",
+            "brand": "Libas",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3999,
+            "discount_price": 2399,
+            "stock": 30,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "40% OFF",
+            "megaCoins": 95,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3999,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3999,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3999,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3999,
+                            "discount_price": 2399
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 4299,
+                            "discount_price": 2599
+                    }
+            ]
+    },
+    {
+            "id": "fsh-libas-palazzo-suit-set",
+            "name": "Libas Women Georgette Floral Printed Kurta with Flared Palazzo - Sunshine Yellow",
+            "brand": "Libas",
+            "subType": "Women's Ethnic",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3499,
+            "discount_price": 1999,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "43% OFF",
+            "megaCoins": 80,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3499,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3499,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3499,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3499,
+                            "discount_price": 1999
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3799,
+                            "discount_price": 2199
+                    }
+            ]
+    },
+    {
+            "id": "fsh-adidas-aeroready-track-pants",
+            "name": "Adidas Men AEROREADY 3-Stripes Athletic Training Track Pants - Core Black",
+            "brand": "Adidas",
+            "subType": "Men's Apparel",
+            "unit": "Size: L",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 3499,
+            "discount_price": 2199,
+            "stock": 35,
+            "maxPerOrder": 3,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": true,
+            "flashDiscount": "37% OFF",
+            "megaCoins": 90,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 3499,
+                            "discount_price": 2199
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 3799,
+                            "discount_price": 2399
+                    }
+            ]
+    },
+    {
+            "id": "fsh-puma-performance-track-pants",
+            "name": "Puma Men Performance Poly-Interlock Workout Track Pants - Heather Grey",
+            "brand": "Puma",
+            "subType": "Men's Apparel",
+            "unit": "Size: M",
+            "type": "Fashion & Apparel",
+            "quantity": 0,
+            "price": 2799,
+            "discount_price": 1699,
+            "stock": 40,
+            "maxPerOrder": 4,
+            "countryoforigin": "India",
+            "src": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&auto=format&fit=crop&q=80",
+            "isFlashDeal": false,
+            "flashDiscount": "39% OFF",
+            "megaCoins": 70,
+            "variants": [
+                    {
+                            "unit": "Size: S",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: M",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: L",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: XL",
+                            "price": 2799,
+                            "discount_price": 1699
+                    },
+                    {
+                            "unit": "Size: XXL",
+                            "price": 2999,
+                            "discount_price": 1849
+                    }
+            ]
+    }
 ];
 
 export function getProductVariants(item) {
