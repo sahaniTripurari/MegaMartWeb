@@ -19,8 +19,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Top Header with Search -->
-    <header class="header" id="header">
+    <!-- Unified 2-Row Sticky Navigation Header (Top Search Header + Category Tabs) -->
+    <div class="sticky-navbars-wrapper" id="stickyNavbarsWrapper">
+        <!-- Top Header with Search -->
+        <header class="header" id="header">
         <div class="container header-inner">
             <div class="header-left">
                 <a href="#" class="logo" id="logoBtn">
@@ -149,40 +151,6 @@
         </div>
     </header>
 
-    <nav class="bottom-nav">
-        <div class="bottom-nav-item active" data-view="home">
-            <i data-lucide="home"></i>
-            <span>Home</span>
-        </div>
-        <div class="bottom-nav-item" data-view="categories">
-            <i data-lucide="layout-grid"></i>
-            <span>Categories</span>
-        </div>
-        <div class="bottom-nav-item" data-view="orders" id="mobileOrdersBtn">
-            <i data-lucide="package"></i>
-            <span>Orders</span>
-        </div>
-        <div class="bottom-nav-item" id="bottomWishlistBtn">
-            <div class="cart-icon-wrapper">
-                <i data-lucide="heart"></i>
-                <span class="cart-count bottom-wishlist-count" id="bottomWishlistCount">0</span>
-            </div>
-            <span>Wishlist</span>
-        </div>
-        <div class="bottom-nav-item" id="mobileCartBtn">
-            <div class="cart-icon-wrapper">
-                <i data-lucide="shopping-cart"></i>
-                <span class="cart-count mobile-count">0</span>
-            </div>
-            <span>Cart</span>
-        </div>
-        <div class="bottom-nav-item" data-view="profile" id="mobileProfileBtn">
-            <i data-lucide="user"></i>
-            <span>Profile</span>
-        </div>
-
-    </nav>
-
     <!-- Unified Flipkart/Amazon-Style Category Navigation Bar -->
     <nav class="sub-header-nav" id="subHeaderNav">
         <div class="container sub-header-container">
@@ -239,6 +207,41 @@
             </div>
             <!-- Backwards-compatible container for legacy script bindings -->
             <div class="type-list" id="navCategories" style="display: none;"></div>
+        </div>
+    </nav>
+    </div> <!-- /sticky-navbars-wrapper -->
+
+    <!-- Mobile Bottom App Bar -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-item active" data-view="home">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </div>
+        <div class="bottom-nav-item" data-view="categories">
+            <i data-lucide="layout-grid"></i>
+            <span>Categories</span>
+        </div>
+        <div class="bottom-nav-item" data-view="orders" id="mobileOrdersBtn">
+            <i data-lucide="package"></i>
+            <span>Orders</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomWishlistBtn">
+            <div class="cart-icon-wrapper">
+                <i data-lucide="heart"></i>
+                <span class="cart-count bottom-wishlist-count" id="bottomWishlistCount">0</span>
+            </div>
+            <span>Wishlist</span>
+        </div>
+        <div class="bottom-nav-item" id="mobileCartBtn">
+            <div class="cart-icon-wrapper">
+                <i data-lucide="shopping-cart"></i>
+                <span class="cart-count mobile-count">0</span>
+            </div>
+            <span>Cart</span>
+        </div>
+        <div class="bottom-nav-item" data-view="profile" id="mobileProfileBtn">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
         </div>
     </nav>
 

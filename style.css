@@ -23,7 +23,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { 
-  overflow-x: hidden; 
+  overflow-x: clip; 
   width: 100%;
 }
 body { 
@@ -66,11 +66,41 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255, 50, 105, 0.3); }
 .btn-outline { border: 1px solid var(--border-color); color: var(--text-dark); }
 
-/* ================= Header ================= */
+/* ================= Unified 2-Row Sticky Navigation Header ================= */
+.sticky-navbars-wrapper {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.sticky-navbars-wrapper .header {
+  position: relative !important;
+  top: auto !important;
+  z-index: 1002 !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  background: var(--bg-header); 
+  padding: 12px 0;
+}
+
+.sticky-navbars-wrapper .sub-header-nav {
+  position: relative !important;
+  top: auto !important;
+  z-index: 1001 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+}
+
+/* Base Header */
 .header { 
   background: var(--bg-header); 
-  position: sticky; 
-  top: 0; 
+  position: relative; 
   z-index: 1000; 
   border-bottom: 1px solid var(--border-color); 
   padding: 12px 0;
@@ -10852,13 +10882,24 @@ body {
 
 /* 2. Mobile Header: Logo + Delivery Location + User Account + Global Sticky Search */
 @media (max-width: 768px) {
-  .header {
-    padding: 8px 12px 10px !important;
+  .sticky-navbars-wrapper {
+    position: -webkit-sticky !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06) !important;
     background: #ffffff !important;
+  }
+
+  .sticky-navbars-wrapper .header,
+  .header {
+    padding: 8px 12px 10px !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 1002 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
   }
   
   .header-inner {
@@ -11044,14 +11085,15 @@ body {
 
 /* 3. Sub-Header Category Navigation Tabs on Mobile */
 @media (max-width: 768px) {
+  .sticky-navbars-wrapper .sub-header-nav,
   .sub-header-nav,
   .category-sub-nav {
-    top: 92px !important;
-    position: sticky !important;
-    z-index: 90 !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 1001 !important;
     background: #ffffff !important;
     border-bottom: 1px solid #f1f5f9 !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    box-shadow: none !important;
   }
   
   .sub-header-container {
