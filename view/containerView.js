@@ -1343,7 +1343,7 @@ export class ContainerView {
         
         if (activeView === this.homeView) {
             document.querySelector('.bottom-nav-item[data-view="home"]')?.classList.add('active');
-        } else if (activeView === this.categoryView || activeView === this.categoriesHubView) {
+        } else if (activeView === this.categoriesHubView) {
             document.querySelector('.bottom-nav-item[data-view="categories"]')?.classList.add('active');
         } else if (activeView === this.profileView) {
             document.querySelector('.bottom-nav-item[data-view="profile"]')?.classList.add('active');
@@ -1990,12 +1990,12 @@ export class ContainerView {
                     setTimeout(() => {
                         this.productInterstitialOverlay.classList.remove('active', 'fade-out');
                         this.productInterstitialOverlay.setAttribute('aria-hidden', 'true');
-                    }, 260);
+                    }, 280);
                 }
                 this.setActiveView(this.productDetailView);
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 if (window.lucide) lucide.createIcons();
-            }, 850);
+            }, 1200);
             return;
         }
 
