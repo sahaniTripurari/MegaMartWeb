@@ -1141,6 +1141,99 @@
             </div>
         </div>
 
+        <!-- ================= SEARCH DISCOVERY HUB VIEW (MYNTRA / FLIPKART STYLE - IMAGE 2) ================= -->
+        <div id="searchHubView" class="view-section search-hub-view" style="display: none;">
+            <!-- Sticky Top Header (Back + Input + Voice/Camera) -->
+            <div class="search-hub-header">
+                <button class="search-hub-back-btn" id="searchHubBackBtn" type="button" aria-label="Go Back">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="search-hub-input-box">
+                    <span class="search-hub-cursor" id="searchHubCursor">|</span>
+                    <input type="text" id="searchHubInput" class="search-hub-input" placeholder="Dresses" autocomplete="off" spellcheck="false">
+                    <button class="search-hub-clear-btn" id="searchHubClearBtn" type="button" aria-label="Clear Search" style="display: none;">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="search-hub-header-actions">
+                    <button class="search-hub-icon-btn" id="searchHubMicBtn" type="button" title="Voice Search">
+                        <i data-lucide="mic"></i>
+                    </button>
+                    <button class="search-hub-icon-btn" id="searchHubCameraBtn" type="button" title="Camera / Lens Search">
+                        <i data-lucide="camera"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Suggestion Sub-Banner (Exact match to Image 2: "Casual outfit ideas for a college trip" + "Ask Maya >") -->
+            <div class="search-hub-ai-banner" id="searchHubAiBanner">
+                <div class="search-ai-prompt">
+                    <span class="search-ai-prompt-text" id="searchAiPromptText">Casual outfit ideas for a college trip</span>
+                </div>
+                <button class="search-ai-trigger-btn" id="searchAiTriggerBtn" type="button">
+                    <span class="ai-sparkle">✦</span>
+                    <span>Ask Maya</span>
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Filter Pills Horizontal Strip (Image 2: Gender ∨, Categories ∨, Sort ∨, Under ₹999) -->
+            <div class="search-hub-filter-strip" id="searchHubFilterStrip">
+                <button class="search-chip active" data-filter="all">All</button>
+                <button class="search-chip" data-filter="gender" id="chipGenderBtn">
+                    <span>Gender</span> <i data-lucide="chevron-down"></i>
+                </button>
+                <button class="search-chip" data-filter="categories" id="chipCategoriesBtn">
+                    <span>Categories</span> <i data-lucide="chevron-down"></i>
+                </button>
+                <button class="search-chip" data-filter="sort" id="chipSortBtn">
+                    <span>Sort</span> <i data-lucide="arrow-up-down"></i>
+                </button>
+                <button class="search-chip" data-filter="under999" id="chipUnder999Btn">
+                    <span>Under ₹999</span>
+                </button>
+                <button class="search-chip" data-filter="fast" id="chipFastBtn">
+                    <span>⚡ 10 Mins</span>
+                </button>
+                <button class="search-chip" data-filter="topbrands" id="chipTopBrandsBtn">
+                    <span>Top Brands</span>
+                </button>
+            </div>
+
+            <!-- Results Meta Row (Shown when actively filtering) -->
+            <div class="search-hub-results-meta" id="searchHubResultsMeta" style="display: none;">
+                <span class="results-count-text" id="searchHubResultsCount">Showing 0 matches</span>
+                <button class="results-reset-btn" id="searchHubResetBtn" type="button">Reset All</button>
+            </div>
+
+            <!-- Infinite Scroll Masonry Feed (Image 2 Editorial Visual Cards) -->
+            <div class="search-hub-feed-container" id="searchHubFeedContainer">
+                <div class="search-hub-masonry-grid" id="searchHubMasonryGrid">
+                    <!-- Dynamic Pinterest/Myntra Styled Cards Injected by JS -->
+                </div>
+
+                <!-- Infinite Scroll Loading Trigger -->
+                <div class="search-hub-infinite-loader" id="searchHubInfiniteLoader">
+                    <div class="infinite-loader-spinner"></div>
+                    <span>Discovering more curated finds...</span>
+                </div>
+            </div>
+
+            <!-- Floating Action Bar at Bottom (Image 2: Image Search + Camera Search) -->
+            <div class="search-hub-floating-bar" id="searchHubFloatingBar">
+                <button class="floating-action-pill" id="floatImageSearchBtn" type="button">
+                    <i data-lucide="image"></i>
+                    <span>Image Search</span>
+                </button>
+                <button class="floating-action-pill" id="floatCameraSearchBtn" type="button">
+                    <i data-lucide="camera"></i>
+                    <span>Camera Search</span>
+                </button>
+            </div>
+            
+            <input type="file" id="searchHubImageFileInput" accept="image/*" style="display: none;">
+        </div>
+
         <!-- ================= PRODUCT DETAILS VIEW ================= -->
         <div id="productDetailView" class="view-section" style="display: none;">
             <div class="container">
@@ -1214,6 +1307,25 @@
                         </div>
                     </div>
 
+                    <!-- Prominent Delivery Location & Pincode Card (Image 1 Mobile Location Requirement) -->
+                    <div class="profile-location-card" id="profileLocationCard" role="button" tabindex="0" title="Click to change your delivery location">
+                        <div class="profile-loc-icon-bubble">
+                            <i data-lucide="map-pin"></i>
+                        </div>
+                        <div class="profile-loc-details">
+                            <div class="profile-loc-header-row">
+                                <span class="profile-loc-tag">DELIVERY LOCATION</span>
+                                <span class="profile-loc-badge">⚡ 10-MIN FAST</span>
+                            </div>
+                            <span class="profile-loc-addr" id="profileDeliveryAddressText">Mumbai, 400001</span>
+                            <span class="profile-loc-sub">Instant Doorstep Delivery • Dark Store Active</span>
+                        </div>
+                        <button class="profile-loc-change-btn" type="button" id="profileChangeLocationBtn">
+                            <span>Change</span>
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+
                     <div class="profile-menu">
                         <div class="menu-item" id="profileOrdersBtn">
                             <div class="menu-icon"><i data-lucide="shopping-bag"></i></div>
@@ -1225,9 +1337,10 @@
                             <span>Live Order Tracking</span>
                             <i data-lucide="chevron-right" class="arrow"></i>
                         </div>
-                        <div class="menu-item">
+                        <div class="menu-item" id="profileSavedAddressesBtn">
                             <div class="menu-icon"><i data-lucide="map-pin"></i></div>
-                            <span>Saved Addresses</span>
+                            <span>Delivery Addresses & Pincodes</span>
+                            <span class="profile-menu-badge" id="profileMenuPincodeBadge">400001</span>
                             <i data-lucide="chevron-right" class="arrow"></i>
                         </div>
                         <div class="menu-item">

@@ -940,6 +940,7 @@ export class ContainerView {
         this.cartPageView = document.getElementById('cartPageView');
         this.wishlistPageView = document.getElementById('wishlistPageView');
         this.ordersPageView = document.getElementById('ordersPageView');
+        this.searchHubView = document.getElementById('searchHubView');
         this.productInterstitialOverlay = document.getElementById('productInterstitialOverlay');
         this.searchSuggestionsDropdown = document.getElementById('searchSuggestionsDropdown');
         this.searchClearBtn = document.getElementById('searchClearBtn');
@@ -1065,6 +1066,7 @@ export class ContainerView {
         this.setupFooterLinks();
         this.aiCopilot = new MegaAiCopilot(this.data);
         this.setupMegaAiCopilot();
+        this.setupSearchHubView();
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
@@ -1253,8 +1255,7 @@ export class ContainerView {
                 } else if (view === 'categories') {
                     this.showCategoriesHubView();
                 } else if (view === 'search') {
-                    this.globalSearchInput?.focus();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    this.showSearchHubView();
                 } else if (view === 'profile') {
                     this.showProfileView();
                 }
@@ -1315,7 +1316,8 @@ export class ContainerView {
             this.profileView, 
             this.cartPageView, 
             this.wishlistPageView, 
-            this.ordersPageView
+            this.ordersPageView,
+            this.searchHubView
         ];
 
         allViews.forEach((view) => {
@@ -1329,22 +1331,23 @@ export class ContainerView {
             activeView.style.display = 'flex';
         }
         
-        // Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile, Categories Hub)
-        const hideFooterViews = [this.ordersPageView, this.wishlistPageView, this.cartPageView, this.profileView, this.categoriesHubView];
+        // Hide footer on mobile for dedicated views (Orders, Wishlist, Cart, Profile, Categories Hub, Search Hub)
+        const hideFooterViews = [this.ordersPageView, this.wishlistPageView, this.cartPageView, this.profileView, this.categoriesHubView, this.searchHubView];
         if (hideFooterViews.includes(activeView)) {
             document.body.classList.add('hide-mobile-footer');
         } else {
             document.body.classList.remove('hide-mobile-footer');
         }
 
-        // Hide 2nd row category navbar on dedicated views (Product details, Wishlist, Orders, Cart, Profile/Settings, Categories Hub)
+        // Hide 2nd row category navbar on dedicated views (Product details, Wishlist, Orders, Cart, Profile/Settings, Categories Hub, Search Hub)
         const hideSubNavViews = [
             this.productDetailView, 
             this.wishlistPageView, 
             this.ordersPageView, 
             this.cartPageView, 
             this.profileView, 
-            this.categoriesHubView
+            this.categoriesHubView,
+            this.searchHubView
         ];
         
         const subHeaderNav = document.getElementById('subHeaderNav');
@@ -1354,6 +1357,13 @@ export class ContainerView {
         } else {
             document.body.classList.remove('hide-sub-nav');
             if (subHeaderNav) subHeaderNav.style.display = '';
+        }
+
+        // Dedicated Search Hub full-screen mode: hides standard top header
+        if (activeView === this.searchHubView) {
+            document.body.classList.add('in-search-hub-mode');
+        } else {
+            document.body.classList.remove('in-search-hub-mode');
         }
 
         // Sync bottom nav active state
@@ -1492,6 +1502,654 @@ export class ContainerView {
 
         window.scrollTo({ top: 0, behavior: 'instant' });
         if (window.lucide) lucide.createIcons();
+    }
+
+    showSearchHubView(initialQuery = '') {
+        if (this.currentCategory !== 'Search Hub') {
+            this.previousActiveView = this.currentActiveView || this.homeView;
+        }
+        this.currentCategory = 'Search Hub';
+        this.setActiveView(this.searchHubView);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        this.startSearchHubTypewriter();
+
+        if (initialQuery) {
+            if (this.searchHubInput) {
+                this.searchHubInput.value = initialQuery;
+                if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
+            }
+            this.executeSearchHubQuery(initialQuery);
+        } else {
+            if (this.searchHubInput) {
+                this.searchHubInput.value = '';
+                if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'none';
+            }
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.renderSearchHubDiscoveryFeed(true);
+        }
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    hideSearchHubView() {
+        this.stopSearchHubTypewriter();
+        const targetView = this.previousActiveView || this.homeView;
+        this.setActiveView(targetView);
+        if (targetView === this.homeView) {
+            this.currentCategory = 'Home';
+            this.updateNavHighlight('Home');
+        } else if (targetView === this.profileView) {
+            this.currentCategory = 'Profile';
+            this.updateNavHighlight('Profile');
+        } else if (targetView === this.categoriesHubView) {
+            this.currentCategory = 'Categories Hub';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    setupSearchHubView() {
+        this.searchHubBackBtn = document.getElementById('searchHubBackBtn');
+        this.searchHubInput = document.getElementById('searchHubInput');
+        this.searchHubClearBtn = document.getElementById('searchHubClearBtn');
+        this.searchHubMicBtn = document.getElementById('searchHubMicBtn');
+        this.searchHubCameraBtn = document.getElementById('searchHubCameraBtn');
+        this.searchHubAiBanner = document.getElementById('searchHubAiBanner');
+        this.searchAiTriggerBtn = document.getElementById('searchAiTriggerBtn');
+        this.searchAiPromptText = document.getElementById('searchAiPromptText');
+        this.searchHubFilterStrip = document.getElementById('searchHubFilterStrip');
+        this.searchHubMasonryGrid = document.getElementById('searchHubMasonryGrid');
+        this.searchHubInfiniteLoader = document.getElementById('searchHubInfiniteLoader');
+        this.searchHubResultsMeta = document.getElementById('searchHubResultsMeta');
+        this.searchHubResultsCount = document.getElementById('searchHubResultsCount');
+        this.searchHubResetBtn = document.getElementById('searchHubResetBtn');
+        this.floatImageSearchBtn = document.getElementById('floatImageSearchBtn');
+        this.floatCameraSearchBtn = document.getElementById('floatCameraSearchBtn');
+        this.searchHubImageFileInput = document.getElementById('searchHubImageFileInput');
+
+        this.searchHubBatch = 0;
+        this.searchHubIsLoading = false;
+        this.searchHubActiveFilter = 'all';
+        this.searchHubPlaceholderTimer = null;
+
+        // Back button navigation
+        this.searchHubBackBtn?.addEventListener('click', () => {
+            this.hideSearchHubView();
+        });
+
+        // Clear button
+        this.searchHubClearBtn?.addEventListener('click', () => {
+            if (this.searchHubInput) {
+                this.searchHubInput.value = '';
+                this.searchHubInput.focus();
+            }
+            if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'none';
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.renderSearchHubDiscoveryFeed(true);
+        });
+
+        // Reset all button
+        this.searchHubResetBtn?.addEventListener('click', () => {
+            if (this.searchHubInput) this.searchHubInput.value = '';
+            if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'none';
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.searchHubActiveFilter = 'all';
+            this.searchHubFilterStrip?.querySelectorAll('.search-chip').forEach(c => c.classList.remove('active'));
+            this.searchHubFilterStrip?.querySelector('.search-chip[data-filter="all"]')?.classList.add('active');
+            this.renderSearchHubDiscoveryFeed(true);
+        });
+
+        // Live Search Input Handler with Debounce
+        let debounceTimer = null;
+        this.searchHubInput?.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            if (this.searchHubClearBtn) {
+                this.searchHubClearBtn.style.display = query ? 'flex' : 'none';
+            }
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                if (query.length > 0) {
+                    this.executeSearchHubQuery(query);
+                } else {
+                    if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+                    if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+                    if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+                    this.renderSearchHubDiscoveryFeed(true);
+                }
+            }, 120);
+        });
+
+        // Voice Search Simulation
+        this.searchHubMicBtn?.addEventListener('click', () => {
+            this.showToast('🎙️ Listening... Say "Kurtas", "Smartphones", or "Dresses"');
+            const sampleQueries = ['Kurtas', 'Sherwani', 'Jeans', 'Smartphones', 'Sneakers', 'Coffee'];
+            const sample = sampleQueries[Math.floor(Math.random() * sampleQueries.length)];
+            setTimeout(() => {
+                if (this.searchHubInput) {
+                    this.searchHubInput.value = sample;
+                    if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
+                    this.executeSearchHubQuery(sample);
+                    this.showToast(`🎙️ Voice Recognized: "${sample}"`);
+                }
+            }, 1300);
+        });
+
+        // Camera / Image Search Simulation
+        const triggerImageUpload = () => {
+            if (this.searchHubImageFileInput) {
+                this.searchHubImageFileInput.click();
+            }
+        };
+        this.searchHubCameraBtn?.addEventListener('click', triggerImageUpload);
+        this.floatCameraSearchBtn?.addEventListener('click', triggerImageUpload);
+        this.floatImageSearchBtn?.addEventListener('click', triggerImageUpload);
+
+        this.searchHubImageFileInput?.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                this.showToast(`📸 Visual AI Search: Analyzing "${file.name}"...`);
+                setTimeout(() => {
+                    this.showToast(`✨ Match Found: Found 6 matching styles!`);
+                    if (this.searchHubInput) {
+                        this.searchHubInput.value = 'Fashion & Apparel';
+                        if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
+                    }
+                    this.executeSearchHubQuery('Fashion');
+                }, 1100);
+            }
+        });
+
+        // AI Assistant Prompt Trigger ("Ask Maya")
+        this.searchAiTriggerBtn?.addEventListener('click', () => {
+            const prompt = this.searchAiPromptText?.textContent || 'Casual outfit ideas for a college trip';
+            if (this.searchHubInput) {
+                this.searchHubInput.value = 'college outfit';
+                if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
+            }
+            this.executeSearchHubQuery('shirt');
+            this.showToast(`✨ Maya AI: Curated picks for "${prompt}"`);
+        });
+
+        // Filter Strip Chips
+        this.searchHubFilterStrip?.addEventListener('click', (e) => {
+            const chip = e.target.closest('.search-chip');
+            if (!chip) return;
+            const filter = chip.dataset.filter;
+            this.searchHubFilterStrip.querySelectorAll('.search-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            this.searchHubActiveFilter = filter;
+            this.applySearchHubFilter(filter);
+        });
+
+        // Card clicks inside Masonry Grid
+        this.searchHubMasonryGrid?.addEventListener('click', (e) => {
+            // 1. Wishlist toggle
+            const wishBtn = e.target.closest('.disco-wishlist-toggle');
+            if (wishBtn) {
+                e.stopPropagation();
+                const pName = wishBtn.dataset.productName;
+                if (pName) {
+                    this.toggleWishlist(pName);
+                    const isWish = this.wishlist.has(pName);
+                    wishBtn.classList.toggle('active', isWish);
+                    const icon = wishBtn.querySelector('i, svg');
+                    if (icon) {
+                        icon.style.fill = isWish ? '#ef4444' : 'none';
+                        icon.style.color = isWish ? '#ef4444' : '#64748b';
+                    }
+                }
+                return;
+            }
+
+            // 2. Product Card click -> Show Product Detail
+            const prodCard = e.target.closest('[data-product-name]');
+            if (prodCard) {
+                const pName = prodCard.dataset.productName;
+                const item = this.data.find(p => p.name === pName);
+                if (item) {
+                    this.showProductDetail(item);
+                }
+                return;
+            }
+
+            // 3. Hero or Spotlight click -> Show Category View
+            const catCard = e.target.closest('[data-target-category]');
+            if (catCard) {
+                const cat = catCard.dataset.targetCategory;
+                if (cat) {
+                    this.showCategoryView(cat);
+                }
+            }
+        });
+
+        // Infinite Scroll on Window / Container
+        window.addEventListener('scroll', () => {
+            if (this.currentCategory !== 'Search Hub' || this.searchHubIsLoading) return;
+            if (this.searchHubInput && this.searchHubInput.value.trim() !== '') return;
+            const scrollPos = window.innerHeight + window.scrollY;
+            const threshold = document.documentElement.scrollHeight - 450;
+            if (scrollPos >= threshold) {
+                this.appendDiscoveryBatch();
+            }
+        }, { passive: true });
+
+        // Trigger Search Hub on Mobile Header Search Bar Click / Focus
+        if (this.globalSearchInput) {
+            this.globalSearchInput.addEventListener('click', (e) => {
+                if (window.innerWidth <= 900) {
+                    e.preventDefault();
+                    this.globalSearchInput.blur();
+                    this.showSearchHubView(this.globalSearchInput.value || '');
+                }
+            });
+            this.globalSearchInput.addEventListener('focus', (e) => {
+                if (window.innerWidth <= 900) {
+                    e.preventDefault();
+                    this.globalSearchInput.blur();
+                    this.showSearchHubView(this.globalSearchInput.value || '');
+                }
+            });
+        }
+
+        const headerSearchBox = document.querySelector('.global-search-container .search-box');
+        if (headerSearchBox) {
+            headerSearchBox.addEventListener('click', (e) => {
+                if (window.innerWidth <= 900) {
+                    e.preventDefault();
+                    this.globalSearchInput?.blur();
+                    this.showSearchHubView(this.globalSearchInput?.value || '');
+                }
+            });
+        }
+
+        this.rotateAiPrompts();
+    }
+
+    startSearchHubTypewriter() {
+        this.stopSearchHubTypewriter();
+        const words = ['"Dresses"', '"Kurtas"', '"Smartphones"', '"Sneakers"', '"Track Pants"', '"Coffee"', '"Wireless Earbuds"', '"Bridal Lehengas"', '"Blazers"'];
+        let wordIdx = 0;
+        const input = document.getElementById('searchHubInput');
+        if (!input) return;
+
+        this.searchHubPlaceholderTimer = setInterval(() => {
+            if (input.value.trim() !== '') return;
+            wordIdx = (wordIdx + 1) % words.length;
+            input.setAttribute('placeholder', words[wordIdx]);
+        }, 2200);
+    }
+
+    stopSearchHubTypewriter() {
+        if (this.searchHubPlaceholderTimer) {
+            clearInterval(this.searchHubPlaceholderTimer);
+            this.searchHubPlaceholderTimer = null;
+        }
+    }
+
+    rotateAiPrompts() {
+        const prompts = [
+            'Casual outfit ideas for a college trip',
+            'Best noise cancelling headphones under ₹3000',
+            'Festive traditional Kurta & Sherwani sets',
+            'Instant 10-minute snacks for house party',
+            'Top rated skincare & bridal glow essentials'
+        ];
+        let idx = 0;
+        setInterval(() => {
+            idx = (idx + 1) % prompts.length;
+            const el = document.getElementById('searchAiPromptText');
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.textContent = prompts[idx];
+                    el.style.opacity = '1';
+                }, 200);
+            }
+        }, 4000);
+    }
+
+    renderSearchHubDiscoveryFeed(reset = false) {
+        if (!this.searchHubMasonryGrid) return;
+        if (reset) {
+            this.searchHubBatch = 0;
+            this.searchHubMasonryGrid.innerHTML = '';
+        }
+        // Append initial batches
+        this.appendDiscoveryBatch();
+        this.appendDiscoveryBatch();
+    }
+
+    findProductByNameOrFallback(name, fallbackCategory, tag) {
+        let item = this.data.find(p => p.name === name);
+        if (!item) {
+            const catItems = this.data.filter(p => p.type === fallbackCategory);
+            item = catItems[Math.floor(Math.random() * catItems.length)] || this.data[0];
+        }
+        return { item, tag };
+    }
+
+    appendDiscoveryBatch() {
+        if (!this.searchHubMasonryGrid || this.searchHubIsLoading) return;
+        this.searchHubIsLoading = true;
+        if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.opacity = '1';
+
+        const batchIdx = this.searchHubBatch || 0;
+        this.searchHubBatch = batchIdx + 1;
+
+        const batchConfigs = [
+            // Batch 0: Fashion / Kids / Beauty / Activewear (Image 2 style)
+            {
+                hero: {
+                    title: 'CUTE STYLES',
+                    subtitle: 'Dresses, Tops & Footwear',
+                    discount: 'UP TO 60% OFF',
+                    image: 'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?w=500&auto=format&fit=crop&q=80',
+                    target: 'Fashion & Apparel',
+                    cta: 'Shop Now'
+                },
+                spotlight: {
+                    brand: 'MODARAPIDO & KALINI',
+                    footer: 'Min. 70% Off',
+                    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80',
+                    target: 'Fashion & Apparel'
+                },
+                bestseller: this.findProductByNameOrFallback('Biba Women Pure Cotton Floral Printed Anarkali Kurta Set with Dupatta', 'Fashion & Apparel', 'Pack of 11'),
+                trend: this.findProductByNameOrFallback('Puma Men Modern Basics Regular Fit Cotton Track Pants - Black', 'Fashion & Apparel', 'FRESH DROPS')
+            },
+            // Batch 1: Flagship Tech / Audio / Sneakers / Royal Ethnic
+            {
+                hero: {
+                    title: 'FLAGSHIP TECH',
+                    subtitle: 'Pro Cameras & Snapdragon 8 Gen 3',
+                    discount: 'FLAT 35% OFF',
+                    image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop&q=80',
+                    target: 'Electronics & Gadgets',
+                    cta: 'Explore'
+                },
+                spotlight: {
+                    brand: 'APPLE & SONY AUDIO',
+                    footer: 'Min. 40% Off',
+                    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80',
+                    target: 'Electronics & Gadgets'
+                },
+                bestseller: this.findProductByNameOrFallback('Red Tape Men Casual Low-Top Lifestyle Walking Sneakers - Off White', 'Fashion & Apparel', '⚡ 10 MINS'),
+                trend: this.findProductByNameOrFallback('Manyavar Royal Zari Embroidered Silk Sherwani with Stole - Maroon & Gold', 'Fashion & Apparel', 'WEDDING EDIT')
+            },
+            // Batch 2: Barista Blends / Denims / Formal Suits
+            {
+                hero: {
+                    title: 'BARISTA BLENDS',
+                    subtitle: 'Artisanal Coffee & Single Estate Teas',
+                    discount: 'UP TO 50% OFF',
+                    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=80',
+                    target: 'Cold Drinks & Beverages',
+                    cta: 'Brew Now'
+                },
+                spotlight: {
+                    brand: 'LEVI\'S & RAYMOND',
+                    footer: 'Min. 45% Off',
+                    image: 'https://images.unsplash.com/photo-1542272604-780c96856592?w=500&auto=format&fit=crop&q=80',
+                    target: 'Fashion & Apparel'
+                },
+                bestseller: this.findProductByNameOrFallback('Levi\'s Men 511 Slim Fit Stretch Denim Jeans - Dark Indigo Wash', 'Fashion & Apparel', 'BEST VALUE'),
+                trend: this.findProductByNameOrFallback('Raymond Formal Slim-Fit Single-Breasted Italian Wool Blazer - Charcoal Grey', 'Fashion & Apparel', 'EXECUTIVE')
+            },
+            // Batch 3: Urban Kicks / Silk Sarees / Joggers
+            {
+                hero: {
+                    title: 'URBAN KICKS',
+                    subtitle: 'Lifestyle Walkers & Gym Trainers',
+                    discount: 'UP TO 55% OFF',
+                    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80',
+                    target: 'Fashion & Apparel',
+                    cta: 'View Drop'
+                },
+                spotlight: {
+                    brand: 'BIBA & LIBAS SILK',
+                    footer: 'Flat 50% Off',
+                    image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&auto=format&fit=crop&q=80',
+                    target: 'Fashion & Apparel'
+                },
+                bestseller: this.findProductByNameOrFallback('Biba Women Traditional Kanjivaram Pure Silk Festive Saree - Deep Emerald & Gold', 'Fashion & Apparel', 'FESTIVE SPECIAL'),
+                trend: this.findProductByNameOrFallback('Adidas Men Essentials French Terry Tapered Cuff Joggers - Heather Grey', 'Fashion & Apparel', 'POPULAR')
+            }
+        ];
+
+        const cfg = batchConfigs[batchIdx % batchConfigs.length];
+        let batchHtml = '';
+
+        // Card 1: Hero Editorial (Image 2 Top Left)
+        batchHtml += `
+            <div class="disco-card-hero" data-target-category="${cfg.hero.target}">
+                <div class="disco-hero-header">
+                    <span class="disco-hero-title">${cfg.hero.title}</span>
+                    <span class="disco-hero-sub">${cfg.hero.subtitle}</span>
+                    <span class="disco-hero-disc">${cfg.hero.discount}</span>
+                </div>
+                <div class="disco-hero-img-wrap">
+                    <img class="disco-hero-img" src="${cfg.hero.image}" alt="${cfg.hero.title}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                </div>
+                <div class="disco-hero-footer">
+                    <div class="disco-hero-cta">
+                        <span>${cfg.hero.cta}</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                    <div class="disco-hero-dots">
+                        <span class="active"></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Card 2: Spotlight Brand / Fabric (Image 2 Top Right)
+        batchHtml += `
+            <div class="disco-card-spotlight" data-target-category="${cfg.spotlight.target}">
+                <div class="disco-spotlight-img-wrap">
+                    <img class="disco-spotlight-img" src="${cfg.spotlight.image}" alt="${cfg.spotlight.brand}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                    <div class="disco-spotlight-brand-pill">
+                        <span>${cfg.spotlight.brand}</span>
+                        <i data-lucide="sparkles" style="width: 12px; height: 12px; color: #7c3aed;"></i>
+                    </div>
+                    <div class="disco-spotlight-footer">
+                        <span>${cfg.spotlight.footer}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Card 3: Bestseller Ribbon Product Tile (Image 2 Bottom Left)
+        if (cfg.bestseller) {
+            const b = cfg.bestseller.item;
+            const isWish = this.wishlist.has(b.name);
+            const disc = Math.round(((b.price - b.discount_price) / b.price) * 100);
+            batchHtml += `
+                <div class="disco-card-bestseller" data-product-id="${b.id}" data-product-name="${b.name}">
+                    <span class="disco-bestseller-ribbon">BESTSELLER</span>
+                    <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${b.name}" aria-label="Toggle Wishlist">
+                        <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
+                    </button>
+                    <span class="disco-deal-tag-pill">${cfg.bestseller.tag || 'HOT DEAL'}</span>
+                    <div class="disco-bestseller-img-wrap">
+                        <img class="disco-bestseller-img" src="${b.src}" alt="${b.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                    </div>
+                    <div class="disco-prod-meta">
+                        <span class="disco-prod-brand">${b.brand || 'MegaMart'}</span>
+                        <div class="disco-prod-name" title="${b.name}">${b.name}</div>
+                        <div class="disco-prod-pricing">
+                            <span class="disco-price-bold">₹${b.discount_price}</span>
+                            <span class="disco-mrp-cut">₹${b.price}</span>
+                            <span class="disco-disc-green">${disc}% OFF</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Card 4: Streetwear / Trend Tile (Image 2 Bottom Right)
+        if (cfg.trend) {
+            const t = cfg.trend.item;
+            const isWish = this.wishlist.has(t.name);
+            const disc = Math.round(((t.price - t.discount_price) / t.price) * 100);
+            batchHtml += `
+                <div class="disco-card-trend" data-product-id="${t.id}" data-product-name="${t.name}">
+                    <span class="disco-trend-badge">${cfg.trend.tag || 'TRENDING'}</span>
+                    <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${t.name}" aria-label="Toggle Wishlist">
+                        <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
+                    </button>
+                    <div class="disco-bestseller-img-wrap">
+                        <img class="disco-bestseller-img" src="${t.src}" alt="${t.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                    </div>
+                    <div class="disco-prod-meta">
+                        <span class="disco-prod-brand">${t.brand || 'MegaMart'}</span>
+                        <div class="disco-prod-name" title="${t.name}">${t.name}</div>
+                        <div class="disco-prod-pricing">
+                            <span class="disco-price-bold">₹${t.discount_price}</span>
+                            <span class="disco-mrp-cut">₹${t.price}</span>
+                            <span class="disco-disc-green">${disc}% OFF</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = batchHtml;
+        while (tempDiv.firstChild) {
+            this.searchHubMasonryGrid.appendChild(tempDiv.firstChild);
+        }
+
+        if (window.lucide) lucide.createIcons();
+        this.searchHubIsLoading = false;
+    }
+
+    executeSearchHubQuery(query) {
+        if (!this.searchHubMasonryGrid) return;
+        const q = (query || '').toLowerCase().trim();
+        if (!q) {
+            this.renderSearchHubDiscoveryFeed(true);
+            return;
+        }
+
+        const matches = this.data.filter(item => 
+            (item.name && item.name.toLowerCase().includes(q)) ||
+            (item.brand && item.brand.toLowerCase().includes(q)) ||
+            (item.subType && item.subType.toLowerCase().includes(q)) ||
+            (item.type && item.type.toLowerCase().includes(q))
+        );
+
+        if (this.searchHubResultsMeta) {
+            this.searchHubResultsMeta.style.display = 'flex';
+            if (this.searchHubResultsCount) {
+                this.searchHubResultsCount.textContent = `Found ${matches.length} products for "${query}"`;
+            }
+        }
+        if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'none';
+        if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'none';
+
+        if (matches.length === 0) {
+            this.searchHubMasonryGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b;">No products found for "${query}"</h3>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 6px;">Try searching for "Kurtas", "Sherwani", "Jeans", or "Sneakers"</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        matches.slice(0, 30).forEach(item => {
+            const isWish = this.wishlist.has(item.name);
+            const disc = Math.round(((item.price - item.discount_price) / item.price) * 100);
+            html += `
+                <div class="disco-card-bestseller" data-product-name="${item.name}">
+                    ${item.isFlashDeal ? '<span class="disco-bestseller-ribbon" style="background: #f43f5e;">FLASH DEAL</span>' : ''}
+                    <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${item.name}" aria-label="Toggle Wishlist">
+                        <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
+                    </button>
+                    <span class="disco-deal-tag-pill">⚡ 10 MINS</span>
+                    <div class="disco-bestseller-img-wrap">
+                        <img class="disco-bestseller-img" src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                    </div>
+                    <div class="disco-prod-meta">
+                        <span class="disco-prod-brand">${item.brand || 'MegaMart'}</span>
+                        <div class="disco-prod-name" title="${item.name}">${item.name}</div>
+                        <div class="disco-prod-pricing">
+                            <span class="disco-price-bold">₹${item.discount_price}</span>
+                            <span class="disco-mrp-cut">₹${item.price}</span>
+                            <span class="disco-disc-green">${disc}% OFF</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        this.searchHubMasonryGrid.innerHTML = html;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    applySearchHubFilter(filterKey) {
+        if (!this.searchHubMasonryGrid) return;
+        if (filterKey === 'all') {
+            this.renderSearchHubDiscoveryFeed(true);
+            return;
+        }
+
+        let filtered = [];
+        if (filterKey === 'gender') {
+            filtered = this.data.filter(p => p.type === 'Fashion & Apparel');
+        } else if (filterKey === 'categories') {
+            this.showCategoriesHubView();
+            return;
+        } else if (filterKey === 'under999') {
+            filtered = this.data.filter(p => p.discount_price <= 999);
+        } else if (filterKey === 'fast') {
+            filtered = this.data.filter(p => p.stock >= 20 || p.isFlashDeal);
+        } else if (filterKey === 'topbrands') {
+            const brands = ['manyavar', 'raymond', 'levi', 'peter england', 'allen solly', 'puma', 'adidas', 'nike', 'biba', 'libas'];
+            filtered = this.data.filter(p => brands.some(b => (p.brand || '').toLowerCase().includes(b)));
+        } else if (filterKey === 'sort') {
+            filtered = [...this.data].sort((a,b) => a.discount_price - b.discount_price);
+        }
+
+        if (filtered.length > 0) {
+            let html = '';
+            filtered.slice(0, 24).forEach(item => {
+                const isWish = this.wishlist.has(item.name);
+                const disc = Math.round(((item.price - item.discount_price) / item.price) * 100);
+                html += `
+                    <div class="disco-card-bestseller" data-product-name="${item.name}">
+                        <span class="disco-bestseller-ribbon">${filterKey.toUpperCase()}</span>
+                        <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${item.name}" aria-label="Toggle Wishlist">
+                            <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
+                        </button>
+                        <span class="disco-deal-tag-pill">⚡ FAST</span>
+                        <div class="disco-bestseller-img-wrap">
+                            <img class="disco-bestseller-img" src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
+                        </div>
+                        <div class="disco-prod-meta">
+                            <span class="disco-prod-brand">${item.brand || 'MegaMart'}</span>
+                            <div class="disco-prod-name" title="${item.name}">${item.name}</div>
+                            <div class="disco-prod-pricing">
+                                <span class="disco-price-bold">₹${item.discount_price}</span>
+                                <span class="disco-mrp-cut">₹${item.price}</span>
+                                <span class="disco-disc-green">${disc}% OFF</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            this.searchHubMasonryGrid.innerHTML = html;
+            if (window.lucide) lucide.createIcons();
+        }
     }
 
     renderCategoriesHub(selectedCategory = 'Trending Now') {
@@ -4307,6 +4965,18 @@ export class ContainerView {
                 openModal();
             }
         });
+
+        // Profile Delivery Location & Pincode Card Bindings (Image 1 Requirement)
+        const profileLocCard = document.getElementById('profileLocationCard');
+        const profileChangeBtn = document.getElementById('profileChangeLocationBtn');
+        const profileSavedAddresses = document.getElementById('profileSavedAddressesBtn');
+        profileLocCard?.addEventListener('click', openModal);
+        profileChangeBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal();
+        });
+        profileSavedAddresses?.addEventListener('click', openModal);
+
         closeBtn?.addEventListener('click', closeModal);
         overlay?.addEventListener('click', closeModal);
 
@@ -4380,6 +5050,14 @@ export class ContainerView {
         if (addressSpan) {
             addressSpan.innerHTML = `${city}, ${pin} <i data-lucide="chevron-down"></i>`;
             if (window.lucide) lucide.createIcons();
+        }
+        const profileAddr = document.getElementById('profileDeliveryAddressText');
+        if (profileAddr) {
+            profileAddr.textContent = `${city}, ${pin}`;
+        }
+        const profileBadge = document.getElementById('profileMenuPincodeBadge');
+        if (profileBadge) {
+            profileBadge.textContent = pin;
         }
     }
 
