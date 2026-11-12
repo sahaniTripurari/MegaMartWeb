@@ -977,6 +977,7 @@ export class ContainerView {
         this.currentCategory = 'All Products';
         this.activeFilterTag = 'all';
         this.sliderInterval = null;
+        this.currentUser = this.loadUserFromStorage();
         this.wishlist = this.loadWishlistFromStorage();
         this.savedForLater = this.loadSavedForLaterFromStorage();
         this.megaCoins = this.loadMegaCoinsFromStorage();
@@ -984,7 +985,6 @@ export class ContainerView {
         this.redeemedCoinsValue = 0;
         this.megaCarouselIndex = 0;
         this.megaCarouselInterval = null;
-        this.currentUser = this.loadUserFromStorage();
 
         // Shopsy / Flipkart Dynamic Filter & Mega Menu Bindings
         this.categoryFilterSidebar = document.getElementById('categoryFilterSidebar');
@@ -4396,7 +4396,8 @@ export class ContainerView {
     // ================= WISHLIST SYSTEM =================
     loadWishlistFromStorage() {
         try {
-            const saved = localStorage.getItem('megamart_wishlist');
+            const key = this.getUserStorageKey('megamart_wishlist');
+            const saved = localStorage.getItem(key);
             if (saved) {
                 const parsed = JSON.parse(saved);
                 return new Set(Array.isArray(parsed) ? parsed : []);
@@ -4409,7 +4410,8 @@ export class ContainerView {
 
     saveWishlistToStorage() {
         try {
-            localStorage.setItem('megamart_wishlist', JSON.stringify([...this.wishlist]));
+            const key = this.getUserStorageKey('megamart_wishlist');
+            localStorage.setItem(key, JSON.stringify([...(this.wishlist || [])]));
         } catch (e) {
             console.error('Error saving wishlist to storage:', e);
         }
@@ -4438,17 +4440,28 @@ export class ContainerView {
     updateWishlistButtonStates() {
         document.querySelectorAll('.wishlist-card-btn').forEach(btn => {
             const name = btn.dataset.name;
-            if (this.wishlist.has(name)) {
+            if (this.wishlist && this.wishlist.has(name)) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         });
 
+        document.querySelectorAll('.disco-wishlist-toggle').forEach(btn => {
+            const name = btn.dataset.productName;
+            const isWish = !!(this.wishlist && this.wishlist.has(name));
+            btn.classList.toggle('active', isWish);
+            const icon = btn.querySelector('i, svg');
+            if (icon) {
+                icon.style.fill = isWish ? '#ef4444' : 'none';
+                icon.style.color = isWish ? '#ef4444' : '#64748b';
+            }
+        });
+
         const pdBtn = document.getElementById('pdWishlistBtn');
         if (pdBtn) {
             const name = pdBtn.dataset.name;
-            if (this.wishlist.has(name)) {
+            if (this.wishlist && this.wishlist.has(name)) {
                 pdBtn.classList.add('active');
             } else {
                 pdBtn.classList.remove('active');
@@ -4457,7 +4470,8 @@ export class ContainerView {
     }
 
     updateWishlistUI() {
-        const count = this.wishlist.size;
+        const count = this.wishlist ? this.wishlist.size : 0;
+        this.updateWishlistButtonStates();
         if (this.wishlistCount) this.wishlistCount.textContent = count;
         if (this.mobileWishlistCount) this.mobileWishlistCount.textContent = count;
         if (this.bottomWishlistCount) this.bottomWishlistCount.textContent = count;
@@ -4772,12 +4786,22 @@ export class ContainerView {
                 cartState[item.name] = item.quantity;
             }
         });
-        localStorage.setItem('megamart_cart', JSON.stringify(cartState));
+        const key = this.getUserStorageKey('megamart_cart');
+        localStorage.setItem(key, JSON.stringify(cartState));
     }
 
     loadCartFromStorage() {
         try {
-            const saved = localStorage.getItem('megamart_cart');
+            // First reset all item quantities to 0 in memory and DOM
+            this.data.forEach(item => {
+                if (item.quantity > 0) {
+                    item.quantity = 0;
+                    this.updateAllCardDOMs(item);
+                }
+            });
+
+            const key = this.getUserStorageKey('megamart_cart');
+            const saved = localStorage.getItem(key);
             if (saved) {
                 const cartState = JSON.parse(saved);
                 let restoredCount = 0;
@@ -4788,9 +4812,9 @@ export class ContainerView {
                         this.updateAllCardDOMs(item);
                     }
                 });
-                if (restoredCount > 0) {
-                    this.updateCartUI();
-                }
+                this.updateCartUI();
+            } else {
+                this.updateCartUI();
             }
         } catch (e) {
             console.error('Error loading cart from storage:', e);
@@ -5415,16 +5439,27 @@ export class ContainerView {
 
     loadMegaCoinsFromStorage() {
         try {
-            const saved = localStorage.getItem('megamart_coins');
-            return saved !== null ? parseInt(saved, 10) : 150;
+            const key = this.getUserStorageKey('megamart_coins');
+            const saved = localStorage.getItem(key);
+            if (saved !== null) {
+                return parseInt(saved, 10);
+            }
+            if (this.currentUser) {
+                if (this.currentUser.email === 'tripurarisahni@gmail.com' || this.currentUser.isDemo) {
+                    return 268;
+                }
+                return 50; // New user bonus
+            }
+            return 0; // Guest starts with 0
         } catch (e) {
-            return 150;
+            return this.currentUser ? 50 : 0;
         }
     }
 
     saveMegaCoinsToStorage() {
         try {
-            localStorage.setItem('megamart_coins', this.megaCoins.toString());
+            const key = this.getUserStorageKey('megamart_coins');
+            localStorage.setItem(key, (this.megaCoins || 0).toString());
         } catch (e) {
             console.error('Error saving coins:', e);
         }
@@ -5472,7 +5507,8 @@ export class ContainerView {
     // ================= DEDICATED FULL-PAGE CART VIEW =================
     loadSavedForLaterFromStorage() {
         try {
-            const raw = localStorage.getItem('megamart_saved_for_later');
+            const key = this.getUserStorageKey('megamart_saved_for_later');
+            const raw = localStorage.getItem(key);
             return raw ? JSON.parse(raw) : [];
         } catch (e) {
             return [];
@@ -5481,7 +5517,8 @@ export class ContainerView {
 
     saveSavedForLaterToStorage() {
         try {
-            localStorage.setItem('megamart_saved_for_later', JSON.stringify(this.savedForLater));
+            const key = this.getUserStorageKey('megamart_saved_for_later');
+            localStorage.setItem(key, JSON.stringify(this.savedForLater || []));
         } catch (e) {}
     }
 
@@ -7205,6 +7242,13 @@ export class ContainerView {
             };
             this.currentUser = demoUser;
             this.saveUserToStorage(demoUser);
+            // Reset in-memory quantities first
+            this.data.forEach(item => {
+                if (item.quantity > 0) {
+                    item.quantity = 0;
+                    this.updateAllCardDOMs(item);
+                }
+            });
             // Switch session data
             this.loadCartFromStorage();
             this.wishlist = this.loadWishlistFromStorage();
@@ -7242,6 +7286,13 @@ export class ContainerView {
             };
             this.currentUser = activeUser;
             this.saveUserToStorage(activeUser);
+            // Reset in-memory quantities first
+            this.data.forEach(item => {
+                if (item.quantity > 0) {
+                    item.quantity = 0;
+                    this.updateAllCardDOMs(item);
+                }
+            });
             // Switch session data
             this.loadCartFromStorage();
             this.wishlist = this.loadWishlistFromStorage();
