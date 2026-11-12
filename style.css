@@ -14653,6 +14653,7 @@ body.in-search-hub-mode .category-tabs-nav {
 
   body.mobile-hide-global-header .orders-page-topbar,
   body.mobile-hide-global-header .wishlist-page-topbar,
+  body.mobile-hide-global-header .cart-page-topbar,
   body.mobile-hide-global-header .cart-page-header,
   body.mobile-hide-global-header .product-detail-topbar {
     top: 0 !important;
