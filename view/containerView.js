@@ -5045,9 +5045,9 @@ export class ContainerView {
             coinsRedeemed: coinsDiscount
         };
 
-        const existingOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const existingOrders = this.getUserOrders();
         existingOrders.unshift(orderRecord);
-        localStorage.setItem('megamart_orders', JSON.stringify(existingOrders));
+        this.saveUserOrders(existingOrders);
 
         // Persist Order into Supabase Cloud PostgreSQL DB
         try {
@@ -7205,7 +7205,17 @@ export class ContainerView {
             };
             this.currentUser = demoUser;
             this.saveUserToStorage(demoUser);
+            // Switch session data
+            this.loadCartFromStorage();
+            this.wishlist = this.loadWishlistFromStorage();
+            this.savedForLater = this.loadSavedForLaterFromStorage();
+            this.megaCoins = this.loadMegaCoinsFromStorage();
             this.updateAuthUI();
+            this.updateCartUI();
+            this.updateWishlistUI();
+            this.updateMegaCoinsUI();
+            this.updateProfileStats();
+            this.renderOrdersPageView();
             this.closeAuthModal();
             this.showToast('👋 Welcome back, Tripurari Sahni!');
             return;
@@ -7232,7 +7242,17 @@ export class ContainerView {
             };
             this.currentUser = activeUser;
             this.saveUserToStorage(activeUser);
+            // Switch session data
+            this.loadCartFromStorage();
+            this.wishlist = this.loadWishlistFromStorage();
+            this.savedForLater = this.loadSavedForLaterFromStorage();
+            this.megaCoins = this.loadMegaCoinsFromStorage();
             this.updateAuthUI();
+            this.updateCartUI();
+            this.updateWishlistUI();
+            this.updateMegaCoinsUI();
+            this.updateProfileStats();
+            this.renderOrdersPageView();
             this.closeAuthModal();
             this.showToast(`👋 Welcome back, ${found.name.split(' ')[0]}!`);
             return;
@@ -7251,7 +7271,16 @@ export class ContainerView {
 
         this.currentUser = newUser;
         this.saveUserToStorage(newUser);
+        this.loadCartFromStorage();
+        this.wishlist = this.loadWishlistFromStorage();
+        this.savedForLater = this.loadSavedForLaterFromStorage();
+        this.megaCoins = this.loadMegaCoinsFromStorage();
         this.updateAuthUI();
+        this.updateCartUI();
+        this.updateWishlistUI();
+        this.updateMegaCoinsUI();
+        this.updateProfileStats();
+        this.renderOrdersPageView();
         this.closeAuthModal();
         this.showToast(`👋 Welcome to MegaMart, ${capitalized}!`);
     }
@@ -7336,17 +7365,251 @@ export class ContainerView {
         this.currentUser = sessionUser;
         this.saveUserToStorage(sessionUser);
 
+        // Clear previous in-memory quantities
+        this.data.forEach(item => {
+            if (item.quantity > 0) {
+                item.quantity = 0;
+                this.updateAllCardDOMs(item);
+            }
+        });
+
+        // Initialize fresh empty scoped storage for this new user
+        localStorage.setItem(this.getUserStorageKey('megamart_cart'), '{}');
+        this.wishlist = new Set();
+        this.saveWishlistToStorage();
+        this.savedForLater = [];
+        this.saveSavedForLaterToStorage();
+        this.megaCoins = 50; // 50 Welcome bonus coins
+        this.saveMegaCoinsToStorage();
+        this.saveUserOrders([]);
+
         this.updateAuthUI();
+        this.updateCartUI();
+        this.updateWishlistUI();
+        this.updateMegaCoinsUI();
+        this.updateProfileStats();
+        this.renderOrdersPageView();
         this.closeAuthModal();
-        this.showToast(`🎉 Welcome to MegaMart, ${name.split(' ')[0]}! Account created.`);
+        this.showToast(`🎉 Welcome to MegaMart, ${name.split(' ')[0]}! Fresh account created with 🪙 50 Welcome Coins.`);
     }
 
     logout() {
         this.clearUserFromStorage();
         this.currentUser = null;
+        // Reset in-memory cart items
+        this.data.forEach(item => {
+            if (item.quantity > 0) {
+                item.quantity = 0;
+                this.updateAllCardDOMs(item);
+            }
+        });
+        // Load guest data
+        this.loadCartFromStorage();
+        this.wishlist = this.loadWishlistFromStorage();
+        this.savedForLater = this.loadSavedForLaterFromStorage();
+        this.megaCoins = this.loadMegaCoinsFromStorage();
         this.updateAuthUI();
+        this.updateCartUI();
+        this.updateWishlistUI();
+        this.updateMegaCoinsUI();
         this.updateProfileStats();
-        this.showToast('🚪 Logged out successfully. See you again soon!');
+        this.renderOrdersPageView();
+        this.showToast('🚪 Logged out successfully. You are now in Guest Mode.');
+    }
+
+    getUserStorageKey(prefix) {
+        if (this.currentUser && (this.currentUser.email || this.currentUser.phone)) {
+            const id = (this.currentUser.email || this.currentUser.phone).toLowerCase().replace(/[^a-z0-9]/g, '_');
+            return `${prefix}_${id}`;
+        }
+        return `${prefix}_guest`;
+    }
+
+    getUserOrders() {
+        try {
+            const key = this.getUserStorageKey('megamart_orders');
+            const saved = localStorage.getItem(key);
+            if (saved) return JSON.parse(saved);
+            // If demo user and nothing saved in scoped key yet, check legacy megamart_orders
+            if (this.currentUser && (this.currentUser.email === 'tripurarisahni@gmail.com' || this.currentUser.isDemo)) {
+                const legacy = localStorage.getItem('megamart_orders');
+                if (legacy) {
+                    try { return JSON.parse(legacy); } catch(e) {}
+                }
+            }
+            return [];
+        } catch (e) {
+            console.error('Error getting user orders:', e);
+            return [];
+        }
+    }
+
+    saveUserOrders(orders) {
+        try {
+            const key = this.getUserStorageKey('megamart_orders');
+            localStorage.setItem(key, JSON.stringify(orders || []));
+        } catch (e) {
+            console.error('Error saving user orders:', e);
+        }
+    }
+
+    updateProfileViewData() {
+        const addressesContent = document.getElementById('profileAddressesContent');
+        const paymentsContent = document.getElementById('profilePaymentsContent');
+        const profileVipBadge = document.getElementById('profileVipBadge');
+        const profileVerifiedBadge = document.getElementById('profileVerifiedBadge');
+        const profileSavingsDisplay = document.getElementById('profileSavingsDisplay');
+
+        const isDemo = this.currentUser && (this.currentUser.email === 'tripurarisahni@gmail.com' || this.currentUser.isDemo);
+        const isRegistered = !!this.currentUser;
+
+        if (profileVipBadge) {
+            profileVipBadge.style.display = isRegistered ? 'inline-flex' : 'none';
+        }
+        if (profileVerifiedBadge) {
+            profileVerifiedBadge.style.display = isRegistered ? 'inline-flex' : 'none';
+        }
+        if (profileSavingsDisplay) {
+            profileSavingsDisplay.textContent = isDemo ? '₹450' : (isRegistered ? '₹50' : '₹0');
+        }
+
+        // 1. Addresses & Pincodes
+        if (addressesContent) {
+            if (isDemo) {
+                addressesContent.innerHTML = `
+                    <div class="profile-sub-option-card active">
+                        <div class="sub-option-icon"><i data-lucide="home"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Home (Primary Address)</strong>
+                                <span class="sub-option-badge">Default</span>
+                            </div>
+                            <p class="sub-option-desc">Flat 402, Sea Green Apartments, Bandra West, Mumbai - 400001</p>
+                        </div>
+                    </div>
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="building"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Office / Tech Park</strong>
+                            </div>
+                            <p class="sub-option-desc">Tower B, Express Delivery Zone, Mumbai - 400069</p>
+                        </div>
+                    </div>
+                `;
+            } else if (isRegistered) {
+                const addr = this.currentAddress || 'Mumbai, 400001';
+                addressesContent.innerHTML = `
+                    <div class="profile-sub-option-card active">
+                        <div class="sub-option-icon"><i data-lucide="home"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Primary Delivery Address</strong>
+                                <span class="sub-option-badge">Active</span>
+                            </div>
+                            <p class="sub-option-desc">${addr} • 10-Minute Express Dark Store Active</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                addressesContent.innerHTML = `
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="map-pin"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Location: ${this.currentAddress || 'Mumbai, 400001'}</strong>
+                            </div>
+                            <p class="sub-option-desc">Sign in or register to save multiple doorstep delivery addresses</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 2. Payments & Refunds
+        if (paymentsContent) {
+            if (isDemo) {
+                paymentsContent.innerHTML = `
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="smartphone"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Saved UPI ID</strong>
+                                <span class="sub-option-badge verified">Verified ✓</span>
+                            </div>
+                            <p class="sub-option-desc">tripurari@okhdfcbank • Instant 1-Click Pay</p>
+                        </div>
+                    </div>
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="credit-card"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>HDFC Bank Millennia Debit Card</strong>
+                                <span class="sub-option-badge">Visa</span>
+                            </div>
+                            <p class="sub-option-desc">•••• •••• •••• 4920 (Expires 08/29)</p>
+                        </div>
+                    </div>
+                    <div class="profile-sub-option-card refund-status-card">
+                        <div class="sub-option-icon"><i data-lucide="refresh-cw"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Instant Refund Log</strong>
+                                <span class="sub-option-badge green">₹0 Pending</span>
+                            </div>
+                            <p class="sub-option-desc">✓ Last refund of ₹120 credited to bank on 10 Nov</p>
+                        </div>
+                    </div>
+                `;
+            } else if (isRegistered) {
+                const upiHandle = (this.currentUser.phone ? `${this.currentUser.phone}@upi` : `${this.currentUser.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@okhdfcbank`);
+                paymentsContent.innerHTML = `
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="smartphone"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Saved UPI ID</strong>
+                                <span class="sub-option-badge verified">Active ✓</span>
+                            </div>
+                            <p class="sub-option-desc">${upiHandle} • Instant 1-Click Pay</p>
+                        </div>
+                    </div>
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="credit-card"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>No Saved Cards</strong>
+                            </div>
+                            <p class="sub-option-desc">Add a debit/credit card during checkout for 1-click tokenized pay</p>
+                        </div>
+                    </div>
+                    <div class="profile-sub-option-card refund-status-card">
+                        <div class="sub-option-icon"><i data-lucide="refresh-cw"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Instant Refund Log</strong>
+                                <span class="sub-option-badge green">₹0 Pending</span>
+                            </div>
+                            <p class="sub-option-desc">✓ No refunds pending • All orders in good standing</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                paymentsContent.innerHTML = `
+                    <div class="profile-sub-option-card">
+                        <div class="sub-option-icon"><i data-lucide="shield-check"></i></div>
+                        <div class="sub-option-content">
+                            <div class="sub-option-title-row">
+                                <strong>Guest Checkout Mode</strong>
+                            </div>
+                            <p class="sub-option-desc">Pay via UPI, Cards, NetBanking or Cash on Delivery at checkout</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        if (window.lucide) lucide.createIcons();
     }
 
     clearUserFromStorage() {
@@ -7429,11 +7692,20 @@ export class ContainerView {
     }
 
     updateProfileStats() {
-        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const orders = this.getUserOrders();
         const profileOrdersCount = document.getElementById('profileOrdersCount');
         if (profileOrdersCount) {
             profileOrdersCount.textContent = orders.length;
         }
+        const profileCoinBalance = document.getElementById('profileCoinBalance');
+        if (profileCoinBalance) {
+            profileCoinBalance.textContent = this.megaCoins || 0;
+        }
+        const profileCoinBalanceDisplay = document.getElementById('profileCoinBalanceDisplay');
+        if (profileCoinBalanceDisplay) {
+            profileCoinBalanceDisplay.textContent = this.megaCoins || 0;
+        }
+        this.updateProfileViewData();
     }
 
     // ================= ORDER HISTORY DRAWER SYSTEM =================
@@ -7478,14 +7750,14 @@ export class ContainerView {
         trackingOverlay?.addEventListener('click', closeTracker);
 
         profileTrackBtn?.addEventListener('click', () => {
-            const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+            const orders = this.getUserOrders();
             const latestId = orders[0]?.orderId || '#MM-89214';
             this.openLiveTracker(latestId);
         });
 
         trackFooterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
-            const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+            const orders = this.getUserOrders();
             const latestId = orders[0]?.orderId || '#MM-89214';
             this.openLiveTracker(latestId);
         });
@@ -7504,7 +7776,7 @@ export class ContainerView {
 
         if (!drawer || !body) return;
 
-        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const orders = this.getUserOrders();
 
         if (orders.length === 0) {
             body.innerHTML = `
@@ -7583,7 +7855,7 @@ export class ContainerView {
 
         if (titleEl) titleEl.textContent = orderId || 'Order #MM-89214';
 
-        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const orders = this.getUserOrders();
         const matching = orders.find(o => o.orderId === orderId);
         const summaryBox = document.getElementById('trackingOrderSummary');
         if (summaryBox) {
@@ -7755,7 +8027,7 @@ export class ContainerView {
         const empty = document.getElementById('ordersPageEmpty');
         const countPill = document.getElementById('ordersPageCountPill');
 
-        const allOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const allOrders = this.getUserOrders();
         const count = allOrders.length;
 
         if (countPill) countPill.textContent = `${count} Order${count === 1 ? '' : 's'} Placed`;
@@ -7906,7 +8178,7 @@ export class ContainerView {
                 const reorderBtn = e.target.closest('.order-reorder-btn');
                 if (reorderBtn) {
                     const orderId = reorderBtn.dataset.orderId;
-                    const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+                    const orders = this.getUserOrders();
                     const order = orders.find(o => o.orderId === orderId);
                     if (order && order.items) {
                         let reorderedCount = 0;
@@ -8193,7 +8465,7 @@ export class ContainerView {
         chatBody.scrollTop = chatBody.scrollHeight;
 
         // User Context for History, Cart & Support
-        const userOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const userOrders = this.getUserOrders();
         const activeCart = this.data.filter(i => i.quantity > 0);
         const context = {
             orders: userOrders,

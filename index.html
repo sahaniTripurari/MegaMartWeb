@@ -99,20 +99,20 @@
                     <!-- Logged In State: User Menu & Dropdown -->
                     <div class="header-user-menu" id="headerUserMenu" style="display: none;">
                         <button class="header-user-btn" id="headerUserBtn" aria-haspopup="true" aria-expanded="false" title="Account Menu">
-                            <div class="user-avatar-pill" id="headerUserAvatar">TS</div>
+                            <div class="user-avatar-pill" id="headerUserAvatar">GU</div>
                             <div class="user-name-box">
                                 <span class="user-greeting-sub">Hi,</span>
-                                <span class="user-greeting-name" id="headerUserName">Tripurari</span>
+                                <span class="user-greeting-name" id="headerUserName">Guest</span>
                             </div>
                             <i data-lucide="chevron-down" class="user-chevron"></i>
                         </button>
 
                         <div class="header-user-dropdown" id="headerUserDropdown" role="menu">
                             <div class="dropdown-profile-header">
-                                <div class="dropdown-avatar-large" id="dropdownUserAvatar">TS</div>
+                                <div class="dropdown-avatar-large" id="dropdownUserAvatar">GU</div>
                                 <div class="dropdown-user-info">
-                                    <h4 id="dropdownUserName">Tripurari Sahni</h4>
-                                    <p id="dropdownUserEmail">tripurarisahni@gmail.com</p>
+                                    <h4 id="dropdownUserName">Guest User</h4>
+                                    <p id="dropdownUserEmail">Sign in to view account</p>
                                     <span class="verified-badge"><i data-lucide="shield-check"></i> Verified Member</span>
                                 </div>
                             </div>
@@ -1257,14 +1257,14 @@
                             <div class="profile-avatar" id="profileAvatar">
                                 <span id="profileAvatarText"><i data-lucide="user"></i></span>
                             </div>
-                            <span class="avatar-verified-badge" title="Verified User"><i data-lucide="check"></i></span>
+                            <span class="avatar-verified-badge" id="profileVerifiedBadge" title="Verified User" style="display:none;"><i data-lucide="check"></i></span>
                         </div>
                         <div class="profile-info">
                             <div class="profile-name-row">
-                                <h2 id="profileUserName">Tripurari Sahni</h2>
-                                <span class="profile-vip-pill"><i data-lucide="crown"></i> SuperSaver VIP</span>
+                                <h2 id="profileUserName">Guest User</h2>
+                                <span class="profile-vip-pill" id="profileVipBadge" style="display:none;"><i data-lucide="crown"></i> SuperSaver VIP</span>
                             </div>
-                            <p id="profileUserContact">+91 9876543210 • tripurarisahni@gmail.com</p>
+                            <p id="profileUserContact">Sign in to access orders, wishlist, and rewards</p>
                         </div>
                         <button class="auth-btn-profile" id="profileLoginBtn" style="display:none;"><i data-lucide="log-in"></i> Sign In</button>
                         <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile Details"><i data-lucide="edit-3"></i></button>
@@ -1274,17 +1274,17 @@
                     <div class="profile-stats">
                         <div class="stat-card">
                             <div class="stat-icon-wrap stat-orders"><i data-lucide="package"></i></div>
-                            <span class="stat-value" id="profileOrdersCount">3</span>
+                            <span class="stat-value" id="profileOrdersCount">0</span>
                             <span class="stat-label">Orders</span>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon-wrap stat-coins"><i data-lucide="coins"></i></div>
-                            <span class="stat-value" id="profileCoinBalance">268</span>
+                            <span class="stat-value" id="profileCoinBalance">0</span>
                             <span class="stat-label">MegaCoins</span>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon-wrap stat-savings"><i data-lucide="wallet"></i></div>
-                            <span class="stat-value">₹450</span>
+                            <span class="stat-value" id="profileSavingsCount">₹0</span>
                             <span class="stat-label">Saved</span>
                         </div>
                         <div class="stat-card">
@@ -1305,7 +1305,7 @@
                                 </div>
                             </div>
                             <div class="coins-balance-display">
-                                <span class="coins-number" id="profileCoinBalanceDisplay">268</span>
+                                <span class="coins-number" id="profileCoinBalanceDisplay">0</span>
                                 <span class="coins-unit">Coins</span>
                             </div>
                         </div>
@@ -1368,24 +1368,8 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profileAddressesPanel" style="display:none;">
-                                    <div class="profile-sub-option-card active">
-                                        <div class="sub-option-icon"><i data-lucide="home"></i></div>
-                                        <div class="sub-option-content">
-                                            <div class="sub-option-title-row">
-                                                <strong>Home (Primary Address)</strong>
-                                                <span class="sub-option-badge">Default</span>
-                                            </div>
-                                            <p class="sub-option-desc">Flat 402, Sea Green Apartments, Bandra West, Mumbai - 400001</p>
-                                        </div>
-                                    </div>
-                                    <div class="profile-sub-option-card">
-                                        <div class="sub-option-icon"><i data-lucide="building"></i></div>
-                                        <div class="sub-option-content">
-                                            <div class="sub-option-title-row">
-                                                <strong>Office / Tech Park</strong>
-                                            </div>
-                                            <p class="sub-option-desc">Tower B, Express Delivery Zone, Mumbai - 400069</p>
-                                        </div>
+                                    <div class="profile-sub-options-content" id="profileAddressesContent">
+                                        <!-- Dynamically populated via updateProfileViewData() -->
                                     </div>
                                     <button class="profile-sub-action-btn" id="addNewAddressBtn" type="button">
                                         <i data-lucide="plus"></i>
@@ -1408,35 +1392,8 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profilePaymentsPanel" style="display:none;">
-                                    <div class="profile-sub-option-card">
-                                        <div class="sub-option-icon"><i data-lucide="smartphone"></i></div>
-                                        <div class="sub-option-content">
-                                            <div class="sub-option-title-row">
-                                                <strong>Saved UPI ID</strong>
-                                                <span class="sub-option-badge verified">Verified ✓</span>
-                                            </div>
-                                            <p class="sub-option-desc">tripurari@okhdfcbank • Instant 1-Click Pay</p>
-                                        </div>
-                                    </div>
-                                    <div class="profile-sub-option-card">
-                                        <div class="sub-option-icon"><i data-lucide="credit-card"></i></div>
-                                        <div class="sub-option-content">
-                                            <div class="sub-option-title-row">
-                                                <strong>HDFC Bank Millennia Debit Card</strong>
-                                                <span class="sub-option-badge">Visa</span>
-                                            </div>
-                                            <p class="sub-option-desc">•••• •••• •••• 4920 (Expires 08/29)</p>
-                                        </div>
-                                    </div>
-                                    <div class="profile-sub-option-card refund-status-card">
-                                        <div class="sub-option-icon"><i data-lucide="refresh-cw"></i></div>
-                                        <div class="sub-option-content">
-                                            <div class="sub-option-title-row">
-                                                <strong>Instant Refund Log</strong>
-                                                <span class="sub-option-badge green">₹0 Pending</span>
-                                            </div>
-                                            <p class="sub-option-desc">✓ Last refund of ₹120 credited to bank on 10 Nov</p>
-                                        </div>
+                                    <div class="profile-sub-options-content" id="profilePaymentsContent">
+                                        <!-- Dynamically populated via updateProfileViewData() -->
                                     </div>
                                     <button class="profile-sub-action-btn" id="addNewPaymentBtn" type="button">
                                         <i data-lucide="plus"></i>
@@ -1952,7 +1909,7 @@
                     <label for="registerName">Full Name</label>
                     <div class="auth-input-field">
                         <i data-lucide="user" class="auth-field-icon"></i>
-                        <input type="text" id="registerName" placeholder="e.g. Tripurari Sahni" autocomplete="name" required>
+                        <input type="text" id="registerName" placeholder="Enter your full name" autocomplete="name" required>
                     </div>
                     <span class="auth-field-error" id="registerNameError"></span>
                 </div>
