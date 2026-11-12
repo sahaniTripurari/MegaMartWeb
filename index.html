@@ -1251,6 +1251,14 @@
         <div id="profileView" class="view-section" style="display: none;">
             <div class="container">
                 <div class="profile-layout">
+                    <!-- Desktop Top Back Navigation -->
+                    <div class="profile-top-nav-bar">
+                        <button class="desktop-view-back-btn" id="profilePageBackBtn" type="button" title="Back to Shopping">
+                            <i data-lucide="arrow-left"></i>
+                            <span>Back to Shopping</span>
+                        </button>
+                    </div>
+
                     <!-- Modern VIP Hero Card -->
                     <div class="profile-header">
                         <div class="profile-avatar-wrap">
@@ -1368,6 +1376,13 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profileAddressesPanel" style="display:none;">
+                                    <div class="panel-sub-header">
+                                        <button class="panel-back-btn" type="button" data-close-panel="profileAddressesPanel">
+                                            <i data-lucide="arrow-left"></i>
+                                            <span>Back</span>
+                                        </button>
+                                        <span class="panel-sub-title">Addresses &amp; Pincodes</span>
+                                    </div>
                                     <div class="profile-sub-options-content" id="profileAddressesContent">
                                         <!-- Dynamically populated via updateProfileViewData() -->
                                     </div>
@@ -1392,6 +1407,13 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profilePaymentsPanel" style="display:none;">
+                                    <div class="panel-sub-header">
+                                        <button class="panel-back-btn" type="button" data-close-panel="profilePaymentsPanel">
+                                            <i data-lucide="arrow-left"></i>
+                                            <span>Back</span>
+                                        </button>
+                                        <span class="panel-sub-title">Payments &amp; Refunds</span>
+                                    </div>
                                     <div class="profile-sub-options-content" id="profilePaymentsContent">
                                         <!-- Dynamically populated via updateProfileViewData() -->
                                     </div>
@@ -1411,6 +1433,13 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profileCouponsPanel" style="display:none;">
+                                    <div class="panel-sub-header">
+                                        <button class="panel-back-btn" type="button" data-close-panel="profileCouponsPanel">
+                                            <i data-lucide="arrow-left"></i>
+                                            <span>Back</span>
+                                        </button>
+                                        <span class="panel-sub-title">Coupons &amp; Deals</span>
+                                    </div>
                                     <div class="profile-coupon-item">
                                         <div class="coupon-left">
                                             <span class="coupon-code-pill">FESTIVE10</span>
@@ -1449,6 +1478,13 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profileSupportPanel" style="display:none;">
+                                    <div class="panel-sub-header">
+                                        <button class="panel-back-btn" type="button" data-close-panel="profileSupportPanel">
+                                            <i data-lucide="arrow-left"></i>
+                                            <span>Back</span>
+                                        </button>
+                                        <span class="panel-sub-title">24x7 Help &amp; Support</span>
+                                    </div>
                                     <button class="profile-sub-action-btn primary-ai" id="supportChatAiBtn" type="button">
                                         <i data-lucide="sparkles"></i>
                                         <span>Ask MegaAI Shopping Copilot</span>
@@ -1482,6 +1518,13 @@
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
                                 <div class="menu-sub-options-panel" id="profileSettingsPanel" style="display:none;">
+                                    <div class="panel-sub-header">
+                                        <button class="panel-back-btn" type="button" data-close-panel="profileSettingsPanel">
+                                            <i data-lucide="arrow-left"></i>
+                                            <span>Back</span>
+                                        </button>
+                                        <span class="panel-sub-title">Settings &amp; Preferences</span>
+                                    </div>
                                     <div class="profile-setting-row">
                                         <div class="setting-text">
                                             <strong>App Language</strong>
@@ -1528,6 +1571,10 @@
             <div class="container cart-page-container">
                 <!-- Top Bar -->
                 <div class="cart-page-topbar">
+                    <button class="desktop-view-back-btn" id="cartPageBackBtn" type="button" title="Back to Shopping">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Back</span>
+                    </button>
                     <div class="cart-page-heading">
                         <h2>Shopping Cart</h2>
                         <span class="cart-badge-pill" id="cartPageItemCount">0 Items</span>
@@ -1649,6 +1696,10 @@
             <div class="container wishlist-page-container">
                 <!-- Top Bar -->
                 <div class="wishlist-page-topbar">
+                    <button class="desktop-view-back-btn" id="wishlistPageBackBtn" type="button" title="Back to Shopping">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Back</span>
+                    </button>
                     <div class="wishlist-page-heading-wrap">
                         <h2>My Wishlist</h2>
                         <span class="wishlist-badge-pill" id="wishlistPageItemCount">0 Items</span>
@@ -1686,6 +1737,10 @@
             <div class="container orders-page-container">
                 <!-- Top Bar -->
                 <div class="orders-page-topbar">
+                    <button class="desktop-view-back-btn" id="ordersPageBackBtn" type="button" title="Back to Shopping">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Back</span>
+                    </button>
                     <div class="orders-page-heading-wrap">
                         <h2>My Orders & History</h2>
                         <span class="orders-badge-pill" id="ordersPageCountPill">0 Orders Placed</span>

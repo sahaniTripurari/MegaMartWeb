@@ -1534,6 +1534,7 @@ export class ContainerView {
         window.scrollTo({ top: 0, behavior: 'instant' });
 
         this.startSearchHubTypewriter();
+        setTimeout(() => { this.searchHubInput?.focus(); }, 80);
 
         if (initialQuery) {
             if (this.searchHubInput) {
@@ -1571,6 +1572,12 @@ export class ContainerView {
             this.updateNavHighlight('Profile');
         } else if (targetView === this.categoriesHubView) {
             this.currentCategory = 'Categories Hub';
+        } else if (targetView === this.cartPageView) {
+            this.currentCategory = 'Cart';
+        } else if (targetView === this.wishlistPageView) {
+            this.currentCategory = 'Wishlist';
+        } else if (targetView === this.ordersPageView) {
+            this.currentCategory = 'Orders';
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1914,32 +1921,26 @@ export class ContainerView {
             }
         }, { passive: true });
 
-        // Trigger Search Hub on Mobile Header Search Bar Click / Focus
+        // Trigger Search Hub on Header Search Bar Click / Focus (Both Mobile & Desktop)
         if (this.globalSearchInput) {
             this.globalSearchInput.addEventListener('click', (e) => {
-                if (window.innerWidth <= 900) {
-                    e.preventDefault();
-                    this.globalSearchInput.blur();
-                    this.showSearchHubView(this.globalSearchInput.value || '');
-                }
+                e.preventDefault();
+                this.globalSearchInput.blur();
+                this.showSearchHubView(this.globalSearchInput.value || '');
             });
             this.globalSearchInput.addEventListener('focus', (e) => {
-                if (window.innerWidth <= 900) {
-                    e.preventDefault();
-                    this.globalSearchInput.blur();
-                    this.showSearchHubView(this.globalSearchInput.value || '');
-                }
+                e.preventDefault();
+                this.globalSearchInput.blur();
+                this.showSearchHubView(this.globalSearchInput.value || '');
             });
         }
 
         const headerSearchBox = document.querySelector('.global-search-container .search-box');
         if (headerSearchBox) {
             headerSearchBox.addEventListener('click', (e) => {
-                if (window.innerWidth <= 900) {
-                    e.preventDefault();
-                    this.globalSearchInput?.blur();
-                    this.showSearchHubView(this.globalSearchInput?.value || '');
-                }
+                e.preventDefault();
+                this.globalSearchInput?.blur();
+                this.showSearchHubView(this.globalSearchInput?.value || '');
             });
         }
 
@@ -8301,6 +8302,28 @@ export class ContainerView {
                     if (panel) {
                         panel.style.display = 'flex';
                         if (window.lucide) lucide.createIcons();
+                    }
+                }
+            });
+        });
+
+        // Desktop Profile Top Back Button
+        document.getElementById('profilePageBackBtn')?.addEventListener('click', () => {
+            this.showHomeView();
+        });
+
+        // Sub-panel Back Buttons (Desktop & Panel Navigation)
+        document.querySelectorAll('.panel-back-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const panel = btn.closest('.menu-sub-options-panel');
+                if (panel) {
+                    panel.style.display = 'none';
+                    const group = optionGroups.find(g => g.panelId === panel.id);
+                    if (group) {
+                        const trigger = document.getElementById(group.triggerId);
+                        trigger?.classList.remove('expanded');
+                        trigger?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
                 }
             });

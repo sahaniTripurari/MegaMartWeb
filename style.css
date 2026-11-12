@@ -15708,3 +15708,131 @@ body.in-search-hub-mode .category-tabs-nav {
 .profile-toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(16px);
 }
+
+/* ================= DESKTOP TOP BACK BUTTONS & PROFILE SUBMENU BACK ================= */
+.desktop-view-back-btn {
+  display: none; /* strictly hidden on mobile devices */
+}
+
+.panel-sub-header {
+  display: none; /* hidden on mobile screens */
+}
+
+@media (min-width: 769px) {
+  /* Prominent sleek back button for Wishlist, Orders, Cart, Profile */
+  .desktop-view-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 9999px;
+    color: #1e293b;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .desktop-view-back-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #ff3269;
+    transform: translateX(-3px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .desktop-view-back-btn i,
+  .desktop-view-back-btn svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  .desktop-view-back-btn:hover i,
+  .desktop-view-back-btn:hover svg {
+    transform: translateX(-3px);
+  }
+
+  /* Profile page top nav bar */
+  .profile-top-nav-bar {
+    padding: 8px 0 16px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Profile sub-panel back header */
+  .panel-sub-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px 12px 14px;
+    border-bottom: 1.5px solid #f1f5f9;
+    margin-bottom: 10px;
+    background: #f8fafc;
+    border-radius: 12px;
+  }
+
+  .panel-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #1e293b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .panel-back-btn:hover {
+    background: #ff3269;
+    border-color: #ff3269;
+    color: #ffffff;
+    transform: translateX(-2px);
+  }
+
+  .panel-back-btn i,
+  .panel-back-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .panel-sub-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Desktop Search Hub Layout polish */
+@media (min-width: 900px) {
+  .search-hub-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 0 0 16px 16px;
+  }
+  .search-hub-filter-strip {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 10px 24px;
+  }
+  .search-hub-results-meta {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 10px 24px;
+  }
+}
