@@ -7788,7 +7788,7 @@ export const Model = [
             "stock": 45,
             "maxPerOrder": 4,
             "countryoforigin": "India",
-            "src": "https://images.unsplash.com/photo-1589310243389-9685613133b5?w=500&auto=format&fit=crop&q=80",
+            "src": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&auto=format&fit=crop&q=80",
             "isFlashDeal": true,
             "flashDiscount": "36% OFF",
             "megaCoins": 60,

@@ -1359,11 +1359,14 @@ export class ContainerView {
             if (subHeaderNav) subHeaderNav.style.display = '';
         }
 
-        // Dedicated Search Hub full-screen mode: hides standard top header
+        // Dedicated Search Hub full-screen mode: hides standard top header completely
+        const stickyNavbarsWrapper = document.getElementById('stickyNavbarsWrapper');
         if (activeView === this.searchHubView) {
             document.body.classList.add('in-search-hub-mode');
+            if (stickyNavbarsWrapper) stickyNavbarsWrapper.style.setProperty('display', 'none', 'important');
         } else {
             document.body.classList.remove('in-search-hub-mode');
+            if (stickyNavbarsWrapper) stickyNavbarsWrapper.style.removeProperty('display');
         }
 
         // Sync bottom nav active state
@@ -1536,6 +1539,10 @@ export class ContainerView {
 
     hideSearchHubView() {
         this.stopSearchHubTypewriter();
+        const stickyNavbarsWrapper = document.getElementById('stickyNavbarsWrapper');
+        if (stickyNavbarsWrapper) stickyNavbarsWrapper.style.removeProperty('display');
+        document.body.classList.remove('in-search-hub-mode');
+
         const targetView = this.previousActiveView || this.homeView;
         this.setActiveView(targetView);
         if (targetView === this.homeView) {
@@ -1572,6 +1579,7 @@ export class ContainerView {
         this.searchHubBatch = 0;
         this.searchHubIsLoading = false;
         this.searchHubActiveFilter = 'all';
+        this.searchHubCurrentFilteredList = null;
         this.searchHubPlaceholderTimer = null;
 
         // Back button navigation
@@ -1589,6 +1597,7 @@ export class ContainerView {
             if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
             if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
             if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.searchHubCurrentFilteredList = null;
             this.renderSearchHubDiscoveryFeed(true);
         });
 
@@ -1600,8 +1609,22 @@ export class ContainerView {
             if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
             if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
             this.searchHubActiveFilter = 'all';
+            this.searchHubCurrentFilteredList = null;
+
+            const genderLabel = document.getElementById('chipGenderLabel');
+            if (genderLabel) genderLabel.textContent = 'Gender';
+            const sortLabel = document.getElementById('chipSortLabel');
+            if (sortLabel) sortLabel.textContent = 'Sort';
+            const catLabel = document.getElementById('chipCategoriesLabel');
+            if (catLabel) catLabel.textContent = 'Categories';
+
             this.searchHubFilterStrip?.querySelectorAll('.search-chip').forEach(c => c.classList.remove('active'));
             this.searchHubFilterStrip?.querySelector('.search-chip[data-filter="all"]')?.classList.add('active');
+
+            document.querySelectorAll('#genderMenuOptions .popup-menu-item').forEach(b => b.classList.toggle('active', b.dataset.gender === 'all'));
+            document.querySelectorAll('#sortMenuOptions .popup-menu-item').forEach(b => b.classList.toggle('active', b.dataset.sort === 'featured'));
+            document.querySelectorAll('#categoriesMenuOptions .popup-menu-item').forEach(b => b.classList.toggle('active', b.dataset.category === 'all'));
+
             this.renderSearchHubDiscoveryFeed(true);
         });
 
@@ -1620,6 +1643,7 @@ export class ContainerView {
                     if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
                     if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
                     if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+                    this.searchHubCurrentFilteredList = null;
                     this.renderSearchHubDiscoveryFeed(true);
                 }
             }, 120);
@@ -1635,7 +1659,7 @@ export class ContainerView {
                     this.searchHubInput.value = sample;
                     if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
                     this.executeSearchHubQuery(sample);
-                    this.showToast(`🎙️ Voice Recognized: "${sample}"`);
+                    this.showToast(`🔍 Searching for "${sample}"`);
                 }
             }, 1300);
         });
@@ -1676,12 +1700,129 @@ export class ContainerView {
             this.showToast(`✨ Maya AI: Curated picks for "${prompt}"`);
         });
 
-        // Filter Strip Chips
+        // Popovers & Filter Dropdowns Management
+        const filterOverlay = document.getElementById('searchHubFilterOverlay');
+        const genderMenu = document.getElementById('searchHubGenderMenu');
+        const sortMenu = document.getElementById('searchHubSortMenu');
+        const catMenu = document.getElementById('searchHubCategoriesMenu');
+
+        const closeAllFilterMenus = () => {
+            if (filterOverlay) filterOverlay.style.display = 'none';
+            if (genderMenu) genderMenu.style.display = 'none';
+            if (sortMenu) sortMenu.style.display = 'none';
+            if (catMenu) catMenu.style.display = 'none';
+        };
+
+        const toggleMenu = (menuEl) => {
+            if (!menuEl) return;
+            const isShown = menuEl.style.display === 'flex';
+            closeAllFilterMenus();
+            if (!isShown) {
+                menuEl.style.display = 'flex';
+                if (filterOverlay) filterOverlay.style.display = 'block';
+                if (window.lucide) lucide.createIcons();
+            }
+        };
+
+        // Gender button click
+        document.getElementById('chipGenderBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu(genderMenu);
+        });
+
+        // Sort button click
+        document.getElementById('chipSortBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu(sortMenu);
+        });
+
+        // Categories button click
+        document.getElementById('chipCategoriesBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu(catMenu);
+        });
+
+        // Close buttons & overlay click
+        document.getElementById('closeGenderMenuBtn')?.addEventListener('click', closeAllFilterMenus);
+        document.getElementById('closeSortMenuBtn')?.addEventListener('click', closeAllFilterMenus);
+        document.getElementById('closeCategoriesMenuBtn')?.addEventListener('click', closeAllFilterMenus);
+        filterOverlay?.addEventListener('click', closeAllFilterMenus);
+
+        // Gender menu option clicks
+        document.getElementById('genderMenuOptions')?.addEventListener('click', (e) => {
+            const itemBtn = e.target.closest('.popup-menu-item');
+            if (!itemBtn) return;
+            const gender = itemBtn.dataset.gender || 'all';
+            document.querySelectorAll('#genderMenuOptions .popup-menu-item').forEach(b => b.classList.remove('active'));
+            itemBtn.classList.add('active');
+
+            const labelMap = { all: 'Gender', men: 'Men', women: 'Women', boys: 'Kids & Boys', girls: 'Girls' };
+            const labelEl = document.getElementById('chipGenderLabel');
+            if (labelEl) labelEl.textContent = labelMap[gender] || 'Gender';
+
+            const chip = document.getElementById('chipGenderBtn');
+            if (chip) chip.classList.toggle('active', gender !== 'all');
+
+            closeAllFilterMenus();
+            this.filterSearchHubByGender(gender);
+        });
+
+        // Sort menu option clicks
+        document.getElementById('sortMenuOptions')?.addEventListener('click', (e) => {
+            const itemBtn = e.target.closest('.popup-menu-item');
+            if (!itemBtn) return;
+            const sortVal = itemBtn.dataset.sort || 'featured';
+            document.querySelectorAll('#sortMenuOptions .popup-menu-item').forEach(b => b.classList.remove('active'));
+            itemBtn.classList.add('active');
+
+            const labelMap = {
+                featured: 'Sort',
+                'price-low': 'Price: Low-High',
+                'price-high': 'Price: High-Low',
+                rating: 'Rating 4.5+ ⭐',
+                discount: 'Biggest % Off'
+            };
+            const labelEl = document.getElementById('chipSortLabel');
+            if (labelEl) labelEl.textContent = labelMap[sortVal] || 'Sort';
+
+            const chip = document.getElementById('chipSortBtn');
+            if (chip) chip.classList.toggle('active', sortVal !== 'featured');
+
+            closeAllFilterMenus();
+            this.sortSearchHubItems(sortVal);
+        });
+
+        // Categories menu option clicks
+        document.getElementById('categoriesMenuOptions')?.addEventListener('click', (e) => {
+            const itemBtn = e.target.closest('.popup-menu-item');
+            if (!itemBtn) return;
+            const cat = itemBtn.dataset.category || 'all';
+            document.querySelectorAll('#categoriesMenuOptions .popup-menu-item').forEach(b => b.classList.remove('active'));
+            itemBtn.classList.add('active');
+
+            const labelEl = document.getElementById('chipCategoriesLabel');
+            if (labelEl) labelEl.textContent = cat === 'all' ? 'Categories' : cat;
+
+            const chip = document.getElementById('chipCategoriesBtn');
+            if (chip) chip.classList.toggle('active', cat !== 'all');
+
+            closeAllFilterMenus();
+            this.filterSearchHubByCategory(cat);
+        });
+
+        // Quick filter chips (All, Under ₹999, 10 Mins, Top Brands)
         this.searchHubFilterStrip?.addEventListener('click', (e) => {
             const chip = e.target.closest('.search-chip');
             if (!chip) return;
             const filter = chip.dataset.filter;
-            this.searchHubFilterStrip.querySelectorAll('.search-chip').forEach(c => c.classList.remove('active'));
+            if (['gender', 'sort', 'categories'].includes(filter)) {
+                return; // Handled by separate popup menus
+            }
+            this.searchHubFilterStrip.querySelectorAll('.search-chip').forEach(c => {
+                if (!['gender', 'sort', 'categories'].includes(c.dataset.filter)) {
+                    c.classList.remove('active');
+                }
+            });
             chip.classList.add('active');
             this.searchHubActiveFilter = filter;
             this.applySearchHubFilter(filter);
@@ -1707,18 +1848,20 @@ export class ContainerView {
                 return;
             }
 
-            // 2. Product Card click -> Show Product Detail
-            const prodCard = e.target.closest('[data-product-name]');
+            // 2. Product Card click (Any card with data-product-id or data-product-name)
+            const prodCard = e.target.closest('[data-product-id], [data-product-name]');
             if (prodCard) {
+                const pId = prodCard.dataset.productId;
                 const pName = prodCard.dataset.productName;
-                const item = this.data.find(p => p.name === pName);
+                const item = (pId && this.data.find(p => p.id === pId)) || 
+                             (pName && this.data.find(p => p.name === pName));
                 if (item) {
-                    this.showProductDetail(item);
+                    this.showProductDetailView(item); // Cleanly opens product detail
                 }
                 return;
             }
 
-            // 3. Hero or Spotlight click -> Show Category View
+            // 3. Fallback Category click
             const catCard = e.target.closest('[data-target-category]');
             if (catCard) {
                 const cat = catCard.dataset.targetCategory;
@@ -1732,6 +1875,7 @@ export class ContainerView {
         window.addEventListener('scroll', () => {
             if (this.currentCategory !== 'Search Hub' || this.searchHubIsLoading) return;
             if (this.searchHubInput && this.searchHubInput.value.trim() !== '') return;
+            if (this.searchHubCurrentFilteredList) return;
             const scrollPos = window.innerHeight + window.scrollY;
             const threshold = document.documentElement.scrollHeight - 450;
             if (scrollPos >= threshold) {
@@ -1818,6 +1962,7 @@ export class ContainerView {
         if (!this.searchHubMasonryGrid) return;
         if (reset) {
             this.searchHubBatch = 0;
+            this.searchHubCurrentFilteredList = null;
             this.searchHubMasonryGrid.innerHTML = '';
         }
         // Append initial batches
@@ -1825,11 +1970,15 @@ export class ContainerView {
         this.appendDiscoveryBatch();
     }
 
-    findProductByNameOrFallback(name, fallbackCategory, tag) {
-        let item = this.data.find(p => p.name === name);
+    findProductByIdOrKeyword(id, keyword, fallbackCategory, tag) {
+        let item = id ? this.data.find(p => p.id === id) : null;
+        if (!item && keyword) {
+            const kw = keyword.toLowerCase();
+            item = this.data.find(p => (p.name && p.name.toLowerCase().includes(kw)) || (p.brand && p.brand.toLowerCase().includes(kw)));
+        }
         if (!item) {
             const catItems = this.data.filter(p => p.type === fallbackCategory);
-            item = catItems[Math.floor(Math.random() * catItems.length)] || this.data[0];
+            item = catItems[0] || this.data[0];
         }
         return { item, tag };
     }
@@ -1850,6 +1999,8 @@ export class ContainerView {
                     subtitle: 'Dresses, Tops & Footwear',
                     discount: 'UP TO 60% OFF',
                     image: 'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?w=500&auto=format&fit=crop&q=80',
+                    productId: 'fsh-biba-anarkali-kurti',
+                    productName: 'Biba Women Pure Cotton Floral Printed Anarkali Kurta Set with Dupatta',
                     target: 'Fashion & Apparel',
                     cta: 'Shop Now'
                 },
@@ -1857,10 +2008,12 @@ export class ContainerView {
                     brand: 'MODARAPIDO & KALINI',
                     footer: 'Min. 70% Off',
                     image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80',
+                    productId: 'fsh-fabindia-silk-saree',
+                    productName: 'Fabindia Women Handwoven Festive Banarasi Silk Saree - Royal Wine Red',
                     target: 'Fashion & Apparel'
                 },
-                bestseller: this.findProductByNameOrFallback('Biba Women Pure Cotton Floral Printed Anarkali Kurta Set with Dupatta', 'Fashion & Apparel', 'Pack of 11'),
-                trend: this.findProductByNameOrFallback('Puma Men Modern Basics Regular Fit Cotton Track Pants - Black', 'Fashion & Apparel', 'FRESH DROPS')
+                bestseller: this.findProductByIdOrKeyword('fsh-biba-anarkali-kurti', 'biba anarkali', 'Fashion & Apparel', 'Pack of 11'),
+                trend: this.findProductByIdOrKeyword('fsh-puma-cotton-track-pants', 'puma track', 'Fashion & Apparel', 'FRESH DROPS')
             },
             // Batch 1: Flagship Tech / Audio / Sneakers / Royal Ethnic
             {
@@ -1869,6 +2022,8 @@ export class ContainerView {
                     subtitle: 'Pro Cameras & Snapdragon 8 Gen 3',
                     discount: 'FLAT 35% OFF',
                     image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop&q=80',
+                    productId: 'phone-apple-iphone15',
+                    productName: 'Apple iPhone 15 (128 GB) - Black',
                     target: 'Electronics & Gadgets',
                     cta: 'Explore'
                 },
@@ -1876,10 +2031,12 @@ export class ContainerView {
                     brand: 'APPLE & SONY AUDIO',
                     footer: 'Min. 40% Off',
                     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80',
+                    productId: 'aud-sony-wh1000xm5',
+                    productName: 'Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones',
                     target: 'Electronics & Gadgets'
                 },
-                bestseller: this.findProductByNameOrFallback('Red Tape Men Casual Low-Top Lifestyle Walking Sneakers - Off White', 'Fashion & Apparel', '⚡ 10 MINS'),
-                trend: this.findProductByNameOrFallback('Manyavar Royal Zari Embroidered Silk Sherwani with Stole - Maroon & Gold', 'Fashion & Apparel', 'WEDDING EDIT')
+                bestseller: this.findProductByIdOrKeyword('fsh-redtape-retro-sneakers', 'red tape', 'Fashion & Apparel', '⚡ 10 MINS'),
+                trend: this.findProductByIdOrKeyword('fsh-raymond-suit-blazer', 'raymond', 'Fashion & Apparel', 'WEDDING EDIT')
             },
             // Batch 2: Barista Blends / Denims / Formal Suits
             {
@@ -1888,17 +2045,21 @@ export class ContainerView {
                     subtitle: 'Artisanal Coffee & Single Estate Teas',
                     discount: 'UP TO 50% OFF',
                     image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=80',
+                    productId: 'bev-nescafe-classic',
+                    productName: 'Nescafe Classic 100% Pure Instant Coffee Glass Jar',
                     target: 'Cold Drinks & Beverages',
                     cta: 'Brew Now'
                 },
                 spotlight: {
                     brand: 'LEVI\'S & RAYMOND',
                     footer: 'Min. 45% Off',
-                    image: 'https://images.unsplash.com/photo-1542272604-780c96856592?w=500&auto=format&fit=crop&q=80',
+                    image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80',
+                    productId: 'fsh-levis-511-slim-jeans',
+                    productName: "Levi's Men 511 Slim Fit Stretch Denim Jeans - Dark Indigo Wash",
                     target: 'Fashion & Apparel'
                 },
-                bestseller: this.findProductByNameOrFallback('Levi\'s Men 511 Slim Fit Stretch Denim Jeans - Dark Indigo Wash', 'Fashion & Apparel', 'BEST VALUE'),
-                trend: this.findProductByNameOrFallback('Raymond Formal Slim-Fit Single-Breasted Italian Wool Blazer - Charcoal Grey', 'Fashion & Apparel', 'EXECUTIVE')
+                bestseller: this.findProductByIdOrKeyword('fsh-levis-511-slim-jeans', 'levis 511', 'Fashion & Apparel', 'BEST VALUE'),
+                trend: this.findProductByIdOrKeyword('fsh-allen-solly-shirt', 'allen solly', 'Fashion & Apparel', 'EXECUTIVE')
             },
             // Batch 3: Urban Kicks / Silk Sarees / Joggers
             {
@@ -1907,26 +2068,64 @@ export class ContainerView {
                     subtitle: 'Lifestyle Walkers & Gym Trainers',
                     discount: 'UP TO 55% OFF',
                     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80',
+                    productId: 'fsh-nike-air-max-sc',
+                    productName: 'Nike Air Max SC Men Sneaker',
                     target: 'Fashion & Apparel',
                     cta: 'View Drop'
                 },
                 spotlight: {
-                    brand: 'BIBA & LIBAS SILK',
+                    brand: 'BIBA & FABINDIA SILK',
                     footer: 'Flat 50% Off',
                     image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&auto=format&fit=crop&q=80',
+                    productId: 'fsh-fabindia-silk-saree',
+                    productName: 'Fabindia Women Handwoven Festive Banarasi Silk Saree - Royal Wine Red',
                     target: 'Fashion & Apparel'
                 },
-                bestseller: this.findProductByNameOrFallback('Biba Women Traditional Kanjivaram Pure Silk Festive Saree - Deep Emerald & Gold', 'Fashion & Apparel', 'FESTIVE SPECIAL'),
-                trend: this.findProductByNameOrFallback('Adidas Men Essentials French Terry Tapered Cuff Joggers - Heather Grey', 'Fashion & Apparel', 'POPULAR')
+                bestseller: this.findProductByIdOrKeyword('fsh-fabindia-silk-saree', 'fabindia saree', 'Fashion & Apparel', 'FESTIVE SPECIAL'),
+                trend: this.findProductByIdOrKeyword('fsh-adidas-runfalcon', 'adidas runfalcon', 'Fashion & Apparel', 'POPULAR')
             }
         ];
 
-        const cfg = batchConfigs[batchIdx % batchConfigs.length];
+        let cfg;
+        if (batchIdx < batchConfigs.length) {
+            cfg = batchConfigs[batchIdx];
+        } else {
+            // Infinite dynamic rotating batches from platform catalog
+            const startIdx = ((batchIdx - batchConfigs.length) * 4) % this.data.length;
+            const p1 = this.data[startIdx] || this.data[0];
+            const p2 = this.data[(startIdx + 1) % this.data.length] || this.data[1];
+            const p3 = this.data[(startIdx + 2) % this.data.length] || this.data[2];
+            const p4 = this.data[(startIdx + 3) % this.data.length] || this.data[3];
+
+            cfg = {
+                hero: {
+                    title: p1.brand?.toUpperCase() || 'TRENDING NOW',
+                    subtitle: p1.subType || p1.type,
+                    discount: `${Math.round(((p1.price - p1.discount_price) / p1.price) * 100)}% OFF`,
+                    image: p1.src,
+                    productId: p1.id,
+                    productName: p1.name,
+                    target: p1.type,
+                    cta: 'View Deal'
+                },
+                spotlight: {
+                    brand: (p2.brand || 'MEGA') + ' PICKS',
+                    footer: `Min. ${Math.round(((p2.price - p2.discount_price) / p2.price) * 100)}% Off`,
+                    image: p2.src,
+                    productId: p2.id,
+                    productName: p2.name,
+                    target: p2.type
+                },
+                bestseller: { item: p3, tag: 'TOP RATED' },
+                trend: { item: p4, tag: '⚡ 10 MINS' }
+            };
+        }
+
         let batchHtml = '';
 
         // Card 1: Hero Editorial (Image 2 Top Left)
         batchHtml += `
-            <div class="disco-card-hero" data-target-category="${cfg.hero.target}">
+            <div class="disco-card-hero" data-product-id="${cfg.hero.productId || ''}" data-product-name="${cfg.hero.productName || ''}" data-target-category="${cfg.hero.target}">
                 <div class="disco-hero-header">
                     <span class="disco-hero-title">${cfg.hero.title}</span>
                     <span class="disco-hero-sub">${cfg.hero.subtitle}</span>
@@ -1951,7 +2150,7 @@ export class ContainerView {
 
         // Card 2: Spotlight Brand / Fabric (Image 2 Top Right)
         batchHtml += `
-            <div class="disco-card-spotlight" data-target-category="${cfg.spotlight.target}">
+            <div class="disco-card-spotlight" data-product-id="${cfg.spotlight.productId || ''}" data-product-name="${cfg.spotlight.productName || ''}" data-target-category="${cfg.spotlight.target}">
                 <div class="disco-spotlight-img-wrap">
                     <img class="disco-spotlight-img" src="${cfg.spotlight.image}" alt="${cfg.spotlight.brand}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
                     <div class="disco-spotlight-brand-pill">
@@ -1966,7 +2165,7 @@ export class ContainerView {
         `;
 
         // Card 3: Bestseller Ribbon Product Tile (Image 2 Bottom Left)
-        if (cfg.bestseller) {
+        if (cfg.bestseller && cfg.bestseller.item) {
             const b = cfg.bestseller.item;
             const isWish = this.wishlist.has(b.name);
             const disc = Math.round(((b.price - b.discount_price) / b.price) * 100);
@@ -1994,7 +2193,7 @@ export class ContainerView {
         }
 
         // Card 4: Streetwear / Trend Tile (Image 2 Bottom Right)
-        if (cfg.trend) {
+        if (cfg.trend && cfg.trend.item) {
             const t = cfg.trend.item;
             const isWish = this.wishlist.has(t.name);
             const disc = Math.round(((t.price - t.discount_price) / t.price) * 100);
@@ -2030,48 +2229,36 @@ export class ContainerView {
         this.searchHubIsLoading = false;
     }
 
-    executeSearchHubQuery(query) {
+    renderSearchHubProductGrid(items, metaTitle = '') {
         if (!this.searchHubMasonryGrid) return;
-        const q = (query || '').toLowerCase().trim();
-        if (!q) {
-            this.renderSearchHubDiscoveryFeed(true);
-            return;
-        }
-
-        const matches = this.data.filter(item => 
-            (item.name && item.name.toLowerCase().includes(q)) ||
-            (item.brand && item.brand.toLowerCase().includes(q)) ||
-            (item.subType && item.subType.toLowerCase().includes(q)) ||
-            (item.type && item.type.toLowerCase().includes(q))
-        );
+        if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'none';
+        if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'none';
 
         if (this.searchHubResultsMeta) {
             this.searchHubResultsMeta.style.display = 'flex';
             if (this.searchHubResultsCount) {
-                this.searchHubResultsCount.textContent = `Found ${matches.length} products for "${query}"`;
+                this.searchHubResultsCount.textContent = `Showing ${items.length} products ${metaTitle ? `• ${metaTitle}` : ''}`;
             }
         }
-        if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'none';
-        if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'none';
 
-        if (matches.length === 0) {
+        if (!items || items.length === 0) {
             this.searchHubMasonryGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
                     <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
-                    <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b;">No products found for "${query}"</h3>
-                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 6px;">Try searching for "Kurtas", "Sherwani", "Jeans", or "Sneakers"</p>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b;">No products found</h3>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 6px;">Try adjusting your filters or search terms</p>
                 </div>
             `;
             return;
         }
 
         let html = '';
-        matches.slice(0, 30).forEach(item => {
+        items.forEach(item => {
             const isWish = this.wishlist.has(item.name);
             const disc = Math.round(((item.price - item.discount_price) / item.price) * 100);
             html += `
-                <div class="disco-card-bestseller" data-product-name="${item.name}">
-                    ${item.isFlashDeal ? '<span class="disco-bestseller-ribbon" style="background: #f43f5e;">FLASH DEAL</span>' : ''}
+                <div class="disco-card-bestseller" data-product-id="${item.id}" data-product-name="${item.name}">
+                    ${disc >= 30 ? '<span class="disco-bestseller-ribbon">HOT DEAL</span>' : ''}
                     <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${item.name}" aria-label="Toggle Wishlist">
                         <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
                     </button>
@@ -2096,60 +2283,130 @@ export class ContainerView {
         if (window.lucide) lucide.createIcons();
     }
 
+    filterSearchHubByGender(gender) {
+        if (!gender || gender === 'all') {
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.searchHubCurrentFilteredList = null;
+            this.renderSearchHubDiscoveryFeed(true);
+            return;
+        }
+
+        const g = gender.toLowerCase();
+        const items = this.data.filter(item => {
+            const name = (item.name || '').toLowerCase();
+            const sub = (item.subType || '').toLowerCase();
+
+            if (g === 'men') {
+                return (sub.includes('men') || name.includes('men') || name.includes('shirt') || name.includes('sherwani') || name.includes('jeans') || name.includes('blazer') || name.includes('trouser') || name.includes('sneaker') || name.includes('jogger')) && !name.includes('women') && !sub.includes('women');
+            } else if (g === 'women') {
+                return sub.includes('women') || name.includes('women') || name.includes('saree') || name.includes('kurta') || name.includes('anarkali') || name.includes('lehenga') || name.includes('palazzo') || name.includes('frock') || name.includes('heels') || sub.includes('beauty');
+            } else if (g === 'boys') {
+                return name.includes('kid') || name.includes('boy') || name.includes('track pant') || name.includes('jogger') || name.includes('basics') || name.includes('cartoon') || sub.includes('kid');
+            } else if (g === 'girls') {
+                return name.includes('girl') || name.includes('frock') || name.includes('dress') || name.includes('skirt') || sub.includes('girl');
+            }
+            return false;
+        });
+
+        this.searchHubCurrentFilteredList = items;
+        const labelMap = { men: "Men's Collection", women: "Women's Collection", boys: "Kids & Boys", girls: "Girls Collection" };
+        this.renderSearchHubProductGrid(items, labelMap[g] || gender);
+    }
+
+    sortSearchHubItems(sortVal) {
+        let source = this.searchHubCurrentFilteredList && this.searchHubCurrentFilteredList.length > 0 
+            ? [...this.searchHubCurrentFilteredList] 
+            : [...this.data];
+
+        if (sortVal === 'price-low') {
+            source.sort((a, b) => a.discount_price - b.discount_price);
+        } else if (sortVal === 'price-high') {
+            source.sort((a, b) => b.discount_price - a.discount_price);
+        } else if (sortVal === 'rating') {
+            source.sort((a, b) => (b.rating || 4.5) - (a.rating || 4.5));
+        } else if (sortVal === 'discount') {
+            source.sort((a, b) => {
+                const discA = ((a.price - a.discount_price) / a.price);
+                const discB = ((b.price - b.discount_price) / b.price);
+                return discB - discA;
+            });
+        } else {
+            if (!this.searchHubCurrentFilteredList) {
+                this.renderSearchHubDiscoveryFeed(true);
+                return;
+            }
+        }
+
+        const sortLabels = {
+            'price-low': 'Price: Low to High',
+            'price-high': 'Price: High to Low',
+            rating: 'Rating: 4.5+ ⭐',
+            discount: 'Biggest Discount',
+            featured: 'Featured'
+        };
+        this.renderSearchHubProductGrid(source, sortLabels[sortVal] || 'Sorted');
+    }
+
+    filterSearchHubByCategory(category) {
+        if (!category || category === 'all') {
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
+            this.searchHubCurrentFilteredList = null;
+            this.renderSearchHubDiscoveryFeed(true);
+            return;
+        }
+
+        const items = this.data.filter(p => p.type === category);
+        this.searchHubCurrentFilteredList = items;
+        this.renderSearchHubProductGrid(items, category);
+    }
+
+    executeSearchHubQuery(query) {
+        if (!this.searchHubMasonryGrid) return;
+        const q = (query || '').toLowerCase().trim();
+        if (!q) {
+            this.searchHubCurrentFilteredList = null;
+            this.renderSearchHubDiscoveryFeed(true);
+            return;
+        }
+
+        const matches = this.data.filter(item => 
+            (item.name && item.name.toLowerCase().includes(q)) ||
+            (item.brand && item.brand.toLowerCase().includes(q)) ||
+            (item.subType && item.subType.toLowerCase().includes(q)) ||
+            (item.type && item.type.toLowerCase().includes(q))
+        );
+
+        this.searchHubCurrentFilteredList = matches;
+        this.renderSearchHubProductGrid(matches, `Search: "${query}"`);
+    }
+
     applySearchHubFilter(filterKey) {
         if (!this.searchHubMasonryGrid) return;
         if (filterKey === 'all') {
+            this.searchHubCurrentFilteredList = null;
+            if (this.searchHubResultsMeta) this.searchHubResultsMeta.style.display = 'none';
+            if (this.searchHubAiBanner) this.searchHubAiBanner.style.display = 'flex';
+            if (this.searchHubInfiniteLoader) this.searchHubInfiniteLoader.style.display = 'flex';
             this.renderSearchHubDiscoveryFeed(true);
             return;
         }
 
         let filtered = [];
-        if (filterKey === 'gender') {
-            filtered = this.data.filter(p => p.type === 'Fashion & Apparel');
-        } else if (filterKey === 'categories') {
-            this.showCategoriesHubView();
-            return;
-        } else if (filterKey === 'under999') {
+        if (filterKey === 'under999') {
             filtered = this.data.filter(p => p.discount_price <= 999);
         } else if (filterKey === 'fast') {
             filtered = this.data.filter(p => p.stock >= 20 || p.isFlashDeal);
         } else if (filterKey === 'topbrands') {
-            const brands = ['manyavar', 'raymond', 'levi', 'peter england', 'allen solly', 'puma', 'adidas', 'nike', 'biba', 'libas'];
+            const brands = ['manyavar', 'raymond', 'levi', 'peter england', 'allen solly', 'puma', 'adidas', 'nike', 'biba', 'libas', 'apple', 'sony', 'samsung'];
             filtered = this.data.filter(p => brands.some(b => (p.brand || '').toLowerCase().includes(b)));
-        } else if (filterKey === 'sort') {
-            filtered = [...this.data].sort((a,b) => a.discount_price - b.discount_price);
         }
 
-        if (filtered.length > 0) {
-            let html = '';
-            filtered.slice(0, 24).forEach(item => {
-                const isWish = this.wishlist.has(item.name);
-                const disc = Math.round(((item.price - item.discount_price) / item.price) * 100);
-                html += `
-                    <div class="disco-card-bestseller" data-product-name="${item.name}">
-                        <span class="disco-bestseller-ribbon">${filterKey.toUpperCase()}</span>
-                        <button class="disco-wishlist-toggle ${isWish ? 'active' : ''}" data-product-name="${item.name}" aria-label="Toggle Wishlist">
-                            <i data-lucide="heart" style="${isWish ? 'fill: #ef4444; color: #ef4444;' : ''}"></i>
-                        </button>
-                        <span class="disco-deal-tag-pill">⚡ FAST</span>
-                        <div class="disco-bestseller-img-wrap">
-                            <img class="disco-bestseller-img" src="${item.src}" alt="${item.name}" loading="lazy" onerror="this.src=MEGAMART_PLACEHOLDER">
-                        </div>
-                        <div class="disco-prod-meta">
-                            <span class="disco-prod-brand">${item.brand || 'MegaMart'}</span>
-                            <div class="disco-prod-name" title="${item.name}">${item.name}</div>
-                            <div class="disco-prod-pricing">
-                                <span class="disco-price-bold">₹${item.discount_price}</span>
-                                <span class="disco-mrp-cut">₹${item.price}</span>
-                                <span class="disco-disc-green">${disc}% OFF</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            this.searchHubMasonryGrid.innerHTML = html;
-            if (window.lucide) lucide.createIcons();
-        }
+        this.searchHubCurrentFilteredList = filtered;
+        this.renderSearchHubProductGrid(filtered, filterKey.toUpperCase());
     }
 
     renderCategoriesHub(selectedCategory = 'Trending Now') {

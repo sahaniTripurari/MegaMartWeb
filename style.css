@@ -13744,6 +13744,22 @@ body {
 /* ==========================================================================
    SEARCH DISCOVERY HUB (MYNTRA / FLIPKART STYLE - IMAGE 2)
    ========================================================================== */
+/* Hide sticky navigation header completely in full-page dedicated search hub mode */
+body.in-search-hub-mode #stickyNavbarsWrapper,
+body.in-search-hub-mode .sticky-navbars-wrapper,
+body.in-search-hub-mode .header,
+body.in-search-hub-mode #header,
+body.in-search-hub-mode .sub-header-nav,
+body.in-search-hub-mode #subHeaderNav,
+body.in-search-hub-mode .category-tabs-nav {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
 .search-hub-view {
   width: 100%;
   min-height: 100vh;
@@ -13983,6 +13999,184 @@ body {
 .search-chip.active svg {
   color: #ffffff;
 }
+
+/* Filter Menus Backdrop Overlay */
+.search-hub-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: fadeInOverlay 0.2s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Bottom Sheet on Mobile / Centered Floating Modal on Desktop */
+.search-hub-popup-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 18px 20px 24px 20px;
+  z-index: 1001;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.16);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (min-width: 769px) {
+  .search-hub-popup-menu {
+    bottom: auto;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 440px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+    animation: zoomInModal 0.2s ease forwards;
+  }
+}
+
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes zoomInModal {
+  from { transform: translate(-50%, -46%) scale(0.95); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.popup-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 12px;
+}
+.popup-menu-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.popup-menu-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+.popup-menu-subtitle {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 500;
+}
+.popup-menu-close {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.popup-menu-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.popup-menu-close i,
+.popup-menu-close svg {
+  width: 16px;
+  height: 16px;
+}
+.popup-menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 60vh;
+  padding-right: 4px;
+}
+.popup-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+.popup-menu-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.popup-menu-item.active {
+  background: #f0fdf4;
+  border-color: #22c55e;
+}
+.item-radio-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.popup-menu-item.active .item-radio-circle {
+  border-color: #22c55e;
+  background: #22c55e;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+.item-label-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+.popup-menu-item.active .item-title {
+  color: #15803d;
+}
+.item-desc {
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 500;
+}
+.gender-pill-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.tag-men { background: #e0f2fe; color: #0284c7; }
+.tag-women { background: #fce7f3; color: #db2777; }
+.tag-kids { background: #fef3c7; color: #d97706; }
+.tag-girls { background: #f3e8ff; color: #9333ea; }
 
 /* Results Meta */
 .search-hub-results-meta {
