@@ -1358,7 +1358,7 @@
                                     <span class="menu-live-pill">LIVE 🟢</span>
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
-                                <div class="menu-item" id="profileSavedAddressesBtn">
+                                <div class="menu-item has-options" id="profileSavedAddressesBtn">
                                     <div class="menu-icon icon-address"><i data-lucide="map-pin"></i></div>
                                     <div class="menu-item-text">
                                         <span class="menu-item-title">Delivery Addresses &amp; Pincodes</span>
@@ -1367,6 +1367,31 @@
                                     <span class="profile-menu-badge" id="profileMenuPincodeBadge">400001</span>
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
+                                <div class="menu-sub-options-panel" id="profileAddressesPanel" style="display:none;">
+                                    <div class="profile-sub-option-card active">
+                                        <div class="sub-option-icon"><i data-lucide="home"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Home (Primary Address)</strong>
+                                                <span class="sub-option-badge">Default</span>
+                                            </div>
+                                            <p class="sub-option-desc">Flat 402, Sea Green Apartments, Bandra West, Mumbai - 400001</p>
+                                        </div>
+                                    </div>
+                                    <div class="profile-sub-option-card">
+                                        <div class="sub-option-icon"><i data-lucide="building"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Office / Tech Park</strong>
+                                            </div>
+                                            <p class="sub-option-desc">Tower B, Express Delivery Zone, Mumbai - 400069</p>
+                                        </div>
+                                    </div>
+                                    <button class="profile-sub-action-btn" id="addNewAddressBtn" type="button">
+                                        <i data-lucide="plus"></i>
+                                        <span>+ Add New Delivery Address</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -1374,7 +1399,7 @@
                         <div class="profile-group-box">
                             <span class="profile-group-title">PAYMENTS &amp; REWARDS</span>
                             <div class="profile-menu">
-                                <div class="menu-item">
+                                <div class="menu-item has-options" id="profilePaymentsBtn">
                                     <div class="menu-icon icon-payments"><i data-lucide="credit-card"></i></div>
                                     <div class="menu-item-text">
                                         <span class="menu-item-title">Payments &amp; Refunds</span>
@@ -1382,7 +1407,44 @@
                                     </div>
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
-                                <div class="menu-item">
+                                <div class="menu-sub-options-panel" id="profilePaymentsPanel" style="display:none;">
+                                    <div class="profile-sub-option-card">
+                                        <div class="sub-option-icon"><i data-lucide="smartphone"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Saved UPI ID</strong>
+                                                <span class="sub-option-badge verified">Verified ✓</span>
+                                            </div>
+                                            <p class="sub-option-desc">tripurari@okhdfcbank • Instant 1-Click Pay</p>
+                                        </div>
+                                    </div>
+                                    <div class="profile-sub-option-card">
+                                        <div class="sub-option-icon"><i data-lucide="credit-card"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>HDFC Bank Millennia Debit Card</strong>
+                                                <span class="sub-option-badge">Visa</span>
+                                            </div>
+                                            <p class="sub-option-desc">•••• •••• •••• 4920 (Expires 08/29)</p>
+                                        </div>
+                                    </div>
+                                    <div class="profile-sub-option-card refund-status-card">
+                                        <div class="sub-option-icon"><i data-lucide="refresh-cw"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Instant Refund Log</strong>
+                                                <span class="sub-option-badge green">₹0 Pending</span>
+                                            </div>
+                                            <p class="sub-option-desc">✓ Last refund of ₹120 credited to bank on 10 Nov</p>
+                                        </div>
+                                    </div>
+                                    <button class="profile-sub-action-btn" id="addNewPaymentBtn" type="button">
+                                        <i data-lucide="plus"></i>
+                                        <span>+ Add New Payment Method</span>
+                                    </button>
+                                </div>
+
+                                <div class="menu-item has-options" id="profileCouponsBtn">
                                     <div class="menu-icon icon-coupons"><i data-lucide="ticket"></i></div>
                                     <div class="menu-item-text">
                                         <span class="menu-item-title">Coupons &amp; Exclusive Deals</span>
@@ -1391,6 +1453,29 @@
                                     <span class="menu-coupon-badge">5 ACTIVE</span>
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
+                                <div class="menu-sub-options-panel" id="profileCouponsPanel" style="display:none;">
+                                    <div class="profile-coupon-item">
+                                        <div class="coupon-left">
+                                            <span class="coupon-code-pill">FESTIVE10</span>
+                                            <span class="coupon-benefit">10% instant off on orders above ₹499</span>
+                                        </div>
+                                        <button class="coupon-copy-btn" data-code="FESTIVE10" type="button">Copy Code</button>
+                                    </div>
+                                    <div class="profile-coupon-item">
+                                        <div class="coupon-left">
+                                            <span class="coupon-code-pill">MEGAMART50</span>
+                                            <span class="coupon-benefit">Flat ₹50 OFF on first 3 orders</span>
+                                        </div>
+                                        <button class="coupon-copy-btn" data-code="MEGAMART50" type="button">Copy Code</button>
+                                    </div>
+                                    <div class="profile-coupon-item">
+                                        <div class="coupon-left">
+                                            <span class="coupon-code-pill green">FREEDEL</span>
+                                            <span class="coupon-benefit">FREE 10-min delivery on any amount</span>
+                                        </div>
+                                        <span class="coupon-status-tag">Unlocked ✓</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1398,7 +1483,7 @@
                         <div class="profile-group-box">
                             <span class="profile-group-title">SUPPORT &amp; PREFERENCES</span>
                             <div class="profile-menu">
-                                <div class="menu-item">
+                                <div class="menu-item has-options" id="profileSupportBtn">
                                     <div class="menu-icon icon-support"><i data-lucide="headphones"></i></div>
                                     <div class="menu-item-text">
                                         <span class="menu-item-title">24x7 Help &amp; Customer Support</span>
@@ -1406,13 +1491,71 @@
                                     </div>
                                     <i data-lucide="chevron-right" class="arrow"></i>
                                 </div>
-                                <div class="menu-item">
+                                <div class="menu-sub-options-panel" id="profileSupportPanel" style="display:none;">
+                                    <button class="profile-sub-action-btn primary-ai" id="supportChatAiBtn" type="button">
+                                        <i data-lucide="sparkles"></i>
+                                        <span>Ask MegaAI Shopping Copilot</span>
+                                    </button>
+                                    <div class="profile-sub-option-card">
+                                        <div class="sub-option-icon"><i data-lucide="phone-call"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Toll-Free Customer Care</strong>
+                                            </div>
+                                            <p class="sub-option-desc">1800-MEGAMART (1800-634-262) • 24x7 Live</p>
+                                        </div>
+                                    </div>
+                                    <div class="profile-sub-option-card" id="supportReportIssueBtn" role="button" tabindex="0">
+                                        <div class="sub-option-icon"><i data-lucide="alert-circle"></i></div>
+                                        <div class="sub-option-content">
+                                            <div class="sub-option-title-row">
+                                                <strong>Report Damaged / Missing Item</strong>
+                                            </div>
+                                            <p class="sub-option-desc">Instant verification &amp; 1-click refund to account</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="menu-item has-options" id="profileSettingsBtn">
                                     <div class="menu-icon icon-settings"><i data-lucide="settings"></i></div>
                                     <div class="menu-item-text">
                                         <span class="menu-item-title">Settings &amp; App Language</span>
                                         <span class="menu-item-sub">Notifications, privacy, English / हिंदी</span>
                                     </div>
                                     <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                                <div class="menu-sub-options-panel" id="profileSettingsPanel" style="display:none;">
+                                    <div class="profile-setting-row">
+                                        <div class="setting-text">
+                                            <strong>App Language</strong>
+                                            <span>Choose your preferred language</span>
+                                        </div>
+                                        <div class="lang-pills-row">
+                                            <button class="lang-pill active" type="button" data-lang="en">English</button>
+                                            <button class="lang-pill" type="button" data-lang="hi">हिंदी</button>
+                                            <button class="lang-pill" type="button" data-lang="mr">मराठी</button>
+                                        </div>
+                                    </div>
+                                    <div class="profile-setting-row">
+                                        <div class="setting-text">
+                                            <strong>Order Updates on WhatsApp</strong>
+                                            <span>Live delivery radar &amp; receipts</span>
+                                        </div>
+                                        <label class="profile-toggle-switch">
+                                            <input type="checkbox" id="whatsappNotifyToggle" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="profile-setting-row">
+                                        <div class="setting-text">
+                                            <strong>Sound &amp; Haptic Alerts</strong>
+                                            <span>Alerts when rider reaches doorstep</span>
+                                        </div>
+                                        <label class="profile-toggle-switch">
+                                            <input type="checkbox" id="hapticToggle" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1731,12 +1874,15 @@
     <!-- ================= USER AUTHENTICATION MODAL ================= -->
     <div class="auth-modal-overlay" id="authModalOverlay"></div>
     <div class="auth-modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+        <!-- Top Drag Handle for Native Bottom Sheet Touch UI -->
+        <div class="auth-sheet-handle" aria-hidden="true"></div>
+
         <div class="auth-modal-header">
             <div class="auth-brand-badge">
                 <div class="auth-brand-icon"><i data-lucide="zap"></i></div>
                 <div>
                     <h3 id="authModalTitle">Welcome to MegaMart</h3>
-                    <p class="auth-brand-sub">Instant 10-Minute Grocery Supermarket</p>
+                    <p class="auth-brand-sub" id="authModalSub">Instant 10-Minute Grocery Delivery</p>
                 </div>
             </div>
             <button class="close-auth-modal" id="closeAuthModal" title="Close dialog" aria-label="Close dialog">
@@ -1744,49 +1890,26 @@
             </button>
         </div>
 
-        <!-- Dual Tab Switcher -->
+        <!-- Modern Segmented Pill Switcher -->
         <div class="auth-tab-switchers" role="tablist">
             <button class="auth-tab-btn active" id="authTabLogin" role="tab" aria-selected="true" data-tab="login">
                 <i data-lucide="log-in"></i>
-                <span>Login</span>
+                <span>Sign In</span>
             </button>
             <button class="auth-tab-btn" id="authTabRegister" role="tab" aria-selected="false" data-tab="register">
                 <i data-lucide="user-plus"></i>
-                <span>Sign Up / Register</span>
+                <span>Create Account</span>
             </button>
         </div>
 
         <div class="auth-modal-body">
-            <!-- Recruiter Quick 1-Click Demo Login Box -->
-            <div class="demo-login-box">
-                <div class="demo-box-top">
-                    <span class="demo-recruiter-tag">⚡ Recruiter Quick Testing</span>
-                    <span class="demo-coins-tag">🪙 150 MegaCoins Loaded</span>
-                </div>
-                <button type="button" class="demo-account-btn" id="demoLoginBtn" title="Instant 1-Click Login as Tripurari Sahni">
-                    <div class="demo-account-avatar">TS</div>
-                    <div class="demo-account-info">
-                        <strong>Or continue with Demo Account (Tripurari Sahni)</strong>
-                        <span>tripurarisahni@gmail.com • +91 9876543210</span>
-                    </div>
-                    <div class="demo-account-arrow">
-                        <span>1-Click</span>
-                        <i data-lucide="arrow-right"></i>
-                    </div>
-                </button>
-            </div>
-
-            <div class="auth-divider-line">
-                <span>OR SIGN IN WITH CREDENTIALS</span>
-            </div>
-
             <!-- Tab 1: Login Form -->
             <form class="auth-tab-panel active" id="loginTabContent" novalidate>
                 <div class="auth-input-group">
                     <label for="loginIdentifier">Email or 10-Digit Mobile Phone</label>
                     <div class="auth-input-field">
                         <i data-lucide="mail" class="auth-field-icon"></i>
-                        <input type="text" id="loginIdentifier" placeholder="e.g. tripurarisahni@gmail.com or 9876543210" autocomplete="username" required>
+                        <input type="text" id="loginIdentifier" placeholder="e.g. 9876543210 or name@example.com" autocomplete="username" required>
                     </div>
                     <span class="auth-field-error" id="loginIdentifierError"></span>
                 </div>
@@ -1798,7 +1921,7 @@
                     </div>
                     <div class="auth-input-field">
                         <i data-lucide="lock" class="auth-field-icon"></i>
-                        <input type="password" id="loginPassword" placeholder="Enter password (demo: 123456)" autocomplete="current-password" required>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
                         <button type="button" class="auth-pwd-toggle" id="toggleLoginPassword" aria-label="Toggle password visibility">
                             <i data-lucide="eye" id="loginEyeIcon"></i>
                         </button>
@@ -1809,17 +1932,17 @@
                 <div class="auth-remember-row">
                     <label class="auth-checkbox-label">
                         <input type="checkbox" id="loginRememberMe" checked>
-                        <span>Keep me logged in on this browser</span>
+                        <span>Remember me on this device</span>
                     </label>
                 </div>
 
                 <button type="submit" class="auth-main-btn" id="loginSubmitBtn">
-                    <span>Login to MegaMart</span>
+                    <span>Sign In to MegaMart</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
 
                 <div class="auth-footer-text">
-                    New to MegaMart? <button type="button" class="auth-switch-link" id="switchTabToRegister">Sign Up Free</button>
+                    New to MegaMart? <button type="button" class="auth-switch-link" id="switchTabToRegister">Create Free Account</button>
                 </div>
             </form>
 
@@ -1846,7 +1969,7 @@
                 <div class="auth-input-group">
                     <label for="registerPhone">10-Digit Mobile Phone</label>
                     <div class="auth-input-field auth-phone-field">
-                        <span class="auth-phone-prefix">+91</span>
+                        <span class="auth-phone-prefix">🇮🇳 +91</span>
                         <input type="tel" id="registerPhone" placeholder="9876543210" maxlength="10" autocomplete="tel" required>
                     </div>
                     <span class="auth-field-error" id="registerPhoneError"></span>
@@ -1874,9 +1997,14 @@
                 </button>
 
                 <div class="auth-footer-text">
-                    Already have an account? <button type="button" class="auth-switch-link" id="switchTabToLogin">Log In</button>
+                    Already have an account? <button type="button" class="auth-switch-link" id="switchTabToLogin">Sign In</button>
                 </div>
             </form>
+
+            <div class="auth-trust-security-strip">
+                <i data-lucide="shield-check"></i>
+                <span>100% Secure &amp; End-to-End Encrypted</span>
+            </div>
         </div>
     </div>
 

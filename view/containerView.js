@@ -1061,6 +1061,7 @@ export class ContainerView {
         this.setupCartPageView();
         this.setupWishlistPageView();
         this.setupOrdersPageView();
+        this.setupProfileSubOptions();
         this.setupCategorySubMegaMenu();
         this.setupDynamicCategoryFilters();
         this.setupFooterLinks();
@@ -7098,23 +7099,6 @@ export class ContainerView {
             }
         });
 
-        // Recruiter 1-Click Demo Login Button (Tripurari Sahni)
-        demoLoginBtn?.addEventListener('click', () => {
-            const demoUser = {
-                name: 'Tripurari Sahni',
-                email: 'tripurarisahni@gmail.com',
-                phone: '9876543210',
-                loggedIn: true,
-                isDemo: true,
-                loginTime: new Date().toISOString()
-            };
-            this.currentUser = demoUser;
-            this.saveUserToStorage(demoUser);
-            this.updateAuthUI();
-            this.closeAuthModal();
-            this.showToast('🚀 Welcome back, Tripurari Sahni! (Demo Account)');
-        });
-
         // Login Form Submission
         loginForm?.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -7945,6 +7929,127 @@ export class ContainerView {
     }
 
 
+
+    openMegaAiDrawer() {
+        const triggerBtn = document.getElementById('megaAiTriggerBtn');
+        const drawer = document.getElementById('megaAiDrawer');
+        const overlay = document.getElementById('megaAiOverlay');
+        const textInput = document.getElementById('megaAiTextInput');
+        triggerBtn?.classList.remove('visible', 'idle-attention');
+        drawer?.classList.add('active');
+        overlay?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => textInput?.focus(), 300);
+        if (window.lucide) lucide.createIcons();
+    }
+
+    setupProfileSubOptions() {
+        const optionGroups = [
+            { triggerId: 'profileSavedAddressesBtn', panelId: 'profileAddressesPanel' },
+            { triggerId: 'profilePaymentsBtn', panelId: 'profilePaymentsPanel' },
+            { triggerId: 'profileCouponsBtn', panelId: 'profileCouponsPanel' },
+            { triggerId: 'profileSupportBtn', panelId: 'profileSupportPanel' },
+            { triggerId: 'profileSettingsBtn', panelId: 'profileSettingsPanel' },
+        ];
+
+        optionGroups.forEach(group => {
+            const trigger = document.getElementById(group.triggerId);
+            const panel = document.getElementById(group.panelId);
+
+            trigger?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isExpanded = trigger.classList.contains('expanded');
+
+                // Accordion behavior: close other panels
+                optionGroups.forEach(other => {
+                    const otherTrigger = document.getElementById(other.triggerId);
+                    const otherPanel = document.getElementById(other.panelId);
+                    if (otherPanel && otherPanel !== panel) {
+                        otherPanel.style.display = 'none';
+                        otherTrigger?.classList.remove('expanded');
+                    }
+                });
+
+                if (isExpanded) {
+                    trigger.classList.remove('expanded');
+                    if (panel) panel.style.display = 'none';
+                } else {
+                    trigger.classList.add('expanded');
+                    if (panel) {
+                        panel.style.display = 'flex';
+                        if (window.lucide) lucide.createIcons();
+                    }
+                }
+            });
+        });
+
+        // 1. Coupon copy buttons
+        document.querySelectorAll('.coupon-copy-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const code = e.currentTarget.dataset.code;
+                if (code) {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(code).catch(() => {});
+                    }
+                    const orig = e.currentTarget.textContent;
+                    e.currentTarget.textContent = 'Copied! ✓';
+                    e.currentTarget.style.background = '#059669';
+                    this.showToast(`🎉 Coupon code "${code}" copied to clipboard!`);
+                    setTimeout(() => {
+                        e.currentTarget.textContent = orig;
+                        e.currentTarget.style.background = '';
+                    }, 2000);
+                }
+            });
+        });
+
+        // 2. Ask MegaAI from Support
+        document.getElementById('supportChatAiBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.openMegaAiDrawer();
+        });
+
+        // 3. Language Selector
+        document.querySelectorAll('.lang-pill').forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.lang-pill').forEach(p => p.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                const lang = e.currentTarget.textContent;
+                this.showToast(`🌐 Language preference set to ${lang}`);
+            });
+        });
+
+        // 4. WhatsApp & Haptic Toggles
+        document.getElementById('whatsappNotifyToggle')?.addEventListener('change', (e) => {
+            const status = e.target.checked ? 'Enabled' : 'Disabled';
+            this.showToast(`WhatsApp Order Alerts ${status}`);
+        });
+
+        document.getElementById('hapticToggle')?.addEventListener('change', (e) => {
+            const status = e.target.checked ? 'Enabled' : 'Disabled';
+            this.showToast(`Sound & Haptic Alerts ${status}`);
+        });
+
+        // 5. Add Address & Add Payment Method actions
+        document.getElementById('addNewAddressBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showToast('📍 Add Address: New address saved to quick-checkout profile');
+        });
+
+        document.getElementById('addNewPaymentBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showToast('💳 UPI & Card Linking active for instant checkout');
+        });
+
+        document.getElementById('supportReportIssueBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showOrdersPageView();
+            this.showToast('Select an order to report damage or request 1-click refund');
+        });
+    }
+
     setupMegaAiCopilot() {
         const triggerBtn = document.getElementById('megaAiTriggerBtn');
         const drawer = document.getElementById('megaAiDrawer');
@@ -7983,7 +8088,7 @@ export class ContainerView {
             }
         }, 8000);
 
-        // Requirement 2: When user is idle for >15s on screen, pop up gently to offer help
+        // Requirement 2: When user is idle for >5s on screen, pop up gently to offer help
         const resetIdleTimer = () => {
             if (isDrawerOpen) return;
 
@@ -8000,7 +8105,7 @@ export class ContainerView {
                         }
                     }, 10000);
                 }
-            }, 15000);
+            }, 5000);
         };
 
         const activityEvents = ['mousemove', 'mousedown', 'scroll', 'touchstart', 'touchmove', 'keydown'];
