@@ -1359,7 +1359,24 @@ export class ContainerView {
             if (subHeaderNav) subHeaderNav.style.display = '';
         }
 
-        // Dedicated Search Hub full-screen mode: hides standard top header completely
+        // On mobile, hide global sticky navigation for dedicated views (Categories, Orders, Wishlist, Cart, Profile, Product Details, Search Hub)
+        const mobileHideHeaderViews = [
+            this.categoriesHubView,
+            this.ordersPageView,
+            this.wishlistPageView,
+            this.cartPageView,
+            this.profileView,
+            this.productDetailView,
+            this.searchHubView
+        ];
+
+        if (mobileHideHeaderViews.includes(activeView)) {
+            document.body.classList.add('mobile-hide-global-header');
+        } else {
+            document.body.classList.remove('mobile-hide-global-header');
+        }
+
+        // Dedicated Search Hub full-screen mode: hides standard top header completely on all screens
         const stickyNavbarsWrapper = document.getElementById('stickyNavbarsWrapper');
         if (activeView === this.searchHubView) {
             document.body.classList.add('in-search-hub-mode');
@@ -1697,7 +1714,7 @@ export class ContainerView {
                 if (this.searchHubClearBtn) this.searchHubClearBtn.style.display = 'flex';
             }
             this.executeSearchHubQuery('shirt');
-            this.showToast(`✨ Maya AI: Curated picks for "${prompt}"`);
+            this.showToast(`✨ MegaMart.AI: Curated picks for "${prompt}"`);
         });
 
         // Popovers & Filter Dropdowns Management

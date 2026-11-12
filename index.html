@@ -1172,7 +1172,7 @@
                 </div>
                 <button class="search-ai-trigger-btn" id="searchAiTriggerBtn" type="button">
                     <span class="ai-sparkle">✦</span>
-                    <span>Ask Maya</span>
+                    <span>Ask MegaMart.AI</span>
                     <i data-lucide="chevron-right"></i>
                 </button>
             </div>
@@ -1198,185 +1198,6 @@
                 <button class="search-chip" data-filter="topbrands" id="chipTopBrandsBtn">
                     <span>Top Brands</span>
                 </button>
-            </div>
-
-            <!-- Filter Dropdowns Backdrop Overlay -->
-            <div class="search-hub-menu-overlay" id="searchHubFilterOverlay" style="display: none;"></div>
-
-            <!-- Interactive Gender Selection Popover / Bottom Sheet -->
-            <div class="search-hub-popup-menu" id="searchHubGenderMenu" style="display: none;">
-                <div class="popup-menu-header">
-                    <div class="popup-menu-header-info">
-                        <span class="popup-menu-title">Select Gender</span>
-                        <span class="popup-menu-subtitle">Filter clothes & lifestyle by gender</span>
-                    </div>
-                    <button class="popup-menu-close" id="closeGenderMenuBtn" type="button" aria-label="Close gender menu"><i data-lucide="x"></i></button>
-                </div>
-                <div class="popup-menu-options" id="genderMenuOptions">
-                    <button class="popup-menu-item active" data-gender="all" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">All Genders</span>
-                            <span class="item-desc">Explore everything across all collections</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-gender="men" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Men</span>
-                            <span class="item-desc">Shirts, Jeans, T-Shirts, Blazers, Sneakers, Shoes</span>
-                        </div>
-                        <span class="gender-pill-tag tag-men">Men's</span>
-                    </button>
-                    <button class="popup-menu-item" data-gender="women" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Women</span>
-                            <span class="item-desc">Kurtas, Sarees, Dresses, Tops, Heels, Beauty</span>
-                        </div>
-                        <span class="gender-pill-tag tag-women">Women's</span>
-                    </button>
-                    <button class="popup-menu-item" data-gender="boys" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Kids & Boys</span>
-                            <span class="item-desc">Track pants, Casual Tees, Streetwear</span>
-                        </div>
-                        <span class="gender-pill-tag tag-kids">Kids</span>
-                    </button>
-                    <button class="popup-menu-item" data-gender="girls" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Girls</span>
-                            <span class="item-desc">Frocks, Ethnic Sets, Skirts, Casual Wear</span>
-                        </div>
-                        <span class="gender-pill-tag tag-girls">Girls</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Interactive Sort By Popover / Bottom Sheet -->
-            <div class="search-hub-popup-menu" id="searchHubSortMenu" style="display: none;">
-                <div class="popup-menu-header">
-                    <div class="popup-menu-header-info">
-                        <span class="popup-menu-title">Sort By</span>
-                        <span class="popup-menu-subtitle">Choose order for discovered items</span>
-                    </div>
-                    <button class="popup-menu-close" id="closeSortMenuBtn" type="button" aria-label="Close sort menu"><i data-lucide="x"></i></button>
-                </div>
-                <div class="popup-menu-options" id="sortMenuOptions">
-                    <button class="popup-menu-item active" data-sort="featured" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Featured & Popular</span>
-                            <span class="item-desc">Curated trending styles & editorial highlights</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-sort="price-low" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Price: Low to High</span>
-                            <span class="item-desc">Budget-friendly deals and smart finds</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-sort="price-high" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Price: High to Low</span>
-                            <span class="item-desc">Premium, designer & flagship pieces</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-sort="rating" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Customer Rating</span>
-                            <span class="item-desc">Highest rated products (4.8+ ⭐)</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-sort="discount" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Biggest Discount</span>
-                            <span class="item-desc">Maximum % savings on MRP</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Categories Quick Select Popover -->
-            <div class="search-hub-popup-menu" id="searchHubCategoriesMenu" style="display: none;">
-                <div class="popup-menu-header">
-                    <div class="popup-menu-header-info">
-                        <span class="popup-menu-title">Select Category</span>
-                        <span class="popup-menu-subtitle">Filter search feed by category</span>
-                    </div>
-                    <button class="popup-menu-close" id="closeCategoriesMenuBtn" type="button" aria-label="Close categories menu"><i data-lucide="x"></i></button>
-                </div>
-                <div class="popup-menu-options" id="categoriesMenuOptions">
-                    <button class="popup-menu-item active" data-category="all" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">All Categories</span>
-                            <span class="item-desc">Discover picks from all 9 MegaMart categories</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Fashion & Apparel" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Fashion & Apparel</span>
-                            <span class="item-desc">Men's, Women's Ethnic, Western & Footwear</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Electronics & Gadgets" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Electronics & Gadgets</span>
-                            <span class="item-desc">Smartphones, Audio, Laptops & Accessories</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Beauty & Grooming" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Beauty & Grooming</span>
-                            <span class="item-desc">Skincare, Fragrances, Haircare & Makeup</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Cold Drinks & Beverages" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Cold Drinks & Beverages</span>
-                            <span class="item-desc">Artisanal Coffee, Juices, Sodas & Teas</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Snacks & Munchies" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Snacks & Munchies</span>
-                            <span class="item-desc">Chips, Cookies, Chocolates & Instant Bites</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Dairy & Eggs" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Dairy & Eggs</span>
-                            <span class="item-desc">Fresh Milk, Paneer, Cheese, Butter & Farm Eggs</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Staples & Grains" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Staples & Grains</span>
-                            <span class="item-desc">Atta, Rice, Dal, Organic Oils & Masalas</span>
-                        </div>
-                    </button>
-                    <button class="popup-menu-item" data-category="Household & Cleaning" type="button">
-                        <div class="item-radio-circle"></div>
-                        <div class="item-label-wrap">
-                            <span class="item-title">Household Essentials</span>
-                            <span class="item-desc">Detergents, Surface Cleaners & Care</span>
-                        </div>
-                    </button>
-                </div>
             </div>
 
             <!-- Results Meta Row (Shown when actively filtering) -->
@@ -2517,6 +2338,186 @@
         </div>
     </div>
 
+    <!-- Filter Dropdowns Backdrop Overlay -->
+            <div class="search-hub-menu-overlay" id="searchHubFilterOverlay" style="display: none;"></div>
+
+            <!-- Interactive Gender Selection Popover / Bottom Sheet -->
+            <div class="search-hub-popup-menu" id="searchHubGenderMenu" style="display: none;">
+                <div class="popup-menu-header">
+                    <div class="popup-menu-header-info">
+                        <span class="popup-menu-title">Select Gender</span>
+                        <span class="popup-menu-subtitle">Filter clothes & lifestyle by gender</span>
+                    </div>
+                    <button class="popup-menu-close" id="closeGenderMenuBtn" type="button" aria-label="Close gender menu"><i data-lucide="x"></i></button>
+                </div>
+                <div class="popup-menu-options" id="genderMenuOptions">
+                    <button class="popup-menu-item active" data-gender="all" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">All Genders</span>
+                            <span class="item-desc">Explore everything across all collections</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-gender="men" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Men</span>
+                            <span class="item-desc">Shirts, Jeans, T-Shirts, Blazers, Sneakers, Shoes</span>
+                        </div>
+                        <span class="gender-pill-tag tag-men">Men's</span>
+                    </button>
+                    <button class="popup-menu-item" data-gender="women" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Women</span>
+                            <span class="item-desc">Kurtas, Sarees, Dresses, Tops, Heels, Beauty</span>
+                        </div>
+                        <span class="gender-pill-tag tag-women">Women's</span>
+                    </button>
+                    <button class="popup-menu-item" data-gender="boys" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Kids & Boys</span>
+                            <span class="item-desc">Track pants, Casual Tees, Streetwear</span>
+                        </div>
+                        <span class="gender-pill-tag tag-kids">Kids</span>
+                    </button>
+                    <button class="popup-menu-item" data-gender="girls" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Girls</span>
+                            <span class="item-desc">Frocks, Ethnic Sets, Skirts, Casual Wear</span>
+                        </div>
+                        <span class="gender-pill-tag tag-girls">Girls</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Sort By Popover / Bottom Sheet -->
+            <div class="search-hub-popup-menu" id="searchHubSortMenu" style="display: none;">
+                <div class="popup-menu-header">
+                    <div class="popup-menu-header-info">
+                        <span class="popup-menu-title">Sort By</span>
+                        <span class="popup-menu-subtitle">Choose order for discovered items</span>
+                    </div>
+                    <button class="popup-menu-close" id="closeSortMenuBtn" type="button" aria-label="Close sort menu"><i data-lucide="x"></i></button>
+                </div>
+                <div class="popup-menu-options" id="sortMenuOptions">
+                    <button class="popup-menu-item active" data-sort="featured" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Featured & Popular</span>
+                            <span class="item-desc">Curated trending styles & editorial highlights</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-sort="price-low" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Price: Low to High</span>
+                            <span class="item-desc">Budget-friendly deals and smart finds</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-sort="price-high" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Price: High to Low</span>
+                            <span class="item-desc">Premium, designer & flagship pieces</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-sort="rating" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Customer Rating</span>
+                            <span class="item-desc">Highest rated products (4.8+ ⭐)</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-sort="discount" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Biggest Discount</span>
+                            <span class="item-desc">Maximum % savings on MRP</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories Quick Select Popover -->
+            <div class="search-hub-popup-menu" id="searchHubCategoriesMenu" style="display: none;">
+                <div class="popup-menu-header">
+                    <div class="popup-menu-header-info">
+                        <span class="popup-menu-title">Select Category</span>
+                        <span class="popup-menu-subtitle">Filter search feed by category</span>
+                    </div>
+                    <button class="popup-menu-close" id="closeCategoriesMenuBtn" type="button" aria-label="Close categories menu"><i data-lucide="x"></i></button>
+                </div>
+                <div class="popup-menu-options" id="categoriesMenuOptions">
+                    <button class="popup-menu-item active" data-category="all" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">All Categories</span>
+                            <span class="item-desc">Discover picks from all 9 MegaMart categories</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Fashion & Apparel" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Fashion & Apparel</span>
+                            <span class="item-desc">Men's, Women's Ethnic, Western & Footwear</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Electronics & Gadgets" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Electronics & Gadgets</span>
+                            <span class="item-desc">Smartphones, Audio, Laptops & Accessories</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Beauty & Grooming" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Beauty & Grooming</span>
+                            <span class="item-desc">Skincare, Fragrances, Haircare & Makeup</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Cold Drinks & Beverages" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Cold Drinks & Beverages</span>
+                            <span class="item-desc">Artisanal Coffee, Juices, Sodas & Teas</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Snacks & Munchies" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Snacks & Munchies</span>
+                            <span class="item-desc">Chips, Cookies, Chocolates & Instant Bites</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Dairy & Eggs" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Dairy & Eggs</span>
+                            <span class="item-desc">Fresh Milk, Paneer, Cheese, Butter & Farm Eggs</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Staples & Grains" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Staples & Grains</span>
+                            <span class="item-desc">Atta, Rice, Dal, Organic Oils & Masalas</span>
+                        </div>
+                    </button>
+                    <button class="popup-menu-item" data-category="Household & Cleaning" type="button">
+                        <div class="item-radio-circle"></div>
+                        <div class="item-label-wrap">
+                            <span class="item-title">Household Essentials</span>
+                            <span class="item-desc">Detergents, Surface Cleaners & Care</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
