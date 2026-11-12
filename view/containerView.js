@@ -6337,14 +6337,19 @@ export class ContainerView {
 
         // Proceed to Checkout
         const proceedBtn = document.getElementById('cartPageProceedBtn');
-        proceedBtn?.addEventListener('click', () => {
+        const handleCheckout = () => {
             const cartItems = this.data.filter(i => i.quantity > 0);
             if (cartItems.length === 0) {
                 this.showToast('Your cart is empty! Add products before checking out.');
                 return;
             }
             this.openCheckoutModal();
-        });
+        };
+        proceedBtn?.addEventListener('click', handleCheckout);
+
+        // Mobile Sticky Checkout Button (Zepto/Blinkit Style)
+        const mobileStickyBtn = document.getElementById('mobileCartStickyCheckoutBtn');
+        mobileStickyBtn?.addEventListener('click', handleCheckout);
 
         // MegaCoins Checkbox Toggle
         const coinsToggle = document.getElementById('cartPageRedeemCoins');
@@ -6369,12 +6374,16 @@ export class ContainerView {
             cartPageItemCount.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}`;
         }
 
+        const mobileStickyBar = document.getElementById('mobileCartStickyBar');
+        const mobileStickyTotal = document.getElementById('mobileCartStickyTotal');
+
         if (cartItems.length === 0) {
             if (cartPageItemsList) cartPageItemsList.style.display = 'none';
             if (cartPageEmpty) cartPageEmpty.style.display = 'flex';
             if (cartPageRightCol) cartPageRightCol.style.display = 'none';
             if (clearBtn) clearBtn.style.display = 'none';
             if (freeDeliveryAlert) freeDeliveryAlert.style.display = 'none';
+            if (mobileStickyBar) mobileStickyBar.style.display = 'none';
         } else {
             if (cartPageItemsList) {
                 cartPageItemsList.style.display = 'flex';
@@ -6549,6 +6558,10 @@ export class ContainerView {
 
             if (cartPageRedeemCoins) cartPageRedeemCoins.checked = this.redeemMegaCoins;
             if (summaryFinalTotal) summaryFinalTotal.textContent = `₹${finalTotal.toFixed(2)}`;
+            const mobileStickyBar = document.getElementById('mobileCartStickyBar');
+            const mobileStickyTotal = document.getElementById('mobileCartStickyTotal');
+            if (mobileStickyTotal) mobileStickyTotal.textContent = `₹${finalTotal.toFixed(2)}`;
+            if (mobileStickyBar) mobileStickyBar.style.display = window.innerWidth <= 900 ? 'flex' : 'none';
             if (summaryTotalSavings) summaryTotalSavings.textContent = `₹${totalSavings.toFixed(2)}`;
         }
 
@@ -7770,27 +7783,57 @@ export class ContainerView {
         const empty = document.getElementById('ordersPageEmpty');
         const countPill = document.getElementById('ordersPageCountPill');
 
-        const orders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
-        const count = orders.length;
+        const allOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
+        const count = allOrders.length;
 
         if (countPill) countPill.textContent = `${count} Order${count === 1 ? '' : 's'} Placed`;
 
-        if (count === 0) {
+        // Apply active filter: 'all', 'active', 'delivered'
+        const filter = this.ordersActiveFilter || 'all';
+        let filteredOrders = allOrders;
+        if (filter === 'active') {
+            filteredOrders = allOrders.slice(0, 1); // Latest order is active 10-min delivery
+        } else if (filter === 'delivered') {
+            filteredOrders = allOrders.slice(1);
+        }
+
+        if (filteredOrders.length === 0) {
             if (list) list.style.display = 'none';
             if (empty) empty.style.display = 'block';
         } else {
             if (empty) empty.style.display = 'none';
             if (list) {
                 list.style.display = 'flex';
-                list.innerHTML = orders.map((order, idx) => {
+                list.innerHTML = filteredOrders.map((order, filteredIdx) => {
+                    const originalIdx = allOrders.findIndex(o => o.orderId === order.orderId);
+                    const isLatestLive = originalIdx === 0;
+
                     const dateStr = order.date ? new Date(order.date).toLocaleDateString('en-IN', {
                         day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
                     }) : 'Recently';
 
-                    const isLatestLive = idx === 0;
                     const statusBadgeHtml = isLatestLive 
                         ? `<span class="order-status-badge status-out-for-delivery"><i data-lucide="truck"></i> Out for Delivery (10 min)</span>`
                         : `<span class="order-status-badge status-delivered"><i data-lucide="check-circle-2"></i> Delivered</span>`;
+
+                    // Live Tracking Stepper for active orders
+                    const liveProgressHtml = isLatestLive ? `
+                        <div class="order-live-progress-box">
+                            <div class="olp-header">
+                                <span class="olp-pulse-beacon"></span>
+                                <span class="olp-title">Arriving in ~8 mins • Electric Eco-Scooter</span>
+                            </div>
+                            <div class="olp-stepper">
+                                <div class="olp-step done"><i data-lucide="check"></i><span>Placed</span></div>
+                                <div class="olp-step-line done"></div>
+                                <div class="olp-step done"><i data-lucide="check"></i><span>Packed</span></div>
+                                <div class="olp-step-line done"></div>
+                                <div class="olp-step active"><i data-lucide="truck"></i><span>On Way</span></div>
+                                <div class="olp-step-line"></div>
+                                <div class="olp-step"><i data-lucide="home"></i><span>Doorstep</span></div>
+                            </div>
+                        </div>
+                    ` : '';
 
                     const itemsHtml = (order.items || []).map(item => {
                         const catalogItem = this.data.find(d => d.name === item.name);
@@ -7825,6 +7868,7 @@ export class ContainerView {
                                 </div>
                                 ${statusBadgeHtml}
                             </div>
+                            ${liveProgressHtml}
                             <div class="order-card-items">
                                 ${itemsHtml}
                             </div>
@@ -7857,6 +7901,16 @@ export class ContainerView {
     setupOrdersPageView() {
         document.getElementById('ordersPageBackBtn')?.addEventListener('click', () => {
             this.showHomeView();
+        });
+
+        // Filter chips (All, Active, Delivered)
+        document.getElementById('ordersFilterStrip')?.addEventListener('click', (e) => {
+            const chip = e.target.closest('.orders-filter-chip');
+            if (!chip) return;
+            document.querySelectorAll('#ordersFilterStrip .orders-filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            this.ordersActiveFilter = chip.dataset.filter || 'all';
+            this.renderOrdersPageView();
         });
 
         document.getElementById('ordersEmptyShopBtn')?.addEventListener('click', () => {

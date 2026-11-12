@@ -1251,49 +1251,61 @@
         <div id="profileView" class="view-section" style="display: none;">
             <div class="container">
                 <div class="profile-layout">
+                    <!-- Modern VIP Hero Card -->
                     <div class="profile-header">
-                        <div class="profile-avatar" id="profileAvatar">
-                            <span id="profileAvatarText"><i data-lucide="user"></i></span>
+                        <div class="profile-avatar-wrap">
+                            <div class="profile-avatar" id="profileAvatar">
+                                <span id="profileAvatarText"><i data-lucide="user"></i></span>
+                            </div>
+                            <span class="avatar-verified-badge" title="Verified User"><i data-lucide="check"></i></span>
                         </div>
                         <div class="profile-info">
-                            <h2 id="profileUserName">Guest User</h2>
-                            <p id="profileUserContact">Sign in to access orders, wishlist, and rewards</p>
+                            <div class="profile-name-row">
+                                <h2 id="profileUserName">Tripurari Sahni</h2>
+                                <span class="profile-vip-pill"><i data-lucide="crown"></i> SuperSaver VIP</span>
+                            </div>
+                            <p id="profileUserContact">+91 9876543210 • tripurarisahni@gmail.com</p>
                         </div>
                         <button class="auth-btn-profile" id="profileLoginBtn" style="display:none;"><i data-lucide="log-in"></i> Sign In</button>
-                        <button class="edit-profile-btn" id="editProfileBtn"><i data-lucide="edit-3"></i></button>
+                        <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile Details"><i data-lucide="edit-3"></i></button>
                     </div>
 
+                    <!-- 4-Card Quick Stats Bar -->
                     <div class="profile-stats">
                         <div class="stat-card">
-                            <span class="stat-value" id="profileOrdersCount">0</span>
+                            <div class="stat-icon-wrap stat-orders"><i data-lucide="package"></i></div>
+                            <span class="stat-value" id="profileOrdersCount">3</span>
                             <span class="stat-label">Orders</span>
                         </div>
                         <div class="stat-card">
-                            <span class="stat-value" id="profileCoinBalance">150</span>
+                            <div class="stat-icon-wrap stat-coins"><i data-lucide="coins"></i></div>
+                            <span class="stat-value" id="profileCoinBalance">268</span>
                             <span class="stat-label">MegaCoins</span>
                         </div>
                         <div class="stat-card">
+                            <div class="stat-icon-wrap stat-savings"><i data-lucide="wallet"></i></div>
                             <span class="stat-value">₹450</span>
                             <span class="stat-label">Saved</span>
                         </div>
                         <div class="stat-card">
+                            <div class="stat-icon-wrap stat-coupons"><i data-lucide="ticket"></i></div>
                             <span class="stat-value">5</span>
                             <span class="stat-label">Coupons</span>
                         </div>
                     </div>
 
-                    <!-- Flipkart SuperCoins / MegaCoins Rewards Banner -->
+                    <!-- MegaCoins Rewards VIP Banner -->
                     <div class="profile-megacoins-card">
                         <div class="coins-card-top">
                             <div class="coins-card-title">
                                 <span class="coin-gold-large">🪙</span>
                                 <div>
                                     <h3>MegaCoins Rewards Balance</h3>
-                                    <p>1 MegaCoin = ₹1 instant savings on every order</p>
+                                    <p>1 MegaCoin = ₹1 instant savings on every grocery order</p>
                                 </div>
                             </div>
                             <div class="coins-balance-display">
-                                <span class="coins-number" id="profileCoinBalanceDisplay">150</span>
+                                <span class="coins-number" id="profileCoinBalanceDisplay">268</span>
                                 <span class="coins-unit">Coins</span>
                             </div>
                         </div>
@@ -1304,7 +1316,7 @@
                         </div>
                     </div>
 
-                    <!-- Prominent Delivery Location & Pincode Card (Image 1 Mobile Location Requirement) -->
+                    <!-- Prominent Delivery Location & Pincode Card -->
                     <div class="profile-location-card" id="profileLocationCard" role="button" tabindex="0" title="Click to change your delivery location">
                         <div class="profile-loc-icon-bubble">
                             <i data-lucide="map-pin"></i>
@@ -1323,44 +1335,90 @@
                         </button>
                     </div>
 
-                    <div class="profile-menu">
-                        <div class="menu-item" id="profileOrdersBtn">
-                            <div class="menu-icon"><i data-lucide="shopping-bag"></i></div>
-                            <span>My Orders</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
+                    <!-- Grouped Inset Sections (iOS / Blinkit App Style) -->
+                    <div class="profile-sections-wrapper">
+                        <!-- Group 1: Orders & Delivery -->
+                        <div class="profile-group-box">
+                            <span class="profile-group-title">ORDERS &amp; TRACKING</span>
+                            <div class="profile-menu">
+                                <div class="menu-item" id="profileOrdersBtn">
+                                    <div class="menu-icon icon-orders"><i data-lucide="shopping-bag"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">My Orders</span>
+                                        <span class="menu-item-sub">View order status, history &amp; reorder</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                                <div class="menu-item" id="profileTrackBtn">
+                                    <div class="menu-icon icon-track"><i data-lucide="navigation"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">Live Order Tracking</span>
+                                        <span class="menu-item-sub">Radar GPS view of active delivery</span>
+                                    </div>
+                                    <span class="menu-live-pill">LIVE 🟢</span>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                                <div class="menu-item" id="profileSavedAddressesBtn">
+                                    <div class="menu-icon icon-address"><i data-lucide="map-pin"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">Delivery Addresses &amp; Pincodes</span>
+                                        <span class="menu-item-sub">Saved home, office &amp; delivery locations</span>
+                                    </div>
+                                    <span class="profile-menu-badge" id="profileMenuPincodeBadge">400001</span>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div class="menu-item" id="profileTrackBtn">
-                            <div class="menu-icon"><i data-lucide="navigation"></i></div>
-                            <span>Live Order Tracking</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
+
+                        <!-- Group 2: Payments & Rewards -->
+                        <div class="profile-group-box">
+                            <span class="profile-group-title">PAYMENTS &amp; REWARDS</span>
+                            <div class="profile-menu">
+                                <div class="menu-item">
+                                    <div class="menu-icon icon-payments"><i data-lucide="credit-card"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">Payments &amp; Refunds</span>
+                                        <span class="menu-item-sub">UPI, saved cards, instant refund log</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="menu-icon icon-coupons"><i data-lucide="ticket"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">Coupons &amp; Exclusive Deals</span>
+                                        <span class="menu-item-sub">5 active promo codes available</span>
+                                    </div>
+                                    <span class="menu-coupon-badge">5 ACTIVE</span>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div class="menu-item" id="profileSavedAddressesBtn">
-                            <div class="menu-icon"><i data-lucide="map-pin"></i></div>
-                            <span>Delivery Addresses & Pincodes</span>
-                            <span class="profile-menu-badge" id="profileMenuPincodeBadge">400001</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
-                        </div>
-                        <div class="menu-item">
-                            <div class="menu-icon"><i data-lucide="credit-card"></i></div>
-                            <span>Payments & Refunds</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
-                        </div>
-                        <div class="menu-item">
-                            <div class="menu-icon"><i data-lucide="headphones"></i></div>
-                            <span>Help & Support</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
-                        </div>
-                        <div class="menu-item">
-                            <div class="menu-icon"><i data-lucide="settings"></i></div>
-                            <span>Settings</span>
-                            <i data-lucide="chevron-right" class="arrow"></i>
+
+                        <!-- Group 3: Support & App Settings -->
+                        <div class="profile-group-box">
+                            <span class="profile-group-title">SUPPORT &amp; PREFERENCES</span>
+                            <div class="profile-menu">
+                                <div class="menu-item">
+                                    <div class="menu-icon icon-support"><i data-lucide="headphones"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">24x7 Help &amp; Customer Support</span>
+                                        <span class="menu-item-sub">Chat with MegaMart AI or human executive</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="menu-icon icon-settings"><i data-lucide="settings"></i></div>
+                                    <div class="menu-item-text">
+                                        <span class="menu-item-title">Settings &amp; App Language</span>
+                                        <span class="menu-item-sub">Notifications, privacy, English / हिंदी</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="arrow"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button class="logout-btn" id="profileLogoutBtn">
-                        <i data-lucide="log-out"></i>
-                        <span>Log Out</span>
-                    </button>
+                    <button class="logout-btn" id="profileLogoutBtn"><i data-lucide="log-out"></i> Log Out</button>
                 </div>
             </div>
         </div>
@@ -1485,6 +1543,18 @@
                 </div>
             </div>
         </div>
+            <!-- Mobile Sticky Bottom Checkout Bar (Zepto/Blinkit Style) -->
+            <div class="mobile-cart-sticky-checkout" id="mobileCartStickyBar" style="display: none;">
+                <div class="mc-sticky-left">
+                    <span class="mc-sticky-total-label">Total to Pay</span>
+                    <span class="mc-sticky-total-val" id="mobileCartStickyTotal">₹0.00</span>
+                    <span class="mc-sticky-savings" id="mobileCartStickySavings"><i data-lucide="sparkles"></i> FREE Delivery</span>
+                </div>
+                <button type="button" class="mc-sticky-checkout-btn" id="mobileCartStickyCheckoutBtn">
+                    <span>Proceed to Pay</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
 
         <!-- ================= WISHLIST PAGE VIEW ================= -->
         <div id="wishlistPageView" class="view-section" style="display: none;">
@@ -1532,6 +1602,13 @@
                         <h2>My Orders & History</h2>
                         <span class="orders-badge-pill" id="ordersPageCountPill">0 Orders Placed</span>
                     </div>
+                </div>
+
+                <!-- Mobile Orders Filter Strip (Blinkit/Amazon Style) -->
+                <div class="orders-filter-strip" id="ordersFilterStrip">
+                    <button class="orders-filter-chip active" data-filter="all">All Orders</button>
+                    <button class="orders-filter-chip" data-filter="active">⚡ Active (10-min Live)</button>
+                    <button class="orders-filter-chip" data-filter="delivered">✓ Delivered</button>
                 </div>
 
                 <!-- Main Content: Orders List -->
