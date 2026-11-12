@@ -1,9 +1,9 @@
 /**
- * MegaMart AI Copilot Serverless API Endpoint (Powered by Google Gemini 3.5 Flash)
+ * MegaMart AI Copilot Serverless API Endpoint (Powered by Google Gemini 1.5 Flash)
  * POST /api/ai-copilot
  * 
  * Features:
- * - Direct Google Gemini 3.5 Flash REST API Integration with JSON Schema Output
+ * - Direct Google Gemini 1.5 Flash REST API Integration with JSON Schema Output
  * - Strict E-commerce Domain Guardrails (Prompt Engineering + System Instructions)
  * - Intelligent Entity Matching with Supabase PostgreSQL Catalog (246 Products)
  * - Fallback to Local Semantic Engine if GEMINI_API_KEY is not configured
@@ -13,11 +13,13 @@ const GEMINI_SYSTEM_INSTRUCTION = `You are MegaAI, the official autonomous AI Sh
 
 YOUR STRICT RULES:
 1. STRICT E-COMMERCE GUARDRAIL: You ONLY answer questions related to shopping, products, groceries, meal recipes, ingredients, gym/fitness nutrition, prices, discounts, order tracking, returns, and customer feedback.
-2. If the user asks ANY non-shopping question (e.g. politics, general history, programming, writing essays, math puzzles), politely decline in a friendly Indian quick-commerce tone (Hinglish/English) and steer them back to shopping.
-3. If the user gives a list (e.g., "gym products: eggs, peanut butter, oats, milk" or "dinner list: atta, paneer, ghee"), classify intent as "interactive_checklist" and break down the discrete items in "itemsToSearch".
-4. If the user asks for a recipe (e.g., "paneer butter masala", "biryani", "tea party"), classify intent as "recipe_bundle" and list the cooking ingredients needed.
-5. If the user asks about order status, tracking, or support, classify intent as "order_support".
-6. Respond with valid JSON matching the exact schema requested. Keep responses helpful, snappy, and polite.`;
+2. If the user greets (e.g. "hi", "hello", "namaste"), classify intent as "friendly_greeting" and welcome them warmly. DO NOT suggest random expensive products on greetings!
+3. If the user asks ANY non-shopping question (e.g. politics, general history, programming, writing essays, math puzzles), politely decline in a friendly Indian quick-commerce tone (Hinglish/English) and steer them back to shopping.
+4. If the user gives a list (e.g., "gym products: eggs, peanut butter, oats, milk" or "dinner list: atta, paneer, ghee"), classify intent as "interactive_checklist" and break down the discrete items in "itemsToSearch".
+5. If the user asks for past orders or reordering, classify intent as "past_orders_reorder".
+6. If the user asks for a recipe (e.g., "paneer butter masala", "biryani", "tea party"), classify intent as "recipe_bundle" and list the cooking ingredients needed.
+7. If the user asks about order status, tracking, or support, classify intent as "order_support".
+8. Respond with valid JSON matching the exact schema requested. Keep responses helpful, snappy, and polite.`;
 
 export default async function handler(req, res) {
   // CORS & Methods
@@ -50,10 +52,10 @@ export default async function handler(req, res) {
     console.warn('[Supabase Catalog Fetch Error]:', err.message);
   }
 
-  // 3. If Gemini API Key is provided, call Google Gemini 3.5 Flash
+  // 3. If Gemini API Key is provided, call Google Gemini 1.5 Flash
   if (geminiApiKey) {
     try {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${geminiApiKey}`;
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
 
       const geminiPayload = {
         contents: [

@@ -7956,7 +7956,66 @@ export class ContainerView {
 
         if (!triggerBtn || !drawer) return;
 
+        let isDrawerOpen = false;
+        let initialHideTimer = null;
+        let idleTimer = null;
+        let idleAutoHideTimer = null;
+
+        const showFab = (isIdle = false) => {
+            if (isDrawerOpen) return;
+            triggerBtn.classList.add('visible');
+            if (isIdle) {
+                triggerBtn.classList.add('idle-attention');
+            } else {
+                triggerBtn.classList.remove('idle-attention');
+            }
+        };
+
+        const hideFab = () => {
+            triggerBtn.classList.remove('visible', 'idle-attention');
+        };
+
+        // Requirement 1: When user first opens website, show for 8s, then hide if not clicked
+        showFab(false);
+        initialHideTimer = setTimeout(() => {
+            if (!isDrawerOpen) {
+                hideFab();
+            }
+        }, 8000);
+
+        // Requirement 2: When user is idle for >15s on screen, pop up gently to offer help
+        const resetIdleTimer = () => {
+            if (isDrawerOpen) return;
+
+            if (idleTimer) clearTimeout(idleTimer);
+
+            idleTimer = setTimeout(() => {
+                if (!isDrawerOpen) {
+                    showFab(true);
+                    if (idleAutoHideTimer) clearTimeout(idleAutoHideTimer);
+                    // Stay visible for 10s after idle popup
+                    idleAutoHideTimer = setTimeout(() => {
+                        if (!isDrawerOpen) {
+                            hideFab();
+                        }
+                    }, 10000);
+                }
+            }, 15000);
+        };
+
+        const activityEvents = ['mousemove', 'mousedown', 'scroll', 'touchstart', 'touchmove', 'keydown'];
+        activityEvents.forEach(evt => {
+            window.addEventListener(evt, resetIdleTimer, { passive: true });
+        });
+        resetIdleTimer();
+
         const openDrawer = () => {
+            isDrawerOpen = true;
+            if (initialHideTimer) clearTimeout(initialHideTimer);
+            if (idleTimer) clearTimeout(idleTimer);
+            if (idleAutoHideTimer) clearTimeout(idleAutoHideTimer);
+            hideFab();
+
             drawer.classList.add('active');
             overlay?.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -7965,9 +8024,11 @@ export class ContainerView {
         };
 
         const closeDrawer = () => {
+            isDrawerOpen = false;
             drawer.classList.remove('active');
             overlay?.classList.remove('active');
             document.body.style.overflow = '';
+            resetIdleTimer();
         };
 
         triggerBtn.addEventListener('click', openDrawer);
@@ -7998,11 +8059,12 @@ export class ContainerView {
         const chatBody = document.getElementById('megaAiChatBody');
         if (!chatBody) return;
 
-        // 1. Render User Outgoing Bubble
+        // 1. Render User Outgoing Bubble (sanitized against XSS)
         const userMsg = document.createElement('div');
         userMsg.className = 'ai-message-row ai-outgoing';
+        const sanitizedQuery = query.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         userMsg.innerHTML = `
-            <div class="ai-msg-bubble"><p>${query}</p></div>
+            <div class="ai-msg-bubble"><p>${sanitizedQuery}</p></div>
             <div class="ai-msg-avatar">👤</div>
         `;
         chatBody.appendChild(userMsg);
@@ -8025,7 +8087,7 @@ export class ContainerView {
         chatBody.appendChild(thinkingRow);
         chatBody.scrollTop = chatBody.scrollHeight;
 
-        // User Context for History & Support
+        // User Context for History, Cart & Support
         const userOrders = JSON.parse(localStorage.getItem('megamart_orders') || '[]');
         const activeCart = this.data.filter(i => i.quantity > 0);
         const context = {
@@ -8046,7 +8108,7 @@ export class ContainerView {
 
         let cardHtml = '';
 
-        // --- A. Interactive Shopping Checklist ---
+        // --- A. Interactive Multi-Item Shopping Checklist ---
         if (response.type === 'interactive_checklist' && response.checklist) {
             let checklistState = response.checklist.map((item, idx) => ({
                 id: item.product.id,
@@ -8054,7 +8116,7 @@ export class ContainerView {
                 unit: item.product.unit || '1 unit',
                 price: Number(item.product.discount_price || item.product.price || 0),
                 img: item.product.src || item.product.image_url,
-                qty: 1,
+                qty: item.quantity || 1,
                 selected: true
             }));
 
@@ -8068,7 +8130,7 @@ export class ContainerView {
                 return checklistState.map((item, idx) => `
                     <div class="ai-check-item-row ${item.selected ? '' : 'unselected'}" data-index="${idx}">
                         <input type="checkbox" class="ai-check-box" data-index="${idx}" ${item.selected ? 'checked' : ''}>
-                        <img src="${item.img}" alt="${item.name}" class="ai-check-thumb">
+                        <img src="${item.img}" alt="${item.name}" class="ai-check-thumb" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200'">
                         <div class="ai-check-details">
                             <div class="ai-check-name">${item.name}</div>
                             <div class="ai-check-meta">
@@ -8105,7 +8167,7 @@ export class ContainerView {
             aiMsg.innerHTML = `
                 <div class="ai-msg-avatar">✨</div>
                 <div class="ai-msg-bubble">
-                    <p>${response.reply}</p>
+                    <p style="white-space:pre-line;">${response.reply}</p>
                     ${cardHtml}
                 </div>
             `;
@@ -8165,7 +8227,7 @@ export class ContainerView {
                         return;
                     }
                     selected.forEach(item => {
-                        const target = this.data.find(d => d.id === item.id);
+                        const target = this.data.find(d => d.id === item.id || (d.name && item.name && d.name.toLowerCase() === item.name.toLowerCase()));
                         if (target) {
                             target.quantity = (target.quantity || 0) + item.qty;
                         }
@@ -8182,7 +8244,85 @@ export class ContainerView {
                 }
             });
         }
-        // --- B. Live Order Tracking Card ---
+        // --- B. Purchase History & 1-Click Past Order Reorder ---
+        else if (response.type === 'past_orders_reorder' && response.items) {
+            cardHtml = `
+                <div class="ai-reorder-card" id="aiReorderCard">
+                    <div class="ai-reorder-header">
+                        <div class="ai-reorder-badge"><i data-lucide="rotate-ccw"></i> Past Order ${response.orderId}</div>
+                        <span class="ai-reorder-date">${response.orderDate || 'Recent'}</span>
+                    </div>
+                    <div class="ai-reorder-items-list">
+                        ${response.items.map((item, idx) => `
+                            <div class="ai-reorder-item-row" data-index="${idx}">
+                                <img src="${item.src}" alt="${item.name}" class="ai-reorder-thumb" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200'">
+                                <div class="ai-reorder-info">
+                                    <div class="ai-reorder-name">${item.name}</div>
+                                    <div class="ai-reorder-meta">
+                                        <span class="ai-reorder-price">₹${item.price}</span>
+                                        <span>• Qty: ${item.qty}</span>
+                                        <span>• ${item.unit}</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="ai-single-reorder-btn" data-index="${idx}">+ Add</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="ai-reorder-all-btn" id="aiReorderAllBtn" type="button">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>${response.actionLabel || `🔄 Reorder All to Cart (₹${response.totalPrice})`}</span>
+                    </button>
+                </div>
+            `;
+
+            aiMsg.innerHTML = `
+                <div class="ai-msg-avatar">✨</div>
+                <div class="ai-msg-bubble">
+                    <p style="white-space:pre-line;">${response.reply}</p>
+                    ${cardHtml}
+                </div>
+            `;
+            chatBody.appendChild(aiMsg);
+
+            const reorderCardEl = aiMsg.querySelector('#aiReorderCard');
+            // 1-Click Reorder All to Cart
+            reorderCardEl?.querySelector('#aiReorderAllBtn')?.addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                response.items.forEach(item => {
+                    const target = this.data.find(d => d.id === item.id || (d.name && item.name && d.name.toLowerCase() === item.name.toLowerCase()));
+                    if (target) {
+                        target.quantity = (target.quantity || 0) + (item.qty || 1);
+                    }
+                });
+                this.updateCartUI();
+                this.saveCartToStorage();
+                btn.innerHTML = `<i data-lucide="check"></i> <span>✓ Reordered All ${response.items.length} Items to Cart!</span>`;
+                btn.style.background = '#059669';
+                this.showToast(`🎉 Reordered all items from ${response.orderId} to your cart!`);
+                if (window.lucide) lucide.createIcons();
+            });
+
+            // Single item add button
+            reorderCardEl?.querySelectorAll('.ai-single-reorder-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = Number(e.currentTarget.dataset.index);
+                    const item = response.items[idx];
+                    if (item) {
+                        const target = this.data.find(d => d.id === item.id || (d.name && item.name && d.name.toLowerCase() === item.name.toLowerCase()));
+                        if (target) {
+                            target.quantity = (target.quantity || 0) + (item.qty || 1);
+                        }
+                        this.updateCartUI();
+                        this.saveCartToStorage();
+                        e.currentTarget.textContent = '✓ Added';
+                        e.currentTarget.style.background = '#059669';
+                        e.currentTarget.style.color = '#ffffff';
+                        this.showToast(`Added ${item.name} to cart!`);
+                    }
+                });
+            });
+        }
+        // --- C. Live Order Tracking Card ---
         else if (response.type === 'order_tracking_card') {
             cardHtml = `
                 <div class="ai-tracking-card">
@@ -8227,7 +8367,7 @@ export class ContainerView {
                 this.showOrdersPageView();
             });
         }
-        // --- C. Feedback Card with Interactive Stars ---
+        // --- D. Feedback Card with Interactive Stars ---
         else if (response.type === 'feedback_acknowledged') {
             cardHtml = `
                 <div class="ai-feedback-stars-row" id="aiStarsRow">
@@ -8254,8 +8394,8 @@ export class ContainerView {
                 });
             });
         }
-        // --- D. Guardrail Rejection with Actionable Chips ---
-        else if (response.type === 'guardrail_reject' && response.suggestions) {
+        // --- E. Friendly Greeting / Guardrail Reject / Security Blocked with Actionable Chips ---
+        else if ((response.type === 'friendly_greeting' || response.type === 'guardrail_reject' || response.type === 'security_blocked') && response.suggestions) {
             const chipsHtml = response.suggestions.map(s => `
                 <button class="ai-prompt-chip" data-prompt="${s}" style="margin:3px 2px;" type="button">${s}</button>
             `).join('');
@@ -8274,7 +8414,7 @@ export class ContainerView {
                 });
             });
         }
-        // --- E. Standard Product Bundles & Recommendations ---
+        // --- F. Standard Product Bundles & Recommendations ---
         else {
             if (response.items && response.items.length > 0) {
                 cardHtml = `
@@ -8286,7 +8426,7 @@ export class ContainerView {
                         <div class="ai-bundle-items-list">
                             ${response.items.map(item => `
                                 <div class="ai-bundle-item-row">
-                                    <img src="${item.src || item.image_url}" alt="${item.name || item.title}" class="ai-bundle-item-img">
+                                    <img src="${item.src || item.image_url}" alt="${item.name || item.title}" class="ai-bundle-item-img" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200'">
                                     <div class="ai-bundle-item-info">
                                         <div class="ai-bundle-item-name">${item.name || item.title}</div>
                                         <div class="ai-bundle-item-price">₹${item.discount_price || item.price} <span style="font-weight:400;color:#64748b;font-size:0.65rem;">(${item.unit || '1 unit'})</span></div>
@@ -8314,7 +8454,7 @@ export class ContainerView {
             aiMsg.querySelector('.ai-add-all-btn')?.addEventListener('click', (e) => {
                 const btn = e.currentTarget;
                 response.items.forEach(item => {
-                    const target = this.data.find(d => d.id === item.id);
+                    const target = this.data.find(d => d.id === item.id || (d.name && item.name && d.name.toLowerCase() === item.name.toLowerCase()));
                     if (target) {
                         target.quantity = (target.quantity || 0) + 1;
                     }

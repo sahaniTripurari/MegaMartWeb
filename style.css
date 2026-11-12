@@ -12266,78 +12266,92 @@ body {
    MEGAMART AI SHOPPING COPILOT & SEMANTIC VECTOR SEARCH STYLING
    ============================================================================== */
 
-/* Floating AI Copilot Trigger Pill */
-.mega-ai-floating-pill {
+/* Floating AI Copilot Round Star Trigger FAB (Zepto/Blinkit/Uber Style) */
+.mega-ai-floating-fab {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 998;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 50%, #be185d 100%);
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.45);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-}
-
-.mega-ai-floating-pill:hover {
-  transform: translateY(-4px) scale(1.04);
-  box-shadow: 0 16px 36px rgba(109, 40, 217, 0.6);
-  border-color: #ffffff;
-}
-
-.mega-ai-floating-pill:active {
-  transform: scale(0.96);
-}
-
-.ai-sparkle-halo {
-  width: 30px;
-  height: 30px;
+  bottom: 26px;
+  right: 26px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
+  z-index: 998;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-  animation: aiPulseHalo 2.5s infinite;
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 50%, #be185d 100%);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 28px rgba(109, 40, 217, 0.5);
+  cursor: pointer;
+  user-select: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px) scale(0.85);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 }
 
-@keyframes aiPulseHalo {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
-  50% { transform: scale(1.15); box-shadow: 0 0 18px rgba(255, 255, 255, 0.9); }
+.mega-ai-floating-fab.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
-.ai-pill-text {
+.mega-ai-floating-fab.idle-attention {
+  animation: fabIdleAttention 2s ease-in-out infinite;
+}
+
+@keyframes fabIdleAttention {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 24px rgba(109, 40, 217, 0.45);
+  }
+  30% {
+    transform: translateY(-7px) scale(1.1);
+    box-shadow: 0 14px 30px rgba(219, 39, 119, 0.65);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.04);
+  }
+  70% {
+    transform: translateY(-6px) scale(1.08);
+    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.6);
+  }
+}
+
+.mega-ai-floating-fab:hover {
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 16px 36px rgba(109, 40, 217, 0.65);
+  border-color: #ffffff;
+}
+
+.mega-ai-floating-fab:active {
+  transform: scale(0.95);
+}
+
+.ai-fab-star-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
   display: flex;
-  flex-direction: column;
-  text-align: left;
+  align-items: center;
+  justify-content: center;
+  animation: aiStarShimmer 3s ease-in-out infinite;
 }
 
-.ai-pill-title {
-  font-size: 0.88rem;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.2px;
+@keyframes aiStarShimmer {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(12deg); }
 }
 
-.ai-pill-sub {
-  font-size: 0.62rem;
-  opacity: 0.9;
-  font-weight: 500;
-}
-
-.ai-live-pulse-dot {
-  width: 8px;
-  height: 8px;
+.ai-fab-live-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #34d399;
+  border: 2px solid #ffffff;
   box-shadow: 0 0 8px #34d399;
   animation: liveDotPulse 1.8s infinite;
 }
@@ -12348,27 +12362,151 @@ body {
 }
 
 @media (max-width: 768px) {
-  .mega-ai-floating-pill {
-    bottom: 70px;
-    right: 14px;
-    padding: 8px 14px;
-    gap: 8px;
+  .mega-ai-floating-fab {
+    bottom: 72px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
   }
-  
-  .ai-sparkle-halo {
-    width: 26px;
-    height: 26px;
-    font-size: 0.95rem;
-  }
-  
-  .ai-pill-title {
-    font-size: 0.78rem;
-  }
-  
-  .ai-pill-sub {
-    display: none;
+  .ai-fab-star-icon {
+    font-size: 1.2rem;
   }
 }
+
+/* Past Orders 1-Click Reorder Card */
+.ai-reorder-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.ai-reorder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ai-reorder-badge {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.ai-reorder-date {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.ai-reorder-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ai-reorder-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.ai-reorder-thumb {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.ai-reorder-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-reorder-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-reorder-meta {
+  font-size: 0.7rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-reorder-price {
+  font-weight: 800;
+  color: #059669;
+}
+
+.ai-single-reorder-btn {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.ai-single-reorder-btn:hover {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+
+.ai-reorder-all-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  transition: all 0.15s ease;
+}
+
+.ai-reorder-all-btn:active {
+  transform: scale(0.98);
+}
+
 
 /* MegaAI Drawer Overlay & Container */
 .mega-ai-drawer-overlay {
