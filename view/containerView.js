@@ -1214,11 +1214,11 @@ export class ContainerView {
 
     setupPromoBanners() {
         const bannerElements = document.querySelectorAll(
-            '.spotlight-card, .mega-festive-poster, .quad-deal-card, .promo-banner-card, .ecom-wide-poster, .spotlight-btn, .poster-main-cta, [data-category]'
+            '#homeView .spotlight-card, #homeView .mega-festive-poster, #homeView .quad-deal-card, #homeView .promo-banner-card, #homeView .ecom-wide-poster, #homeView .spotlight-btn, #homeView .poster-main-cta'
         );
         bannerElements.forEach(el => {
             el.addEventListener('click', (e) => {
-                e.stopPropagation();
+                if (el.closest('#searchHubView, #searchHubCategoriesMenu, .search-hub-popup-menu, .popup-menu-options')) return;
                 const cat = el.getAttribute('data-category') || el.closest('[data-category]')?.getAttribute('data-category');
                 if (cat) {
                     this.showCategoryView(cat);
@@ -1811,14 +1811,27 @@ export class ContainerView {
 
         // Categories menu option clicks
         document.getElementById('categoriesMenuOptions')?.addEventListener('click', (e) => {
+            e.stopPropagation();
             const itemBtn = e.target.closest('.popup-menu-item');
             if (!itemBtn) return;
             const cat = itemBtn.dataset.category || 'all';
             document.querySelectorAll('#categoriesMenuOptions .popup-menu-item').forEach(b => b.classList.remove('active'));
             itemBtn.classList.add('active');
 
+            const labelMap = {
+                'all': 'Categories',
+                'Fashion & Apparel': 'Fashion',
+                'Electronics & Gadgets': 'Electronics',
+                'Home & Kitchen': 'Home & Kitchen',
+                'Beauty & Personal Care': 'Beauty',
+                'Cold Drinks & Beverages': 'Beverages',
+                'Snacks & Munchies': 'Snacks',
+                'Dairy, Bread & Eggs': 'Dairy & Eggs',
+                'Staples, Atta & Oil': 'Staples & Atta',
+                'House Hold': 'Household'
+            };
             const labelEl = document.getElementById('chipCategoriesLabel');
-            if (labelEl) labelEl.textContent = cat === 'all' ? 'Categories' : cat;
+            if (labelEl) labelEl.textContent = labelMap[cat] || (cat === 'all' ? 'Categories' : cat);
 
             const chip = document.getElementById('chipCategoriesBtn');
             if (chip) chip.classList.toggle('active', cat !== 'all');
@@ -1878,12 +1891,12 @@ export class ContainerView {
                 return;
             }
 
-            // 3. Fallback Category click
+            // 3. Fallback Category click (Filter directly inside Search Hub)
             const catCard = e.target.closest('[data-target-category]');
             if (catCard) {
                 const cat = catCard.dataset.targetCategory;
                 if (cat) {
-                    this.showCategoryView(cat);
+                    this.filterSearchHubByCategory(cat);
                 }
             }
         });
@@ -2310,25 +2323,50 @@ export class ContainerView {
             return;
         }
 
-        const g = gender.toLowerCase();
+        const g = gender.toLowerCase().trim();
         const items = this.data.filter(item => {
+            // 1. Explicit authoritative gender property
+            if (item.gender) {
+                const ig = item.gender.toLowerCase();
+                if (g === 'men') return ig === 'men' || ig === 'unisex';
+                if (g === 'women') return ig === 'women' || ig === 'unisex';
+                if (g === 'boys') return ig === 'boys';
+                if (g === 'girls') return ig === 'girls';
+                return ig === g;
+            }
+
+            // 2. Strict semantic fallback for non-tagged items
             const name = (item.name || '').toLowerCase();
             const sub = (item.subType || '').toLowerCase();
+            const type = (item.type || '').toLowerCase();
 
-            if (g === 'men') {
-                return (sub.includes('men') || name.includes('men') || name.includes('shirt') || name.includes('sherwani') || name.includes('jeans') || name.includes('blazer') || name.includes('trouser') || name.includes('sneaker') || name.includes('jogger')) && !name.includes('women') && !sub.includes('women');
-            } else if (g === 'women') {
-                return sub.includes('women') || name.includes('women') || name.includes('saree') || name.includes('kurta') || name.includes('anarkali') || name.includes('lehenga') || name.includes('palazzo') || name.includes('frock') || name.includes('heels') || sub.includes('beauty');
-            } else if (g === 'boys') {
-                return name.includes('kid') || name.includes('boy') || name.includes('track pant') || name.includes('jogger') || name.includes('basics') || name.includes('cartoon') || sub.includes('kid');
+            // Only fashion items are gender-filtered
+            if (!type.includes('fashion')) return false;
+
+            if (g === 'boys') {
+                return (name.includes('boy') || sub.includes('boy') || (name.includes('kid') && !name.includes('kidney')) || sub.includes('kid')) && !name.includes('girl');
             } else if (g === 'girls') {
-                return name.includes('girl') || name.includes('frock') || name.includes('dress') || name.includes('skirt') || sub.includes('girl');
+                return name.includes('girl') || sub.includes('girl') || name.includes('frock');
+            } else if (g === 'women') {
+                const isWomenWord = name.includes('women') || sub.includes('women') || name.includes('saree') || name.includes('lehenga') || name.includes('anarkali') || name.includes('kurti') || name.includes('palazzo') || name.includes('choli') || name.includes('churidar');
+                const isMenWord = name.includes('men ') || name.includes("men'") || name.includes(' men') || sub.includes('men');
+                return isWomenWord && !isMenWord && !name.includes('girl');
+            } else if (g === 'men') {
+                const isMenWord = name.includes('men ') || name.includes("men'") || name.includes(' men') || sub.includes('men') || name.includes('sherwani') || name.includes('nehru') || name.includes('blazer') || name.includes('tuxedo') || name.includes('bandhgala');
+                const isWomenWord = name.includes('women') || sub.includes('women') || name.includes('saree') || name.includes('lehenga');
+                const isKidWord = name.includes('kid') || name.includes('boy') || name.includes('girl');
+                return isMenWord && !isWomenWord && !isKidWord;
             }
             return false;
         });
 
         this.searchHubCurrentFilteredList = items;
-        const labelMap = { men: "Men's Collection", women: "Women's Collection", boys: "Kids & Boys", girls: "Girls Collection" };
+        const labelMap = { 
+            men: "Men's Collection", 
+            women: "Women's Collection", 
+            boys: "Kids & Boys Collection", 
+            girls: "Girls Collection" 
+        };
         this.renderSearchHubProductGrid(items, labelMap[g] || gender);
     }
 
@@ -2376,9 +2414,25 @@ export class ContainerView {
             return;
         }
 
-        const items = this.data.filter(p => p.type === category);
+        const c = category.toLowerCase().trim();
+        const items = this.data.filter(p => {
+            const type = (p.type || '').toLowerCase().trim();
+            if (type === c) return true;
+            if (c.includes('fashion') && type.includes('fashion')) return true;
+            if (c.includes('electronic') && type.includes('electronic')) return true;
+            if ((c.includes('home') || c.includes('kitchen')) && (type.includes('home') || type.includes('kitchen'))) return true;
+            if ((c.includes('beauty') || c.includes('personal') || c.includes('grooming')) && (type.includes('beauty') || type.includes('personal'))) return true;
+            if ((c.includes('beverage') || c.includes('drink')) && (type.includes('beverage') || type.includes('drink'))) return true;
+            if (c.includes('snack') && type.includes('snack')) return true;
+            if ((c.includes('dairy') || c.includes('bread') || c.includes('egg')) && (type.includes('dairy') || type.includes('bread') || type.includes('egg'))) return true;
+            if ((c.includes('staple') || c.includes('atta') || c.includes('oil') || c.includes('grain')) && (type.includes('staple') || type.includes('atta') || type.includes('oil'))) return true;
+            if ((c.includes('house') || c.includes('cleaning')) && (type.includes('house') || type.includes('cleaning'))) return true;
+            return false;
+        });
+
         this.searchHubCurrentFilteredList = items;
-        this.renderSearchHubProductGrid(items, category);
+        const displayCategory = category === 'House Hold' ? 'Household Essentials' : category;
+        this.renderSearchHubProductGrid(items, displayCategory);
     }
 
     executeSearchHubQuery(query) {
