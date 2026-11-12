@@ -6347,10 +6347,6 @@ export class ContainerView {
         };
         proceedBtn?.addEventListener('click', handleCheckout);
 
-        // Mobile Sticky Checkout Button (Zepto/Blinkit Style)
-        const mobileStickyBtn = document.getElementById('mobileCartStickyCheckoutBtn');
-        mobileStickyBtn?.addEventListener('click', handleCheckout);
-
         // MegaCoins Checkbox Toggle
         const coinsToggle = document.getElementById('cartPageRedeemCoins');
         coinsToggle?.addEventListener('change', (e) => {
@@ -6374,16 +6370,12 @@ export class ContainerView {
             cartPageItemCount.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}`;
         }
 
-        const mobileStickyBar = document.getElementById('mobileCartStickyBar');
-        const mobileStickyTotal = document.getElementById('mobileCartStickyTotal');
-
         if (cartItems.length === 0) {
             if (cartPageItemsList) cartPageItemsList.style.display = 'none';
             if (cartPageEmpty) cartPageEmpty.style.display = 'flex';
             if (cartPageRightCol) cartPageRightCol.style.display = 'none';
             if (clearBtn) clearBtn.style.display = 'none';
             if (freeDeliveryAlert) freeDeliveryAlert.style.display = 'none';
-            if (mobileStickyBar) mobileStickyBar.style.display = 'none';
         } else {
             if (cartPageItemsList) {
                 cartPageItemsList.style.display = 'flex';
@@ -6558,10 +6550,6 @@ export class ContainerView {
 
             if (cartPageRedeemCoins) cartPageRedeemCoins.checked = this.redeemMegaCoins;
             if (summaryFinalTotal) summaryFinalTotal.textContent = `₹${finalTotal.toFixed(2)}`;
-            const mobileStickyBar = document.getElementById('mobileCartStickyBar');
-            const mobileStickyTotal = document.getElementById('mobileCartStickyTotal');
-            if (mobileStickyTotal) mobileStickyTotal.textContent = `₹${finalTotal.toFixed(2)}`;
-            if (mobileStickyBar) mobileStickyBar.style.display = window.innerWidth <= 900 ? 'flex' : 'none';
             if (summaryTotalSavings) summaryTotalSavings.textContent = `₹${totalSavings.toFixed(2)}`;
         }
 

@@ -14889,70 +14889,7 @@ body.in-search-hub-mode .category-tabs-nav {
     display: none !important;
   }
   
-  /* Mobile Sticky Bottom Checkout Bar */
-  .mobile-cart-sticky-checkout {
-    position: fixed !important;
-    bottom: 58px !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 99 !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-top: 1px solid #e2e8f0 !important;
-    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08) !important;
-    padding: 10px 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    animation: slideUpSticky 0.25s ease-out !important;
-  }
-  .mc-sticky-left {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-  }
-  .mc-sticky-total-label {
-    font-size: 0.68rem !important;
-    font-weight: 700 !important;
-    color: #64748b !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-  }
-  .mc-sticky-total-val {
-    font-size: 1.15rem !important;
-    font-weight: 800 !important;
-    color: #0f172a !important;
-    line-height: 1.1 !important;
-  }
-  .mc-sticky-savings {
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
-    color: #16a34a !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 3px !important;
-  }
-  .mc-sticky-checkout-btn {
-    background: linear-gradient(135deg, #e11d48, #be123c) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 24px !important;
-    padding: 10px 20px !important;
-    font-size: 0.9rem !important;
-    font-weight: 800 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35) !important;
-    transition: transform 0.15s ease !important;
-  }
-  .mc-sticky-checkout-btn:active {
-    transform: scale(0.97) !important;
-  }
-
-  /* ---------------- 3. WISHLIST VIEW MOBILE ENHANCEMENTS ---------------- */
+/* ---------------- 3. WISHLIST VIEW MOBILE ENHANCEMENTS ---------------- */
   .wishlist-page-container {
     padding: 10px 12px 90px !important;
   }
