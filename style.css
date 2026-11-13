@@ -15887,30 +15887,41 @@ body.in-search-hub-mode .category-tabs-nav {
   pointer-events: none !important;
 }
 
-/* Full App Skeleton Overlay */
+/* Full App Skeleton Overlay - STRICTLY HIDDEN ON DESKTOP */
 .app-skeleton-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #ffffff;
-  z-index: 999999;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 70px;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
-.app-skeleton-overlay.hidden {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* App Skeleton Overlay - ONLY SHOWN ON MOBILE DURING INITIAL LOAD */
+@media (max-width: 768px) {
+  .app-skeleton-overlay {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    z-index: 999999 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-direction: column !important;
+    padding-bottom: 70px !important;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: all !important;
+  }
+
+  .app-skeleton-overlay.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
+  }
 }
 
 /* Skeleton Header */
@@ -16197,21 +16208,10 @@ body.in-search-hub-mode .category-tabs-nav {
 /* Desktop adaptations for skeleton */
 @media (min-width: 769px) {
   .app-skeleton-overlay {
-    max-width: 1240px;
-    margin: 0 auto;
-    border-left: 1px solid #f1f5f9;
-    border-right: 1px solid #f1f5f9;
-  }
-  .skeleton-hero-banner {
-    height: 260px;
-  }
-  .skeleton-quad-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .skeleton-products-grid {
-    grid-template-columns: repeat(4, 1fr);
+    display: none !important;
+    visibility: hidden !important;
   }
   .skeleton-bottom-nav {
-    display: none;
+    display: none !important;
   }
 }

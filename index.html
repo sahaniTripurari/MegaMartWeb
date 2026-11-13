@@ -192,6 +192,31 @@
     </div>
     <!-- /appSkeletonOverlay -->
 
+    <!-- Fail-safe Auto Dismiss Script for Skeleton -->
+    <script>
+        (function() {
+            function autoDismissSkeleton() {
+                var el = document.getElementById('appSkeletonOverlay');
+                if (el) {
+                    setTimeout(function() {
+                        el.classList.add('hidden');
+                        setTimeout(function() {
+                            el.style.display = 'none';
+                        }, 350);
+                    }, 350);
+                }
+            }
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                autoDismissSkeleton();
+            } else {
+                window.addEventListener('DOMContentLoaded', autoDismissSkeleton, { once: true });
+                window.addEventListener('load', autoDismissSkeleton, { once: true });
+                setTimeout(autoDismissSkeleton, 700);
+            }
+        })();
+    </script>
+
+
     <!-- Unified 2-Row Sticky Navigation Header (Top Search Header + Category Tabs) -->
     <div class="sticky-navbars-wrapper" id="stickyNavbarsWrapper">
         <!-- Top Header with Search -->

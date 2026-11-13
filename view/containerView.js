@@ -1071,6 +1071,7 @@ export class ContainerView {
         
         this.setActiveView(this.homeView);
         if (window.lucide) lucide.createIcons();
+        this.setupAppSkeletonDismissal();
     }
 
     setupCuratedRailAutoMotion() {
@@ -2884,15 +2885,16 @@ export class ContainerView {
                 skeleton.classList.add('hidden');
                 setTimeout(() => {
                     skeleton.style.display = 'none';
-                }, 380);
-            }, 450);
+                }, 350);
+            }, 300);
         };
 
-        if (document.readyState === 'complete') {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
             dismiss();
         } else {
+            window.addEventListener('DOMContentLoaded', dismiss, { once: true });
             window.addEventListener('load', dismiss, { once: true });
-            setTimeout(dismiss, 1200);
+            setTimeout(dismiss, 600);
         }
     }
 
