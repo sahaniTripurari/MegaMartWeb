@@ -1995,7 +1995,15 @@ export class ContainerView {
         if (reset) {
             this.searchHubBatch = 0;
             this.searchHubCurrentFilteredList = null;
-            this.searchHubMasonryGrid.innerHTML = '';
+            this.searchHubMasonryGrid.innerHTML = this.getProductSkeletonHtml(4);
+            setTimeout(() => {
+                if (this.searchHubMasonryGrid && !this.searchHubCurrentFilteredList) {
+                    this.searchHubMasonryGrid.innerHTML = '';
+                    this.appendDiscoveryBatch();
+                    this.appendDiscoveryBatch();
+                }
+            }, 140);
+            return;
         }
         // Append initial batches
         this.appendDiscoveryBatch();
@@ -2863,6 +2871,53 @@ export class ContainerView {
         });
 
         if (window.lucide) lucide.createIcons();
+    }
+
+    
+    // ================= SKELETON LOADERS & SCREEN SYSTEM =================
+    setupAppSkeletonDismissal() {
+        const skeleton = document.getElementById('appSkeletonOverlay');
+        if (!skeleton) return;
+
+        const dismiss = () => {
+            setTimeout(() => {
+                skeleton.classList.add('hidden');
+                setTimeout(() => {
+                    skeleton.style.display = 'none';
+                }, 380);
+            }, 450);
+        };
+
+        if (document.readyState === 'complete') {
+            dismiss();
+        } else {
+            window.addEventListener('load', dismiss, { once: true });
+            setTimeout(dismiss, 1200);
+        }
+    }
+
+    getProductSkeletonHtml(count = 6) {
+        return Array.from({ length: count }).map(() => `
+            <div class="skeleton-product-card dynamic-skeleton" aria-hidden="true">
+                <div class="skeleton-shimmer skeleton-card-image"></div>
+                <div class="skeleton-card-body">
+                    <div class="skeleton-shimmer skeleton-card-tag"></div>
+                    <div class="skeleton-shimmer skeleton-card-line long"></div>
+                    <div class="skeleton-shimmer skeleton-card-line short"></div>
+                    <div class="skeleton-card-bottom">
+                        <div class="skeleton-shimmer skeleton-card-price"></div>
+                        <div class="skeleton-shimmer skeleton-card-btn"></div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderCategorySkeleton(count = 6) {
+        if (!this.categoryProductsGrid) return;
+        this.categoryProductsGrid.style.display = 'grid';
+        if (this.filterEmptyState) this.filterEmptyState.style.display = 'none';
+        this.categoryProductsGrid.innerHTML = this.getProductSkeletonHtml(count);
     }
 
     showCategoryView(categoryName, initialFilter = '') {
